@@ -27,3 +27,7 @@ Route::group([
 Route::resource('pcs', 'AdminDashboardController');
 
 });
+
+Route::get('validation', function () {
+    return view('be_forms_validation');
+});

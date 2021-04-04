@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Computer extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public $timestamps = false;
 }

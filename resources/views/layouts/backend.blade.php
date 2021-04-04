@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-  <title>{{ config('app.name', 'Codebase - Bootstrap 4 Admin Template &amp; UI Framework') }}</title>
+  <title>InventoryPC | @yield('title')</title>
   <meta name="description"
     content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
   <meta name="author" content="pixelcave">
@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="{{ asset('/js/plugins/slick/slick.css') }}">
   <link rel="stylesheet" href="{{ asset('/js/plugins/slick/slick-theme.css') }}">
   <link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
+  <link rel="stylesheet" href="{{ asset('/js/plugins/select2/css/select2.css') }}">
   @yield('css')
   <!-- Fonts and Codebase framework -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
@@ -139,12 +140,13 @@
               <a class="{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span>
               </a>
-            <li class="{{ request()->is('admin/pcs') ? ' open' : '' }}">
+            <li class="{{ request()->is('admin/dashboard/pcs') ? ' open' : '' }}">
               <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-cup"></i>
                 <span class="sidebar-mini-hide">Dashboard Admin</span></a>
               <ul>
                 <li>
-                  <a class="{{ request()->is( 'admin/pcs' ) ? ' active' : '' }}" href="{{ route('admin.pcs.index') }}">
+                  <a class="{{ request()->is( 'admin/dashboard/pcs' ) ? ' active' : '' }}"
+                    href="{{ route('admin.pcs.index') }}">
                     <span class="sidebar-mini-hide">Equipos PC</span>
                   </a>
                 </li>
@@ -478,13 +480,23 @@
   <!-- Page JS Plugins -->
   <script src="{{ asset('/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/slick/slick.min.js') }}"></script>
+  <script src="{{ asset('/js/plugins/select2/js/select2.full.min.js') }}"></script>
+  <script src="{{ asset('/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
   <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+  <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
   <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Page JS Helpers (Select2 plugin) -->
+  <script>
+    jQuery(function(){ Codebase.helpers('select2'); });
+  </script>
 
   <!-- Page JS Code -->
   <script src="{{ asset('/js/pages/be_pages_dashboard.min.js') }}"></script>
   <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
+  <script src="{{ asset('/js/pages/be_forms_wizard.min.js') }}"></script>
+  <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
   @stack('js')
 </body>
 

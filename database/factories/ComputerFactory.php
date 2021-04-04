@@ -30,21 +30,21 @@ class ComputerFactory extends Factory
         $str_ip2=Str::random(3);
         $ip_chain = '192.168.'.$str_ip1.'.'.$str_ip2;
 
-        $str=Str::random(3);
+        $str=Str::random(5);
         $pc_name_chain = 'V1AMAC-'.$str;
 
         return [
             'lote' => 'INVPC71MAC',
             'inv_code' => $inv_code_chain,
-            'brand' => 'LENOVO',
+            'brand_id' => 3,
             'model' => 'M710Q DESKTOP (THINKCENTRE) - TYPE 10MR',
             'serial' => Str::random(10),
             'serial_monitor' => Str::random(10),
             'type_id' => 1,
-            'ram_slot_0_id' => 2,
-            'ram_slot_1_id' => 2,
-            'hdd_id' => 3,
-            'campus_id' => 'MAC',
+            'ram_slot_0_id' => 9,
+            'ram_slot_1_id' => 11,
+            'hdd_id' => 22,
+            'campu_id' => 'MAC',
             'cpu' => 'INTEL(R) CORE(TM) I5-7400T CPU @ 2.40GHZ',
             'ip' => $ip_chain,
             'mac' => Str::random(17),
