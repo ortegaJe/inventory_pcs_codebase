@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campu;
 use App\Models\Campus;
 use App\Models\Computer;
 use App\Models\User;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use App\Helpers\Generator;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class AdminDashboardController extends Controller
 {
@@ -24,7 +27,7 @@ class AdminDashboardController extends Controller
             //dd($global_pc_count);
 
                 if ($request->ajax()) {
-                    $pcs = DB::table('view_admin_pcs')->get();
+                    $pcs = DB::table('view_all_pcs')->get();
                         //dd($pcs);
 
                 return DataTables::of($pcs)
@@ -57,13 +60,21 @@ class AdminDashboardController extends Controller
     public function create()
     {
         $types = DB::table('types')->select('id', 'name')->get();
+        $operating_systems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
         $rams = DB::table('rams')->select('id', 'ram')->get();
         $hdds = DB::table('hdds')->select('id', 'size','type')->get();
         $brands = DB::table('brands')->select('id', 'name')->get();
         $campus = DB::table('campus')->select('id', 'description')->get();
+        //$campus = Campu::select('id', 'description')->get();
+        //dd($campus);
+        //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
+        /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
+        dd($slug);*/
 
-        $data = [
+        $data = 
+        [
             'types' => $types,
+            'operating_systems' => $operating_systems,
             'rams' => $rams,
             'hdds' => $hdds,
             'brands' => $brands,
@@ -92,14 +103,22 @@ class AdminDashboardController extends Controller
         $str=Str::random(5);
         $pc_name_chain = 'V1AMAC-'.$str;
 
-        $pc = new Computer();
-        $pc->inv_code = $inv_code_chain;
-        $pc->type_id = $request['select-tipos-pc'];
-        $pc->brand = $request['marca'];
-        $pc->model = $request['modelo'];
-        $pc->serial = $request['serial-equipo'];
-        $pc->serial_monitor = $request['serial-monitor'];
-        $pc->os = $request['os'];
+        $config = [
+        'table' => 'computers',
+        'field' => 'inv_code',
+        'length' => 10,
+        'prefix' => 'INVPC-'
+        ];
+
+        //$generatorID = Generator::IdGenerator(new Computer,'inv_code',5,'INVPC');
+        //$pc = new Computer();
+        $pc = IdGenerator::generate($config);
+        /*$pc->type_id = $request['tipos-pc-select2'];
+        $pc->brand_id = $request['marca-pc-select2'];
+        $pc->model = $request['modelo-pc'];
+        $pc->serial = $request['serial-pc'];
+        $pc->serial_monitor = $request['serial-monitor-pc'];
+        $pc->os = $request['os-pc-select2'];
         $pc->ram_slot_0_id = $request['val-select2-ram0'];
         $pc->ram_slot_1_id = $request['val-select2-ram1'];
         $pc->hdd_id = $request['val-select2-hdd'];
@@ -108,12 +127,12 @@ class AdminDashboardController extends Controller
         $pc->mac = $request['mac'];
         $pc->anydesk = $request['anydesk'];
         $pc->pc_name = $pc_name_chain;
-        $pc->campus_id = $request['val-select2-campus'];
+        $pc->campu_id = $request['val-select2-campus'];
         $pc->location = $request['location'];
         $pc->observation = $request['observation'];
-        $pc->created_at = now();
-        //dd($pc);
-        $pc->save();
+        $pc->created_at = now();*/
+        dd($pc);
+        //$pc->save();
 
         return redirect()->route('admin.pcs.index')
             ->with('pc_created','Nuevo equipo fué añadido al inventario'
