@@ -15,7 +15,7 @@ class CreateComputersTable extends Migration
     {
         Schema::create('computers', function (Blueprint $table) {
             $table->id();
-            $table->string('lote', 10)->nullable();
+            $table->string('batch', 10)->nullable();
             $table->string('inv_code', 10)->nullable()->unique();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->string('model')->nullable();
@@ -27,9 +27,9 @@ class CreateComputersTable extends Migration
             $table->unsignedBigInteger('hdd_id')->nullable();
             $table->char('campu_id',4)->nullable();
             $table->string('cpu')->nullable();
-            $table->ipAddress('ip')->unique();
+            $table->ipAddress('ip',15)->unique();
             $table->macAddress('mac')->unique();
-            $table->string('os')->nullable();
+            //$table->string('os')->nullable();
             $table->string('anydesk')->nullable()->unique();
             $table->string('pc_name')->nullable()->unique();
             $table->string('image')->nullable();

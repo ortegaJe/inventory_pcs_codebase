@@ -48,7 +48,7 @@ class ComputerFactory extends Factory
             'cpu' => 'INTEL(R) CORE(TM) I5-7400T CPU @ 2.40GHZ',
             'ip' => $ip_chain,
             'mac' => Str::random(17),
-            'os' => 'WINDOWS 10',
+            'os_id' => 1,
             'anydesk' => Str::random(9),
             'pc_name' => $pc_name_chain,
             'image' => 'image.jpg',

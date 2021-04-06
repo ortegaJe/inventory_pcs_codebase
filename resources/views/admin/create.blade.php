@@ -40,79 +40,87 @@
         <div class="block-content block-content-full tab-content" style="min-height: 274px;">
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
-            <div class="form-row">
-              <div class="col-md-3 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <select class="form-control" name="select-tipos-pc" size="1">
-                      <option selected disabled></option>
-                      <!-- Empty value for demostrating material select box -->
-                      @forelse ($types as $type)
-                      <option value="{{ $type->id }}">{{ $type->name }}</option>
-                      @empty
-                      <option value="NULL">NO EXISTEN TIPOS DE EQUIPOS REGISTRADOS</option>
-                      @endforelse
-                    </select>
-                    <label for="">Tipo de equipo</label>
+            <div class="form-group row">
+              <div class="col-md-3">
+                <div class="form-material floating">
+                  <select class="form-control" id="tipos-pc-select2" name="tipos-pc-select2">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($types as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @empty
+                    <option value="tipos-pc-select2">NO EXISTEN TIPOS DE EQUIPOS REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="tipos-pc-select2">Tipo de equipo</label>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-material floating">
+                  <select class="form-control" id="marca-pc-select2" name="marca-pc-select2">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($brands as $brand)
+                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    @empty
+                    <option value="">NO EXISTEN FABRICANTES REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="marca-pc-select2">Seleccionar fabricante</label>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
+                    data-placeholder="Seleccione sistema operativo..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($operating_systems as $os)
+                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
+                    @empty
+                    <option value="">NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="os-pc-select2">Sistema operativo</label>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="modelo-pc" name="modelo-pc"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="modelo-pc">Modelo</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-fw fa-paint-brush"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="serial-pc" name="serial-pc"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="serial-pc">Serial</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-fw fa-barcode"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="serial-monitor-pc">Serial monitor</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-fw fa-barcode"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <select class="form-control" name="marca" size="1">
-                      <option selected disabled></option>
-                      <!-- Empty value for demostrating material select box -->
-                      @forelse ($brands as $brand)
-                      <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                      @empty
-                      <option value="NULL">NO EXISTEN FABRICANTES REGISTRADOS</option>
-                      @endforelse
-                    </select>
-                    <label for="">Fabricante</label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="modelo"
-                      onkeyup="javascript:this.value=this.value.toUpperCase();">
-                    <label for="">Modelo</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="col-md-3 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="serial-equipo"
-                      onkeyup="javascript:this.value=this.value.toUpperCase();">
-                    <label for="">Serial</label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="serial-monitor"
-                      onkeyup="javascript:this.value=this.value.toUpperCase();">
-                    <label for="">Serial monitor</label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="os"
-                      onkeyup="javascript:this.value=this.value.toUpperCase();">
-                    <label for="">Sistema Operativo</label>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
           <!-- END Step 1 -->
 
@@ -129,7 +137,7 @@
                       @forelse ($rams as $ram)
                       <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                       @empty
-                      <option value="NULL">NO EXISTEN RAM REGISTRADAS</option>
+                      <option value="">NO EXISTEN RAM REGISTRADAS</option>
                       @endforelse
                     </select>
                     <label for="val-select2">Memoria</label>
@@ -146,7 +154,7 @@
                       @forelse ($rams as $ram)
                       <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                       @empty
-                      <option value="NULL">NO EXISTEN RAM REGISTRADAS</option>
+                      <option value="">NO EXISTEN RAM REGISTRADAS</option>
                       @endforelse
                     </select>
                     <label for="val-select2">Memoria</label>
@@ -163,7 +171,7 @@
                       @forelse ($hdds as $hdd)
                       <option value="{{ $hdd->id }}">{{ $hdd->size }} | {{ $hdd->type }}</option>
                       @empty
-                      <option value="NULL">NO EXISTEN DISCOS DUROS REGISTRADOS</option>
+                      <option value="">NO EXISTEN DISCOS DUROS REGISTRADOS</option>
                       @endforelse
                     </select>
                     <label for="val-select2">Disco Duro</label>
@@ -235,7 +243,7 @@
                       @forelse ($campus as $campu)
                       <option value="{{ $campu->id }}">{{ $campu->description }}</option>
                       @empty
-                      <option value="NULL">NO EXISTEN SEDES REGISTRADAS</option>
+                      <option value="">NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
                     <label for="val-select2">Sede del equipo</label>

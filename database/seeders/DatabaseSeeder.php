@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             TypesSeeder::class,
             RamSeeder::class,
             HddSeeder::class,
-            BrandSeeder::class
+            BrandSeeder::class,
+            OsSeeder::class
             //Campus::class,
             //CampuUsersSeeder::class,
     ]);

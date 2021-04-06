@@ -43,7 +43,7 @@ class User extends Authenticatable
     ];
 
     //Relacion uno a muchos
-    public function profile(){
-        return $this->hasMany('App\Models\Profile');
+    public function profiles(){
+        return $this->hasMany(Profile::class);
     }
 }

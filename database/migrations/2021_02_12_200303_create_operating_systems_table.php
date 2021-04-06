@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class {{ class }} extends Migration
+class CreateOperatingSystemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class {{ class }} extends Migration
      */
     public function up()
     {
-        Schema::create('{{ table }}', function (Blueprint $table) {
+        Schema::create('operating_systems', function (Blueprint $table) {
             $table->id();
+            $table->char('name');
+            $table->char('version');
+            $table->char('architecture',10);
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });
@@ -27,6 +30,6 @@ class {{ class }} extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('{{ table }}');
+        Schema::dropIfExists('operating_systems');
     }
 }
