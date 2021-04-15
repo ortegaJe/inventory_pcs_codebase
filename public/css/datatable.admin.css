@@ -16,6 +16,19 @@
         padding: 0;
     }
 
+    table.dataTable tbody {
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    table.dataTable thead {
+        font-size: 14px;
+    }
+
+    table.dataTable tfoot {
+        font-size: 14px;
+    }
+
     [tabindex="-1"]:focus:not(:focus-visible) {
         outline: 0 !important;
     }

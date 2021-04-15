@@ -33,7 +33,6 @@
   <!-- Page JS Plugins CSS -->
   <link rel="stylesheet" href="{{ asset('/js/plugins/slick/slick.css') }}">
   <link rel="stylesheet" href="{{ asset('/js/plugins/slick/slick-theme.css') }}">
-  <link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
   <link rel="stylesheet" href="{{ asset('/js/plugins/select2/css/select2.css') }}">
   @yield('css')
   <!-- Fonts and Codebase framework -->
@@ -484,19 +483,16 @@
   <script src="{{ asset('/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
   <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
-  <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Page JS Code -->
+  <script src="{{ asset('/js/pages/be_pages_dashboard.min.js') }}"></script>
+  <script src="{{ asset('/js/pages/be_forms_wizard.min.js') }}"></script>
+  <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
 
   <!-- Page JS Helpers (Select2 plugin) -->
   <script>
     jQuery(function(){ Codebase.helpers('select2'); });
   </script>
-
-  <!-- Page JS Code -->
-  <script src="{{ asset('/js/pages/be_pages_dashboard.min.js') }}"></script>
-  <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
-  <script src="{{ asset('/js/pages/be_forms_wizard.min.js') }}"></script>
-  <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
   @stack('js')
 </body>
 

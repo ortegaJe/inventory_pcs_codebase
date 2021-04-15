@@ -51,7 +51,7 @@
                     <option value="tipos-pc-select2">NO EXISTEN TIPOS DE EQUIPOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="tipos-pc-select2">Tipo de equipo</label>
+                  <label for="tipos-pc-select2">Seleccionar tipo de equipo</label>
                 </div>
               </div>
               <div class="col-md-3">
@@ -70,7 +70,7 @@
               <div class="col-md-3">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
-                    data-placeholder="Seleccione sistema operativo..">
+                    data-placeholder="Seleccionar sistema operativo..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($operating_systems as $os)
                     <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
@@ -78,7 +78,7 @@
                     <option value="">NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="os-pc-select2">Sistema operativo</label>
+                  <label for="os-pc-select2">Sistema Operativo</label>
                 </div>
               </div>
               <div class="col-md-3">
@@ -120,70 +120,65 @@
                 </div>
               </div>
             </div>
-
           </div>
           <!-- END Step 1 -->
 
           <!-- Step 2 -->
           <div class="tab-pane" id="wizard-progress2-step2" role="tabpanel">
-            <div class="form-row">
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material">
-                    <select class="js-select2 form-control" name="val-select2-ram0" style="width: 100%;"
-                      data-placeholder="Seleccionar RAM Slot #1..">
-                      <option></option>
-                      <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                      @forelse ($rams as $ram)
-                      <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
-                      @empty
-                      <option value="">NO EXISTEN RAM REGISTRADAS</option>
-                      @endforelse
-                    </select>
-                    <label for="val-select2">Memoria</label>
-                  </div>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
+                    style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($rams as $ram)
+                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @empty
+                    <option value="">NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-ram0">Memorias RAM</label>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material">
-                    <select class="js-select2 form-control" name="val-select2-ram1" style="width: 100%;"
-                      data-placeholder="Seleccionar RAM Slot #2..">
-                      <option></option>
-                      <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                      @forelse ($rams as $ram)
-                      <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
-                      @empty
-                      <option value="">NO EXISTEN RAM REGISTRADAS</option>
-                      @endforelse
-                    </select>
-                    <label for="val-select2">Memoria</label>
-                  </div>
+              <div class="col-md-6">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-ram1" name="val-select2-ram1"
+                    style="width: 100%;" data-placeholder="Seleccionar RAM ranura 2">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($rams as $ram)
+                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @empty
+                    <option value="">NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-ram1">Memorias RAM</label>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material">
-                    <select class="js-select2 form-control" name="val-select2-hdd" style="width: 100%;"
-                      data-placeholder="Seleccionar Disco duro..">
-                      <option></option>
-                      <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                      @forelse ($hdds as $hdd)
-                      <option value="{{ $hdd->id }}">{{ $hdd->size }} | {{ $hdd->type }}</option>
-                      @empty
-                      <option value="">NO EXISTEN DISCOS DUROS REGISTRADOS</option>
-                      @endforelse
-                    </select>
-                    <label for="val-select2">Disco Duro</label>
-                  </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-hdd" name="val-select2-hdd"
+                    style="width: 100%;" data-placeholder="Seleccionar disco duro">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($hdds as $hdd)
+                    <option value="{{ $hdd->id }}">{{ $hdd->size }} | {{ $hdd->type }}</option>
+                    @empty
+                    <option value="">NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-hdd">Discos duros</label>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="cpu"
-                      onkeyup="javascript:this.value=this.value.toUpperCase();">
-                    <label for="">Procesador</label>
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="cpu" name="cpu"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="cpu">Procesador</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-microchip"></i>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -193,37 +188,61 @@
 
           <!-- Step 3 -->
           <div class="tab-pane" id="wizard-progress2-step3" role="tabpanel">
-            <div class="form-row">
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="ip">
-                    <label for="wizard-simple2-ip">Dirección IP</label>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="ip" name="ip"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="ip">Dirección IP</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                    </span>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="mac">
-                    <label for="wizard-simple2-mac">Dirección MAC</label>
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="mac" name="mac"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="mac">Dirección MAC</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                    </span>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="anydesk">
-                    <label for="wizard-simple2-mac"><img class="img-fluid" width="80px"
-                        src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk"></label>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="anydesk" name="anydesk"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="ip">Anydesk</label>
+                  <div class="input-group-append">
+                    <label for="anydesk"><img class="img-fluid" width="20px"
+                        src="https://ubuntupit.com/wp-content/uploads/2019/03/AnyDesk-remote.png" alt="anydesk">
+                    </label>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="pc-name">
-                    <label for="wizard-simple2-mac">Nombre del equipo</label>
+              <div class="col-md-6">
+                <div class="form-material floating">
+                  <input type="text" class="form-control" id="pc-name" name="pc-name"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="pc-name">Nombre del equipo</label>
+                  <div class="block-content block-content-full">
+                    <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
+                      data-placement="bottom" title="Ver abreviados de las sedes">
+                      <i class="fa fa-info-circle"></i>
+                    </button>
+                    <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
+                      title="Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
+                      (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
+                      <i class="fa fa-info-circle"></i>
+                      Como nombrar equipos?
+                    </button>
                   </div>
                 </div>
               </div>
@@ -236,8 +255,8 @@
               <div class="col-md-6 mb-3">
                 <div class="form-group">
                   <div class="form-material">
-                    <select class="js-select2 form-control" name="val-select2-campus" style="width: 100%;"
-                      data-placeholder="Seleccionar Sede..">
+                    <select class="js-select2 form-control" id="val-select2-campus" name="val-select2-campus"
+                      style="width: 100%;" data-placeholder="Seleccionar Sede..">
                       <option></option>
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                       @forelse ($campus as $campu)
@@ -246,23 +265,29 @@
                       <option value="">NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2">Sede del equipo</label>
+                    <label for="val-select2-campus">Sede del equipo</label>
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <div class="form-material floating">
-                    <input class="form-control" type="text" name="location">
-                    <label for="wizard-simple2-mac">Ubicación</label>
+              <div class="col-md-6">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="location" name="location"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="location">Ubicacion</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-map-marker"></i>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-12">
-              <div class="form-material floating">
-                <textarea class="form-control" name="observation" rows="4"></textarea>
-                <label for="material-textarea-large2">Oberservación</label>
+            <div class="form-row">
+              <div class="col-md-12">
+                <div class="form-material floating">
+                  <textarea class="form-control" id="observation" name="observation" rows="4"></textarea>
+                  <label for="observation">Oberservación</label>
+                </div>
               </div>
             </div>
             <!-- END Step 4 -->
@@ -275,15 +300,15 @@
           <div class="row">
             <div class="col-6">
               <button type="button" class="btn btn-alt-secondary disabled" data-wizard="prev">
-                <i class="fa fa-angle-left mr-5"></i> Previous
+                <i class="fa fa-angle-left mr-5"></i> Atras
               </button>
             </div>
             <div class="col-6 text-right">
               <button type="button" class="btn btn-alt-secondary" data-wizard="next">
-                Next <i class="fa fa-angle-right ml-5"></i>
+                Siguiente <i class="fa fa-angle-right ml-5"></i>
               </button>
               <button type="submit" class="btn btn-alt-primary d-none" data-wizard="finish">
-                <i class="fa fa-check mr-5"></i> Submit
+                <i class="fa fa-check mr-5"></i> Guardar
               </button>
             </div>
           </div>
