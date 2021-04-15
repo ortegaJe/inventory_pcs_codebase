@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Campu;
-use App\Models\Campus;
 use App\Models\Computer;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
-use App\Helpers\Generator;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Helpers\Helper;
 
 class AdminDashboardController extends Controller
 {
@@ -32,10 +28,10 @@ class AdminDashboardController extends Controller
 
                 return DataTables::of($pcs)
                             ->addColumn('action', function ($pcs) {
-                           $btn = '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Edit" aria-describedby="">
+                           $btn = '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
                                         <i class="fa fa-pencil"></i>
                                     </button>';
-                           $btn = $btn.'<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Delete">
+                           $btn = $btn.'<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
                                             <i class="fa fa-times"></i>
                                         </button>';        
                             return $btn;            
@@ -93,8 +89,8 @@ class AdminDashboardController extends Controller
      */
     public function store(Request $request)
     {
-        $str=Str::random(4);
-        $inv_code_chain = 'INVPC-'.$str;
+
+        $generatorID = Helper::IDGenerator(new Computer,'inv_code',4,'INVPC');
 
         $str_ip1=Str::random(3);
         $str_ip2=Str::random(3);
@@ -103,22 +99,14 @@ class AdminDashboardController extends Controller
         $str=Str::random(5);
         $pc_name_chain = 'V1AMAC-'.$str;
 
-        $config = [
-        'table' => 'computers',
-        'field' => 'inv_code',
-        'length' => 10,
-        'prefix' => 'INVPC-'
-        ];
-
-        //$generatorID = Generator::IdGenerator(new Computer,'inv_code',5,'INVPC');
-        //$pc = new Computer();
-        $pc = IdGenerator::generate($config);
-        /*$pc->type_id = $request['tipos-pc-select2'];
+        $pc = new Computer();
+        $pc->inv_code = $generatorID;
+        $pc->type_id = $request['tipos-pc-select2'];
         $pc->brand_id = $request['marca-pc-select2'];
         $pc->model = $request['modelo-pc'];
         $pc->serial = $request['serial-pc'];
         $pc->serial_monitor = $request['serial-monitor-pc'];
-        $pc->os = $request['os-pc-select2'];
+        $pc->os_id = $request['os-pc-select2'];
         $pc->ram_slot_0_id = $request['val-select2-ram0'];
         $pc->ram_slot_1_id = $request['val-select2-ram1'];
         $pc->hdd_id = $request['val-select2-hdd'];
@@ -130,9 +118,9 @@ class AdminDashboardController extends Controller
         $pc->campu_id = $request['val-select2-campus'];
         $pc->location = $request['location'];
         $pc->observation = $request['observation'];
-        $pc->created_at = now();*/
-        dd($pc);
-        //$pc->save();
+        $pc->created_at = now();
+        //dd($pc);
+        $pc->save();
 
         return redirect()->route('admin.pcs.index')
             ->with('pc_created','Nuevo equipo fué añadido al inventario'
