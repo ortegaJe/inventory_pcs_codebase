@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Helpers\Generator;
 use App\Models\Computer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -23,6 +24,7 @@ class ComputerFactory extends Factory
     public function definition()
     {
         //\App\Models\Computer::factory(100)->create();
+
         $str=Str::random(4);
         $inv_code_chain = 'INVPC-'.$str;
 
@@ -34,7 +36,7 @@ class ComputerFactory extends Factory
         $pc_name_chain = 'V1AMAC-'.$str;
 
         return [
-            'lote' => 'INVPC71MAC',
+            'batch' => 'INVPC71MAC',
             'inv_code' => $inv_code_chain,
             'brand_id' => 3,
             'model' => 'M710Q DESKTOP (THINKCENTRE) - TYPE 10MR',
