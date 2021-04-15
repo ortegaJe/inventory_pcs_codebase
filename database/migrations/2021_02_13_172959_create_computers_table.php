@@ -15,24 +15,23 @@ class CreateComputersTable extends Migration
     {
         Schema::create('computers', function (Blueprint $table) {
             $table->id();
-            $table->string('batch', 10)->nullable();
-            $table->string('inv_code', 10)->nullable()->unique();
+            $table->string('batch', 20)->nullable();
+            $table->char('inv_code', 11)->nullable()->unique();
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->string('model')->nullable();
-            $table->string('serial')->unique();
-            $table->string('serial_monitor')->nullable();
+            $table->char('model')->nullable();
+            $table->char('serial')->unique();
+            $table->char('serial_monitor')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
             $table->unsignedBigInteger('ram_slot_0_id')->nullable();
             $table->unsignedBigInteger('ram_slot_1_id')->nullable();
             $table->unsignedBigInteger('hdd_id')->nullable();
             $table->char('campu_id',4)->nullable();
-            $table->string('cpu')->nullable();
+            $table->char('cpu')->nullable();
             $table->ipAddress('ip',15)->unique();
             $table->macAddress('mac')->unique();
-            //$table->string('os')->nullable();
-            $table->string('anydesk')->nullable()->unique();
-            $table->string('pc_name')->nullable()->unique();
-            $table->string('image')->nullable();
+            $table->char('anydesk')->nullable()->unique();
+            $table->char('pc_name')->nullable()->unique();
+            $table->char('image')->nullable();
             $table->text('location')->nullable();
             $table->text('observation')->nullable();
             $table->timestamp('created_at')->nullable();
