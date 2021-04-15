@@ -58,8 +58,8 @@ function format(d) {
         "</td>" +
         "</tr>" +
         "<tr>" +
-        "<td>Imagen: " +
-        '<img class="img-fluid" width="160px" src="media/dashboard/photos/M710q.png">' +
+        "<td>" +
+        '<img class="img-fluid" width="160px" src="/media/dashboard/photos/M710q.png">' +
         "</img>" +
         "</td>" +
         "<td></td>" +
@@ -76,7 +76,7 @@ $(document).ready(function() {
     var dt = $("#dt").DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('admin.pcs.index') }}",
+        ajax: root_url,
         language: {
             lengthMenu: "Display _MENU_ records per page",
             zeroRecords: "Registro no encontrado",
@@ -92,15 +92,35 @@ $(document).ready(function() {
                 data: null,
                 defaultContent: ""
             },
-            { data: "CodigoInventario" },
-            { data: "Serial" },
-            { data: "Ip" },
-            { data: "Mac" },
-            { data: "Anydesk" },
-            { data: "FechaCreacion" },
-            { data: "Sede" },
-            { data: "EstadoPC" },
-            { data: "action" }
+            {
+                data: "CodigoInventario"
+            },
+            {
+                data: "Serial",
+                visible: false
+            },
+            {
+                data: "Ip"
+            },
+            {
+                data: "Mac"
+            },
+            {
+                data: "Anydesk"
+                //visible: false
+            },
+            {
+                data: "FechaCreacion"
+            },
+            {
+                data: "Sede"
+            },
+            {
+                data: "EstadoPC"
+            },
+            {
+                data: "action"
+            }
         ],
         order: [[1, "asc"]]
     });
