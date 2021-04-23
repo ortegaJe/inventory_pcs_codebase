@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use Carbon\Carbon;
+use Faker\Generator as Faker;
 
 class AdminDashboardController extends Controller
 {
@@ -19,32 +21,51 @@ class AdminDashboardController extends Controller
      */
     public function index(Request $request)
     {
-            $global_pc_count = Computer::count();
-            //dd($global_pc_count);
+        $global_pc_count = Computer::count();
+        //dd($global_pc_count);
 
-                if ($request->ajax()) {
-                    $pcs = DB::table('view_all_pcs')->get();
-                        //dd($pcs);
+        if ($request->ajax()) {
+            $pcs = DB::table('view_all_pcs')->get();
+            //dd($pcs);
 
-                return DataTables::of($pcs)
-                            ->addColumn('action', function ($pcs) {
-                           $btn = '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
+            $datatables = DataTables::of($pcs);
+            $datatables->editColumn('FechaCreacion', function ($pcs) {
+                return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
+                    ->format('d-m-Y h:i A')    : '';
+            });
+            $datatables->addColumn('EstadoPC', function ($pcs) {
+                return $pcs->EstadoPC;
+            });
+            $datatables->editColumn('EstadoPC', function ($pcs) {
+
+                if ($pcs->EstadoPC = 'rendimiento optimo') {
+                    return '<span class="badge badge-pill badge-success">' . $pcs->EstadoPC . '</span>';
+                } else if ($pcs->EstadoPC = 'rendimiento bajo') {
+                    return '<span class="badge badge-pill badge-warning">' . $pcs->EstadoPC . '</span>';
+                } else if ($pcs->EstadoPC = 'hurtado') {
+                    return '<span class="badge badge-pill badge-orange">' . $pcs->EstadoPC . '</span>';
+                } else if ($pcs->EstadoPC = 'dado de baja') {
+                    return '<span class="badge badge-pill badge-secondary">' . $pcs->EstadoPC . '</span>';
+                }
+            });
+            $datatables->addColumn('action', function ($pcs) {
+                $btn = '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
                                         <i class="fa fa-pencil"></i>
                                     </button>';
-                           $btn = $btn.'<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
+                $btn = $btn . '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
                                             <i class="fa fa-times"></i>
-                                        </button>';        
-                            return $btn;            
-                        })
-                        ->rawColumns(['action' => 'action'])
-                        ->make(true);
+                                        </button>';
+                return $btn;
+            });
+            $datatables->rawColumns(['action', 'EstadoPC']);
+            return $datatables->make(true);
         }
 
-        $data = 
-        [
-            'global_pc_count' => $global_pc_count,
-        ];
-            
+        $data =
+            [
+                'global_pc_count' => $global_pc_count,
+            ];
+
         return view('admin.index')->with($data);
     }
 
@@ -57,28 +78,41 @@ class AdminDashboardController extends Controller
     {
         $types = DB::table('types')->select('id', 'name')->get();
         $operating_systems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
-        $rams = DB::table('rams')->select('id', 'ram')->get();
-        $hdds = DB::table('hdds')->select('id', 'size','type')->get();
+        $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->get();
+        $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->get();
+        $hdds = DB::table('hdds')->select('id', 'size', 'type')->get();
         $brands = DB::table('brands')->select('id', 'name')->get();
         $campus = DB::table('campus')->select('id', 'description')->get();
+
+        $secondSegmentIp = rand(1, 254);
+        $thirdSegmentIp = rand(1, 254);
+        $ip = '192.168.' . $secondSegmentIp . '.' . $thirdSegmentIp;
+
+        $macAdress = Str::upper(Str::random(3)) . '.' .
+            Str::upper(Str::random(3)) . '.' .
+            Str::upper(Str::random(3)) . '.' .
+            Str::upper(Str::random(3));
+
         //$campus = Campu::select('id', 'description')->get();
         //dd($campus);
         //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
         /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
         dd($slug);*/
 
-        $data = 
-        [
-            'types' => $types,
-            'operating_systems' => $operating_systems,
-            'rams' => $rams,
-            'hdds' => $hdds,
-            'brands' => $brands,
-            'campus' => $campus
-        ];
-            
-        return view('admin.create')->with($data);
+        $data =
+            [
+                'types' => $types,
+                'operating_systems' => $operating_systems,
+                'SlotOneRams' => $SlotOneRams,
+                'SlotTwoRams' => $SlotTwoRams,
+                'hdds' => $hdds,
+                'brands' => $brands,
+                'campus' => $campus,
+                'ip' => $ip,
+                'macAdress' => $macAdress,
+            ];
 
+        return view('admin.create')->with($data);
     }
 
     /**
@@ -87,44 +121,43 @@ class AdminDashboardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Faker $faker)
     {
 
-        $generatorID = Helper::IDGenerator(new Computer,'inv_code',4,'INVPC');
+        $generatorID = Helper::IDGenerator(new Computer, 'inv_code', 5, 'PC');
 
-        $str_ip1=Str::random(3);
-        $str_ip2=Str::random(3);
-        $ip_chain = '192.168.'.$str_ip1.'.'.$str_ip2;
-
-        $str=Str::random(5);
-        $pc_name_chain = 'V1AMAC-'.$str;
+        $str = Str::random(5);
+        $pc_name_chain = 'V1AMAC-' . $str;
 
         $pc = new Computer();
-        $pc->inv_code = $generatorID;
+        $pc->inv_code =  $generatorID;
         $pc->type_id = $request['tipos-pc-select2'];
         $pc->brand_id = $request['marca-pc-select2'];
         $pc->model = $request['modelo-pc'];
         $pc->serial = $request['serial-pc'];
         $pc->serial_monitor = $request['serial-monitor-pc'];
         $pc->os_id = $request['os-pc-select2'];
-        $pc->ram_slot_0_id = $request['val-select2-ram0'];
-        $pc->ram_slot_1_id = $request['val-select2-ram1'];
+        $pc->slot_one_ram_id = $request['val-select2-ram0'];
+        $pc->slot_two_ram_id = $request['val-select2-ram1'];
         $pc->hdd_id = $request['val-select2-hdd'];
         $pc->cpu = $request['cpu'];
-        $pc->ip = $ip_chain;
+        $pc->ip = $request['ip'];
         $pc->mac = $request['mac'];
         $pc->anydesk = $request['anydesk'];
         $pc->pc_name = $pc_name_chain;
         $pc->campu_id = $request['val-select2-campus'];
         $pc->location = $request['location'];
         $pc->observation = $request['observation'];
+        $pc->rowuuid = $faker->uuid;
         $pc->created_at = now();
         //dd($pc);
         $pc->save();
 
-        return redirect()->route('admin.pcs.index')
-            ->with('pc_created','Nuevo equipo fué añadido al inventario'
-        );
+        return redirect()->route('admin.pcs.index', 200)
+            ->with(
+                'pc_created',
+                'Nuevo equipo fué añadido al inventario'
+            );
     }
 
     /**
