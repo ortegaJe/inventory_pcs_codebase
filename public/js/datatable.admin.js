@@ -1,7 +1,7 @@
 function format(d) {
     return (
         '<div class="slider">' +
-        '<table table-responsive style="font-size:13">' +
+        '<table class="table-responsive" style="font-size:13">' +
         "<tr>" +
         "<td>Marca: " +
         '<span class="badge badge-pill badge-success">' +
@@ -47,11 +47,10 @@ function format(d) {
         "<tr>" +
         "<td>Tipo: " +
         d.TipoMaquina +
-        "<td>Dirección IP: " +
-        d.Ip +
+        "<td>Codigo: " +
+        d.CodigoInventario +
         "</td>" +
-        "<td>Direccion MAC: " +
-        d.Mac +
+        "<td>" +
         "</td>" +
         "<td></td>" +
         "<td></td>" +
@@ -59,7 +58,7 @@ function format(d) {
         "</tr>" +
         "<tr>" +
         "<td>" +
-        '<img class="img-fluid" width="160px" src="/media/dashboard/photos/M710q.png">' +
+        '<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/photos/M710q.png">' +
         "</img>" +
         "</td>" +
         "<td></td>" +
@@ -78,12 +77,25 @@ $(document).ready(function() {
         serverSide: true,
         ajax: root_url,
         language: {
-            lengthMenu: "Display _MENU_ records per page",
-            zeroRecords: "Registro no encontrado",
-            info: "Showing page _PAGE_ of _PAGES_",
-            infoEmpty: "No records available",
-            infoFiltered: "(filtered from _MAX_ total records)",
-            search: "Buscar"
+            lengthMenu: "Mostrar _MENU_ registros",
+            zeroRecords: "No se encontraron resultados",
+            emptyTable:  "Ningún dato disponible en esta tabla",
+            //info: "Mostrando página _PAGE_ de _PAGES_",
+             info: "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            infoFiltered: "(filtrado de un total de _MAX_ registros)",
+            search: "Buscar",
+            loadingRecords: "Loading...",
+            processing: "<img src='/media/dashboard/datatable/load.gif' width='32px'> Procesando...",
+            paginate: {
+                first:      "First",
+                last:       "Last",
+                next:       "Siguiente",
+                previous:   "Atras"
+            },
+        error: {
+            system: "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\\/a&gt;).<\/a>"
+        },
         },
         columns: [
             {
@@ -93,7 +105,8 @@ $(document).ready(function() {
                 defaultContent: ""
             },
             {
-                data: "CodigoInventario"
+                data: "FechaCreacion",
+                orderable: true
             },
             {
                 data: "Serial",
@@ -110,13 +123,24 @@ $(document).ready(function() {
                 //visible: false
             },
             {
-                data: "FechaCreacion"
-            },
-            {
                 data: "Sede"
             },
             {
-                data: "EstadoPC"
+                data: "EstadoPC",
+                visible: true, 
+                orderable: true,
+                searchable: true
+                /*render: function (data, type, row) {
+                     if (data === 'rendimiento óptimo') {
+                         console.log(data);
+                         return '' + row.data + '';
+                    }else if (data === 'rendimiento bajo') {
+                         console.log(data);   
+                         return '' + row.data + '';
+                     }
+
+                }*/
+ 
             },
             {
                 data: "action"

@@ -16,13 +16,17 @@
         padding: 0;
     }
 
-    table.dataTable tbody {
-        font-size: 12px;
-        cursor: pointer;
-    }
-
     table.dataTable thead {
         font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    table.dataTable tbody {
+        font-size: 14px;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
     }
 
     table.dataTable tfoot {

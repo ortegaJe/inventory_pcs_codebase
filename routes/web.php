@@ -24,10 +24,9 @@ Route::group([
     'namespace' => 'App\Http\Controllers\Admin',
     'middleware' => ['auth']
 ], function () {
-Route::resource('pcs', 'AdminDashboardController');
-
+    Route::resource('pcs', 'AdminDashboardController');
 });
 
-Route::get('validation', function () {
-    return view('be_forms_validation');
+Route::get('example-faker', function () {
+    return view('example');
 });

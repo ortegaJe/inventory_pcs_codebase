@@ -131,7 +131,7 @@
                   <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($rams as $ram)
+                    @forelse ($SlotOneRams as $ram)
                     <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                     @empty
                     <option value="">NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
@@ -145,7 +145,7 @@
                   <select class="js-select2 form-control" id="val-select2-ram1" name="val-select2-ram1"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($rams as $ram)
+                    @forelse ($SlotTwoRams as $ram)
                     <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                     @empty
                     <option value="">NO EXISTEN MEMORIAS RAM REGISTRADAS</option>

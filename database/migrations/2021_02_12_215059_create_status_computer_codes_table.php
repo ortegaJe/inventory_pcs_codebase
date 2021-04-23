@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRamsTable extends Migration
+class CreateStatusComputerCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateRamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rams', function (Blueprint $table) {
+        Schema::create('status_computers_codes', function (Blueprint $table) {
             $table->id();
-            $table->char('ram');
+            $table->unsignedBigInteger('statu_id')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
+
+            $table->foreign('statu_id')->references('id')->on('status_computers')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -28,6 +30,6 @@ class CreateRamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rams');
+        Schema::dropIfExists('status_computer_codes');
     }
 }

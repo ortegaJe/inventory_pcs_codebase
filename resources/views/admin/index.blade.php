@@ -98,7 +98,7 @@
             <thead>
               <tr>
                 <th></th>
-                <th>codigo</th>
+                <th>fecha de creación</th>
                 <th>serial</th>
                 <th>ip</th>
                 <th>mac</th>
@@ -106,7 +106,6 @@
                   <img class="img-fluid" width="80px" src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg"
                     alt="anydesk">
                 </th>
-                <th>fecha de creación</th>
                 <th>sede</th>
                 <th>estado</th>
                 <th>Action</th>
@@ -115,7 +114,7 @@
             <tfoot>
               <tr>
                 <th></th>
-                <th>CODIGO</th>
+                <th>FECHA DE CREACIÓN</th>
                 <th>SERIAL</th>
                 <th>IP</th>
                 <th>MAC</th>
@@ -123,7 +122,6 @@
                   <img class="img-fluid" width="80px" src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg"
                     alt="anydesk">
                 </th>
-                <th>FECHA DE CREACIÓN</th>
                 <th>SEDE</th>
                 <th>ESTADO</th>
                 <th>ACTION</th>
