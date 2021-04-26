@@ -24,11 +24,9 @@ class ComputerFactory extends Factory
     public function definition()
     {
         //\App\Models\Computer::factory(100)->create();
-        /*$second_segment = rand(1, 254);
-        $third_segment = rand(1, 254);
-        $ip = '192.168.' . $second_segment . '.' . $third_segment;*/
 
         $str = $this->faker->ean8;
+        //$str = rand(1,9999);
         $inv_code_chain = 'PC' . $str;
 
         $str = Str::random(5);
@@ -55,12 +53,23 @@ class ComputerFactory extends Factory
             'image' => $this->faker->imageUrl(),
             'location' => $this->faker->name,
             'observation' => $this->faker->text,
-            'rowuuid' => $this->faker->uuid,
+            'rowguid' => $this->faker->uuid,
             'created_at' => now(),
             'updated_at' => null,
             'deleted_at' => null,
             'deleted_at_status' => null,
             'statu_id' => rand(1, 5)
         ];
+    }
+
+    public function array($max)
+    {
+        $values = [];
+        
+        for ($i=1; $i < $max; $i++) { 
+            $values[] = $i;
+        }
+
+        return $values;
     }
 }

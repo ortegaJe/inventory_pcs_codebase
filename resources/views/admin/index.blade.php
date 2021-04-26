@@ -58,8 +58,8 @@
       </a>
     </div>
     <div class="col-md-6 col-xl-3">
-      <a class="block block-link-shadow block-link-shadow" href="{{ route('admin.pcs.create') }}">
-        <div class="block-content block-content-full block-sticky-options">
+      <a class="block block-link-shadow block-link-shadow" data-toggle="modal" data-target="#modal-popout">
+        <div class=" block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
               <i class="si si-screen-desktop fa-2x text-success-light"></i>
@@ -76,6 +76,108 @@
     </div>
     <!-- END Row #1 -->
   </div>
+  <!-- Pop Out Modal -->
+  <div class="block">
+    <div class="block-header block-header-default">
+      <h3 class="block-title">Pop Out <small>Effect</small></h3>
+    </div>
+    <div class="block-content block-content-full">
+      <button type="button" class="btn btn-alt-warning">Launch
+        Modal</button>
+    </div>
+  </div>
+  <!-- END Pop Out Modal -->
+  <!-- Pop Out Modal -->
+  <div class="modal fade" id="modal-popout" tabindex="-1" role="dialog" aria-labelledby="modal-popout"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-popout" role="document">
+      <div class="modal-content">
+        <div class="block block-themed block-transparent mb-0">
+          <div class="block-header bg-gray-darker">
+            <h3 class="block-title">Registrar nuevo equipo</h3>
+            <div class="block-options">
+              <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                <i class="si si-close"></i>
+              </button>
+            </div>
+          </div>
+          <div class="block-content">
+            <div class="row">
+              <!-- Row #6 -->
+              <div class="col-md-6 col-xl-3">
+                <a class="block block-transparent bg-primary" href="javascript:void(0)">
+                  <div class="block-content block-content-full text-center">
+                    <div class="p-20 mb-10">
+                      <i class="fa fa-3x fa-desktop text-black-op"></i>
+                    </div>
+                    <p class="font-size-lg font-w600 text-white mb-0">
+                      545 Games
+                    </p>
+                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
+                      de escritrio
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-6 col-xl-3">
+                <a class="block block-transparent bg-earth" href="javascript:void(0)">
+                  <div class="block-content block-content-full text-center">
+                    <div class="p-20 mb-10">
+                      <i class="fa fa-3x fa-laptop text-black-op"></i>
+                    </div>
+                    <p class="font-size-lg font-w600 text-white mb-0">
+                      120 Albums
+                    </p>
+                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
+                      portatil
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-6 col-xl-3">
+                <a class="block block-transparent bg-pulse" href="javascript:void(0)">
+                  <div class="block-content block-content-full text-center">
+                    <div class="p-20 mb-10">
+                      <i class="fa fa-3x fa-desktop text-black-op"></i>
+                    </div>
+                    <p class="font-size-lg font-w600 text-white mb-0">
+                      14 Videos
+                    </p>
+                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
+                      Youtube
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-6 col-xl-3">
+                <a class="block block-transparent bg-gray-dark" href="javascript:void(0)">
+                  <div class="block-content block-content-full text-center">
+                    <div class="p-20 mb-10">
+                      <img src="{{ asset('media/photos/noun_Raspberry Pi_125961.svg') }}" alt="" width="36px">
+                    </div>
+                    <p class="font-size-lg font-w600 text-white mb-0">
+                      17 Stories
+                    </p>
+                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
+                      Medium
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <!-- END Row #6 -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-alt-success" data-dismiss="modal">
+            <i class="fa fa-check"></i> Perfect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END Pop Out Modal -->
   <div class="col-md-14">
     <div class="block block-rounded block-bordered">
       <div class="block-header block-header-default border-b">
@@ -143,6 +245,10 @@
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
-  var root_url = <?php echo json_encode(route('admin.pcs.index')) ?>;
+  let root_url = <?php echo json_encode(route('admin.pcs.index')) ?>;
+</script>
+
+<script>
+  let root_url_delete = <?php echo json_encode(url('admin/dashboard/pcs/delete')) ?>;
 </script>
 @endpush

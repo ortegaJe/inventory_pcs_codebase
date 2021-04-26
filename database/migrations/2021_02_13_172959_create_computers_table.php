@@ -16,7 +16,7 @@ class CreateComputersTable extends Migration
         Schema::create('computers', function (Blueprint $table) {
             $table->id();
             $table->string('batch', 20)->nullable();
-            $table->char('inv_code', 11)->nullable()->unique();
+            $table->string('inventory_code_number', 12)->nullable()->unique();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->char('model')->nullable();
             $table->char('serial')->unique();
@@ -34,7 +34,7 @@ class CreateComputersTable extends Migration
             $table->char('image')->nullable();
             $table->text('location')->nullable();
             $table->text('observation')->nullable();
-            $table->uuid('rowuuid')->nullable();
+            $table->uuid('rowguid')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->softDeletes();

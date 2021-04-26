@@ -119,10 +119,10 @@
               </li>
               <li class="list-inline-item">
                 <a class="link-effect text-dual-primary-dark" href="{{ route('logout') }}" onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
+                    document.getElementById('logout-form-side').submit();">
                   <i class="si si-logout"></i>
                 </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                <form id="logout-form-side" action="{{ route('logout') }}" method="POST" class="d-none">
                   @csrf
                 </form>
               </li>
@@ -493,6 +493,7 @@
   <script>
     jQuery(function(){ Codebase.helpers('select2'); });
   </script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   @stack('js')
 </body>
 

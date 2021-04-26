@@ -70,32 +70,82 @@ function format(d) {
         "</div>"
     );
 }
+    
+/*function btnDelete($id) {
+    console.log($id);
+    //let id = $(this).attr("id");
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then(result => {
+        if (result.isConfirmed) {
+            $.ajax({
+                route: root_url_delete,
+                method: "post",
+                data: { $id: $id },
+                success: function (response) {
+                    //alert(response);
+                    $("#dt")
+                        .DataTable()
+                        .ajax.reload();
+                }
+            });
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        }
+    });
+}*/
+
+/*if (confirm("Are you sure you want to DELETE this data?")) {
+    $.ajax({
+        url: root_url_delete,
+        type: "GET",
+        data: {
+            id: id
+        },
+        success: function(data) {
+            alert(data);
+            $("#dt")
+                .DataTable()
+                .ajax.reload();
+        }
+    });
+} else {
+    return false;
+}*/
 
 $(document).ready(function() {
-    var dt = $("#dt").DataTable({
+    let dt = $("#dt").DataTable({
         processing: true,
         serverSide: true,
         ajax: root_url,
         language: {
             lengthMenu: "Mostrar _MENU_ registros",
             zeroRecords: "No se encontraron resultados",
-            emptyTable:  "Ningún dato disponible en esta tabla",
+            emptyTable: "Ningún dato disponible en esta tabla",
             //info: "Mostrando página _PAGE_ de _PAGES_",
-             info: "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            info: "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            infoEmpty:
+                "Mostrando registros del 0 al 0 de un total de 0 registros",
             infoFiltered: "(filtrado de un total de _MAX_ registros)",
             search: "Buscar",
             loadingRecords: "Loading...",
-            processing: "<img src='/media/dashboard/datatable/load.gif' width='32px'> Procesando...",
+            processing:
+                "<img src='/media/dashboard/datatable/load.gif' width='32px'> Procesando...",
             paginate: {
-                first:      "First",
-                last:       "Last",
-                next:       "Siguiente",
-                previous:   "Atras"
+                first: "First",
+                last: "Last",
+                next: "Siguiente",
+                previous: "Atras"
             },
-        error: {
-            system: "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\\/a&gt;).<\/a>"
-        },
+            error: {
+                system:
+                    'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>'
+            }
         },
         columns: [
             {
@@ -127,7 +177,7 @@ $(document).ready(function() {
             },
             {
                 data: "EstadoPC",
-                visible: true, 
+                visible: true,
                 orderable: true,
                 searchable: true
                 /*render: function (data, type, row) {
@@ -140,14 +190,43 @@ $(document).ready(function() {
                      }
 
                 }*/
- 
             },
             {
                 data: "action"
             }
         ],
-        order: [[1, "asc"]]
+        order: [[1, "desc"]]
     });
+
+    /*$("#dt tbody").on("click", "td .btn-delete", function() {
+        //alert("Element clicked through function!");
+        let id = $(this).attr("id");
+        btnDelete(id);
+        //console.log(id);
+    });*/
+
+    $("#dt tbody").on('click','.btn-delete', function (e) {
+    console.log(e);
+    let id = $(this).attr('id');
+    //var token = $(this).data('token');
+    $.ajax({
+        url: root_url_delete + "/"+  id,
+        type: "DELETE",
+        data: {
+            id: id,
+            _method: "DELETE",
+            _token: $('input[name="_token"]').val()
+        },
+        success: function(data) {
+            $("#dt tbody")
+                .DataTable.clear()
+                .draw();
+            console.log("it Work");
+        }
+    });
+
+    console.log("It failed");
+});
 
     // Array to track the ids of the details displayed rows
     $("#dt tbody").on("click", "td.details-control", function() {

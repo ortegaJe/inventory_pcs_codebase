@@ -22,10 +22,13 @@ class AdminDashboardController extends Controller
     public function index(Request $request)
     {
         $global_pc_count = Computer::count();
+        $pcID = Computer::all()->only('ComputerID');
         //dd($global_pc_count);
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs')->get();
+            $pcs = DB::table('view_all_pcs')
+            //->orderBy('ComputerID')
+            ->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);
@@ -37,24 +40,17 @@ class AdminDashboardController extends Controller
                 return $pcs->EstadoPC;
             });
             $datatables->editColumn('EstadoPC', function ($pcs) {
-
-                if ($pcs->EstadoPC = 'rendimiento optimo') {
-                    return '<span class="badge badge-pill badge-success">' . $pcs->EstadoPC . '</span>';
-                } else if ($pcs->EstadoPC = 'rendimiento bajo') {
-                    return '<span class="badge badge-pill badge-warning">' . $pcs->EstadoPC . '</span>';
-                } else if ($pcs->EstadoPC = 'hurtado') {
-                    return '<span class="badge badge-pill badge-orange">' . $pcs->EstadoPC . '</span>';
-                } else if ($pcs->EstadoPC = 'dado de baja') {
-                    return '<span class="badge badge-pill badge-secondary">' . $pcs->EstadoPC . '</span>';
-                }
+              $pcs->EstadoPC;
             });
+            
             $datatables->addColumn('action', function ($pcs) {
-                $btn = '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>';
-                $btn = $btn . '<button type="button" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="">
-                                            <i class="fa fa-times"></i>
-                                        </button>';
+                error_log(__LINE__.__METHOD__.' pc --->'. var_export($pcs->ComputerID,true));
+                $btn = "<button type='button' class='btn btn-sm btn-secondary js-tooltip-enabled' data-toggle='tooltip' title=''>
+                                        <i class='fa fa-pencil'></i>
+                                    </button>";
+                $btn = $btn . "<button class='btn btn-sm btn-secondary js-tooltip-enabled btn-delete' data-id='$pcs->ComputerID' id='$pcs->ComputerID'>
+                                        <i class='fa fa-times'></i>
+                                    </button>";
                 return $btn;
             });
             $datatables->rawColumns(['action', 'EstadoPC']);
@@ -64,6 +60,7 @@ class AdminDashboardController extends Controller
         $data =
             [
                 'global_pc_count' => $global_pc_count,
+                'pcID' => $pcID, 
             ];
 
         return view('admin.index')->with($data);
@@ -124,7 +121,7 @@ class AdminDashboardController extends Controller
     public function store(Request $request, Faker $faker)
     {
 
-        $generatorID = Helper::IDGenerator(new Computer, 'inv_code', 5, 'PC');
+        $generatorID = Helper::IDGenerator(new Computer, 'inv_code', 8, 'PC');
 
         $str = Str::random(5);
         $pc_name_chain = 'V1AMAC-' . $str;
@@ -148,7 +145,7 @@ class AdminDashboardController extends Controller
         $pc->campu_id = $request['val-select2-campus'];
         $pc->location = $request['location'];
         $pc->observation = $request['observation'];
-        $pc->rowuuid = $faker->uuid;
+        $pc->rowguid = $faker->uuid;
         $pc->created_at = now();
         //dd($pc);
         $pc->save();
@@ -200,8 +197,26 @@ class AdminDashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Computer $id)
     {
-        //
+        $pcs = Computer::findOrfail($id);
+        $pcs->delete();
+    }
+
+    public function eraseData(Computer $id)
+    {
+        $pcs = Computer::findOrfail($id);
+        $pcs->delete();
+    }
+
+        function removedata(Request $request)
+    {
+        Computer::find($request)->delete();        
+        return json_encode(array('statusCode'=>200));
+        /*$pcs = Computer::find($request->input('id'));
+        if($pcs->delete())
+        {
+            echo 'Data Deleted';
+        }*/
     }
 }
