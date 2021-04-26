@@ -130,155 +130,156 @@ $(document).ready(function () {
 
     function get_computer_data() {
     
-	$.ajax({
-        url: root_url,
-        type:'GET',
-    	data: { }
-    }).done(function (data) {
-        //alert(data.data);
-        //table_data_row(data.data)
-	});
+        $.ajax({
+            url: root_url,
+            type: 'GET',
+            data: {}
+        }).done(function (data) {
+            //alert(data.data);
+            //table_data_row(data.data)
+        });
     }
-    
-                $(document).on('click', '#btn-delete', function (e) {
-                console.log(e);
-                //let id = $(this).attr('id');
-                    if(!confirm("Do you really want to do this?")) {
-                         return false;
-                    }
 
-                    event.preventDefault();
-                let id = $(this).attr('data-id');
-                console.log(id);
- 
-                    $.ajax(
-                        {
-                        url: root_url_store+'/'+id,
-                        type: 'DELETE',
-                            data:
-                            {
-                                _token: $('input[name="_token"]').val()
-                            },
-                        success: function (response){
-                            Swal.fire(
+    $(document).ready(function () {
+        let dt = $("#dt").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: root_url,
+            language: {
+                lengthMenu: "Mostrar _MENU_ registros",
+                zeroRecords: "No se encontraron resultados",
+                emptyTable: "Ningún dato disponible en esta tabla",
+                //info: "Mostrando página _PAGE_ de _PAGES_",
+                info: "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+                infoEmpty:
+                    "Mostrando registros del 0 al 0 de un total de 0 registros",
+                infoFiltered: "(filtrado de un total de _MAX_ registros)",
+                search: "Buscar",
+                loadingRecords: "Loading...",
+                processing:
+                    "<img src='/media/dashboard/datatable/load.gif' width='32px'> Procesando...",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Siguiente",
+                    previous: "Atras"
+                },
+                error: {
+                    system:
+                        'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>'
+                }
+            },
+            columns: [
+                {
+                    class: "details-control",
+                    orderable: false,
+                    data: null,
+                    defaultContent: ""
+                },
+                {
+                    data: "FechaCreacion",
+                    orderable: true
+                },
+                {
+                    data: "Serial",
+                    visible: false
+                },
+                {
+                    data: "Ip"
+                },
+                {
+                    data: "Mac"
+                },
+                {
+                    data: "Anydesk"
+                    //visible: false
+                },
+                {
+                    data: "Sede"
+                },
+                {
+                    data: "EstadoPC",
+                    visible: true,
+                    orderable: true,
+                    searchable: true
+                    /*render: function (data, type, row) {
+                         if (data === 'rendimiento óptimo') {
+                             console.log(data);
+                             return '' + row.data + '';
+                        }else if (data === 'rendimiento bajo') {
+                             console.log(data);   
+                             return '' + row.data + '';
+                         }
+    
+                    }*/
+                },
+                {
+                    data: "action"
+                }
+            ],
+            order: [[1, "desc"]]
+        });
+    
+
+        /*$("#dt tbody").on("click", "td .btn-delete", function() {
+            //alert("Element clicked through function!");
+            let id = $(this).attr("id");
+            btnDelete(id);
+            //console.log(id);
+        });*/
+
+        $(document).on('click', '#btn-delete', function (e) {
+            console.log(e);
+            //let id = $(this).attr('id');
+            if (!confirm("Do you really want to do this?")) {
+                return false;
+            }
+
+            event.preventDefault();
+            let id = $(this).attr('data-id');
+            console.log(id);
+
+            $.ajax(
+                {
+                    url: root_url_store + '/' + id,
+                    type: 'DELETE',
+                    data:
+                    {
+                        _token: $('input[name="_token"]').val()
+                    },
+                    success: function (response) {
+                        Swal.fire(
                             'Remind!',
                             'Company deleted successfully!',
                             'success'
-                            )
-                            //console.log(id);
-                            get_computer_data();
-                        }
-                    });
-                    return false;
+                        )
+                        //console.log(id);
+                        $('data-id' + id).remove();
+                        $("#dt").DataTable().ajax.reload();
+                        get_computer_data();
+                    }
                 });
-
-        $(document).ready(function () {
-            let dt = $("#dt").DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: root_url,
-                language: {
-                    lengthMenu: "Mostrar _MENU_ registros",
-                    zeroRecords: "No se encontraron resultados",
-                    emptyTable: "Ningún dato disponible en esta tabla",
-                    //info: "Mostrando página _PAGE_ de _PAGES_",
-                    info: "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-                    infoEmpty:
-                        "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    infoFiltered: "(filtrado de un total de _MAX_ registros)",
-                    search: "Buscar",
-                    loadingRecords: "Loading...",
-                    processing:
-                        "<img src='/media/dashboard/datatable/load.gif' width='32px'> Procesando...",
-                    paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Siguiente",
-                        previous: "Atras"
-                    },
-                    error: {
-                        system:
-                            'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>'
-                    }
-                },
-                columns: [
-                    {
-                        class: "details-control",
-                        orderable: false,
-                        data: null,
-                        defaultContent: ""
-                    },
-                    {
-                        data: "FechaCreacion",
-                        orderable: true
-                    },
-                    {
-                        data: "Serial",
-                        visible: false
-                    },
-                    {
-                        data: "Ip"
-                    },
-                    {
-                        data: "Mac"
-                    },
-                    {
-                        data: "Anydesk"
-                        //visible: false
-                    },
-                    {
-                        data: "Sede"
-                    },
-                    {
-                        data: "EstadoPC",
-                        visible: true,
-                        orderable: true,
-                        searchable: true
-                        /*render: function (data, type, row) {
-                             if (data === 'rendimiento óptimo') {
-                                 console.log(data);
-                                 return '' + row.data + '';
-                            }else if (data === 'rendimiento bajo') {
-                                 console.log(data);   
-                                 return '' + row.data + '';
-                             }
-        
-                        }*/
-                    },
-                    {
-                        data: "action"
-                    }
-                ],
-                order: [[1, "desc"]]
-            });
-    
-
-            /*$("#dt tbody").on("click", "td .btn-delete", function() {
-                //alert("Element clicked through function!");
-                let id = $(this).attr("id");
-                btnDelete(id);
-                //console.log(id);
-            });*/
-
-            // Array to track the ids of the details displayed rows
-            $("#dt tbody").on("click", "td.details-control", function () {
-                var tr = $(this).closest("tr");
-                var row = dt.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    $("div.slider", row.child()).slideUp(function () {
-                        row.child.hide();
-                        tr.removeClass("shown");
-                    });
-                } else {
-                    // Open this row
-                    row.child(format(row.data()), "no-padding").show();
-                    tr.addClass("shown");
-
-                    $("div.slider", row.child()).slideDown();
-                }
-            });
+            return false;
         });
-    
+
+        // Array to track the ids of the details displayed rows
+        $("#dt tbody").on("click", "td.details-control", function () {
+            var tr = $(this).closest("tr");
+            var row = dt.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                $("div.slider", row.child()).slideUp(function () {
+                    row.child.hide();
+                    tr.removeClass("shown");
+                });
+            } else {
+                // Open this row
+                row.child(format(row.data()), "no-padding").show();
+                tr.addClass("shown");
+
+                $("div.slider", row.child()).slideDown();
+            }
+        });
+    });
 });
