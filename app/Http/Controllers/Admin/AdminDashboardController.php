@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Helpers\Helper;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
 
 class AdminDashboardController extends Controller
 {
@@ -27,8 +28,8 @@ class AdminDashboardController extends Controller
 
         if ($request->ajax()) {
             $pcs = DB::table('view_all_pcs')
-            //->orderBy('ComputerID')
-            ->get();
+                //->orderBy('ComputerID')
+                ->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);
@@ -40,15 +41,15 @@ class AdminDashboardController extends Controller
                 return $pcs->EstadoPC;
             });
             $datatables->editColumn('EstadoPC', function ($pcs) {
-              $pcs->EstadoPC;
+                $pcs->EstadoPC;
             });
-            
+
             $datatables->addColumn('action', function ($pcs) {
-                error_log(__LINE__.__METHOD__.' pc --->'. var_export($pcs->ComputerID,true));
+                error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<button type='button' class='btn btn-sm btn-secondary js-tooltip-enabled' data-toggle='tooltip' title=''>
                                         <i class='fa fa-pencil'></i>
                                     </button>";
-                $btn = $btn . "<button class='btn btn-sm btn-secondary js-tooltip-enabled btn-delete' data-id='$pcs->ComputerID' id='$pcs->ComputerID'>
+                $btn = $btn . "<button class='btn btn-sm btn-secondary js-tooltip-enabled' data-id='$pcs->ComputerID' id='btn-delete'>
                                         <i class='fa fa-times'></i>
                                     </button>";
                 return $btn;
@@ -60,7 +61,7 @@ class AdminDashboardController extends Controller
         $data =
             [
                 'global_pc_count' => $global_pc_count,
-                'pcID' => $pcID, 
+                'pcID' => $pcID,
             ];
 
         return view('admin.index')->with($data);
@@ -197,22 +198,35 @@ class AdminDashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Computer $id)
+    public function destroy($id)
     {
-        $pcs = Computer::findOrfail($id);
-        $pcs->delete();
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($id));
+        try {
+            Computer::destroy($id);
+        } catch (ModelNotFoundException $e) {
+            // Handle the error.
+        }
+
+        return response()->json([
+            'message' => 'Data deleted successfully!'
+        ]);
     }
 
-    public function eraseData(Computer $id)
+    /*public function delete($id)
     {
-        $pcs = Computer::findOrfail($id);
+        error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($id));
+        /*$pcs = Computer::findOrFail($id);
         $pcs->delete();
-    }
 
-        function removedata(Request $request)
+        return response()->json([
+            'message' => 'Data deleted successfully!'
+        ]);
+    }*/
+
+    function removedata(Request $request)
     {
-        Computer::find($request)->delete();        
-        return json_encode(array('statusCode'=>200));
+        Computer::find($request)->delete();
+        return json_encode(array('statusCode' => 200));
         /*$pcs = Computer::find($request->input('id'));
         if($pcs->delete())
         {

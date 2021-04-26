@@ -246,9 +246,6 @@
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
   let root_url = <?php echo json_encode(route('admin.pcs.index')) ?>;
-</script>
-
-<script>
-  let root_url_delete = <?php echo json_encode(url('admin/dashboard/pcs/delete')) ?>;
+  let root_url_store = <?php echo json_encode(route('admin.pcs.store')) ?>;
 </script>
 @endpush

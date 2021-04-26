@@ -34,7 +34,7 @@ class ComputerFactory extends Factory
 
         return [
             'batch' => 'INVPC71MAC',
-            'inv_code' => $inv_code_chain,
+            'inventory_code_number' => $inv_code_chain,
             'brand_id' => 3,
             'model' => 'M710Q DESKTOP (THINKCENTRE) - TYPE 10MR',
             'serial' => Str::random(10),
@@ -65,8 +65,8 @@ class ComputerFactory extends Factory
     public function array($max)
     {
         $values = [];
-        
-        for ($i=1; $i < $max; $i++) { 
+
+        for ($i = 1; $i < $max; $i++) {
             $values[] = $i;
         }
 
