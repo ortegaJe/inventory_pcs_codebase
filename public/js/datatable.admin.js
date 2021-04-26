@@ -1,4 +1,12 @@
+$(document).ready(function () {
 
+    get_computer_data()
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
     function format(d) {
         return (
@@ -131,6 +139,38 @@
         //table_data_row(data.data)
 	});
     }
+    
+                $(document).on('click', '#btn-delete', function (e) {
+                console.log(e);
+                //let id = $(this).attr('id');
+                    if(!confirm("Do you really want to do this?")) {
+                         return false;
+                    }
+
+                    event.preventDefault();
+                let id = $(this).attr('data-id');
+                console.log(id);
+ 
+                    $.ajax(
+                        {
+                        url: root_url_store+'/'+id,
+                        type: 'DELETE',
+                            data:
+                            {
+                                _token: $('input[name="_token"]').val()
+                            },
+                        success: function (response){
+                            Swal.fire(
+                            'Remind!',
+                            'Company deleted successfully!',
+                            'success'
+                            )
+                            //console.log(id);
+                            get_computer_data();
+                        }
+                    });
+                    return false;
+                });
 
         $(document).ready(function () {
             let dt = $("#dt").DataTable({
@@ -220,40 +260,6 @@
                 //console.log(id);
             });*/
 
-            $(document).on('click', '#btn-delete', function (e) {
-    console.log(e);
-    //let id = $(this).attr('id');
-        if(!confirm("Do you really want to do this?")) {
-                return false;
-        }
-
-        event.preventDefault();
-    let id = $(this).attr('data-id');
-    console.log(id);
-
-        $.ajax(
-            {
-            url: root_url_store+'/'+id,
-            type: 'DELETE',
-                data:
-                {
-                    _token: $('input[name="_token"]').val()
-                },
-            success: function (response){
-                Swal.fire(
-                'Remind!',
-                'Company deleted successfully!',
-                'success'
-                )
-                //console.log(id);
-                $('data-id'+id).remove();
-                 $("#dt").DataTable().ajax.reload();
-                get_computer_data();
-            }
-        });
-        return false;
-});
-
             // Array to track the ids of the details displayed rows
             $("#dt tbody").on("click", "td.details-control", function () {
                 var tr = $(this).closest("tr");
@@ -274,3 +280,5 @@
                 }
             });
         });
+    
+});
