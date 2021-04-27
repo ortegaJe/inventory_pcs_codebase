@@ -23,14 +23,12 @@ class AdminDashboardController extends Controller
     public function index(Request $request)
     {
         $global_pc_count = Computer::count();
-        $pcID = Computer::all()->only('ComputerID');
         //dd($global_pc_count);
 
         if ($request->ajax()) {
             $pcs = DB::table('view_all_pcs')
-                //->orderBy('ComputerID')
                 ->get();
-            //dd($pcs);
+                //dd($pcs);
 
             $datatables = DataTables::of($pcs);
             $datatables->editColumn('FechaCreacion', function ($pcs) {
@@ -61,7 +59,6 @@ class AdminDashboardController extends Controller
         $data =
             [
                 'global_pc_count' => $global_pc_count,
-                'pcID' => $pcID,
             ];
 
         return view('admin.index')->with($data);
@@ -200,37 +197,20 @@ class AdminDashboardController extends Controller
      */
     public function destroy($id)
     {
-        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($id));
+        $pcs = null;
+        $pcTemp = [];
+        error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
         try {
-            Computer::destroy($id);
+            $pcTemp[] = DB::select("SELECT * FROM computers WHERE id = $id", [1]);
+            $pcs = DB::delete("delete from computers where id = $id", [1]);
+            error_log(__LINE__ . __METHOD__ . ' pc --->' .var_export($pcs, true));
         } catch (ModelNotFoundException $e) {
             // Handle the error.
         }
 
         return response()->json([
-            'message' => 'Data deleted successfully!'
+            'message' => 'Data deleted successfully!',
+            'result' => $pcTemp[0]
         ]);
-    }
-
-    /*public function delete($id)
-    {
-        error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($id));
-        /*$pcs = Computer::findOrFail($id);
-        $pcs->delete();
-
-        return response()->json([
-            'message' => 'Data deleted successfully!'
-        ]);
-    }*/
-
-    function removedata(Request $request)
-    {
-        Computer::find($request)->delete();
-        return json_encode(array('statusCode' => 200));
-        /*$pcs = Computer::find($request->input('id'));
-        if($pcs->delete())
-        {
-            echo 'Data Deleted';
-        }*/
     }
 }

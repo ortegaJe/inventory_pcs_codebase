@@ -25,7 +25,6 @@ Route::group([
     'middleware' => ['auth']
 ], function () {
     Route::resource('pcs', 'AdminDashboardController');
-    Route::delete('delete/{id}', 'AdminDashboardController@delete')->name('pcs.delete');
 });
 
 Route::get('example-faker', function () {

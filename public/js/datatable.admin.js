@@ -219,44 +219,41 @@ $(document).ready(function () {
             ],
             order: [[1, "desc"]]
         });
-    
-
-        /*$("#dt tbody").on("click", "td .btn-delete", function() {
-            //alert("Element clicked through function!");
-            let id = $(this).attr("id");
-            btnDelete(id);
-            //console.log(id);
-        });*/
 
         $(document).on('click', '#btn-delete', function (e) {
             console.log(e);
-            //let id = $(this).attr('id');
-            if (!confirm("Do you really want to do this?")) {
-                return false;
-            }
-
-            event.preventDefault();
-            let id = $(this).attr('data-id');
-            console.log(id);
-
-            $.ajax(
-                {
-                    url: root_url_store + '/' + id,
-                    type: 'DELETE',
-                    data:
-                    {
-                        _token: $('input[name="_token"]').val()
-                    },
-                    success: function (response) {
-                        Swal.fire(
-                            'Remind!',
-                            'Company deleted successfully!',
-                            'success'
-                        )
-                        //console.log(id);
-                        $('data-id' + id).remove();
-                        $("#dt").DataTable().ajax.reload();
-                        get_computer_data();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        event.preventDefault();
+                        let id = $(this).attr("data-id");
+                        console.log(id);
+                        $.ajax({
+                            url: root_url_store + "/" + id,
+                            type: "DELETE",
+                            data: {
+                                _token: $('input[name="_token"]').val()
+                            },
+                            success: function(response) {
+                                console.log(response.result[0]["inventory_code_number"]);
+                                let msg = response.result[0]["inventory_code_number"];
+                                Swal.fire(
+                                    `El  ${msg}`,
+                                    response.message,
+                                    "success"
+                                );
+                                $("#dt").DataTable().ajax.reload();
+                                //console.log(id);
+                                get_computer_data();
+                            }
+                        });
                     }
                 });
             return false;

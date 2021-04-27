@@ -77,17 +77,6 @@
     <!-- END Row #1 -->
   </div>
   <!-- Pop Out Modal -->
-  <div class="block">
-    <div class="block-header block-header-default">
-      <h3 class="block-title">Pop Out <small>Effect</small></h3>
-    </div>
-    <div class="block-content block-content-full">
-      <button type="button" class="btn btn-alt-warning">Launch
-        Modal</button>
-    </div>
-  </div>
-  <!-- END Pop Out Modal -->
-  <!-- Pop Out Modal -->
   <div class="modal fade" id="modal-popout" tabindex="-1" role="dialog" aria-labelledby="modal-popout"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-popout" role="document">
@@ -101,74 +90,62 @@
               </button>
             </div>
           </div>
-          <div class="block-content">
+          <div class="block-content" style="background-color: #f0f2f5">
             <div class="row">
-              <!-- Row #6 -->
+              <!-- Row #1 -->
               <div class="col-md-6 col-xl-3">
-                <a class="block block-transparent bg-primary" href="javascript:void(0)">
-                  <div class="block-content block-content-full text-center">
-                    <div class="p-20 mb-10">
-                      <i class="fa fa-3x fa-desktop text-black-op"></i>
-                    </div>
-                    <p class="font-size-lg font-w600 text-white mb-0">
-                      545 Games
-                    </p>
-                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
-                      de escritrio
-                    </p>
+                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                  <div class="block-content block-content-full bg-image"
+                    style="background-image: url('{{ asset('/media/photos/M710q.png') }}');">
+                    <span class="img-avatar" src="" alt=""></span>
+                  </div>
+                  <div class="block-content block-content-full">
+                    <div class="font-w600 mb-5">Andrea Gardner</div>
+                    <div class="font-size-sm text-muted">VIP Account</div>
                   </div>
                 </a>
               </div>
               <div class="col-md-6 col-xl-3">
-                <a class="block block-transparent bg-earth" href="javascript:void(0)">
-                  <div class="block-content block-content-full text-center">
-                    <div class="p-20 mb-10">
-                      <i class="fa fa-3x fa-laptop text-black-op"></i>
-                    </div>
-                    <p class="font-size-lg font-w600 text-white mb-0">
-                      120 Albums
-                    </p>
-                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
-                      portatil
-                    </p>
+                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                  <div class="block-content block-content-full bg-image"
+                    style="background-image: url('assets/media/photos/photo4.jpg');">
+                    <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar8.jpg" alt="">
+                  </div>
+                  <div class="block-content block-content-full">
+                    <div class="font-w600 mb-5">Lori Grant</div>
+                    <div class="font-size-sm text-muted">Premium Account</div>
                   </div>
                 </a>
               </div>
               <div class="col-md-6 col-xl-3">
-                <a class="block block-transparent bg-pulse" href="javascript:void(0)">
-                  <div class="block-content block-content-full text-center">
-                    <div class="p-20 mb-10">
-                      <i class="fa fa-3x fa-desktop text-black-op"></i>
-                    </div>
-                    <p class="font-size-lg font-w600 text-white mb-0">
-                      14 Videos
-                    </p>
-                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
-                      Youtube
-                    </p>
+                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                  <div class="block-content block-content-full bg-image"
+                    style="background-image: url('assets/media/photos/photo25.jpg');">
+                    <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar10.jpg" alt="">
+                  </div>
+                  <div class="block-content block-content-full">
+                    <div class="font-w600 mb-5">Jack Greene</div>
+                    <div class="font-size-sm text-muted">Trial Account</div>
                   </div>
                 </a>
               </div>
               <div class="col-md-6 col-xl-3">
-                <a class="block block-transparent bg-gray-dark" href="javascript:void(0)">
-                  <div class="block-content block-content-full text-center">
-                    <div class="p-20 mb-10">
-                      <img src="{{ asset('media/photos/noun_Raspberry Pi_125961.svg') }}" alt="" width="36px">
-                    </div>
-                    <p class="font-size-lg font-w600 text-white mb-0">
-                      17 Stories
-                    </p>
-                    <p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
-                      Medium
-                    </p>
+                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
+                  <div class="block-content block-content-full bg-image"
+                    style="background-image: url('assets/media/photos/photo1.jpg');">
+                    <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar16.jpg" alt="">
+                  </div>
+                  <div class="block-content block-content-full">
+                    <div class="font-w600 mb-5">Brian Stevens</div>
+                    <div class="font-size-sm text-muted">Free Account</div>
                   </div>
                 </a>
               </div>
-              <!-- END Row #6 -->
+              <!-- END Row #1 -->
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="background-color: #f0f2f5">
           <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-alt-success" data-dismiss="modal">
             <i class="fa fa-check"></i> Perfect
