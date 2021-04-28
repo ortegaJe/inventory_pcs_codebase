@@ -27,7 +27,7 @@ class AdminDashboardController extends Controller
 
         if ($request->ajax()) {
             $pcs = DB::table('view_all_pcs')->get();
-                //dd($pcs);
+            //dd($pcs);
 
             $datatables = DataTables::of($pcs);
             $datatables->editColumn('FechaCreacion', function ($pcs) {
@@ -36,6 +36,7 @@ class AdminDashboardController extends Controller
             });
             $datatables->addColumn('EstadoPC', function ($pcs) {
                 return $pcs->EstadoPC;
+                error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
             });
 
             $datatables->addColumn('action', function ($pcs) {
@@ -116,14 +117,12 @@ class AdminDashboardController extends Controller
     {
 
         $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
-        $typeID = 1;
-
         $str = Str::random(5);
         $pc_name_chain = 'V1AMAC-' . $str;
 
         $pc = new Computer();
         $pc->inventory_code_number =  $generatorID;
-        $pc->type_id = $typeID; //ID equipo de escritorio
+        $pc->type_id = Computer::DESKTOP_PC_ID; //ID equipo de escritorio
         $pc->brand_id = $request['marca-pc-select2'];
         $pc->model = $request['modelo-pc'];
         $pc->serial = $request['serial-pc'];
@@ -148,7 +147,7 @@ class AdminDashboardController extends Controller
         return redirect()->route('admin.pcs.index', 200)
             ->with(
                 'pc_created',
-                'Nuevo equipo fué añadido al inventario'
+                'Nuevo equipo añadido al inventario!'
             );
     }
 
@@ -241,7 +240,7 @@ class AdminDashboardController extends Controller
         try {
             $pcTemp[] = DB::select("SELECT * FROM computers WHERE id = $id", [1]);
             $pcs = DB::delete("DELETE FROM computers WHERE id = $id", [1]);
-            error_log(__LINE__ . __METHOD__ . ' pc --->' .var_export($pcs, true));
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
         } catch (ModelNotFoundException $e) {
             // Handle the error.
         }

@@ -148,20 +148,7 @@ $(document).ready(function() {
                     data: "Sede"
                 },
                 {
-                    data: "EstadoPC",
-                    visible: true,
-                    orderable: true,
-                    searchable: true
-                    /*render: function (data, type, row) {
-                         if (data === 'rendimiento óptimo') {
-                             console.log(data);
-                             return '' + row.data + '';
-                        }else if (data === 'rendimiento bajo') {
-                             console.log(data);   
-                             return '' + row.data + '';
-                         }
-    
-                    }*/
+                    data: "EstadoPC"
                 },
                 {
                     data: "action"

@@ -10,5 +10,8 @@ class Computer extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const DESKTOP_PC_ID = 1;
+    const ALL_IN_ONE_PC_ID = 3;
+
     public $timestamps = false;
 }
