@@ -1,10 +1,9 @@
-$(document).ready(function () {
-
-    get_computer_data()
+$(document).ready(function() {
+    //getComputerData();
 
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         }
     });
 
@@ -80,67 +79,18 @@ $(document).ready(function () {
             "</div>"
         );
     }
-    
-    /*function btnDelete($id) {
-        console.log($id);
-        //let id = $(this).attr("id");
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then(result => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    route: root_url_delete,
-                    method: "post",
-                    data: { $id: $id },
-                    success: function (response) {
-                        //alert(response);
-                        $("#dt")
-                            .DataTable()
-                            .ajax.reload();
-                    }
-                });
-                Swal.fire("Deleted!", "Your file has been deleted.", "success");
-            }
-        });
-    }*/
 
-    /*if (confirm("Are you sure you want to DELETE this data?")) {
-        $.ajax({
-            url: root_url_delete,
-            type: "GET",
-            data: {
-                id: id
-            },
-            success: function(data) {
-                alert(data);
-                $("#dt")
-                    .DataTable()
-                    .ajax.reload();
-            }
-        });
-    } else {
-        return false;
-    }*/
-
-    function get_computer_data() {
-    
+    function getComputerData() {
         $.ajax({
             url: root_url,
-            type: 'GET',
+            type: "GET",
             data: {}
-        }).done(function (data) {
-            //alert(data.data);
-            //table_data_row(data.data)
+        }).done(function(data) {
+            //alert(data);
         });
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
@@ -220,53 +170,59 @@ $(document).ready(function () {
             order: [[1, "desc"]]
         });
 
-        $(document).on('click', '#btn-delete', function (e) {
-            console.log(e);
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        event.preventDefault();
-                        let id = $(this).attr("data-id");
-                        console.log(id);
-                        $.ajax({
-                            url: root_url_store + "/" + id,
-                            type: "DELETE",
-                            data: {
-                                _token: $('input[name="_token"]').val()
-                            },
-                            success: function(response) {
-                                console.log(response.result[0]["inventory_code_number"]);
-                                let msg = response.result[0]["inventory_code_number"];
-                                Swal.fire(
-                                    `El  ${msg}`,
-                                    response.message,
-                                    "success"
-                                );
-                                $("#dt").DataTable().ajax.reload();
-                                //console.log(id);
-                                get_computer_data();
-                            }
-                        });
-                    }
-                });
+        $(document).on("click", "#btn-delete", function(e) {
+            //console.log(e);
+            Swal.fire({
+                title: "Estas seguro?",
+                text: "No se podra revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, borrar!",
+                cancelButtonText: "No, cancelar"
+            }).then(result => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    let id = $(this).attr("data-id");
+                    //console.log(id);
+                    $.ajax({
+                        url: root_url_store + "/" + id,
+                        type: "DELETE",
+                        data: {
+                            _token: $('input[name="_token"]').val()
+                        },
+                        success: function(response) {
+                            console.log(
+                                response.result[0]["inventory_code_number"]
+                            );
+                            let msg =
+                                response.result[0]["inventory_code_number"];
+                            Swal.fire(
+                                `Numero de inventario #${msg}`,
+                                response.message,
+                                "success"
+                            );
+                            $("#dt")
+                                .DataTable()
+                                .ajax.reload();
+                            //console.log(id);
+                            //getComputerData();
+                        }
+                    });
+                }
+            });
             return false;
         });
 
         // Array to track the ids of the details displayed rows
-        $("#dt tbody").on("click", "td.details-control", function () {
-            var tr = $(this).closest("tr");
-            var row = dt.row(tr);
+        $("#dt tbody").on("click", "td.details-control", function() {
+            let tr = $(this).closest("tr");
+            let row = dt.row(tr);
 
             if (row.child.isShown()) {
                 // This row is already open - close it
-                $("div.slider", row.child()).slideUp(function () {
+                $("div.slider", row.child()).slideUp(function() {
                     row.child.hide();
                     tr.removeClass("shown");
                 });

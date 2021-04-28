@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="{{ asset('/js/plugins/slick/slick.css') }}">
   <link rel="stylesheet" href="{{ asset('/js/plugins/slick/slick-theme.css') }}">
   <link rel="stylesheet" href="{{ asset('/js/plugins/select2/css/select2.css') }}">
+  <link rel="stylesheet" href="{{ asset('/js/plugins/sweetalert2/sweetalert2.min.css') }}">
   @yield('css')
   <!-- Fonts and Codebase framework -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
@@ -146,7 +147,10 @@
                 <li>
                   <a class="{{ request()->is( 'admin/dashboard/pcs' ) ? ' active' : '' }}"
                     href="{{ route('admin.pcs.index') }}">
-                    <span class="sidebar-mini-hide">Equipos PC</span>
+                    <span class="sidebar-mini-hide">Equipos</span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
+                      @php use App\Models\Computer; $globalPcCount = Computer::count(); @endphp
+                      {{ $globalPcCount ?? '0' }}</span>
                   </a>
                 </li>
                 <li>

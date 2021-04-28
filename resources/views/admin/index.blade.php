@@ -17,9 +17,9 @@
           <div class="float-left mt-10 d-none d-sm-block">
             <i class="si si-screen-desktop fa-3x text-body-bg-dark"></i>
           </div>
-          <div class="font-size-h3 font-w600" data-toggle="countTo" data-speed="1000" data-to="{{ $global_pc_count }}">0
+          <div class="font-size-h3 font-w600" data-toggle="countTo" data-speed="1000" data-to="{{ $globalPcCount }}">0
           </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">pc de escritorio</div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorio</div>
         </div>
       </a>
     </div>
@@ -92,56 +92,73 @@
           </div>
           <div class="block-content" style="background-color: #f0f2f5">
             <div class="row">
-              <!-- Row #1 -->
+              <!-- Row #2 -->
               <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-image"
-                    style="background-image: url('{{ asset('/media/photos/M710q.png') }}');">
-                    <span class="img-avatar" src="" alt=""></span>
+                <a class="block block-rounded block-transparent text-center bg-image"
+                  style="background-image: url('{{ asset('/media/photos/lenovo-desktop.png') }}');"
+                  href="{{ route('admin.pcs.create') }}">
+                  <div class=" block-content block-content-full">
+                    <span class="img-avatar"></span>
                   </div>
-                  <div class="block-content block-content-full">
-                    <div class="font-w600 mb-5">Andrea Gardner</div>
-                    <div class="font-size-sm text-muted">VIP Account</div>
+                  <div class="block-content block-content-full block-content-sm bg-black-op">
+                    <div class="font-w600 text-white mb-5">De escritorio</div>
+                    <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
               </div>
               <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-image"
-                    style="background-image: url('assets/media/photos/photo4.jpg');">
-                    <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar8.jpg" alt="">
-                  </div>
+                <a class="block block-rounded block-transparent text-center bg-image"
+                  style="background-image: url('{{ asset('/media/photos/lenovo-all-in-one.png') }}');"
+                  href="{{ route('admin.create.allinone') }}">
                   <div class="block-content block-content-full">
-                    <div class="font-w600 mb-5">Lori Grant</div>
-                    <div class="font-size-sm text-muted">Premium Account</div>
+                    <span class="img-avatar"></span>
+                  </div>
+                  <div class="block-content block-content-full block-content-sm bg-black-op">
+                    <div class="font-w600 text-white mb-5">All in one</div>
+                    <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
               </div>
               <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-image"
-                    style="background-image: url('assets/media/photos/photo25.jpg');">
-                    <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar10.jpg" alt="">
-                  </div>
+                <a class="block block-rounded block-transparent text-center bg-image"
+                  style="background-image: url('{{ asset('/media/photos/atril-turnero.png') }}');"
+                  href="javascript:void(0)">
                   <div class="block-content block-content-full">
-                    <div class="font-w600 mb-5">Jack Greene</div>
-                    <div class="font-size-sm text-muted">Trial Account</div>
+                    <span class="img-avatar"></span>
+                  </div>
+                  <div class="block-content block-content-full block-content-sm bg-black-op">
+                    <div class="font-w600 text-white mb-5">Atril tunero</div>
+                    <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
               </div>
               <div class="col-md-6 col-xl-3">
-                <a class="block block-rounded block-link-pop text-center" href="javascript:void(0)">
-                  <div class="block-content block-content-full bg-image"
-                    style="background-image: url('assets/media/photos/photo1.jpg');">
-                    <img class="img-avatar img-avatar-thumb" src="assets/media/avatars/avatar16.jpg" alt="">
-                  </div>
+                <a class="block block-rounded block-transparent text-center bg-image"
+                  style="background-image: url('{{ asset('/media/photos/raspberry-pi.png') }}');"
+                  href="javascript:void(0)">
                   <div class="block-content block-content-full">
-                    <div class="font-w600 mb-5">Brian Stevens</div>
-                    <div class="font-size-sm text-muted">Free Account</div>
+                    <span class="img-avatar"></span>
+                  </div>
+                  <div class="block-content block-content-full block-content-sm bg-black-op">
+                    <div class="font-w600 text-white mb-5">Raspberry Pi</div>
+                    <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
               </div>
-              <!-- END Row #1 -->
+              <div class="col-md-6 col-xl-3">
+                <a class="block block-rounded block-transparent text-center bg-image"
+                  style="background-image: url('{{ asset('/media/photos/laptop-lenovo.png') }}');"
+                  href="javascript:void(0)">
+                  <div class="block-content block-content-full">
+                    <span class="img-avatar"></span>
+                  </div>
+                  <div class="block-content block-content-full block-content-sm bg-black-op">
+                    <div class="font-w600 text-white mb-5">Portátil</div>
+                    <div class="font-size-sm text-white-op"></div>
+                  </div>
+                </a>
+              </div>
+              <!-- END Row #2 -->
             </div>
           </div>
         </div>

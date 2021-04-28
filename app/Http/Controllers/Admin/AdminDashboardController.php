@@ -22,12 +22,11 @@ class AdminDashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $global_pc_count = Computer::count();
+        $globalPcCount = Computer::count();
         //dd($global_pc_count);
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs')
-                ->get();
+            $pcs = DB::table('view_all_pcs')->get();
                 //dd($pcs);
 
             $datatables = DataTables::of($pcs);
@@ -38,12 +37,9 @@ class AdminDashboardController extends Controller
             $datatables->addColumn('EstadoPC', function ($pcs) {
                 return $pcs->EstadoPC;
             });
-            $datatables->editColumn('EstadoPC', function ($pcs) {
-                $pcs->EstadoPC;
-            });
 
             $datatables->addColumn('action', function ($pcs) {
-                error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
+                //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<button type='button' class='btn btn-sm btn-secondary js-tooltip-enabled' data-toggle='tooltip' title=''>
                                         <i class='fa fa-pencil'></i>
                                     </button>";
@@ -58,7 +54,7 @@ class AdminDashboardController extends Controller
 
         $data =
             [
-                'global_pc_count' => $global_pc_count,
+                'globalPcCount' => $globalPcCount,
             ];
 
         return view('admin.index')->with($data);
@@ -72,7 +68,7 @@ class AdminDashboardController extends Controller
     public function create()
     {
         $types = DB::table('types')->select('id', 'name')->get();
-        $operating_systems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
+        $operatingSystems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
         $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->get();
         $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->get();
         $hdds = DB::table('hdds')->select('id', 'size', 'type')->get();
@@ -97,7 +93,7 @@ class AdminDashboardController extends Controller
         $data =
             [
                 'types' => $types,
-                'operating_systems' => $operating_systems,
+                'operatingSystems' => $operatingSystems,
                 'SlotOneRams' => $SlotOneRams,
                 'SlotTwoRams' => $SlotTwoRams,
                 'hdds' => $hdds,
@@ -119,14 +115,15 @@ class AdminDashboardController extends Controller
     public function store(Request $request, Faker $faker)
     {
 
-        $generatorID = Helper::IDGenerator(new Computer, 'inv_code', 8, 'PC');
+        $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+        $typeID = 1;
 
         $str = Str::random(5);
         $pc_name_chain = 'V1AMAC-' . $str;
 
         $pc = new Computer();
-        $pc->inv_code =  $generatorID;
-        $pc->type_id = $request['tipos-pc-select2'];
+        $pc->inventory_code_number =  $generatorID;
+        $pc->type_id = $typeID; //ID equipo de escritorio
         $pc->brand_id = $request['marca-pc-select2'];
         $pc->model = $request['modelo-pc'];
         $pc->serial = $request['serial-pc'];
@@ -153,6 +150,47 @@ class AdminDashboardController extends Controller
                 'pc_created',
                 'Nuevo equipo fué añadido al inventario'
             );
+    }
+
+    public function createAllInOne()
+    {
+        $types = DB::table('types')->select('id', 'name')->get();
+        $operatingSystems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
+        $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->get();
+        $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->get();
+        $hdds = DB::table('hdds')->select('id', 'size', 'type')->get();
+        $brands = DB::table('brands')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'description')->get();
+
+        $secondSegmentIp = rand(1, 254);
+        $thirdSegmentIp = rand(1, 254);
+        $ip = '192.168.' . $secondSegmentIp . '.' . $thirdSegmentIp;
+
+        $macAdress = Str::upper(Str::random(3)) . '.' .
+            Str::upper(Str::random(3)) . '.' .
+            Str::upper(Str::random(3)) . '.' .
+            Str::upper(Str::random(3));
+
+        //$campus = Campu::select('id', 'description')->get();
+        //dd($campus);
+        //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
+        /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
+        dd($slug);*/
+
+        $data =
+            [
+                'types' => $types,
+                'operatingSystems' => $operatingSystems,
+                'SlotOneRams' => $SlotOneRams,
+                'SlotTwoRams' => $SlotTwoRams,
+                'hdds' => $hdds,
+                'brands' => $brands,
+                'campus' => $campus,
+                'ip' => $ip,
+                'macAdress' => $macAdress,
+            ];
+
+        return view('admin.forms.create_all_in_one')->with($data);
     }
 
     /**
@@ -199,17 +237,17 @@ class AdminDashboardController extends Controller
     {
         $pcs = null;
         $pcTemp = [];
-        error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
         try {
             $pcTemp[] = DB::select("SELECT * FROM computers WHERE id = $id", [1]);
-            $pcs = DB::delete("delete from computers where id = $id", [1]);
+            $pcs = DB::delete("DELETE FROM computers WHERE id = $id", [1]);
             error_log(__LINE__ . __METHOD__ . ' pc --->' .var_export($pcs, true));
         } catch (ModelNotFoundException $e) {
             // Handle the error.
         }
 
         return response()->json([
-            'message' => 'Data deleted successfully!',
+            'message' => 'Equipo borrado del inventario exitosamente!',
             'result' => $pcTemp[0]
         ]);
     }

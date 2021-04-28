@@ -42,16 +42,10 @@
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
             <div class="form-group row">
               <div class="col-md-3">
-                <div class="form-material floating">
-                  <select class="form-control" id="tipos-pc-select2" name="tipos-pc-select2">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($types as $type)
-                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                    @empty
-                    <option value="tipos-pc-select2">NO EXISTEN TIPOS DE EQUIPOS REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="tipos-pc-select2">Seleccionar tipo de equipo</label>
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="tipos-pc-select2" name="tipos-pc-select2"
+                    placeholder="{{ $types[0]->name}}" onkeyup="javascript:this.value=this.value.toUpperCase();"
+                    disabled>
                 </div>
               </div>
               <div class="col-md-3">
@@ -72,7 +66,7 @@
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($operating_systems as $os)
+                    @forelse ($operatingSystems as $os)
                     <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
                     @empty
                     <option value="">NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
