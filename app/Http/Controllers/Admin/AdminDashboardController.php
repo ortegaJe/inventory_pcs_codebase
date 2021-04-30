@@ -12,6 +12,7 @@ use App\Helpers\Helper;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
+use Illuminate\Support\HtmlString;
 
 class AdminDashboardController extends Controller
 {
@@ -35,8 +36,10 @@ class AdminDashboardController extends Controller
                     ->format('d-m-Y h:i A')    : '';
             });
             $datatables->addColumn('EstadoPC', function ($pcs) {
-                return $pcs->EstadoPC;
-                error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
+                //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
+                $arrayPc = array($pcs->EstadoPC);    
+                return implode(" ",$arrayPc);
+
             });
 
             $datatables->addColumn('action', function ($pcs) {
@@ -132,6 +135,11 @@ class AdminDashboardController extends Controller
         $pc->slot_two_ram_id = $request['val-select2-ram1'];
         $pc->hdd_id = $request['val-select2-hdd'];
         $pc->cpu = $request['cpu'];
+        if(!empty($pc->statu_id = $request->input('estado-pc'))){
+            $checkbox = implode(',',$request->input('estado-pc'));
+        }else{
+            $checkbox = '';
+        }
         $pc->ip = $request['ip'];
         $pc->mac = $request['mac'];
         $pc->anydesk = $request['anydesk'];
@@ -142,6 +150,7 @@ class AdminDashboardController extends Controller
         $pc->rowguid = $faker->uuid;
         $pc->created_at = now();
         //dd($pc);
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
         $pc->save();
 
         return redirect()->route('admin.pcs.index', 200)
@@ -160,6 +169,7 @@ class AdminDashboardController extends Controller
         $hdds = DB::table('hdds')->select('id', 'size', 'type')->get();
         $brands = DB::table('brands')->select('id', 'name')->get();
         $campus = DB::table('campus')->select('id', 'description')->get();
+        $status = DB::table('status_computers')->select('id','name')->where('id', '<>', 4)->get();
 
         $secondSegmentIp = rand(1, 254);
         $thirdSegmentIp = rand(1, 254);
@@ -187,9 +197,53 @@ class AdminDashboardController extends Controller
                 'campus' => $campus,
                 'ip' => $ip,
                 'macAdress' => $macAdress,
+                'status' => $status
             ];
 
         return view('admin.forms.create_all_in_one')->with($data);
+    }
+
+    public function storeAllInOne(Request $request, Faker $faker)
+    {
+
+        $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+        $str = Str::random(5);
+        $pc_name_chain = 'V1AMAC-' . $str;
+
+        $pc = new Computer();
+        $pc->inventory_code_number =  $generatorID;
+        $pc->type_id = Computer::ALL_IN_ONE_PC_ID; //ID equipo de escritorio
+        $pc->brand_id = $request['marca-pc-select2'];
+        $pc->model = $request['modelo-pc'];
+        $pc->serial = $request['serial-pc'];
+        $pc->os_id = $request['os-pc-select2'];
+        $pc->slot_one_ram_id = $request['val-select2-ram0'];
+        $pc->slot_two_ram_id = $request['val-select2-ram1'];
+        $pc->hdd_id = $request['val-select2-hdd'];
+        $pc->cpu = $request['cpu'];
+        if(!empty($pc->statu_id = $request->input('estado-pc'))){
+            $checkbox = implode(',',$request->input('estado-pc'));
+        }else{
+            $checkbox = '';
+        }
+        $pc->ip = $request['ip'];
+        $pc->mac = $request['mac'];
+        $pc->anydesk = $request['anydesk'];
+        $pc->pc_name = $pc_name_chain;
+        $pc->campu_id = $request['val-select2-campus'];
+        $pc->location = $request['location'];
+        $pc->observation = $request['observation'];
+        $pc->rowguid = $faker->uuid;
+        $pc->created_at = now();
+        //dd($pc);
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
+        $pc->save();
+
+        return redirect()->route('admin.pcs.index', 200)
+            ->with(
+                'pc_created',
+                'Nuevo equipo añadido al inventario!'
+            );
     }
 
     /**
