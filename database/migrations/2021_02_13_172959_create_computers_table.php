@@ -39,7 +39,7 @@ class CreateComputersTable extends Migration
             $table->dateTime('updated_at')->nullable();
             $table->softDeletes();
             $table->smallInteger('deleted_at_status')->default(1)->nullable();
-            $table->unsignedBigInteger('statu_id')->nullable();
+            $table->json('statu_id')->nullable();
 
             $table->foreign('campu_id')->references('id')->on('campus')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('type_id')->references('id')->on('types')->nullOnDelete()->cascadeOnUpdate();
@@ -47,7 +47,7 @@ class CreateComputersTable extends Migration
             $table->foreign('slot_one_ram_id')->references('id')->on('slot_one_rams')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_two_ram_id')->references('id')->on('slot_two_rams')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('hdd_id')->references('id')->on('hdds')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('statu_id')->references('id')->on('status_computers_codes')->nullOnDelete()->cascadeOnUpdate();
+            //$table->foreign('statu_id')->references('id')->on('status_computers_codes')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

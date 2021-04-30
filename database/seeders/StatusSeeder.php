@@ -16,27 +16,27 @@ class StatusSeeder extends Seeder
     {
         //DB::table('status_computers')->truncate();
 
-        DB::table('status_computers')->insert([
+        DB::table('status')->insert([
             'name' => 'rendimiento optimo',
             'created_at' => now(),
         ]);
 
-        DB::table('status_computers')->insert([
+        DB::table('status')->insert([
             'name' => 'rendimiento bajo',
             'created_at' => now(),
         ]);
 
-        DB::table('status_computers')->insert([
+        DB::table('status')->insert([
             'name' => 'hurtado',
             'created_at' => now(),
         ]);
 
-        DB::table('status_computers')->insert([
+        DB::table('status')->insert([
             'name' => 'eliminado',
             'created_at' => now(),
         ]);
 
-        DB::table('status_computers')->insert([
+        DB::table('status')->insert([
             'name' => 'dado de baja',
             'created_at' => now(),
         ]);

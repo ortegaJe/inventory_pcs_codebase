@@ -58,7 +58,7 @@ class ComputerFactory extends Factory
             'updated_at' => null,
             'deleted_at' => null,
             'deleted_at_status' => null,
-            'statu_id' => rand(1, 5)
+            'statu_id' => 'rendimiento optimo, dado de baja'
         ];
     }
 

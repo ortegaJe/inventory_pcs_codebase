@@ -19,7 +19,7 @@ class CreateStatusComputerCodesTable extends Migration
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
 
-            $table->foreign('statu_id')->references('id')->on('status_computers')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

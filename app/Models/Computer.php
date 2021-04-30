@@ -17,8 +17,4 @@ class Computer extends Model
     const ALL_IN_ONE_PC_ID = 5;
 
     public $timestamps = false;
-
-        protected $casts = [
-        'statu_id' => 'array',
-    ];
 }
