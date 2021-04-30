@@ -5,7 +5,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar nuevo equipo All In One</h2>
+    <h2 class="content-heading">Registrar Nuevo Equipo All In One</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -41,14 +41,7 @@
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
             <div class="form-group row">
-              <div class="col-md-3">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="tipos-pc-select2" name="tipos-pc-select2"
-                    placeholder="{{ $types[4]->name}}" onkeyup="javascript:this.value=this.value.toUpperCase();"
-                    disabled>
-                </div>
-              </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-material floating">
                   <select class="form-control" id="marca-pc-select2" name="marca-pc-select2">
                     <option disabled selected></option>
@@ -62,7 +55,7 @@
                   <label for="marca-pc-select2">Seleccionar fabricante</label>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
@@ -78,7 +71,7 @@
                   <label for="os-pc-select2">Sistema Operativo</label>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -97,18 +90,6 @@
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="serial-pc">Serial</label>
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="fa fa-fw fa-barcode"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="serial-monitor-pc">Serial monitor</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>
@@ -181,6 +162,44 @@
                     </span>
                   </div>
                 </div>
+              </div>
+              <div class="col-xl-6 mt-4">
+                <!-- Colors -->
+                <div class="block">
+                  <div class="block-header block-header-default">
+                    <h3 class="block-title">Estado del equipo</h3>
+                  </div>
+                  <div class="block-content">
+                    <div class="row no-gutters items-push">
+                      <div class="col-6">
+                        <label class="css-control css-control-success css-checkbox">
+                          <input type="checkbox" class="css-control-input" name="estado-pc[]"
+                            value="rendimiento optimo">
+                          <span class="css-control-indicator"></span> Rendimiento Óptimo
+                        </label>
+                      </div>
+                      <div class="col-6">
+                        <label class="css-control css-control-warning css-checkbox">
+                          <input type="checkbox" class="css-control-input" name="estado-pc[]" value="rendimiento bajo">
+                          <span class="css-control-indicator"></span> Rendimiento bajo
+                        </label>
+                      </div>
+                      <div class="col-6">
+                        <label class="css-control css-control-info css-checkbox">
+                          <input type="checkbox" class="css-control-input" name="estado-pc[]" value="hurtado">
+                          <span class="css-control-indicator"></span> Hurtado
+                        </label>
+                      </div>
+                      <div class="col-6">
+                        <label class="css-control css-control-secondary css-checkbox">
+                          <input type="checkbox" class="css-control-input" name="estado-pc[]" value="dado de baja">
+                          <span class="css-control-indicator"></span> Dado de baja
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- END Colors -->
               </div>
             </div>
           </div>

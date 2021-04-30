@@ -5,7 +5,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registro de equipos</h2>
+    <h2 class="content-heading">Registrar Nuevo Equipo De Escritorio</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -41,14 +41,7 @@
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
             <div class="form-group row">
-              <div class="col-md-3">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="tipos-pc-select2" name="tipos-pc-select2"
-                    placeholder="{{ $types[0]->name}}" onkeyup="javascript:this.value=this.value.toUpperCase();"
-                    disabled>
-                </div>
-              </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-material floating">
                   <select class="form-control" id="marca-pc-select2" name="marca-pc-select2">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
@@ -61,7 +54,7 @@
                   <label for="marca-pc-select2">Seleccionar fabricante</label>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
@@ -75,7 +68,7 @@
                   <label for="os-pc-select2">Sistema Operativo</label>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">

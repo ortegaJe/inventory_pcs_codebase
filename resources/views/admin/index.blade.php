@@ -76,6 +76,12 @@
     </div>
     <!-- END Row #1 -->
   </div>
+  <?php  
+//assigning value to the array  
+$website_list = array("infinityknow","pakainfo,","Virat","Kohali !");  
+  
+echo implode(" ",$website_list);// Use of implode function  
+?>
   <!-- Pop Out Modal -->
   <div class="modal fade" id="modal-popout" tabindex="-1" role="dialog" aria-labelledby="modal-popout"
     aria-hidden="true">
