@@ -15,7 +15,7 @@ class TypesSeeder extends Seeder
     public function run()
     {
         DB::table('types')->insert([
-            'name' => 'PC',
+            'name' => 'DE ESCRITORIO',
             'created_at' => now(),
         ]);
 
@@ -30,7 +30,7 @@ class TypesSeeder extends Seeder
         ]);
 
         DB::table('types')->insert([
-            'name' => 'RASPBERRY',
+            'name' => 'RASPBERRY PI',
             'created_at' => now(),
         ]);
 

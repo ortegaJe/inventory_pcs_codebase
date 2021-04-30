@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->dateTime('current_sign_in_at')->nullable();
             $table->dateTime('last_sign_in_at')->nullable();
-            $table->tinyInteger('is_active')->default(1);
+            $table->boolean('is_active')->default(1);
         });
     }
 

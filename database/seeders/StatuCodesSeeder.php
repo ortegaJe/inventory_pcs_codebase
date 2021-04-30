@@ -14,6 +14,7 @@ class StatuCodesSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table('status_computers_codes')->insert([
             'statu_id' => 1,
             'created_at' => now(),

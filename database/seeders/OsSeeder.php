@@ -17,6 +17,35 @@ class OsSeeder extends Seeder
         DB::table('operating_systems')->insert([
             'name' => 'WINDOWS',
             'architecture' => 'X64',
+            'version' => '7 PROFFESIONAL',
+            'created_at' => now(),
+        ]);
+
+        DB::table('operating_systems')->insert([
+            'name' => 'WINDOWS',
+            'architecture' => 'X64',
+            'version' => '7 PROFFESIONAL',
+            'created_at' => now(),
+        ]);
+
+        
+        DB::table('operating_systems')->insert([
+            'name' => 'WINDOWS',
+            'architecture' => 'X64',
+            'version' => '8.1 PROFFESIONAL',
+            'created_at' => now(),
+        ]);
+
+        DB::table('operating_systems')->insert([
+            'name' => 'WINDOWS',
+            'architecture' => 'X64',
+            'version' => '8.1 PROFFESIONAL',
+            'created_at' => now(),
+        ]);
+
+        DB::table('operating_systems')->insert([
+            'name' => 'WINDOWS',
+            'architecture' => 'X64',
             'version' => '10 PROFFESIONAL',
             'created_at' => now(),
         ]);
@@ -25,20 +54,6 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X86',
             'version' => '10 PROFFESIONAL',
-            'created_at' => now(),
-        ]);
-
-        DB::table('operating_systems')->insert([
-            'name' => 'WINDOWS',
-            'architecture' => 'X64',
-            'version' => '8.1 PROFFESIONAL',
-            'created_at' => now(),
-        ]);
-
-        DB::table('operating_systems')->insert([
-            'name' => 'WINDOWS',
-            'architecture' => 'X64',
-            'version' => '8.1 PROFFESIONAL',
             'created_at' => now(),
         ]);
 

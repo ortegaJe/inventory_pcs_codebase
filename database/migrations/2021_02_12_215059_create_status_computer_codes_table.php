@@ -13,7 +13,7 @@ class CreateStatusComputerCodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_computers_codes', function (Blueprint $table) {
+        Schema::create('statu_computer_codes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('statu_id')->nullable();
             $table->timestamp('created_at')->nullable();

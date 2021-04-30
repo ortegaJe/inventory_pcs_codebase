@@ -14,8 +14,10 @@ class StatusSeeder extends Seeder
      */
     public function run()
     {
+        //DB::table('status_computers')->truncate();
+
         DB::table('status_computers')->insert([
-            'name' => 'rendimiento óptimo',
+            'name' => 'rendimiento optimo',
             'created_at' => now(),
         ]);
 
@@ -25,17 +27,17 @@ class StatusSeeder extends Seeder
         ]);
 
         DB::table('status_computers')->insert([
-            'name' => 'rendimiento hurtado',
+            'name' => 'hurtado',
             'created_at' => now(),
         ]);
 
         DB::table('status_computers')->insert([
-            'name' => 'rendimiento eliminado',
+            'name' => 'eliminado',
             'created_at' => now(),
         ]);
 
         DB::table('status_computers')->insert([
-            'name' => 'rendimiento dado de baja',
+            'name' => 'dado de baja',
             'created_at' => now(),
         ]);
     }

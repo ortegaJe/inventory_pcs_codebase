@@ -13,7 +13,7 @@ class CreateStatusComputersTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_computers', function (Blueprint $table) {
+        Schema::create('status', function (Blueprint $table) {
             $table->id();
             $table->char('name');
             $table->timestamp('created_at')->nullable();
