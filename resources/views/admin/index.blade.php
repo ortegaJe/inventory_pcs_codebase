@@ -9,57 +9,103 @@
 @section('content')
 <!-- Page Content -->
 <div class="content">
-  <div class="row invisible" data-toggle="appear">
-    <!-- Row #1 -->
-    <div class="col-6 col-xl-3">
-      <a class="block block-link-shadow text-right" href="javascript:void(0)">
-        <div class="block-content block-content-full clearfix">
-          <div class="float-left mt-10 d-none d-sm-block">
-            <i class="si si-screen-desktop fa-3x text-body-bg-dark"></i>
+  <div class="row gutters-tiny mb-2">
+    <!-- Total equipos de escritorios -->
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+              <i class="si si-screen-desktop fa-2x text-info-light"></i>
+            </div>
           </div>
-          <div class="font-size-h3 font-w600" data-toggle="countTo" data-speed="1000" data-to="{{ $globalPcCount }}">0
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-0 text-info" data-toggle="countTo" data-to="{{ $globalPcCount }}">0
+            </div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorios</div>
           </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorio</div>
         </div>
       </a>
     </div>
-    <div class="col-6 col-xl-3">
-      <a class="block block-link-shadow text-right" href="javascript:void(0)">
-        <div class="block-content block-content-full clearfix">
-          <div class="float-left mt-10 d-none d-sm-block">
-            <i class="si si-wallet fa-3x text-body-bg-dark"></i>
+    <!-- END Total equipos de escritorios -->
+
+    <!-- All In One -->
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+              <i class="fa fa-desktop fa-2x text-warning-light"></i>
+            </div>
           </div>
-          <div class="font-size-h3 font-w600">$<span data-toggle="countTo" data-speed="1000" data-to="780">0</span>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo" data-to="95">0</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">All In One</div>
           </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Earnings</div>
         </div>
       </a>
     </div>
-    <div class="col-6 col-xl-3">
-      <a class="block block-link-shadow text-right" href="javascript:void(0)">
-        <div class="block-content block-content-full clearfix">
-          <div class="float-left mt-10 d-none d-sm-block">
-            <i class="si si-envelope-open fa-3x text-body-bg-dark"></i>
+    <!-- END All In One -->
+
+    <!-- Portatiles -->
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+              <i class="fa fa-warning fa-2x text-danger-light"></i>
+            </div>
           </div>
-          <div class="font-size-h3 font-w600" data-toggle="countTo" data-speed="1000" data-to="15">0</div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Messages</div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo" data-to="30">0</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Portatiles</div>
+          </div>
         </div>
       </a>
     </div>
-    <div class="col-6 col-xl-3">
-      <a class="block block-link-shadow text-right" href="javascript:void(0)">
-        <div class="block-content block-content-full clearfix">
-          <div class="float-left mt-10 d-none d-sm-block">
-            <i class="si si-users fa-3x text-body-bg-dark"></i>
+    <!-- END Portatiles -->
+
+    <!-- Turnero -->
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+              <i class="fa fa-ticket fa-2x text-danger-light"></i>
+            </div>
           </div>
-          <div class="font-size-h3 font-w600" data-toggle="countTo" data-speed="1000" data-to="4252">0</div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Online</div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo" data-to="30">0</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Turnero</div>
+          </div>
         </div>
       </a>
     </div>
-    <div class="col-md-6 col-xl-3">
+    <!-- END Turnero -->
+
+    <!-- Raspberry PI -->
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+              <i class="fa fa-warning fa-2x" style="color: #c51d4a"></i>
+            </div>
+          </div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-0" style="color: #c51d4a" data-toggle="countTo" data-to="30">0
+            </div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Raspberrys PI</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!-- END Raspberry PI -->
+
+    <!-- Add Product -->
+    <div class="col-md-6 col-xl-2">
       <a class="block block-link-shadow block-link-shadow" data-toggle="modal" data-target="#modal-popout">
-        <div class=" block-content block-content-full block-sticky-options">
+        <div class="block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
               <i class="si si-screen-desktop fa-2x text-success-light"></i>
@@ -74,7 +120,7 @@
         </div>
       </a>
     </div>
-    <!-- END Row #1 -->
+    <!-- END Add Product -->
   </div>
   <!-- Pop Out Modal -->
   <div class="modal fade" id="modal-popout" tabindex="-1" role="dialog" aria-labelledby="modal-popout"
@@ -109,7 +155,7 @@
               <div class="col-md-6 col-xl-3">
                 <a class="block block-rounded block-transparent text-center bg-image"
                   style="background-image: url('{{ asset('/media/photos/lenovo-all-in-one.png') }}');"
-                  href="{{ route('admin.create.allinone') }}">
+                  href="{{ route('admin.pcs.create_allinone') }}">
                   <div class="block-content block-content-full">
                     <span class="img-avatar"></span>
                   </div>
