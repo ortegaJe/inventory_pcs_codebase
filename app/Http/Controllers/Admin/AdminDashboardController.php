@@ -51,12 +51,10 @@ class AdminDashboardController extends Controller
 
       $datatables->addColumn('action', function ($pcs) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
-        $btn = "<button type='button' class='btn btn-sm btn-secondary js-tooltip-enabled' data-toggle='tooltip' title=''>
-                                        <i class='fa fa-pencil'></i>
-                                    </button>";
+        $btn = "<button type='button' class='btn btn-sm btn-secondary' data-toggle='tooltip' title='Edit'>
+                                                    <i class='fa fa-pencil'></i>";
         $btn = $btn . "<button class='btn btn-sm btn-secondary js-tooltip-enabled' data-id='$pcs->ComputerID' id='btn-delete'>
-                                        <i class='fa fa-times'></i>
-                                    </button>";
+                                        <i class='fa fa-times'></i>";
         return $btn;
       });
       $datatables->rawColumns(['action', 'EstadoPC']);
@@ -129,6 +127,7 @@ class AdminDashboardController extends Controller
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
     $str = Str::random(5);
     $pc_name_chain = 'V1AMAC-' . $str;
+    $arrayToString = implode(',', $request->input('estado-pc'));
 
     $pc = new Computer();
     $pc->inventory_code_number =  $generatorID;
@@ -142,12 +141,7 @@ class AdminDashboardController extends Controller
     $pc->slot_two_ram_id = $request['val-select2-ram1'];
     $pc->hdd_id = $request['val-select2-hdd'];
     $pc->cpu = $request['cpu'];
-    if (!empty($request->input('estado-pc'))) {
-      $checkbox = implode(',', $request->input('estado-pc'));
-      $pc->statu_id = $checkbox;
-    } else {
-      $checkbox = '';
-    }
+    $pc->statu_id = $arrayToString;
     $pc->ip = $request['ip'];
     $pc->mac = $request['mac'];
     $pc->anydesk = $request['anydesk'];

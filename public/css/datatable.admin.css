@@ -29,13 +29,17 @@
         cursor: pointer;
     }
 
+    table.dataTable td:nth-child(6){
+        text-align:center;
+    }
+
     table.dataTable td:nth-child(7){
         max-width: 150px;
         width: auto;
         text-align:center;
     }
 
-    table.dataTable td:nth-child(6){
+    table.dataTable td:nth-child(8){
         text-align:center;
     }
 

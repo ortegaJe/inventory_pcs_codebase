@@ -25,8 +25,8 @@ Route::group([
     'middleware' => ['auth']
 ], function () {
     Route::resource('pcs', 'AdminDashboardController');
-    Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('create.allinone');
-    Route::post('guardar-pc-all-in-one', 'AdminDashboardController@storeAllInOne')->name('store.allinone');
+    Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('pcs.create_allinone');
+    Route::post('guardar-pc-all-in-one', 'AdminDashboardController@storeAllInOne')->name('pcs.store_allinone');
 });
 
 Route::get('example-faker', function () {

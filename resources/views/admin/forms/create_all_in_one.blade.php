@@ -33,7 +33,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.store') }}" method="POST">
+      <form action="{{ route('admin.pcs.store_allinone') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -164,7 +164,7 @@
                 </div>
               </div>
               <div class="col-xl-6 mt-4">
-                <!-- Colors -->
+                <!-- Status Checkboxes -->
                 <div class="block">
                   <div class="block-header block-header-default">
                     <h3 class="block-title">Estado del equipo</h3>
@@ -199,7 +199,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- END Colors -->
+                <!-- END Status Checkboxes -->
               </div>
             </div>
           </div>
