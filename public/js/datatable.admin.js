@@ -22,7 +22,7 @@ $(document).ready(function() {
             "<td>Memoria RAM(ranura 02): " +
             d.Ram1 +
             "</td>" +
-            "<td>Disco Duro: " +
+            "<td>Almacenamiento: " +
             d.HddPeso +
             "" +
             d.HddTipo +
@@ -128,30 +128,39 @@ $(document).ready(function() {
                 },
                 {
                     data: "FechaCreacion",
-                    orderable: true
+                    orderable: true,
+                    searchable: true
                 },
                 {
                     data: "Serial",
-                    visible: false
+                    visible: false,
+                    searcheable: true
                 },
                 {
-                    data: "Ip"
+                    data: "Ip",
+                    searcheable: true
                 },
                 {
-                    data: "Mac"
+                    data: "Mac",
+                    searcheable: true
                 },
                 {
-                    data: "Anydesk"
+                    data: "Anydesk",
+                    searcheable: true
                     //visible: false
                 },
                 {
-                    data: "Sede"
+                    data: "Sede",
+                    searcheable: true
                 },
                 {
-                    data: "EstadoPC"
+                    data: "EstadoPC",
+                    searcheable: true
                 },
                 {
-                    data: "action"
+                    data: "action",
+                    searcheable: false,
+                    orderable: false
                 }
             ],
             order: [[1, "desc"]]

@@ -9,7 +9,7 @@ class Helper
 
     public static function IDGenerator($model, $trow, $length = 4, $prefix)
     {
-        $data = $model::orderBy('id', 'desc')->first();
+        $data = $model::orderByDesc('id')->first();
         if (!$data) {
             $og_length = $length;
             $last_number = '';

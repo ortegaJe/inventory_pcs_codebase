@@ -23,8 +23,8 @@ class AdminDashboardController extends Controller
    */
   public function index(Request $request)
   {
-    $globalPcCount = Computer::count();
-    //dd($global_pc_count);
+    $globalPcCount = DB::table('computers')->select('id')->count();
+    //dd($globalPcCount);
 
     if ($request->ajax()) {
       $pcs = DB::table('view_all_pcs')->get();
@@ -45,7 +45,7 @@ class AdminDashboardController extends Controller
         $string = $pcs->EstadoPC;
         $arrayString = explode(",", $string);
         $arrayRenderHtmlStatus = "<span class='badge badge-pill badge-primary btn-block'>$arrayString[0]</span>";
-        $arrayRenderHtmlStatus = $arrayRenderHtmlStatus . "<span class='badge badge-pill badge-primary btn-block mt-2'>$arrayString[1]</span>";
+        //$arrayRenderHtmlStatus = $arrayRenderHtmlStatus . "<span class='badge badge-pill badge-primary btn-block mt-2'>$arrayString[1]</span>";
         return Str::title($arrayRenderHtmlStatus);
       });
 

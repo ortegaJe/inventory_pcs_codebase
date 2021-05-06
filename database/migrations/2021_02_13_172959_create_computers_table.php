@@ -19,19 +19,19 @@ class CreateComputersTable extends Migration
             $table->string('inventory_code_number', 12)->nullable()->unique();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->char('model')->nullable();
-            $table->char('serial')->unique();
-            $table->char('serial_monitor')->nullable();
+            $table->char('serial')->nullable(); //serial_number
+            $table->char('serial_monitor')->nullable(); //monitor_serial_number
             $table->unsignedBigInteger('type_id')->nullable();
             $table->unsignedBigInteger('slot_one_ram_id')->nullable();
             $table->unsignedBigInteger('slot_two_ram_id')->nullable();
-            $table->unsignedBigInteger('hdd_id')->nullable();
-            $table->char('campu_id', 4)->nullable();
+            $table->unsignedBigInteger('hdd_id')->nullable(); //storage_id
             $table->char('cpu')->nullable();
-            $table->ipAddress('ip', 15)->unique();
-            $table->macAddress('mac')->unique();
-            $table->char('anydesk')->nullable()->unique();
-            $table->char('pc_name')->nullable()->unique();
+            $table->ipAddress('ip', 15);
+            $table->macAddress('mac');
+            $table->char('anydesk')->nullable();
+            $table->char('pc_name')->nullable();
             $table->char('image')->nullable();
+            $table->char('campu_id', 4)->nullable();
             $table->text('location')->nullable();
             $table->text('observation')->nullable();
             $table->uuid('rowguid')->nullable();

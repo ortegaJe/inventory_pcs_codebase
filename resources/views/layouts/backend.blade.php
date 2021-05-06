@@ -149,7 +149,7 @@
                     href="{{ route('admin.pcs.index') }}">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
-                      @php use App\Models\Computer; $globalPcCount = Computer::count(); @endphp
+                      @php $globalPcCount = DB::table('computers')->select('id')->count(); @endphp
                       {{ $globalPcCount ?? '0' }}</span>
                   </a>
                 </li>
