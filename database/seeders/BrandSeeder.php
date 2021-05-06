@@ -28,5 +28,10 @@ class BrandSeeder extends Seeder
             'name' => 'LENOVO',
             'created_at' => now(),
         ]);
+
+        DB::table('brands')->insert([
+            'name' => 'RASPBERRY PI FOUNDATION',
+            'created_at' => now(),
+        ]);
     }
 }

@@ -70,18 +70,6 @@ class HddSeeder extends Seeder
         ]);
 
         DB::table('hdds')->insert([
-            'size' => '150 GB',
-            'type' => 'Escritorio',
-            'created_at' => now(),
-        ]);
-
-        DB::table('hdds')->insert([
-            'size' => '150 GB',
-            'type' => 'Portatil',
-            'created_at' => now(),
-        ]);
-
-        DB::table('hdds')->insert([
             'size' => '200 GB',
             'type' => 'Escritorio',
             'created_at' => now(),
@@ -166,38 +154,38 @@ class HddSeeder extends Seeder
         ]);
 
         DB::table('hdds')->insert([
-            'size' => '120 SSD',
-            'type' => 'Escritorio',
-            'created_at' => now(),
-        ]);
-
-        DB::table('hdds')->insert([
-            'size' => '120 SSD',
+            'size' => '120 GB SSD',
             'type' => 'Portatil',
             'created_at' => now(),
         ]);
 
         DB::table('hdds')->insert([
-            'size' => '256 SSD',
-            'type' => 'Escritorio',
-            'created_at' => now(),
-        ]);
-
-        DB::table('hdds')->insert([
-            'size' => '256 SSD',
+            'size' => '256 GB SSD',
             'type' => 'Portatil',
             'created_at' => now(),
         ]);
 
         DB::table('hdds')->insert([
-            'size' => '500 SSD',
-            'type' => 'Escritorio',
+            'size' => '480 GB SSD',
+            'type' => 'Portatil',
             'created_at' => now(),
         ]);
 
         DB::table('hdds')->insert([
-            'size' => '500 SSD',
+            'size' => '512 GB SSD',
             'type' => 'Portatil',
+            'created_at' => now(),
+        ]);
+
+        DB::table('hdds')->insert([
+            'size' => '512GB PCIe NVMe',
+            'type' => 'Portatil',
+            'created_at' => now(),
+        ]);
+
+        DB::table('hdds')->insert([
+            'size' => '32 GB',
+            'type' => 'Micro SD',
             'created_at' => now(),
         ]);
     }

@@ -28,7 +28,7 @@ class OsSeeder extends Seeder
             'created_at' => now(),
         ]);
 
-        
+
         DB::table('operating_systems')->insert([
             'name' => 'WINDOWS',
             'architecture' => 'X64',
@@ -58,9 +58,16 @@ class OsSeeder extends Seeder
         ]);
 
         DB::table('operating_systems')->insert([
-            'name' => 'RASPBERRY PI OS',
+            'name' => 'RASPBIAN GNU/LINUX',
             'architecture' => 'X86',
-            'version' => 'March 4th 2021',
+            'version' => '8.0 (jessie)',
+            'created_at' => now(),
+        ]);
+
+        DB::table('operating_systems')->insert([
+            'name' => 'RASPBIAN GNU/LINUX',
+            'architecture' => 'X86',
+            'version' => '9.4 (strech)',
             'created_at' => now(),
         ]);
     }
