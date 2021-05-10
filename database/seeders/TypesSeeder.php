@@ -20,7 +20,7 @@ class TypesSeeder extends Seeder
         ]);
 
         DB::table('types')->insert([
-            'name' => 'ATRIL',
+            'name' => 'TURNERO',
             'created_at' => now(),
         ]);
 
