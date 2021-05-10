@@ -18,6 +18,7 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X64',
             'version' => '7 PROFFESIONAL',
+            'icon_os' => 'windows7.svg',
             'created_at' => now(),
         ]);
 
@@ -25,6 +26,7 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X64',
             'version' => '7 PROFFESIONAL',
+            'icon_os' => 'windows7.svg',
             'created_at' => now(),
         ]);
 
@@ -33,6 +35,7 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X64',
             'version' => '8.1 PROFFESIONAL',
+            'icon_os' => 'microsoft-windows.svg',
             'created_at' => now(),
         ]);
 
@@ -40,6 +43,7 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X64',
             'version' => '8.1 PROFFESIONAL',
+            'icon_os' => 'microsoft-windows.svg',
             'created_at' => now(),
         ]);
 
@@ -47,6 +51,7 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X64',
             'version' => '10 PROFFESIONAL',
+            'icon_os' => 'microsoft-windows.svg',
             'created_at' => now(),
         ]);
 
@@ -54,6 +59,7 @@ class OsSeeder extends Seeder
             'name' => 'WINDOWS',
             'architecture' => 'X86',
             'version' => '10 PROFFESIONAL',
+            'icon_os' => 'microsoft-windows.svg',
             'created_at' => now(),
         ]);
 
@@ -61,6 +67,7 @@ class OsSeeder extends Seeder
             'name' => 'RASPBIAN GNU/LINUX',
             'architecture' => 'X86',
             'version' => '8.0 (jessie)',
+            'icon_os' => 'raspberry-pi.svg',
             'created_at' => now(),
         ]);
 
@@ -68,6 +75,7 @@ class OsSeeder extends Seeder
             'name' => 'RASPBIAN GNU/LINUX',
             'architecture' => 'X86',
             'version' => '9.4 (strech)',
+            'icon_os' => 'raspberry-pi.svg',
             'created_at' => now(),
         ]);
     }

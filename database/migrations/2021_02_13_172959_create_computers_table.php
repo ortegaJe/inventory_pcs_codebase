@@ -30,7 +30,7 @@ class CreateComputersTable extends Migration
             $table->macAddress('mac');
             $table->char('anydesk')->nullable();
             $table->char('pc_name')->nullable();
-            $table->char('image')->nullable();
+            $table->char('pc_image')->nullable();
             $table->char('campu_id', 4)->nullable();
             $table->text('location')->nullable();
             $table->text('observation')->nullable();

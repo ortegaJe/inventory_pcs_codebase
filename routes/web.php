@@ -25,8 +25,14 @@ Route::group([
     'middleware' => ['auth']
 ], function () {
     Route::resource('pcs', 'AdminDashboardController');
+
+    //Routes All In One PC
     Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('pcs.create_allinone');
     Route::post('guardar-pc-all-in-one', 'AdminDashboardController@storeAllInOne')->name('pcs.store_allinone');
+
+    //Routes Turnero PC
+    Route::get('registrar-pc-turnero', 'AdminDashboardController@createTurnero')->name('pcs.turnero_create');
+    Route::post('guardar-pc-turnero', 'AdminDashboardController@storeTurnero')->name('pcs.turnero_store');
 });
 
 Route::get('example-faker', function () {

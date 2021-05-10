@@ -23,8 +23,13 @@ class AdminDashboardController extends Controller
    */
   public function index(Request $request)
   {
-    $globalPcCount = DB::table('computers')->select('id')->count();
+    $globalPcCount = DB::table('computers')->select('type_id')->where('type_id', 1)->count(); //globalDesktopPcCount
+    $globalAllInOnePcCount = DB::table('computers')->select('type_id')->where('type_id', 5)->count();
+    $globalTurneroPcCount = DB::table('computers')->select('type_id')->where('type_id', 2)->count();
+    $globalRaspberryPcCount = Computer::where('id')->count();
     //dd($globalPcCount);
+    //dd($globalAllInOnePcCount);
+    //dd($globalRaspberryPcCount);
 
     if ($request->ajax()) {
       $pcs = DB::table('view_all_pcs')->get();
@@ -64,6 +69,9 @@ class AdminDashboardController extends Controller
     $data =
       [
         'globalPcCount' => $globalPcCount,
+        'globalAllInOnePcCount' => $globalAllInOnePcCount,
+        'globalTurneroPcCount' => $globalTurneroPcCount,
+        'globalRaspberryPcCount' => $globalRaspberryPcCount
       ];
 
     return view('admin.index')->with($data);
@@ -77,11 +85,20 @@ class AdminDashboardController extends Controller
   public function create()
   {
     $types = DB::table('types')->select('id', 'name')->get();
-    $operatingSystems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
-    $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->get();
-    $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->get();
-    $hdds = DB::table('hdds')->select('id', 'size', 'type')->get();
-    $brands = DB::table('brands')->select('id', 'name')->get();
+
+    $operatingSystems = DB::table('operating_systems')
+      ->select('id', 'name', 'version', 'architecture')
+      ->whereIn('id', [1, 2, 3, 4, 5, 6])
+      ->get();
+
+    $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $hdds = DB::table('hdds')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+
+    $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
+
     $campus = DB::table('campus')->select('id', 'description')->get();
 
     $secondSegmentIp = rand(1, 254);
@@ -165,11 +182,20 @@ class AdminDashboardController extends Controller
   public function createAllInOne()
   {
     $types = DB::table('types')->select('id', 'name')->get();
-    $operatingSystems = DB::table('operating_systems')->select('id', 'name', 'version', 'architecture')->get();
-    $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->get();
-    $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->get();
-    $hdds = DB::table('hdds')->select('id', 'size', 'type')->get();
-    $brands = DB::table('brands')->select('id', 'name')->get();
+
+    $operatingSystems = DB::table('operating_systems')
+      ->select('id', 'name', 'version', 'architecture')
+      ->whereIn('id', [1, 2, 3, 4, 5, 6])
+      ->get();
+
+    $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $hdds = DB::table('hdds')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+
+    $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
+
     $campus = DB::table('campus')->select('id', 'description')->get();
     //$status = DB::table('status_computers')->select('id', 'name')->where('id', '<>', 4)->get();
 
@@ -216,6 +242,98 @@ class AdminDashboardController extends Controller
     $pc = new Computer();
     $pc->inventory_code_number =  $generatorID;
     $pc->type_id = Computer::ALL_IN_ONE_PC_ID; //ID equipo all in one
+    $pc->brand_id = $request['marca-pc-select2'];
+    $pc->model = $request['modelo-pc'];
+    $pc->serial = $request['serial-pc'];
+    $pc->os_id = $request['os-pc-select2'];
+    $pc->slot_one_ram_id = $request['val-select2-ram0'];
+    $pc->slot_two_ram_id = $request['val-select2-ram1'];
+    $pc->hdd_id = $request['val-select2-hdd'];
+    $pc->cpu = $request['cpu'];
+    $pc->statu_id = $arrayToString;
+    $pc->ip = $request['ip'];
+    $pc->mac = $request['mac'];
+    $pc->anydesk = $request['anydesk'];
+    $pc->pc_name = $pc_name_chain;
+    $pc->campu_id = $request['val-select2-campus'];
+    $pc->location = $request['location'];
+    $pc->observation = $request['observation'];
+    $pc->rowguid = $faker->uuid;
+    $pc->created_at = now();
+    //dd($pc);
+    //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
+    $pc->save();
+
+    return redirect()->route('admin.pcs.index', 200)
+      ->with(
+        'pc_created',
+        'Nuevo equipo añadido al inventario!'
+      );
+  }
+
+  public function createTurnero()
+  {
+    $types = DB::table('types')->select('id', 'name')->get();
+
+    $operatingSystems = DB::table('operating_systems')
+      ->select('id', 'name', 'version', 'architecture')
+      ->whereIn('id', [1, 2, 3, 4, 5, 6])
+      ->get();
+
+    $SlotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $hdds = DB::table('hdds')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+
+    $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
+
+    $campus = DB::table('campus')->select('id', 'description')->get();
+    //$status = DB::table('status_computers')->select('id', 'name')->where('id', '<>', 4)->get();
+
+    $secondSegmentIp = rand(1, 254);
+    $thirdSegmentIp = rand(1, 254);
+    $ip = '192.168.' . $secondSegmentIp . '.' . $thirdSegmentIp;
+
+    $macAdress = Str::upper(Str::random(3)) . '.' .
+      Str::upper(Str::random(3)) . '.' .
+      Str::upper(Str::random(3)) . '.' .
+      Str::upper(Str::random(3));
+
+    //$campus = Campu::select('id', 'description')->get();
+    //dd($campus);
+    //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
+    /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
+        dd($slug);*/
+
+    $data =
+      [
+        'types' => $types,
+        'operatingSystems' => $operatingSystems,
+        'SlotOneRams' => $SlotOneRams,
+        'SlotTwoRams' => $SlotTwoRams,
+        'hdds' => $hdds,
+        'brands' => $brands,
+        'campus' => $campus,
+        'ip' => $ip,
+        'macAdress' => $macAdress,
+        //'status' => $status
+      ];
+
+    return view('admin.forms.create_turnero')->with($data);
+  }
+
+  public function storeTurnero(Request $request, Faker $faker)
+  {
+
+    $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+    $str = Str::random(5);
+    $pc_name_chain = 'V1AMAC-' . $str;
+    $arrayToString = implode(',', $request->input('estado-pc'));
+
+    $pc = new Computer();
+    $pc->inventory_code_number =  $generatorID;
+    $pc->type_id = Computer::TURNERO_PC_ID; //ID equipo turnero
     $pc->brand_id = $request['marca-pc-select2'];
     $pc->model = $request['modelo-pc'];
     $pc->serial = $request['serial-pc'];

@@ -16,8 +16,9 @@ class CreateOperatingSystemsTable extends Migration
         Schema::create('operating_systems', function (Blueprint $table) {
             $table->id();
             $table->char('name');
-            $table->char('version');
-            $table->char('architecture',10);
+            $table->char('version')->nullable();
+            $table->char('architecture', 10);
+            $table->char('icon_os')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });
