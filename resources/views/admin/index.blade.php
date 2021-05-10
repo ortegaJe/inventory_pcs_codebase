@@ -22,7 +22,7 @@
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-info" data-toggle="countTo" data-to="{{ $globalPcCount }}">0
             </div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorios</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">equipos de escritorios</div>
           </div>
         </div>
       </a>
@@ -39,8 +39,9 @@
             </div>
           </div>
           <div class="py-20 text-center">
-            <div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo" data-to="95">0</div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">All In One</div>
+            <div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo"
+              data-to="{{ $globalAllInOnePcCount }}">0</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">equipos all in one</div>
           </div>
         </div>
       </a>
@@ -58,7 +59,7 @@
           </div>
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo" data-to="30">0</div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">Portatiles</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">equipos portátiles</div>
           </div>
         </div>
       </a>
@@ -75,8 +76,9 @@
             </div>
           </div>
           <div class="py-20 text-center">
-            <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo" data-to="30">0</div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">Turnero</div>
+            <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo"
+              data-to="{{ $globalTurneroPcCount }}">0</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Turneros</div>
           </div>
         </div>
       </a>
@@ -95,7 +97,7 @@
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0" style="color: #c51d4a" data-toggle="countTo" data-to="30">0
             </div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">Raspberrys PI</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">raspberry's</div>
           </div>
         </div>
       </a>
@@ -168,12 +170,12 @@
               <div class="col-md-6 col-xl-3">
                 <a class="block block-rounded block-transparent text-center bg-image"
                   style="background-image: url('{{ asset('/media/photos/atril-turnero.png') }}');"
-                  href="javascript:void(0)">
+                  href="{{ route('admin.pcs.turnero_create') }}">
                   <div class="block-content block-content-full">
                     <span class="img-avatar"></span>
                   </div>
                   <div class="block-content block-content-full block-content-sm bg-black-op">
-                    <div class="font-w600 text-white mb-5">Atril tunero</div>
+                    <div class="font-w600 text-white mb-5">Tunero</div>
                     <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
@@ -242,6 +244,8 @@
                 <th></th>
                 <th>fecha de creación</th>
                 <th>serial</th>
+                <th>marca</th>
+                <th>tipo</th>
                 <th>ip</th>
                 <th>mac</th>
                 <th>
@@ -258,6 +262,8 @@
                 <th></th>
                 <th>FECHA DE CREACIÓN</th>
                 <th>SERIAL</th>
+                <th>MARCA</th>
+                <th>TIPO</th>
                 <th>IP</th>
                 <th>MAC</th>
                 <th>

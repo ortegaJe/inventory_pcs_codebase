@@ -27,7 +27,7 @@ $(document).ready(function() {
             "" +
             d.HddTipo +
             "</td>" +
-            "<td>S/N monitor: " +
+            "<td>Número de serial monitor: " +
             d.SerialMonitor +
             "</td>" +
             "</td>" +
@@ -42,7 +42,7 @@ $(document).ready(function() {
             d.Cpu +
             "</td>" +
             "<td>" +
-            '<img class="img-fluid" width="24px" src="https://cdn.svgporn.com/logos/microsoft-windows.svg" alt="windows">' +
+            '<img class="img-fluid" width="24px" src="/media/dashboard/datatable/os/'+ d.IconoSistemaOperativo+'" alt="windows">' +
             "</img>" +
             " " +
             d.Os +
@@ -50,16 +50,18 @@ $(document).ready(function() {
             "<td>Ubicación: " +
             d.Ubicacion +
             "</td>" +
-            "<td></td>" +
+            "<td>Número de serial: " +
+            d.Serial +
             "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Tipo: " +
-            d.TipoMaquina +
+            d.TipoPc +
             "<td>Codigo: " +
             d.CodigoInventario +
             "</td>" +
-            "<td>" +
+            "<td>Nombre del equipo: " +
+            d.NombreEquipo +
             "</td>" +
             "<td></td>" +
             "<td></td>" +
@@ -67,10 +69,12 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/photos/M710q.png">' +
+            '<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
-            "<td></td>" +
+            "<td>Observaciones: " +
+            d.Observacion +
+            "</td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
@@ -130,6 +134,16 @@ $(document).ready(function() {
                     data: "FechaCreacion",
                     orderable: true,
                     searchable: true
+                },
+                {
+                    data: "TipoPc",
+                    visible: false,
+                    searcheable: true
+                },
+                {
+                    data: "Marca",
+                    visible: false,
+                    searcheable: true
                 },
                 {
                     data: "Serial",
