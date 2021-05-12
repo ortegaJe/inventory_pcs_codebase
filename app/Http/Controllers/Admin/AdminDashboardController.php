@@ -11,8 +11,8 @@ use Illuminate\Support\Str;
 use App\Helpers\Helper;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
+use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
-use Illuminate\Support\HtmlString;
 
 class AdminDashboardController extends Controller
 {
@@ -136,7 +136,7 @@ class AdminDashboardController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request, Faker $faker)
+  public function store(Request $request)
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
@@ -164,7 +164,7 @@ class AdminDashboardController extends Controller
     $pc->campu_id = $request['val-select2-campus'];
     $pc->location = $request['location'];
     $pc->observation = $request['observation'];
-    $pc->rowguid = $faker->uuid;
+    $pc->rowguid = Uuid::uuid();
     $pc->created_at = now();
     //dd($pc);
     //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
@@ -227,7 +227,7 @@ class AdminDashboardController extends Controller
     return view('admin.forms.create_all_in_one')->with($data);
   }
 
-  public function storeAllInOne(Request $request, Faker $faker)
+  public function storeAllInOne(Request $request)
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
@@ -254,7 +254,7 @@ class AdminDashboardController extends Controller
     $pc->campu_id = $request['val-select2-campus'];
     $pc->location = $request['location'];
     $pc->observation = $request['observation'];
-    $pc->rowguid = $faker->uuid;
+    $pc->rowguid = Uuid::uuid();
     $pc->created_at = now();
     //dd($pc);
     //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
@@ -317,7 +317,7 @@ class AdminDashboardController extends Controller
     return view('admin.forms.create_turnero')->with($data);
   }
 
-  public function storeTurnero(Request $request, Faker $faker)
+  public function storeTurnero(Request $request)
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
@@ -345,7 +345,7 @@ class AdminDashboardController extends Controller
     $pc->campu_id = $request['val-select2-campus'];
     $pc->location = $request['location'];
     $pc->observation = $request['observation'];
-    $pc->rowguid = $faker->uuid;
+    $pc->rowguid = Uuid::uuid();
     $pc->created_at = now();
     //dd($pc);
     //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
@@ -394,7 +394,6 @@ class AdminDashboardController extends Controller
 
     $data =
       [
-        'types' => $types,
         'operatingSystems' => $operatingSystems,
         'SlotOneRams' => $SlotOneRams,
         'SlotTwoRams' => $SlotTwoRams,
@@ -409,7 +408,7 @@ class AdminDashboardController extends Controller
     return view('admin.forms.create_raspberry')->with($data);
   }
 
-  public function storeRaspberry(Request $request, Faker $faker)
+  public function storeRaspberry(Request $request)
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
@@ -436,7 +435,7 @@ class AdminDashboardController extends Controller
     $pc->campu_id = $request['val-select2-campus'];
     $pc->location = $request['location'];
     $pc->observation = $request['observation'];
-    $pc->rowguid = $faker->uuid;
+    $pc->rowguid = Uuid::uuid();
     $pc->created_at = now();
     //dd($pc);
     //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
