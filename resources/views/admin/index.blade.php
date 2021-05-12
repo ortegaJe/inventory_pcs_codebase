@@ -22,7 +22,7 @@
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-info" data-toggle="countTo" data-to="{{ $globalPcCount }}">0
             </div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">equipos de escritorios</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorios</div>
           </div>
         </div>
       </a>
@@ -41,7 +41,7 @@
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo"
               data-to="{{ $globalAllInOnePcCount }}">0</div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">equipos all in one</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">all in one</div>
           </div>
         </div>
       </a>
@@ -59,7 +59,7 @@
           </div>
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo" data-to="30">0</div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">equipos portátiles</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">portátiles</div>
           </div>
         </div>
       </a>
@@ -149,7 +149,7 @@
                     <span class="img-avatar"></span>
                   </div>
                   <div class="block-content block-content-full block-content-sm bg-black-op">
-                    <div class="font-w600 text-white mb-5">De escritorio</div>
+                    <div class="font-w600 text-white mb-5">De escritorios</div>
                     <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
@@ -175,7 +175,7 @@
                     <span class="img-avatar"></span>
                   </div>
                   <div class="block-content block-content-full block-content-sm bg-black-op">
-                    <div class="font-w600 text-white mb-5">Tunero</div>
+                    <div class="font-w600 text-white mb-5">Tuneros</div>
                     <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
@@ -183,12 +183,12 @@
               <div class="col-md-6 col-xl-3">
                 <a class="block block-rounded block-transparent text-center bg-image"
                   style="background-image: url('{{ asset('/media/photos/raspberry-pi.png') }}');"
-                  href="javascript:void(0)">
+                  href="{{ route('admin.pcs.raspberry_create') }}">
                   <div class="block-content block-content-full">
                     <span class="img-avatar"></span>
                   </div>
                   <div class="block-content block-content-full block-content-sm bg-black-op">
-                    <div class="font-w600 text-white mb-5">Raspberry Pi</div>
+                    <div class="font-w600 text-white mb-5">Raspberry´s</div>
                     <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>
@@ -201,7 +201,7 @@
                     <span class="img-avatar"></span>
                   </div>
                   <div class="block-content block-content-full block-content-sm bg-black-op">
-                    <div class="font-w600 text-white mb-5">Portátil</div>
+                    <div class="font-w600 text-white mb-5">Portátiles</div>
                     <div class="font-size-sm text-white-op"></div>
                   </div>
                 </a>

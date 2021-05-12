@@ -33,6 +33,10 @@ Route::group([
     //Routes Turnero PC
     Route::get('registrar-pc-turnero', 'AdminDashboardController@createTurnero')->name('pcs.turnero_create');
     Route::post('guardar-pc-turnero', 'AdminDashboardController@storeTurnero')->name('pcs.turnero_store');
+
+    //Routes Raspberry PC
+    Route::get('registrar-pc-raspberry', 'AdminDashboardController@createRaspberry')->name('pcs.raspberry_create');
+    Route::post('guardar-pc-raspberry', 'AdminDashboardController@storeRaspberry')->name('pcs.raspberry_store');
 });
 
 Route::get('example-faker', function () {

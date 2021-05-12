@@ -5,7 +5,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo All In One</h2>
+    <h2 class="content-heading">Registrar Nuevo Raspberry</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -33,7 +33,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.store_allinone') }}" method="POST">
+      <form action="{{ route('admin.pcs.raspberry_create') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -47,7 +47,7 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    <option selected value="{{ $brand->id }}">{{ $brand->name }}</option>
                     @empty
                     <option value="">NO EXISTEN FABRICANTES REGISTRADOS</option>
                     @endforelse
@@ -68,7 +68,7 @@
                     <option value="">NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="os-pc-select2">Sistema operativo</label>
+                  <label for="os-pc-select2">Sistema Operativo</label>
                 </div>
               </div>
             </div>
@@ -77,7 +77,7 @@
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="serial-pc">Número serial</label>
+                  <label for="serial-pc">Número Serial</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>
@@ -234,18 +234,6 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-6">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="anydesk" name="anydesk"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="ip">Anydesk</label>
-                  <div class="input-group-append">
-                    <label for="anydesk"><img class="img-fluid" width="20px"
-                        src="https://ubuntupit.com/wp-content/uploads/2019/03/AnyDesk-remote.png" alt="anydesk">
-                    </label>
-                  </div>
-                </div>
-              </div>
               <div class="col-md-6">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name"

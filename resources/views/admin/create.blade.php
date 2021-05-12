@@ -86,7 +86,7 @@
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="serial-pc">Serial</label>
+                  <label for="serial-pc">Numero Serial</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>
@@ -98,7 +98,7 @@
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="serial-monitor-pc">Serial monitor</label>
+                  <label for="serial-monitor-pc">Número Serial de monitor</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>
