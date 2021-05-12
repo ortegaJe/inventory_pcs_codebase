@@ -33,7 +33,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.turnero_create') }}" method="POST">
+      <form action="{{ route('admin.pcs.turnero_store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->

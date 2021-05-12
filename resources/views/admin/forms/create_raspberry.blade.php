@@ -33,7 +33,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.raspberry_create') }}" method="POST">
+      <form action="{{ route('admin.pcs.raspberry_store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
