@@ -17,15 +17,13 @@ $(document).ready(function() {
             d.Marca +
             "</span>" +
             "<td>Memoria RAM(ranura 01): " +
-            d.Ram0 +
+            d.RanuraRamUno +
             "</td>" +
             "<td>Memoria RAM(ranura 02): " +
-            d.Ram1 +
+            d.RanuraRamDos +
             "</td>" +
             "<td>Almacenamiento: " +
-            d.HddPeso +
-            "" +
-            d.HddTipo +
+            d.Almacenamiento +
             "</td>" +
             "<td>Número de serial monitor: " +
             d.SerialMonitor +

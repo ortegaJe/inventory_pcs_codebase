@@ -13,7 +13,7 @@ class CreateHddsTable extends Migration
      */
     public function up()
     { //storages
-        Schema::create('hdds', function (Blueprint $table) {
+        Schema::create('storages', function (Blueprint $table) {
             $table->id();
             $table->char('size');
             $table->char('type');

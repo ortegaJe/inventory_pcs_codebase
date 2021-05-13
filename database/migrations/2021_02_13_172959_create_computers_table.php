@@ -24,7 +24,7 @@ class CreateComputersTable extends Migration
             $table->unsignedBigInteger('type_id')->nullable();
             $table->unsignedBigInteger('slot_one_ram_id')->nullable();
             $table->unsignedBigInteger('slot_two_ram_id')->nullable();
-            $table->unsignedBigInteger('hdd_id')->nullable(); //storage_id
+            $table->unsignedBigInteger('storage_id')->nullable();
             $table->char('cpu')->nullable();
             $table->ipAddress('ip', 15);
             $table->macAddress('mac');
@@ -46,7 +46,7 @@ class CreateComputersTable extends Migration
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_one_ram_id')->references('id')->on('slot_one_rams')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_two_ram_id')->references('id')->on('slot_two_rams')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('hdd_id')->references('id')->on('hdds')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();
             //$table->foreign('statu_id')->references('id')->on('status_computers_codes')->nullOnDelete()->cascadeOnUpdate();
         });
     }

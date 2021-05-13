@@ -10,7 +10,6 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
 use Carbon\Carbon;
-use Faker\Generator as Faker;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
 
@@ -23,13 +22,11 @@ class AdminDashboardController extends Controller
    */
   public function index(Request $request)
   {
-    $globalPcCount = DB::table('computers')->select('type_id')->where('type_id', 1)->count(); //globalDesktopPcCount
-    $globalAllInOnePcCount = DB::table('computers')->select('type_id')->where('type_id', 5)->count();
+    $globalDesktopPcCount = DB::table('computers')->select('type_id')->where('type_id', 1)->count();
     $globalTurneroPcCount = DB::table('computers')->select('type_id')->where('type_id', 2)->count();
-    $globalRaspberryPcCount = Computer::where('id')->count();
-    //dd($globalPcCount);
-    //dd($globalAllInOnePcCount);
-    //dd($globalRaspberryPcCount);
+    $globalLaptopPcCount = DB::table('computers')->select('type_id')->where('type_id', 3)->count();
+    $globalRaspberryPcCount = DB::table('computers')->select('type_id')->where('type_id', 4)->count();
+    $globalAllInOnePcCount = DB::table('computers')->select('type_id')->where('type_id', 5)->count();
 
     if ($request->ajax()) {
       $pcs = DB::table('view_all_pcs')->get();
@@ -58,7 +55,7 @@ class AdminDashboardController extends Controller
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
         $btn = "<button type='button' class='btn btn-sm btn-secondary' data-toggle='tooltip' title='Edit'>
                                                     <i class='fa fa-pencil'></i>";
-        $btn = $btn . "<button class='btn btn-sm btn-secondary js-tooltip-enabled' data-id='$pcs->ComputerID' id='btn-delete'>
+        $btn = $btn . "<button class='btn btn-sm btn-secondary js-tooltip-enabled' data-id='$pcs->PcID' id='btn-delete'>
                                         <i class='fa fa-times'></i>";
         return $btn;
       });
@@ -68,10 +65,11 @@ class AdminDashboardController extends Controller
 
     $data =
       [
-        'globalPcCount' => $globalPcCount,
-        'globalAllInOnePcCount' => $globalAllInOnePcCount,
+        'globalDesktopPcCount' => $globalDesktopPcCount,
         'globalTurneroPcCount' => $globalTurneroPcCount,
-        'globalRaspberryPcCount' => $globalRaspberryPcCount
+        'globalLaptopPcCount' => $globalLaptopPcCount,
+        'globalRaspberryPcCount' => $globalRaspberryPcCount,
+        'globalAllInOnePcCount' => $globalAllInOnePcCount,
       ];
 
     return view('admin.index')->with($data);
@@ -94,7 +92,7 @@ class AdminDashboardController extends Controller
 
     $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
 
-    $hdds = DB::table('hdds')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+    $storages = DB::table('storages')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
 
     $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
 
@@ -120,7 +118,7 @@ class AdminDashboardController extends Controller
         'operatingSystems' => $operatingSystems,
         'SlotOneRams' => $SlotOneRams,
         'SlotTwoRams' => $SlotTwoRams,
-        'hdds' => $hdds,
+        'storages' => $storages,
         'brands' => $brands,
         'campus' => $campus,
         'ip' => $ip,
@@ -154,7 +152,7 @@ class AdminDashboardController extends Controller
     $pc->os_id = $request['os-pc-select2'];
     $pc->slot_one_ram_id = $request['val-select2-ram0'];
     $pc->slot_two_ram_id = $request['val-select2-ram1'];
-    $pc->hdd_id = $request['val-select2-hdd'];
+    $pc->storage_id = $request['val-select2-storage'];
     $pc->cpu = $request['cpu'];
     $pc->statu_id = $arrayToString;
     $pc->ip = $request['ip'];
@@ -189,7 +187,7 @@ class AdminDashboardController extends Controller
 
     $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
 
-    $hdds = DB::table('hdds')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+    $storages = DB::table('storages')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
 
     $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
 
@@ -216,7 +214,7 @@ class AdminDashboardController extends Controller
         'operatingSystems' => $operatingSystems,
         'SlotOneRams' => $SlotOneRams,
         'SlotTwoRams' => $SlotTwoRams,
-        'hdds' => $hdds,
+        'storages' => $storages,
         'brands' => $brands,
         'campus' => $campus,
         'ip' => $ip,
@@ -244,7 +242,7 @@ class AdminDashboardController extends Controller
     $pc->os_id = $request['os-pc-select2'];
     $pc->slot_one_ram_id = $request['val-select2-ram0'];
     $pc->slot_two_ram_id = $request['val-select2-ram1'];
-    $pc->hdd_id = $request['val-select2-hdd'];
+    $pc->storage_id = $request['val-select2-storage'];
     $pc->cpu = $request['cpu'];
     $pc->statu_id = $arrayToString;
     $pc->ip = $request['ip'];
@@ -279,7 +277,7 @@ class AdminDashboardController extends Controller
 
     $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
 
-    $hdds = DB::table('hdds')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+    $storages = DB::table('storages')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
 
     $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
 
@@ -306,7 +304,7 @@ class AdminDashboardController extends Controller
         'operatingSystems' => $operatingSystems,
         'SlotOneRams' => $SlotOneRams,
         'SlotTwoRams' => $SlotTwoRams,
-        'hdds' => $hdds,
+        'storages' => $storages,
         'brands' => $brands,
         'campus' => $campus,
         'ip' => $ip,
@@ -335,7 +333,7 @@ class AdminDashboardController extends Controller
     $pc->os_id = $request['os-pc-select2'];
     $pc->slot_one_ram_id = $request['val-select2-ram0'];
     $pc->slot_two_ram_id = $request['val-select2-ram1'];
-    $pc->hdd_id = $request['val-select2-hdd'];
+    $pc->storage_id = $request['val-select2-storage'];
     $pc->cpu = $request['cpu'];
     $pc->statu_id = $arrayToString;
     $pc->ip = $request['ip'];
@@ -370,7 +368,7 @@ class AdminDashboardController extends Controller
 
     $SlotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->whereIn('id', [22])->get();
 
-    $hdds = DB::table('hdds')->select('id', 'size', 'type')->whereIn('id', [29])->get();
+    $storages = DB::table('storages')->select('id', 'size', 'type')->whereIn('id', [29])->get();
 
     $brands = DB::table('brands')->select('id', 'name')->where('id', '=', [4])->get();
 
@@ -397,7 +395,7 @@ class AdminDashboardController extends Controller
         'operatingSystems' => $operatingSystems,
         'SlotOneRams' => $SlotOneRams,
         'SlotTwoRams' => $SlotTwoRams,
-        'hdds' => $hdds,
+        'storages' => $storages,
         'brands' => $brands,
         'campus' => $campus,
         'ip' => $ip,
@@ -425,7 +423,7 @@ class AdminDashboardController extends Controller
     $pc->os_id = $request['os-pc-select2'];
     $pc->slot_one_ram_id = $request['val-select2-ram0'];
     $pc->slot_two_ram_id = $request['val-select2-ram1'];
-    $pc->hdd_id = $request['val-select2-hdd'];
+    $pc->storage_id = $request['val-select2-storage'];
     $pc->cpu = $request['cpu'];
     $pc->statu_id = $arrayToString;
     $pc->ip = $request['ip'];

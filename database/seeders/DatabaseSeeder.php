@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
                         TypesSeeder::class,
                         SlotOneRamSeeder::class,
                         SlotTwoRamSeeder::class,
-                        HddSeeder::class,
+                        StorageSeeder::class,
                         BrandSeeder::class,
                         OsSeeder::class,
                         CampusSeeder::class,
