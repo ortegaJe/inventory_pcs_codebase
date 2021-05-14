@@ -33,7 +33,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.store_allinone') }}" method="POST">
+      <form action="{{ route('admin.pcs.allinone_store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -138,17 +138,17 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-hdd" name="val-select2-hdd"
+                  <select class="js-select2 form-control" id="val-select2-storage" name="val-select2-storage"
                     style="width: 100%;" data-placeholder="Seleccionar disco duro">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
-                    @forelse ($hdds as $hdd)
-                    <option value="{{ $hdd->id }}">{{ $hdd->size }} | {{ $hdd->type }}</option>
+                    @forelse ($storages as $storage)
+                    <option value="{{ $storage->id }}">{{ $storage->size }} | {{ $storage->type }}</option>
                     @empty
                     <option value="">NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-hdd">Discos duros</label>
+                  <label for="val-select2-storage">Discos duros</label>
                 </div>
               </div>
               <div class="col-md-6">

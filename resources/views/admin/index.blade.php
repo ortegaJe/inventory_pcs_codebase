@@ -160,7 +160,7 @@
               <div class="col-md-6 col-xl-3">
                 <a class="block block-rounded block-transparent text-center bg-image"
                   style="background-image: url('{{ asset('/media/photos/lenovo-all-in-one.png') }}');"
-                  href="{{ route('admin.pcs.create_allinone') }}">
+                  href="{{ route('admin.pcs.allinone_create') }}">
                   <div class="block-content block-content-full">
                     <span class="img-avatar"></span>
                   </div>
