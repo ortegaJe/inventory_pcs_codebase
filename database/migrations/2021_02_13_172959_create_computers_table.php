@@ -38,7 +38,7 @@ class CreateComputersTable extends Migration
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->softDeletes();
-            $table->smallInteger('deleted_at_status')->default(1)->nullable();
+            $table->boolean('is_active')->default(true)->nullable();
             $table->json('statu_id')->nullable();
 
             $table->foreign('campu_id')->references('id')->on('campus')->nullOnDelete()->cascadeOnUpdate();
