@@ -12,6 +12,8 @@ use App\Helpers\Helper;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class AdminDashboardController extends Controller
 {
@@ -35,7 +37,7 @@ class AdminDashboardController extends Controller
       $datatables = DataTables::of($pcs);
       $datatables->editColumn('FechaCreacion', function ($pcs) {
         return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
-          ->format('d-m-Y h:i A')    : '';
+          ->format('d/m/Y h:i A')    : '';
       });
       $datatables->addColumn('EstadoPC', function ($pcs) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
@@ -102,10 +104,8 @@ class AdminDashboardController extends Controller
     $thirdSegmentIp = rand(1, 254);
     $ip = '192.168.' . $secondSegmentIp . '.' . $thirdSegmentIp;
 
-    $macAdress = Str::upper(Str::random(3)) . '.' .
-      Str::upper(Str::random(3)) . '.' .
-      Str::upper(Str::random(3)) . '.' .
-      Str::upper(Str::random(3));
+    $macAdress = Str::upper(Str::random(3)) . '.' . Str::upper(Str::random(3)) . '.' .
+      Str::upper(Str::random(3)) . '.' . Str::upper(Str::random(3));
 
     //$campus = Campu::select('id', 'description')->get();
     //dd($campus);
@@ -134,7 +134,43 @@ class AdminDashboardController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
+
   public function store(Request $request)
+  {
+
+    $rules = [
+      'marca-pc-select2' => 'required|not_in:0',
+      'marca-pc-select2' => 'required|in:HP,DELL,LENOVO,SAT',
+    ];
+
+    $messages = [
+      'marca-pc-select2.not_in:0' => 'Seleccione una marca de computador valida',
+      'marca-pc-select2.required' => 'Seleccione una marca de computador',
+      'marca-pc-select2.in' => 'Seleccione una marca de computador de la lista',
+    ];
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+    if ($validator->fails()) :
+      return back()->withErrors($validator)->with(
+        'message',
+        'Se ha producido un error:'
+      )->with(
+        'typealert',
+        'danger'
+      );
+    else :
+      $pc = new Computer();
+      $pc->brand_id = e($request->input('marca-pc-select2'));
+
+      if (dd($pc)) :
+        return redirect('/dashboard/admin/technicians')
+          ->withErrors($validator)
+          ->with('pc_created', 'Nuevo equipo añadido al inventario!');
+      endif;
+    endif;
+  }
+
+  /*public function store(Request $request)
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
@@ -173,7 +209,7 @@ class AdminDashboardController extends Controller
         'pc_created',
         'Nuevo equipo añadido al inventario!'
       );
-  }
+  }*/
 
   public function createAllInOne()
   {

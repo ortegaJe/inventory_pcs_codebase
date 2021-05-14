@@ -337,6 +337,20 @@
               </button>
             </div>
           </div>
+          @if (Session::has('message'))
+          <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> Upsss!</h5>
+            {{ Session::get('message') }}
+            @if ($errors->any())
+            <ul>
+              @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+            @endif
+          </div>
+          @endif
         </div>
         <!-- END Steps Navigation -->
       </form>
@@ -346,3 +360,10 @@
   </div>
 </div>
 @endsection
+
+@push('js')
+<script>
+  $('.alert').slideDown();
+  setTimeout(function(){ $('.alert').slideUp(); }, 10000);
+</script>
+@endpush
