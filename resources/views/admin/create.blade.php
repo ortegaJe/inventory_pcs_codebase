@@ -40,6 +40,20 @@
         <div class="block-content block-content-full tab-content" style="min-height: 274px;">
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
+            @if (Session::has('message'))
+            <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h5><i class="icon fas fa-ban"></i> Upsss!</h5>
+              {{ Session::get('message') }}
+              @if ($errors->any())
+              <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+              @endif
+            </div>
+            @endif
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material floating">
@@ -337,20 +351,6 @@
               </button>
             </div>
           </div>
-          @if (Session::has('message'))
-          <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-ban"></i> Upsss!</h5>
-            {{ Session::get('message') }}
-            @if ($errors->any())
-            <ul>
-              @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-            @endif
-          </div>
-          @endif
         </div>
         <!-- END Steps Navigation -->
       </form>

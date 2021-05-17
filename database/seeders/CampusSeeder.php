@@ -15,49 +15,49 @@ class CampusSeeder extends Seeder
     public function run()
     {
         DB::table('campus')->insert([
-            'id' => 'MAC',
+            'id' => 'V1AMAC',
             'description' => 'VIVA 1A IPS MACARENA',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'C30',
+            'id' => 'V1AC30',
             'description' => 'VIVA 1A IPS CALLE 30',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'C16',
+            'id' => 'V1AC16',
             'description' => 'VIVA 1A IPS CARRERA 16',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'SOL',
+            'id' => 'V1ASOL',
             'description' => 'VIVA 1A IPS SOLEDAD',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'SSJ',
+            'id' => 'V1ASSJ',
             'description' => 'VIVA 1A IPS SURA SAN JOSE',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'MTZ',
+            'id' => 'V1AMTZ',
             'description' => 'VIVA 1A CASA MATRIZ',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'CTI',
+            'id' => 'V1ACTI',
             'description' => 'VIVA 1A IPS CALL CENTER',
             'created_at' => NOW(),
         ]);
 
         DB::table('campus')->insert([
-            'id' => 'CNT',
+            'id' => 'V1ACNT',
             'description' => 'VIVA 1A IPS COUNTRY',
             'created_at' => NOW(),
         ]);

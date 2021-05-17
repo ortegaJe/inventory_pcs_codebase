@@ -16,9 +16,8 @@ class CampuUsersSeeder extends Seeder
     {
         DB::table('campu_users')->insert([
             'user_id' => 1,
-            'campu_id' => 'MAC',
+            'campu_id' => 'V1AMAC',
             'created_at' => now(),
         ]);
-
     }
 }

@@ -43,7 +43,7 @@ class ComputerFactory extends Factory
             'slot_one_ram_id' => rand(5, 12),
             'slot_two_ram_id' => rand(5, 12),
             'storage_id' => 23,
-            'campu_id' => 'MAC',
+            'campu_id' => 'V1AMAC',
             'cpu' => 'INTEL(R) CORE(TM) I5-7400T CPU @ 2.40GHZ',
             'ip' => $this->faker->ipv4,
             'mac' => $this->faker->macAddress,
