@@ -139,14 +139,19 @@ class AdminDashboardController extends Controller
   {
 
     $rules = [
-      'marca-pc-select2' => 'required|not_in:0',
-      'marca-pc-select2' => 'required|in:HP,DELL,LENOVO,SAT',
+      'marca-pc-select2' => 'not_in:0',
+      'marca-pc-select2' => [
+        'required',
+        Rule::in([1, 2, 3, 5], ['HP', 'DELL', 'LENOVO', 'SAT'])
+      ],
+      'modelo-pc' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
     ];
 
     $messages = [
-      'marca-pc-select2.not_in:0' => 'Seleccione una marca de computador valida',
+      'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
       'marca-pc-select2.required' => 'Seleccione una marca de computador',
-      'marca-pc-select2.in' => 'Seleccione una marca de computador de la lista',
+      'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
+      'modelo-pc.regex' => 'no puede contener caracteres raros'
     ];
 
     $validator = Validator::make($request->all(), $rules, $messages);
@@ -161,9 +166,10 @@ class AdminDashboardController extends Controller
     else :
       $pc = new Computer();
       $pc->brand_id = e($request->input('marca-pc-select2'));
+      $pc->model = e($request->input('modelo-pc'));
 
       if (dd($pc)) :
-        return redirect('/dashboard/admin/technicians')
+        return redirect('admin.pcs.index', 200)
           ->withErrors($validator)
           ->with('pc_created', 'Nuevo equipo añadido al inventario!');
       endif;
@@ -199,10 +205,10 @@ class AdminDashboardController extends Controller
     $pc->location = $request['location'];
     $pc->observation = $request['observation'];
     $pc->rowguid = Uuid::uuid();
-    $pc->created_at = now();
-    //dd($pc);
+    $pc->created_at = now('America/Bogota');
+    dd($pc);
     //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pc, true));
-    $pc->save();
+    //$pc->save();
 
     return redirect()->route('admin.pcs.index', 200)
       ->with(
