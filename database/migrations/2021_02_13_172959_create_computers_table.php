@@ -17,6 +17,7 @@ class CreateComputersTable extends Migration
             $table->id();
             $table->string('batch', 20)->nullable();
             $table->string('inventory_code_number', 12)->nullable()->unique();
+            $table->string('inventory_active_code', 15)->nullable()->unique();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->char('model')->nullable();
             $table->char('serial')->nullable(); //serial_number

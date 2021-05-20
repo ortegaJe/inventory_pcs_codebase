@@ -35,6 +35,7 @@ class ComputerFactory extends Factory
         return [
             'batch' => 'INVPC71MAC',
             'inventory_code_number' => $inv_code_chain,
+            'inventory_active_code' => rand(100000, 9000000),
             'brand_id' => 3,
             'model' => 'M710Q DESKTOP (THINKCENTRE) - TYPE 10MR',
             'serial' => Str::random(10),
