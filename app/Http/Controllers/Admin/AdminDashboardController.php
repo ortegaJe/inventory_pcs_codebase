@@ -137,36 +137,100 @@ class AdminDashboardController extends Controller
 
   public function store(Request $request)
   {
+    $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+    //$str = Str::random(5);
+    //$pc_name_chain = 'V1AMAC-' . $str;
+    //$arrayToString = implode(',', $request->input('estado-pc'));
+    $slotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $slotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $storages = DB::table('storages')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
 
     $rules = [
       'marca-pc-select2' => 'not_in:0',
       'marca-pc-select2' => [
         'required',
-        Rule::in([1, 2, 3, 5], ['HP', 'DELL', 'LENOVO', 'SAT'])
+        'numeric',
+        Rule::in([1, 2, 3, 5])
       ],
       'modelo-pc' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
+      'serial-pc' => 'required|unique:computers,serial|regex:/^[0-9a-zA-Z-]+$/i',
+      'activo-fijo-pc' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
+      'serial-monitor-pc' => 'nullable|unique:computers,serial_monitor|regex:/^[0-9a-zA-Z-]+$/i',
+      'os-pc-select2' => [
+        'required',
+        'numeric',
+        Rule::in([1, 2, 3, 4, 5, 6])
+      ],
+      'val-select2-ram0' => [
+        'required',
+        'numeric',
+        Rule::in(array($slotOneRams))
+      ],
+      'val-select2-ram1' => [
+        'required',
+        'numeric',
+        Rule::in(array($slotTwoRams))
+      ],
+      'val-select2-storage' => [
+        'required',
+        'numeric',
+        Rule::in(array($storages))
+      ],
     ];
 
     $messages = [
       'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
       'marca-pc-select2.required' => 'Seleccione una marca de computador',
       'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
-      'modelo-pc.regex' => 'no puede contener caracteres raros'
+      'modelo-pc.regex' => 'Símbolo no permitido en el campo modelo',
+      'serial-pc.required' => 'Campo serial es requerido',
+      'serial-pc.regex' => 'Símbolo no permitido en el campo serial',
+      'serial-pc.unique' => 'Ya existe un equipo registrado con este serial',
+      'activo-fijo-pc.required' => 'Campo serial es requerido',
+      'activo-fijo-pc.regex' => 'Símbolo no permitido en el campo serial',
+      'serial-monitor-pc.regex' => 'Símbolo no permitido en el campo serial',
+      'serial-monitor-pc.unique' => 'Ya existe un monitor registrado con este serial',
+      'os-pc-select2.required' => 'Seleccione un sistema operativo',
+      'os-pc-select2.in' => 'Seleccione un sistema operativo valido en la lista',
+      'val-select2-ram0.required' => 'Seleccione una memoria ram',
+      'val-select2-ram0.in' => 'Seleccione una memoria ram valida en la lista',
+      'val-select2-ram1.required' => 'Seleccione una memoria ram',
+      'val-select2-ram1.in' => 'Seleccione una memoria ram valida en la lista',
+      'val-select2-storage.required' => 'Seleccione un disco duro',
+      'val-select2-storage.in' => 'Seleccione un disco duro valido en la lista',
+
+
     ];
 
     $validator = Validator::make($request->all(), $rules, $messages);
     if ($validator->fails()) :
-      return back()->withErrors($validator)->with(
-        'message',
-        'Se ha producido un error:'
-      )->with(
-        'typealert',
-        'danger'
-      );
+      return back()->withErrors($validator)
+        ->withInput()
+        ->with(
+          'message',
+          'Se ha producido un error:'
+        )->with(
+          'typealert',
+          'danger'
+        );
     else :
       $pc = new Computer();
+      $pc->inventory_code_number =  $generatorID;
+      $pc->type_id = Computer::DESKTOP_PC_ID; //ID equipo de escritorio
       $pc->brand_id = e($request->input('marca-pc-select2'));
+      $pc->os_id = e($request->input('os-pc-select2'));
       $pc->model = e($request->input('modelo-pc'));
+      $pc->serial = e($request->input('serial-pc'));
+      //$pc->inventory_active_code = e($request->input('activo-fijo-pc'));
+      $pc->serial_monitor = e($request->input('serial-monitor-pc'));
+      $pc->slot_one_ram_id = e($request->input('val-select2-ram0'));
+      $pc->slot_two_ram_id = e($request->input('val-select2-ram1'));
+      $pc->storage_id = e($request->input('val-select2-storage'));
+      $pc->cpu = e($request->input('cpu'));
+
+
 
       if (dd($pc)) :
         return redirect('admin.pcs.index', 200)
@@ -534,8 +598,12 @@ class AdminDashboardController extends Controller
     $pcTemp = [];
     //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
     try {
-      $pcTemp[] = DB::select("SELECT * FROM computers WHERE id = $id", [1]);
-      $pcs = DB::delete("DELETE FROM computers WHERE id = $id", [1]);
+      $pcs = Computer::findOrFail($id);
+      $pcTemp[] = DB::table('computers')->where('id', $id)->first();
+      //("SELECT * FROM computers WHERE id = $id", [1]);
+      $ts = now('America/Bogota')->toDateTimeString();
+      $data = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 'eliminado');
+      $pcs = DB::table('computers')->where('id', $id)->update($data);
       error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
     } catch (ModelNotFoundException $e) {
       // Handle the error.
