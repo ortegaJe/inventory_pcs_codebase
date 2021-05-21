@@ -140,12 +140,7 @@ class AdminDashboardController extends Controller
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
     //$str = Str::random(5);
     //$pc_name_chain = 'V1AMAC-' . $str;
-    //$arrayToString = implode(',', $request->input('estado-pc'));
-    $slotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
-
-    $slotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
-
-    $storages = DB::table('storages')->select('id', 'size', 'type')->where('id', '<>', [29])->get();
+    $arrayToString = implode(',', $request->input('estado-pc'));
 
     $rules = [
       'marca-pc-select2' => 'not_in:0',
@@ -154,7 +149,7 @@ class AdminDashboardController extends Controller
         'numeric',
         Rule::in([1, 2, 3, 5])
       ],
-      'modelo-pc' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
+      'modelo-pc' => 'nullable|regex:/^[0-9a-zA-Z- ]+$/i',
       'serial-pc' => 'required|unique:computers,serial|regex:/^[0-9a-zA-Z-]+$/i',
       'activo-fijo-pc' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
       'serial-monitor-pc' => 'nullable|unique:computers,serial_monitor|regex:/^[0-9a-zA-Z-]+$/i',
@@ -166,31 +161,33 @@ class AdminDashboardController extends Controller
       'val-select2-ram0' => [
         'required',
         'numeric',
-        Rule::in(array($slotOneRams))
+        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
       ],
       'val-select2-ram1' => [
         'required',
         'numeric',
-        Rule::in(array($slotTwoRams))
+        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
       ],
       'val-select2-storage' => [
         'required',
         'numeric',
-        Rule::in(array($storages))
+        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])
       ],
+      'ip' => 'nullable|ipv4|unique:computers,ip',
+      'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac'
     ];
 
     $messages = [
       'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
       'marca-pc-select2.required' => 'Seleccione una marca de computador',
       'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
-      'modelo-pc.regex' => 'Símbolo no permitido en el campo modelo',
+      'modelo-pc.regex' => 'Símbolo(s)no permitido en el campo modelo',
       'serial-pc.required' => 'Campo serial es requerido',
-      'serial-pc.regex' => 'Símbolo no permitido en el campo serial',
+      'serial-pc.regex' => 'Símbolo(s)no permitido en el campo serial',
       'serial-pc.unique' => 'Ya existe un equipo registrado con este serial',
       'activo-fijo-pc.required' => 'Campo serial es requerido',
-      'activo-fijo-pc.regex' => 'Símbolo no permitido en el campo serial',
-      'serial-monitor-pc.regex' => 'Símbolo no permitido en el campo serial',
+      'activo-fijo-pc.regex' => 'Símbolo(s)no permitido en el campo serial',
+      'serial-monitor-pc.regex' => 'Símbolo(s)no permitido en el campo serial',
       'serial-monitor-pc.unique' => 'Ya existe un monitor registrado con este serial',
       'os-pc-select2.required' => 'Seleccione un sistema operativo',
       'os-pc-select2.in' => 'Seleccione un sistema operativo valido en la lista',
@@ -200,6 +197,11 @@ class AdminDashboardController extends Controller
       'val-select2-ram1.in' => 'Seleccione una memoria ram valida en la lista',
       'val-select2-storage.required' => 'Seleccione un disco duro',
       'val-select2-storage.in' => 'Seleccione un disco duro valido en la lista',
+      'ip.ipv4' => 'Direccion IP no valida',
+      'ip.max' => 'Direccion IP no valida',
+      'ip.unique' => 'Ya existe un equipo con esta IP registrado',
+      'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
+      'mac.max' => 'Direccion MAC no valida',
 
 
     ];
@@ -229,11 +231,15 @@ class AdminDashboardController extends Controller
       $pc->slot_two_ram_id = e($request->input('val-select2-ram1'));
       $pc->storage_id = e($request->input('val-select2-storage'));
       $pc->cpu = e($request->input('cpu'));
+      $pc->statu_id = $arrayToString;
+      $pc->ip = e($request->input('ip'));
+      $pc->mac = e($request->input('mac'));
+      $pc->anydesk = e($request->input('anydesk'));
 
 
 
-      if (dd($pc)) :
-        return redirect('admin.pcs.index', 200)
+      if ($pc->save()) :
+        return redirect('admin.pcs.index', 201)
           ->withErrors($validator)
           ->with('pc_created', 'Nuevo equipo añadido al inventario!');
       endif;
@@ -599,7 +605,7 @@ class AdminDashboardController extends Controller
     //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
     try {
       $pcs = Computer::findOrFail($id);
-      $pcTemp[] = DB::table('computers')->where('id', $id)->first();
+      $pcTemp[] = DB::table('computers')->where('id', $id)->get();
       //("SELECT * FROM computers WHERE id = $id", [1]);
       $ts = now('America/Bogota')->toDateTimeString();
       $data = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 'eliminado');
@@ -610,7 +616,7 @@ class AdminDashboardController extends Controller
     }
 
     return response()->json([
-      'message' => 'Equipo borrado del inventario exitosamente!',
+      'message' => 'Equipo eliminado del inventario exitosamente!',
       'result' => $pcTemp[0]
     ]);
   }
