@@ -90,7 +90,7 @@
                     @forelse ($operatingSystems as $os)
                     <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
                     @empty
-                    <option value="">NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
+                    <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
                   </select>
                   <label for="os-pc-select2">Sistema Operativo</label>
@@ -102,7 +102,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc" value="{{ old('modelo-pc') }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="modelo-pc">Modelo</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -119,7 +119,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc" value="{{ old('serial-pc') }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    maxlength="24" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="serial-pc">Numero Serial</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -133,7 +133,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc"
+                  <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc" maxlength="24"
                     value="{{ old('serial-monitor-pc') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="serial-monitor-pc">Número Serial de monitor</label>
                   <div class="input-group-append">
@@ -149,7 +149,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
-                    value="{{ old('activo-fijo-pc') }}" maxlength="15"
+                    value="{{ old('activo-fijo-pc') }}" maxlength="20"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="activo-fijo-pc">Codigo de activo fijo</label>
                   <div class="input-group-append">
@@ -177,7 +177,7 @@
                     @forelse ($SlotOneRams as $ram)
                     <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                     @empty
-                    <option value="">NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
+                    <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
                   <label for="val-select2-ram0">Memorias RAM</label>
@@ -195,7 +195,7 @@
                     @forelse ($SlotTwoRams as $ram)
                     <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                     @empty
-                    <option value="">NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
+                    <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
                   <label for="val-select2-ram1">Memorias RAM</label>
@@ -214,7 +214,7 @@
                     @forelse ($storages as $storage)
                     <option value="{{ $storage->id }}">{{ $storage->size }} | {{ $storage->type }}</option>
                     @empty
-                    <option value="">NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
                   <label for="val-select2-storage">Discos duros</label>
@@ -285,7 +285,7 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="ip" name="ip" maxlength="15" value="{{ old('ip') }}"
+                  <input type="text" class="form-control" id="ip" name="ip" maxlength="16" value="{{ old('ip') }}"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="ip">Dirección IP</label>
                   <div class="input-group-append">
@@ -317,8 +317,8 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="anydesk" name="anydesk"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
+                    value="{{ old('anydesk') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="ip">Anydesk</label>
                   <div class="input-group-append">
                     <label for="anydesk"><img class="img-fluid" width="20px"
@@ -326,32 +326,30 @@
                     </label>
                   </div>
                 </div>
+                @if($errors->has('anydesk'))
+                <small class="text-danger is-invalid">{{ $errors->first('anydesk') }}</small>
+                @endif
               </div>
               <div class="col-md-6">
                 <div class="form-material floating">
-                  <input type="text" class="form-control" id="pc-name" name="pc-name"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
+                    value="{{ old('pc-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-name">Nombre del equipo</label>
-                  <div class="block-content block-content-full">
-                    <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
-                      data-placement="bottom" title="Ver abreviados de las sedes">
-                      <i class="fa fa-info-circle"></i>
-                    </button>
-                    <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
-                      title="Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                    title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                      title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                    title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                      title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                    title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                      title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                    title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                      title=" Nombre de equipos" data-placement="Right" data-content="Deberia ser: V1AMAC-CON21             
-                      (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
-                      <i class="fa fa-info-circle"></i>
-                      Como nombrar equipos?
-                    </button>
-                  </div>
+                </div>
+                @if($errors->has('pc-name'))
+                <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
+                @endif
+                <div class="block-content block-content-full">
+                  <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
+                    data-placement="bottom" title="Ver abreviados de las sedes">
+                    <i class="fa fa-info-circle"></i>
+                  </button>
+                  <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
+                    title=" Nombre de equipos" data-placement="Right"
+                    data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
+                    <i class="fa fa-info-circle"></i>
+                    Como nombrar equipos?
+                  </button>
                 </div>
               </div>
             </div>
@@ -370,17 +368,20 @@
                       @forelse ($campus as $campu)
                       <option value="{{ $campu->id }}">{{ $campu->description }}</option>
                       @empty
-                      <option value="">NO EXISTEN SEDES REGISTRADAS</option>
+                      <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
                     <label for="val-select2-campus">Sede del equipo</label>
                   </div>
+                  @if($errors->has('val-select2-campus'))
+                  <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>
+                  @endif
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="location" name="location"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <input type="text" class="form-control" id="location" name="location" maxlength="56"
+                    value="{{ old('location') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="location">Ubicacion</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -388,15 +389,22 @@
                     </span>
                   </div>
                 </div>
+                @if($errors->has('location'))
+                <small class="text-danger is-invalid">{{ $errors->first('location') }}</small>
+                @endif
               </div>
             </div>
             <div class="form-row">
               <div class="col-md-12">
                 <div class="form-material floating">
-                  <textarea class="form-control" id="observation" name="observation" rows="4"></textarea>
+                  <textarea class="form-control" id="observation" name="observation" rows="4" maxlength="255"
+                    value="{{ old('observation') }}"></textarea>
                   <label for="observation">Oberservación</label>
                 </div>
               </div>
+              @if($errors->has('observation'))
+              <small class="text-danger is-invalid">{{ $errors->first('observation') }}</small>
+              @endif
             </div>
             <!-- END Step 4 -->
           </div>

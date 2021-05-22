@@ -100,13 +100,6 @@ class AdminDashboardController extends Controller
 
     $campus = DB::table('campus')->select('id', 'description')->get();
 
-    $secondSegmentIp = rand(1, 254);
-    $thirdSegmentIp = rand(1, 254);
-    $ip = '192.168.' . $secondSegmentIp . '.' . $thirdSegmentIp;
-
-    $macAdress = Str::upper(Str::random(3)) . '.' . Str::upper(Str::random(3)) . '.' .
-      Str::upper(Str::random(3)) . '.' . Str::upper(Str::random(3));
-
     //$campus = Campu::select('id', 'description')->get();
     //dd($campus);
     //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
@@ -121,8 +114,6 @@ class AdminDashboardController extends Controller
         'storages' => $storages,
         'brands' => $brands,
         'campus' => $campus,
-        'ip' => $ip,
-        'macAdress' => $macAdress,
       ];
 
     return view('admin.create')->with($data);
@@ -138,8 +129,6 @@ class AdminDashboardController extends Controller
   public function store(Request $request)
   {
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
-    //$str = Str::random(5);
-    //$pc_name_chain = 'V1AMAC-' . $str;
     $arrayToString = implode(',', $request->input('estado-pc'));
 
     $rules = [
@@ -149,10 +138,10 @@ class AdminDashboardController extends Controller
         'numeric',
         Rule::in([1, 2, 3, 5])
       ],
-      'modelo-pc' => 'nullable|regex:/^[0-9a-zA-Z- ]+$/i',
-      'serial-pc' => 'required|unique:computers,serial|regex:/^[0-9a-zA-Z-]+$/i',
-      'activo-fijo-pc' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
-      'serial-monitor-pc' => 'nullable|unique:computers,serial_monitor|regex:/^[0-9a-zA-Z-]+$/i',
+      'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
+      'serial-pc' => 'required|max:24|unique:computers,serial|regex:/^[0-9a-zA-Z-]+$/i',
+      'activo-fijo-pc' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+      'serial-monitor-pc' => 'nullable|max:24|unique:computers,serial_monitor|regex:/^[0-9a-zA-Z-]+$/i',
       'os-pc-select2' => [
         'required',
         'numeric',
@@ -174,7 +163,12 @@ class AdminDashboardController extends Controller
         Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])
       ],
       'ip' => 'nullable|ipv4|unique:computers,ip',
-      'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac'
+      'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac',
+      'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i|unique:computers,anydesk',
+      'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
+
+      'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
+      'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i'
     ];
 
     $messages = [
@@ -202,6 +196,16 @@ class AdminDashboardController extends Controller
       'ip.unique' => 'Ya existe un equipo con esta IP registrado',
       'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
       'mac.max' => 'Direccion MAC no valida',
+      'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
+      'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
+      'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+      'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
+      'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
+      'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
+      'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
+      'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
+      'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
+      'observation.regex' => 'Símbolo(s) no permitido en el campo observación',
 
 
     ];
@@ -235,8 +239,12 @@ class AdminDashboardController extends Controller
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
       $pc->anydesk = e($request->input('anydesk'));
-
-
+      $pc->pc_name = e($request->input('pc-name'));
+      $pc->campu_id = e($request->input('val-select2-campus'));
+      $pc->location = e($request->input('location'));
+      $pc->observation = e($request->input('observation'));
+      $pc->rowguid = Uuid::uuid();
+      $pc->created_at = now('America/Bogota');
 
       if ($pc->save()) :
         return redirect('admin.pcs.index', 201)
