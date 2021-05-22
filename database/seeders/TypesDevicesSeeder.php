@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TypesSeeder extends Seeder
+class TypesDevicesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,27 +14,27 @@ class TypesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('types')->insert([
+        DB::table('type_devices')->insert([
             'name' => 'DE ESCRITORIO',
             'created_at' => now(),
         ]);
 
-        DB::table('types')->insert([
+        DB::table('type_devices')->insert([
             'name' => 'TURNERO',
             'created_at' => now(),
         ]);
 
-        DB::table('types')->insert([
+        DB::table('type_devices')->insert([
             'name' => 'PORTATIL',
             'created_at' => now(),
         ]);
 
-        DB::table('types')->insert([
+        DB::table('type_devices')->insert([
             'name' => 'RASPBERRY',
             'created_at' => now(),
         ]);
 
-        DB::table('types')->insert([
+        DB::table('type_devices')->insert([
             'name' => 'ALL IN ONE',
             'created_at' => now(),
         ]);

@@ -16,26 +16,31 @@ class BrandSeeder extends Seeder
     {
         DB::table('brands')->insert([
             'name' => 'HP',
+            'description' => 'Hewlett-Packard',
             'created_at' => now(),
         ]);
 
         DB::table('brands')->insert([
             'name' => 'DELL',
+            'description' => 'Dell Inc.',
             'created_at' => now(),
         ]);
 
         DB::table('brands')->insert([
             'name' => 'LENOVO',
+            'description' => NULL,
             'created_at' => now(),
         ]);
 
         DB::table('brands')->insert([
-            'name' => 'RASPBERRY PI FOUNDATION',
+            'name' => 'RASPBERRY PI',
+            'description' => 'Raspberry Pi Foundation',
             'created_at' => now(),
         ]);
 
         DB::table('brands')->insert([
             'name' => 'SAT',
+            'description' => NULL,
             'created_at' => now(),
         ]);
     }
