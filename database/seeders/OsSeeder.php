@@ -24,7 +24,7 @@ class OsSeeder extends Seeder
 
         DB::table('operating_systems')->insert([
             'name' => 'WINDOWS',
-            'architecture' => 'X64',
+            'architecture' => 'X86',
             'version' => '7 PROFFESIONAL',
             'icon_os' => 'windows7.svg',
             'created_at' => now(),
@@ -41,7 +41,7 @@ class OsSeeder extends Seeder
 
         DB::table('operating_systems')->insert([
             'name' => 'WINDOWS',
-            'architecture' => 'X64',
+            'architecture' => 'X86',
             'version' => '8.1 PROFFESIONAL',
             'icon_os' => 'microsoft-windows.svg',
             'created_at' => now(),

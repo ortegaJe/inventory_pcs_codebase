@@ -28,7 +28,7 @@ class BrandSeeder extends Seeder
 
         DB::table('brands')->insert([
             'name' => 'LENOVO',
-            'description' => NULL,
+            'description' => 'Lenovo Group Limited',
             'created_at' => now(),
         ]);
 

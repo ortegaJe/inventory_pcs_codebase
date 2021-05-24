@@ -2,12 +2,14 @@
 
 @section('title', 'Registrar equipo')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/js/plugins/flatpickr/flatpickr.min.css') }}">
+
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
     <h2 class="content-heading">Registrar Nuevo Equipo De Escritorio</h2>
-    {{-- <button type="button" class="js-notify btn btn-sm btn-alt-danger" data-type="danger" data-icon="fa fa-times"
-      data-message="Update failed! :-(">Error</button> --}}
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -42,6 +44,18 @@
         <div class="block-content block-content-full tab-content" style="min-height: 274px;">
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
+            @if (Session::has('message'))
+            <div data-notify="container"
+              class="col-xs-11 col-sm-4 alert-message alert alert-{{ Session::get('typealert') }} animated fadeIn"
+              role="alert" data-notify-position="top-right"
+              style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; right: 20px; animation-iteration-count: 1;">
+              <button type="button" aria-hidden="true" class="close" data-notify="dismiss"
+                style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button><span data-notify="icon"
+                class="fa fa-times"></span> <span data-notify="title"></span> <span
+                data-notify="message">{{ Session::get('message') }}
+              </span><a href="#" target="_blank" data-notify="url"></a>
+            </div>
+            @endif
             {{-- @if (Session::has('message'))
             <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -53,17 +67,7 @@
               <li>{{ $error }}</li>
               @endforeach
             </ul>
-            @endif
-
-            <div data-notify="container" class="col-xs-11 col-sm-4 alert alert-danger animated fadeIn" role="alert"
-              data-notify-position="top-right"
-              style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; right: 20px; animation-iteration-count: 1;">
-              <button type="button" aria-hidden="true" class="close" data-notify="dismiss"
-                style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button><span data-notify="icon"
-                class="fa fa-times"></span> <span data-notify="title"></span> <span data-notify="message">Update failed!
-                :-(</span><a href="#" target="_blank" data-notify="url"></a></div>
-
-            --}}
+            @endif --}}
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material">
@@ -169,12 +173,12 @@
           <!-- Step 2 -->
           <div class="tab-pane" id="wizard-progress2-step2" role="tabpanel">
             <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($SlotOneRams as $ram)
+                    @forelse ($slotOneRams as $ram)
                     <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
@@ -186,43 +190,64 @@
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram0') }}</small>
                 @endif
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-ram1" name="val-select2-ram1"
                     value="{{ old('val-select2-ram1') }}" style="width: 100%;"
                     data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($SlotTwoRams as $ram)
+                    @forelse ($slotTwoRams as $ram)
                     <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-ram1">Memorias RAM</label>
+                  <label for="val-select2-ram1">Memorias RAM <small>(Opcional)</small></label>
                 </div>
                 @if($errors->has('val-select2-ram1'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram1') }}</small>
                 @endif
               </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-storage" name="val-select2-storage"
-                    style="width: 100%;" data-placeholder="Seleccionar disco duro">
+                  <select class="js-select2 form-control" id="val-select2-first-storage"
+                    name="val-select2-first-storage" style="width: 100%;"
+                    data-placeholder="Seleccionar primer almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}">{{ $storage->size }} | {{ $storage->type }}</option>
+                    @forelse ($firstStorages as $storage)
+                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
+                      {{ $storage->type }}</option>
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-storage">Discos duros</label>
+                  <label for="val-select2-first-storage">Almacenamiento</label>
                 </div>
-                @if($errors->has('val-select2-storage'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-storage') }}</small>
+                @if($errors->has('val-select2-first-storage'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-first-storage') }}</small>
                 @endif
               </div>
+              <div class="col-md-3">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-second-storage"
+                    name="val-select2-second-storage" style="width: 100%;"
+                    data-placeholder="Seleccionar segundo almacenamiento..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($secondStorages as $storage)
+                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
+                      {{ $storage->type }}</option>
+                    @empty
+                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-second-storage">Almacenamiento <small>(Opcional)</small></label>
+                </div>
+                @if($errors->has('val-select2-second-storage'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-second-storage') }}</small>
+                @endif
+              </div>
+            </div>
+            <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="cpu" name="cpu"
@@ -238,43 +263,23 @@
                 <small class="text-danger is-invalid">{{ $errors->first('cpu') }}</small>
                 @endif
               </div>
-              <div class="col-xl-6 mt-4">
-                <!-- Status Checkboxes -->
-                <div class="block">
-                  <div class="block-header block-header-default">
-                    <h3 class="block-title">Estado del equipo</h3>
-                  </div>
-                  <div class="block-content">
-                    <div class="row no-gutters items-push">
-                      <div class="col-6">
-                        <label class="css-control css-control-success css-checkbox">
-                          <input type="checkbox" class="css-control-input" name="estado-pc[]"
-                            value="rendimiento optimo">
-                          <span class="css-control-indicator"></span> Rendimiento Óptimo
-                        </label>
-                      </div>
-                      <div class="col-6">
-                        <label class="css-control css-control-warning css-checkbox">
-                          <input type="checkbox" class="css-control-input" name="estado-pc[]" value="rendimiento bajo">
-                          <span class="css-control-indicator"></span> Rendimiento bajo
-                        </label>
-                      </div>
-                      <div class="col-6">
-                        <label class="css-control css-control-info css-checkbox">
-                          <input type="checkbox" class="css-control-input" name="estado-pc[]" value="hurtado">
-                          <span class="css-control-indicator"></span> Hurtado
-                        </label>
-                      </div>
-                      <div class="col-6">
-                        <label class="css-control css-control-secondary css-checkbox">
-                          <input type="checkbox" class="css-control-input" name="estado-pc[]" value="dado de baja">
-                          <span class="css-control-indicator"></span> Dado de baja
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+              <div class="col-md-6">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-status" name="val-select2-status"
+                    style="width: 100%;" data-placeholder="Seleccionar un estado..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($status as $statu)
+                    <option value="{{ $statu->id }}">{{ Str::title($statu->name) }}
+                    </option>
+                    @empty
+                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-status">Estado del equipo</label>
                 </div>
-                <!-- END Status Checkboxes -->
+                @if($errors->has('val-select2-status'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-status') }}</small>
+                @endif
               </div>
             </div>
           </div>
@@ -395,11 +400,40 @@
               </div>
             </div>
             <div class="form-row">
+              <div class="form-group col-md-3">
+                <div class="form-material">
+                  <input type="text" class="js-flatpickr form-control" id="custodian-assignment-date"
+                    name="custodian-assignment-date" placeholder="d-m-Y" data-allow-input="true" maxlength="10">
+                  <label for="custodian-assignment-date">Fecha de asignación al custodio</label>
+                </div>
+                @if($errors->has('custodian-assignment-date'))
+                <small class="text-danger is-invalid">{{ $errors->first('custodian-assignment-date') }}</small>
+                @endif
+              </div>
+              <div class="col-md-9">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="custodian-name" name="custodian-name" maxlength="56"
+                    value="{{ old('custodian-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="custodian-name">Nombre del custodio</label>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-user"></i>
+                    </span>
+                  </div>
+                </div>
+                @if($errors->has('custodian-name'))
+                <small class="text-danger is-invalid">{{ $errors->first('custodian-name') }}</small>
+                @endif
+              </div>
+            </div>
+            <div class="form-row">
               <div class="col-md-12">
-                <div class="form-material floating">
-                  <textarea class="form-control" id="observation" name="observation" rows="4" maxlength="255"
+                <div class="form-material">
+                  <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
+                    maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
+                    data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
                     value="{{ old('observation') }}"></textarea>
-                  <label for="observation">Oberservación</label>
+                  <label for="observation">Observación</label>
                 </div>
               </div>
               @if($errors->has('observation'))
@@ -442,9 +476,21 @@
 <script src="{{ asset('/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
 <script src="{{ asset('/js/pages/be_ui_activity.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
 <script>
   jQuery(function(){ Codebase.helpers('notify'); });
 </script>
+
+<!-- Page JS Code -->
+<script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js ')}}"></script>
+<script src="{{ asset('/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
+
+<!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
+<script>
+  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });
+</script>
+
 @if(Session::has('message'))
 <script>
   Codebase.helpers('notify', {
@@ -458,6 +504,11 @@
 @endif
 <script>
   $('.text-danger').slideDown();
-  setTimeout(function(){ $('.text-danger').slideUp(); }, 10000);
+  setTimeout(function(){ $('.text-danger').slideUp(); }, 50000);
+</script>
+
+<script>
+  $('.alert-message').fadeIn();
+  setTimeout(function(){ $('.alert-message').slideUp(); }, 10000);
 </script>
 @endpush

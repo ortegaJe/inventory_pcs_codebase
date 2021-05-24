@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoragesTable extends Migration
+class CreateFirstStoragesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateStoragesTable extends Migration
      */
     public function up()
     { //storages
-        Schema::create('storages', function (Blueprint $table) {
+        Schema::create('first_storages', function (Blueprint $table) {
             $table->id();
-            $table->char('size');
-            $table->char('type');
+            $table->integer('size')->nullable();
+            $table->char('storage_unit')->nullable();
+            $table->char('type')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });

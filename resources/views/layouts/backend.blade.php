@@ -149,7 +149,11 @@
                     href="{{ route('admin.pcs.index') }}">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
-                      @php $globalPcCount = DB::table('computers')->select('id')->count(); @endphp
+                      @php $globalPcCount = DB::table('computers')->select('id')
+                      ->whereIn('statu_id',[1,2,3,5,6,7,8])
+                      ->where('is_active',[1])
+                      ->where('deleted_at', null)
+                      ->count(); @endphp
                       {{ $globalPcCount ?? '0' }}</span>
                   </a>
                 </li>

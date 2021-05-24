@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,4 +42,15 @@ Route::group([
 
 Route::get('example-faker', function () {
     return view('example');
+});
+
+Route::get('/tester', function () {
+
+    $q = DB::table('first_storages')->pluck('id');
+
+    foreach ($q as $query) {
+        echo "[", $query, "]", ",";
+    }
+
+    return view('admin.test', ['query' => $query]);
 });

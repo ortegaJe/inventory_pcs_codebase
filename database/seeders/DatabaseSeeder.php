@@ -19,13 +19,14 @@ class DatabaseSeeder extends Seeder
                         TypesDevicesSeeder::class,
                         SlotOneRamSeeder::class,
                         SlotTwoRamSeeder::class,
-                        StorageSeeder::class,
+                        FirstStoragesSeeder::class,
+                        SecondStorages::class,
                         BrandSeeder::class,
                         OsSeeder::class,
                         CampusSeeder::class,
                         CampuUsersSeeder::class,
-                        //StatusSeeder::class,
-                        //StatuCodesSeeder::class,
+                        StatusSeeder::class,
+                        StatuCodesSeeder::class,
                 ]);
                 //\App\Models\Computer::factory(100)->create();
         }

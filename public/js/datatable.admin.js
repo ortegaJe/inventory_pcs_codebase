@@ -22,8 +22,9 @@ $(document).ready(function() {
             "<td>Memoria RAM(ranura 02): " +
             d.RanuraRamDos +
             "</td>" +
-            "<td>Almacenamiento: " +
-            d.Almacenamiento +
+            "<td>Primer almacenamiento: " +            
+            d.PrimerUnidadAlmacenamiento +
+            '<i class="fa fa-hdd-o fa-1x"></i>' +
             "</td>" +
             "<td>Número de serial monitor: " +
             d.SerialMonitor +
@@ -67,7 +68,8 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
+            //'<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
+            '<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
