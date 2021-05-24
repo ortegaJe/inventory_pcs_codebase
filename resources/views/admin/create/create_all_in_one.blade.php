@@ -295,7 +295,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
                     value="{{ old('anydesk') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -310,7 +310,19 @@
                 <small class="text-danger is-invalid">{{ $errors->first('anydesk') }}</small>
                 @endif
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
+                <div class="form-material floating input-group">
+                  <input type="text" class="form-control" id="pc-domain-name" name="pc-domain-name" maxlength="20"
+                    value="{{ old('pc-domain-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="pc-domain-name">Nombre de dominio</label>
+                  <div class="input-group-append">
+                  </div>
+                </div>
+                @if($errors->has('pc-domain-name'))
+                <small class="text-danger is-invalid">{{ $errors->first('pc-domain-name') }}</small>
+                @endif
+              </div>
+              <div class="col-md-4">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
                     value="{{ old('pc-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">

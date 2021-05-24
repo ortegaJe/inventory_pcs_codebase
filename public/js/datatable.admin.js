@@ -68,8 +68,8 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            //'<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
-            '<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
+            '<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
+            //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
