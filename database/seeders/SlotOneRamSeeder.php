@@ -123,5 +123,10 @@ class SlotOneRamSeeder extends Seeder
             'ram' => '2GB LPDDR4',
             'created_at' => now(),
         ]);
+
+        DB::table('slot_one_rams')->insert([
+            'ram' => 'DISPONIBLE',
+            'created_at' => now(),
+        ]);
     }
 }

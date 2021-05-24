@@ -41,7 +41,7 @@ class ComputerFactory extends Factory
             'monitor_serial_number' => Str::random(10),
             'type_device_id' => 1,
             'slot_one_ram_id' => rand(5, 12),
-            'slot_two_ram_id' => rand(5, 12),
+            'slot_two_ram_id' => 1,
             'first_storage_id' => 23,
             'second_storage_id' => 30,
             'campu_id' => 'V1AMAC',

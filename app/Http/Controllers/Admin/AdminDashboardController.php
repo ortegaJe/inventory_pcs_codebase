@@ -53,9 +53,10 @@ class AdminDashboardController extends Controller
 
       $datatables->addColumn('action', function ($pcs) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
-        $btn = "<button type='button' class='btn btn-sm btn-secondary' data-toggle='tooltip' title='Edit'>
+        $btn = "<button type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
+                    window.location = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
                                                     <i class='fa fa-pencil'></i>";
-        $btn = $btn . "<button class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
+        $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
                                         <i class='fa fa-times'></i>";
         return $btn;
       });
@@ -96,7 +97,11 @@ class AdminDashboardController extends Controller
 
     $secondStorages = DB::table('second_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
 
-    $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
+    $brands = DB::table('brands')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [5])
+      ->get();
 
     $campus = DB::table('campus')->select('id', 'description')->get();
 
@@ -143,6 +148,7 @@ class AdminDashboardController extends Controller
   public function store(Request $request)
   {
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+    $pcImage = 'lenovo-desktop.png';
     //$queryStorages = $this->queryStorages();
 
     $rules = [
@@ -150,11 +156,11 @@ class AdminDashboardController extends Controller
       'marca-pc-select2' => [
         'required',
         'numeric',
-        Rule::in([1, 2, 3, 5])
+        Rule::in([1, 2, 3])
       ],
       'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
       'serial-pc' => 'required|max:24|unique:computers,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
-      'activo-fijo-pc' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+      'activo-fijo-pc' => 'nullable|max:15|regex:/^[0-9a-zA-Z-]+$/i',
       'serial-monitor-pc' => 'nullable|max:24|unique:computers,monitor_serial_number|regex:/^[0-9a-zA-Z-]+$/i',
       'os-pc-select2' => [
         'required',
@@ -182,10 +188,11 @@ class AdminDashboardController extends Controller
       'val-select2-status' => [
         'required',
         'numeric',
-        Rule::in([1, 2, 3, 5, 6, 7, 8, 9, 10])
+        Rule::in([1, 2, 3, 5, 6, 7, 8])
       ],
       'ip' => 'nullable|ipv4|unique:computers,ip',
       'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac',
+      'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
       'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i|unique:computers,anydesk',
       'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
 
@@ -222,6 +229,9 @@ class AdminDashboardController extends Controller
       'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
       'mac.max' => 'Direccion MAC no valida',
       'mac.unique' => 'Ya existe un equipo con esta MAC registrado',
+      'pc-domain-name.required' => 'Un nombre de dominio es requerido',
+      'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
+      'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
       'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
       'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
       'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
@@ -269,7 +279,9 @@ class AdminDashboardController extends Controller
       $pc->statu_id = e($request->input('val-select2-status'));
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
+      //$pc->pc_name_domain = e($request->input('pc-name-domain'));
       $pc->anydesk = e($request->input('anydesk'));
+      $pc->pc_image = $pcImage;
       $pc->pc_name = e($request->input('pc-name'));
       $pc->campu_id = e($request->input('val-select2-campus'));
       $pc->location = e($request->input('location'));
@@ -295,29 +307,54 @@ class AdminDashboardController extends Controller
       ->whereIn('id', [1, 2, 3, 4, 5, 6])
       ->get();
 
-    $term = 'SO-DIMM';
+    $termTypeLaptopRam = 'so-dimm';
     $slotOneRams = DB::table('slot_one_rams')
       ->select('id', 'ram')
-      ->where('ram', 'LIKE', '%' . $term . '%')
+      ->where('ram', 'LIKE', '%' . $termTypeLaptopRam . '%')
       ->orWhere('ram', 'NO APLICA')
       ->get();
 
-    $term = 'SO-DIMM';
     $slotTwoRams = DB::table('slot_two_rams')
       ->select('id', 'ram')
-      ->where('ram', 'LIKE', '%' . $term . '%')
+      ->where('ram', 'LIKE', '%' . $termTypeLaptopRam . '%')
       ->orWhere('ram', 'NO APLICA')
       ->get();
 
-    $firstStorages = DB::table('first_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
+    $termTypeLaptopStorageSsd = 'ssd';
+    $termTypeLaptopStorageNvme = 'pcie nvme';
+    $termTypeLaptopStorage = 'portatil';
+    $firstStorages = DB::table('first_storages')
+      ->select('id', 'size', 'storage_unit', 'type')
+      ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
+      ->orWhere('storage_unit', 'NO APLICA')
+      ->orWhere('storage_unit', 'DISPONIBLE')
+      ->get();
 
-    $secondStorages = DB::table('second_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
+    $secondStorages = DB::table('second_storages')
+      ->select('id', 'size', 'storage_unit', 'type')
+      ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
+      ->orWhere('storage_unit', 'NO APLICA')
+      ->orWhere('storage_unit', 'DISPONIBLE')
+      ->get();
 
-    $brands = DB::table('brands')->select('id', 'name')->where('id', '<>', [4])->get();
+    $brands = DB::table('brands')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [5])
+      ->get();
 
     $campus = DB::table('campus')->select('id', 'description')->get();
 
-    $status = DB::table('status')->select('id', 'name')->where('id', '<>', [4])->where('id', '<>', [9])->where('id', '<>', [10])->get();
+    $status = DB::table('status')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [9])
+      ->where('id', '<>', [10])
+      ->get();
 
     $data = [
       'operatingSystems' => $operatingSystems,
@@ -337,13 +374,14 @@ class AdminDashboardController extends Controller
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+    $pcImage = 'lenovo-all-in-one.png';
 
     $rules = [
       'marca-pc-select2' => 'not_in:0',
       'marca-pc-select2' => [
         'required',
         'numeric',
-        Rule::in([1, 2, 3, 5])
+        Rule::in([1, 2, 3])
       ],
       'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
       'serial-pc' => 'required|max:24|unique:computers,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
@@ -374,11 +412,12 @@ class AdminDashboardController extends Controller
       'val-select2-status' => [
         'required',
         'numeric',
-        Rule::in([1, 2, 3, 5, 6, 7, 8, 9, 10])
+        Rule::in([1, 2, 3, 5, 6, 7, 8])
       ],
       'ip' => 'nullable|ipv4|unique:computers,ip',
       'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac',
       'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i|unique:computers,anydesk',
+      'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
       'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
 
       'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
@@ -415,6 +454,9 @@ class AdminDashboardController extends Controller
       'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
       'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
       'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+      'pc-domain-name.required' => 'Un nombre de dominio es requerido',
+      'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
+      'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
       'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
       'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
       'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
@@ -459,7 +501,9 @@ class AdminDashboardController extends Controller
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
       $pc->anydesk = e($request->input('anydesk'));
+      $pc->pc_name_domain = e($request->input('pc-name-domain'));
       $pc->pc_name = e($request->input('pc-name'));
+      $pc->pc_image = $pcImage;
       $pc->campu_id = e($request->input('val-select2-campus'));
       $pc->location = e($request->input('location'));
       $pc->custodian_assignment_date = e($request->input('custodian-assignment-date'));
@@ -516,7 +560,7 @@ class AdminDashboardController extends Controller
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
-    //$queryStorages = $this->queryStorages();
+    $pcImage = 'atril-turnero.png';
 
     $rules = [
       'marca-pc-select2' => 'not_in:0',
@@ -554,11 +598,12 @@ class AdminDashboardController extends Controller
       'val-select2-status' => [
         'required',
         'numeric',
-        Rule::in([1, 2, 3, 5, 6, 7, 8, 9, 10])
+        Rule::in([1, 2, 3, 5, 6, 7, 8])
       ],
       'ip' => 'nullable|ipv4|unique:computers,ip',
       'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac',
       'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i|unique:computers,anydesk',
+      'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
       'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
 
       'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
@@ -595,6 +640,9 @@ class AdminDashboardController extends Controller
       'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
       'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
       'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+      'pc-domain-name.required' => 'Un nombre de dominio es requerido',
+      'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
+      'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
       'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
       'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
       'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
@@ -640,7 +688,9 @@ class AdminDashboardController extends Controller
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
       $pc->anydesk = e($request->input('anydesk'));
+      $pc->pc_name_domain = e($request->input('pc-name-domain'));
       $pc->pc_name = e($request->input('pc-name'));
+      $pc->pc_image = $pcImage;
       $pc->campu_id = e($request->input('val-select2-campus'));
       $pc->location = e($request->input('location'));
       $pc->custodian_assignment_date = e($request->input('custodian-assignment-date'));
@@ -681,7 +731,12 @@ class AdminDashboardController extends Controller
 
     $campus = DB::table('campus')->select('id', 'description')->get();
 
-    $status = DB::table('status')->select('id', 'name')->where('id', '<>', [4])->where('id', '<>', [9])->where('id', '<>', [10])->get();
+    $status = DB::table('status')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [9])
+      ->where('id', '<>', [10])
+      ->get();
 
     $data =
       [
@@ -700,7 +755,7 @@ class AdminDashboardController extends Controller
   {
 
     $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
-    //$queryStorages = $this->queryStorages();
+    $pcImage = 'raspberry-pi.png';
 
     $rules = [
       'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
@@ -729,6 +784,7 @@ class AdminDashboardController extends Controller
       'ip' => 'nullable|ipv4|unique:computers,ip',
       'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac',
       'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i|unique:computers,anydesk',
+      'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
       'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
 
       'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
@@ -760,6 +816,9 @@ class AdminDashboardController extends Controller
       'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
       'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
       'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+      'pc-domain-name.required' => 'Un nombre de dominio es requerido',
+      'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
+      'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
       'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
       'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
       'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
@@ -802,6 +861,229 @@ class AdminDashboardController extends Controller
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
       $pc->anydesk = e($request->input('anydesk'));
+      $pc->pc_name_domain = e($request->input('pc-name-domain'));
+      $pc->pc_image = $pcImage;
+      $pc->pc_name = e($request->input('pc-name'));
+      $pc->campu_id = e($request->input('val-select2-campus'));
+      $pc->location = e($request->input('location'));
+      $pc->custodian_assignment_date = e($request->input('custodian-assignment-date'));
+      $pc->custodian_name = e($request->input('custodian-name'));
+      $pc->observation = e($request->input('observation'));
+      $pc->rowguid = Uuid::uuid();
+      $pc->created_at = now('America/Bogota');
+
+      if ($pc->save()) :
+        return redirect()->route('admin.pcs.index')
+          ->withErrors($validator)
+          ->with('pc_created', 'Nuevo equipo añadido al inventario!');
+      endif;
+    endif;
+  }
+
+  public function createLaptop()
+  {
+
+    $operatingSystems = DB::table('operating_systems')
+      ->select('id', 'name', 'version', 'architecture')
+      ->whereIn('id', [1, 2, 3, 4, 5, 6])
+      ->get();
+
+    $termTypeLaptopRam = 'so-dimm';
+    $slotOneRams = DB::table('slot_one_rams')
+      ->select('id', 'ram')
+      ->where('ram', 'LIKE', '%' . $termTypeLaptopRam . '%')
+      ->orWhere('ram', 'NO APLICA')
+      ->get();
+
+    $slotTwoRams = DB::table('slot_two_rams')
+      ->select('id', 'ram')
+      ->where('ram', 'LIKE', '%' . $termTypeLaptopRam . '%')
+      ->orWhere('ram', 'NO APLICA')
+      ->get();
+
+    $termTypeLaptopStorageSsd = 'ssd';
+    $termTypeLaptopStorageNvme = 'pcie nvme';
+    $termTypeLaptopStorage = 'portatil';
+    $firstStorages = DB::table('first_storages')
+      ->select('id', 'size', 'storage_unit', 'type')
+      ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
+      ->orWhere('storage_unit', 'NO APLICA')
+      ->orWhere('storage_unit', 'DISPONIBLE')
+      ->get();
+
+    $secondStorages = DB::table('second_storages')
+      ->select('id', 'size', 'storage_unit', 'type')
+      ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
+      ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
+      ->orWhere('storage_unit', 'NO APLICA')
+      ->orWhere('storage_unit', 'DISPONIBLE')
+      ->get();
+
+    $brands = DB::table('brands')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [5])
+      ->get();
+
+    $campus = DB::table('campus')->select('id', 'description')->get();
+
+    $status = DB::table('status')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [9])
+      ->where('id', '<>', [10])
+      ->get();
+
+    $data = [
+      'operatingSystems' => $operatingSystems,
+      'slotOneRams' => $slotOneRams,
+      'slotTwoRams' => $slotTwoRams,
+      'firstStorages' => $firstStorages,
+      'secondStorages' => $secondStorages,
+      'brands' => $brands,
+      'campus' => $campus,
+      'status' => $status
+    ];
+
+    return view('admin.create.create_laptop')->with($data);
+  }
+
+  public function storeLaptop(Request $request)
+  {
+
+    $generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+    $pcImage = 'laptop-lenovo.png';
+
+    $rules = [
+      'marca-pc-select2' => 'not_in:0',
+      'marca-pc-select2' => [
+        'required',
+        'numeric',
+        Rule::in([1, 2, 3, 5])
+      ],
+      'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
+      'serial-pc' => 'required|max:24|unique:computers,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
+      'activo-fijo-pc' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+      'os-pc-select2' => [
+        'required',
+        'numeric',
+        Rule::in([1, 2, 3, 4, 5, 6])
+      ],
+      'val-select2-ram0' => [
+        'required',
+        'numeric',
+        Rule::in([1, 3, 5, 6, 8, 10, 12, 14, 16, 18, 20])
+      ],
+      'val-select2-ram1' => [
+        'numeric',
+        Rule::in([1, 3, 5, 6, 8, 10, 12, 14, 16, 18, 20])
+      ],
+      'val-select2-first-storage' => [
+        'required',
+        'numeric',
+        Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 30])
+      ],
+      'val-select2-second-storage' => [
+        'numeric',
+        Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 30])
+      ],
+      'val-select2-status' => [
+        'required',
+        'numeric',
+        Rule::in([1, 2, 3, 5, 6, 7, 8])
+      ],
+      'ip' => 'nullable|ipv4|unique:computers,ip',
+      'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/|unique:computers,mac',
+      'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i|unique:computers,anydesk',
+      'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
+      'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
+
+      'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
+      'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
+      'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
+      'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i',
+    ];
+
+    $messages = [
+      'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
+      'marca-pc-select2.required' => 'Seleccione una marca de computador',
+      'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
+      'modelo-pc.regex' => 'Símbolo(s) no permitido en el campo modelo',
+      'serial-pc.required' => 'Campo serial es requerido',
+      'serial-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
+      'serial-pc.unique' => 'Ya existe un equipo registrado con este serial',
+      'activo-fijo-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
+      'os-pc-select2.required' => 'Seleccione un sistema operativo',
+      'os-pc-select2.in' => 'Seleccione un sistema operativo válido en la lista',
+      'val-select2-ram0.required' => 'Seleccione una memoria ram',
+      'val-select2-ram0.in' => 'Seleccione una memoria ram valida en la lista',
+      'val-select2-ram1.in' => 'Seleccione una memoria ram valida en la lista',
+      'val-select2-first-storage.required' => 'Seleccione un disco duro',
+      'val-select2-first-storage.in' => 'Seleccione un disco duro válido en la lista',
+      'val-select2-second-storage.in' => 'Seleccione un disco duro válido en la lista',
+      'val-select2-status.required' => 'Seleccione un estado del equipo',
+      'val-select2-status.in' => 'Seleccione un estado válido en la lista',
+      'ip.ipv4' => 'Direccion IP no valida',
+      'ip.max' => 'Direccion IP no valida',
+      'ip.unique' => 'Ya existe un equipo con esta IP registrado',
+      'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
+      'mac.max' => 'Direccion MAC no valida',
+      'mac.unique' => 'Ya existe un equipo con esta MAC registrado',
+      'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
+      'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
+      'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+      'pc-domain-name.required' => 'Un nombre de dominio es requerido',
+      'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
+      'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
+      'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
+      'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
+      'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
+      'custodian-assignment-date.required_with' => 'El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
+      'custodian-assignment-date.date' => 'Este no es un formato de fecha permitido',
+      'custodian-assignment-date.max' => 'Solo esta permitido 10 caracteres para la fecha',
+      'custodian-name.required_with'  => 'El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
+      'custodian-name.max' => 'Solo esta permitido 56 caracteres para la el nombre del custodio',
+      'custodian-name.regex' => 'Símbolo(s) no permitido en el campo nombre del custodio',
+      'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
+      'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
+      'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
+      'observation.regex' => 'Símbolo(s) no permitido en el campo observación',
+    ];
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+    if ($validator->fails()) :
+      return back()->withErrors($validator)
+        ->withInput()
+        ->with(
+          'message',
+          'Revisar los campos con errores'
+        )->with(
+          'typealert',
+          'danger'
+        );
+    else :
+      $pc = new Computer();
+      $pc->inventory_code_number =  $generatorID;
+      $pc->inventory_active_code = e($request->input('activo-fijo-pc'));
+      $pc->type_device_id = Computer::LAPTOP_PC_ID;
+      $pc->brand_id = e($request->input('marca-pc-select2'));
+      $pc->os_id = e($request->input('os-pc-select2'));
+      $pc->model = e($request->input('modelo-pc'));
+      $pc->serial_number = e($request->input('serial-pc'));
+      $pc->slot_one_ram_id = e($request->input('val-select2-ram0'));
+      $pc->slot_two_ram_id = e($request->input('val-select2-ram1'));
+      $pc->first_storage_id = e($request->input('val-select2-first-storage'));
+      $pc->second_storage_id = e($request->input('val-select2-second-storage'));
+      $pc->cpu = e($request->input('cpu'));
+      $pc->statu_id = e($request->input('val-select2-status'));
+      $pc->ip = e($request->input('ip'));
+      $pc->mac = e($request->input('mac'));
+      $pc->anydesk = e($request->input('anydesk'));
+      $pc->pc_name_domain = e($request->input('pc-name-domain'));
+      $pc->pc_image = $pcImage;
       $pc->pc_name = e($request->input('pc-name'));
       $pc->campu_id = e($request->input('val-select2-campus'));
       $pc->location = e($request->input('location'));
@@ -838,7 +1120,43 @@ class AdminDashboardController extends Controller
    */
   public function edit($id)
   {
-    //
+    $operatingSystems = DB::table('operating_systems')
+      ->select('id', 'name', 'version', 'architecture')
+      ->whereIn('id', [1, 2, 3, 4, 5, 6])
+      ->get();
+
+    $slotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $slotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
+
+    $firstStorages = DB::table('first_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
+
+    $secondStorages = DB::table('second_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
+
+    $brands = DB::table('brands')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [5])
+      ->get();
+
+    $campus = DB::table('campus')->select('id', 'description')->get();
+
+    $status = DB::table('status')->select('id', 'name')->where('id', '<>', [4])->where('id', '<>', [9])->where('id', '<>', [10])->get();
+
+    $data =
+      [
+        'pcs' => Computer::findOrFail($id),
+        'operatingSystems' => $operatingSystems,
+        'slotOneRams' => $slotOneRams,
+        'slotTwoRams' => $slotTwoRams,
+        'firstStorages' => $firstStorages,
+        'secondStorages' => $secondStorages,
+        'brands' => $brands,
+        'campus' => $campus,
+        'status' => $status
+      ];
+
+    return view('admin.edit.edit_desktop')->with($data);
   }
 
   /**

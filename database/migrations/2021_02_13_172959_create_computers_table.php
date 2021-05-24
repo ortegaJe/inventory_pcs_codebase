@@ -30,6 +30,7 @@ class CreateComputersTable extends Migration
             $table->char('cpu')->nullable();
             $table->ipAddress('ip', 15)->nullable()->unique();
             $table->macAddress('mac')->nullable()->unique();
+            $table->char('pc_name_domain', 20)->nullable();
             $table->char('anydesk')->nullable()->unique();
             $table->char('pc_name')->nullable()->unique();
             $table->char('pc_image')->nullable();
