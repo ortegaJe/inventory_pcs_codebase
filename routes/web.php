@@ -38,6 +38,10 @@ Route::group([
     //Routes Raspberry PC
     Route::get('registrar-pc-raspberry', 'AdminDashboardController@createRaspberry')->name('pcs.raspberry_create');
     Route::post('guardar-pc-raspberry', 'AdminDashboardController@storeRaspberry')->name('pcs.raspberry_store');
+
+    //Routes Laptop PC
+    Route::get('registrar-pc-portatil', 'AdminDashboardController@createLaptop')->name('pcs.portatil_create');
+    Route::post('guardar-pc-portatil', 'AdminDashboardController@storeLaptop')->name('pcs.portatil_store');
 });
 
 Route::get('example-faker', function () {
