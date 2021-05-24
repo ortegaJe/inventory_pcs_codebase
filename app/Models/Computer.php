@@ -16,5 +16,12 @@ class Computer extends Model
     const RASPBERRY_PI_ID = 4;
     const ALL_IN_ONE_PC_ID = 5;
 
+    public function scopeCountPc($query, $id)
+    {
+        return $query->select('type_device_id')
+            ->where('type_device_id', $id)
+            ->count();
+    }
+
     public $timestamps = false;
 }
