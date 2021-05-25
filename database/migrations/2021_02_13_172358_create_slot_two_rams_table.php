@@ -15,7 +15,10 @@ class CreateSlotTwoRamsTable extends Migration
     {
         Schema::create('slot_two_rams', function (Blueprint $table) {
             $table->id();
-            $table->char('ram');
+            $table->integer('size');
+            $table->char('storage_unit');
+            $table->char('type')->nullable();
+            $table->char('format');
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });

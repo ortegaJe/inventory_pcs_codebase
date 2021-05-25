@@ -15,52 +15,82 @@ class SlotOneRamSeeder extends Seeder
     public function run()
     {
         DB::table('slot_one_rams')->insert([
-            'ram' => 'NO APLICA',
+            'size' => NULL,
+            'storage_unit' => NULL,
+            'type' => 'NO APLICA',
+            'format' => NULL,
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '1GB DDR2 DIMM',
+            'size' => 1,
+            'storage_unit' => 'GB',
+            'type' => 'DDR2',
+            'format' => 'DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '1GB DDR2 SO-DIMM',
+            'size' => 1,
+            'storage_unit' => 'GB',
+            'type' => 'DDR2',
+            'format' => 'SO-DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '2GB DDR2 DIMM',
+            'size' => 2,
+            'storage_unit' => 'GB',
+            'type' => 'DDR2',
+            'format' => 'DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '2GB DDR2 SO-DIMM',
+            'size' => 2,
+            'storage_unit' => 'GB',
+            'type' => 'DDR2',
+            'format' => 'SO-DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '4GB DDR3 SO-DIMM',
+            'size' => 4,
+            'storage_unit' => 'GB',
+            'type' => 'DDR3',
+            'format' => 'SO-DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '4GB DDR3 DIMM',
+            'size' => 4,
+            'storage_unit' => 'GB',
+            'type' => 'DDR3',
+            'format' => 'DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '4GB DDR4 SO-DIMM',
+            'size' => 4,
+            'storage_unit' => 'GB',
+            'type' => 'DDR4',
+            'format' => 'SO-DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '4GB DDR4 DIMM',
+            'size' => 4,
+            'storage_unit' => 'GB',
+            'type' => 'DDR4',
+            'format' => 'DIMM',
             'created_at' => now(),
         ]);
 
         DB::table('slot_one_rams')->insert([
-            'ram' => '8GB DDR3 SO-DIMM',
+            'size' => 8,
+            'storage_unit' => 'GB',
+            'type' => 'DDR3',
+            'format' => 'SO-DIMM',
             'created_at' => now(),
         ]);
 
