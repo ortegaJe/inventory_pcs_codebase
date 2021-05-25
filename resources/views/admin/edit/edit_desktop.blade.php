@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.update', $pcs->PcID) }}" method="POST">
+      <form action="{{ route('admin.pcs.update', $pcs->id) }}" method="POST">
         @csrf
         @method('PATH')
         <!-- Steps Content -->
@@ -76,7 +76,8 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    <option value="{{ $brand->id }}" {{ $brand->id == $pcs->brand_id ? 'selected' : '' }}>
+                      {{ $brand->name }}</option>
                     @empty
                     <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
                     @endforelse
@@ -94,7 +95,9 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($operatingSystems as $os)
-                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }}
+                    <option value="{{ $os->id }}" {{ $os->id == $pcs->os_id ? 'selected' : '' }}>
+                      {{ $os->name }}
+                      {{ $os->version }}
                       {{ $os->architecture }}</option>
                     @empty
                     <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>

@@ -28,6 +28,7 @@ Route::group([
     Route::resource('pcs', 'AdminDashboardController');
 
     //Routes All In One PC
+    Route::get('data-all-in-one', 'AdminDashboardController@indexAio')->name('pcs.allinone_index');
     Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('pcs.allinone_create');
     Route::post('guardar-pc-all-in-one', 'AdminDashboardController@storeAllInOne')->name('pcs.allinone_store');
 

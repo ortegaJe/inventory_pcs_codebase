@@ -32,7 +32,7 @@ class AdminDashboardController extends Controller
 
 
     if ($request->ajax()) {
-      $pcs = DB::table('view_all_pcs')->get();
+      $pcs = DB::table('view_all_pcs_desktop')->get();
       //dd($pcs);
 
       $datatables = DataTables::of($pcs);
@@ -53,9 +53,10 @@ class AdminDashboardController extends Controller
 
       $datatables->addColumn('action', function ($pcs) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
-        $btn = "<button type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                    window.location = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
-                                                    <i class='fa fa-pencil'></i>";
+        $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
+                   href = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
+                  <i class='fa fa-pencil'></i>
+                </a>";
         $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
                                         <i class='fa fa-times'></i>";
         return $btn;
@@ -74,6 +75,46 @@ class AdminDashboardController extends Controller
       ];
 
     return view('admin.index')->with($data);
+  }
+
+  public function indexAio(Request $request)
+  {
+
+    if ($request->ajax()) {
+      $pcs = DB::table('view_all_pcs_aio')->get();
+      //dd($pcs);
+
+      $datatables = DataTables::of($pcs);
+      $datatables->editColumn('FechaCreacion', function ($pcs) {
+        return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
+          ->format('d/m/Y h:i A')    : '';
+      });
+      $datatables->addColumn('EstadoPC', function ($pcs) {
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
+
+        return $pcs->EstadoPC;
+      });
+
+      $datatables->editColumn('EstadoPC', function ($pcs) {
+        $status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPC</span>";
+        return Str::title($status);
+      });
+
+      $datatables->addColumn('action', function ($pcs) {
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
+        $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
+                   href = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
+                  <i class='fa fa-pencil'></i>
+                </a>";
+        $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
+                                        <i class='fa fa-times'></i>";
+        return $btn;
+      });
+      $datatables->rawColumns(['action', 'EstadoPC']);
+      return $datatables->make(true);
+    }
+
+    return view('admin.index');
   }
 
   /**
@@ -105,7 +146,12 @@ class AdminDashboardController extends Controller
 
     $campus = DB::table('campus')->select('id', 'description')->get();
 
-    $status = DB::table('status')->select('id', 'name')->where('id', '<>', [4])->where('id', '<>', [9])->where('id', '<>', [10])->get();
+    $status = DB::table('status')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [9])
+      ->where('id', '<>', [10])
+      ->get();
 
     //$campus = Campu::select('id', 'description')->get();
     //dd($campus);
@@ -170,11 +216,11 @@ class AdminDashboardController extends Controller
       'val-select2-ram0' => [
         'required',
         'numeric',
-        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23])
       ],
       'val-select2-ram1' => [
         'numeric',
-        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+        Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23])
       ],
       'val-select2-first-storage' => [
         'required',
@@ -279,7 +325,7 @@ class AdminDashboardController extends Controller
       $pc->statu_id = e($request->input('val-select2-status'));
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
-      //$pc->pc_name_domain = e($request->input('pc-name-domain'));
+      $pc->pc_name_domain = e($request->input('pc-name-domain'));
       $pc->anydesk = e($request->input('anydesk'));
       $pc->pc_image = $pcImage;
       $pc->pc_name = e($request->input('pc-name'));
@@ -313,6 +359,8 @@ class AdminDashboardController extends Controller
       ->where('ram', 'LIKE', '%' . $termTypeLaptopRam . '%')
       ->orWhere('ram', 'NO APLICA')
       ->get();
+
+    //dd($slotOneRams);
 
     $slotTwoRams = DB::table('slot_two_rams')
       ->select('id', 'ram')
@@ -1141,7 +1189,12 @@ class AdminDashboardController extends Controller
 
     $campus = DB::table('campus')->select('id', 'description')->get();
 
-    $status = DB::table('status')->select('id', 'name')->where('id', '<>', [4])->where('id', '<>', [9])->where('id', '<>', [10])->get();
+    $status = DB::table('status')
+      ->select('id', 'name')
+      ->where('id', '<>', [4])
+      ->where('id', '<>', [9])
+      ->where('id', '<>', [10])
+      ->get();
 
     $data =
       [

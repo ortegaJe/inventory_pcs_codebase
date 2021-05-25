@@ -98,7 +98,7 @@ $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url,
+            ajax: root_url_desktop,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",

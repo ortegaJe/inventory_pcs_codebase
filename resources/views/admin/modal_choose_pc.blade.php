@@ -14,6 +14,17 @@
         <div class="block-content" style="background-color: #f0f2f5">
           <div class="row">
             <!-- Row #2 -->
+            {{-- <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="javascript:void(0)">
+                <div class="block-content block-content-full">
+                  <i class="si si-screen-desktop fa-4x text-gray-dark"></i>
+                </div>
+                <div class="block-content block-content-full bg-body-light">
+                  <div class="font-w600 mb-5">Carol Ray</div>
+                  <div class="font-size-sm text-muted">Web Designer</div>
+                </div>
+              </a>
+            </div> --}}
             <div class="col-md-6 col-xl-3">
               <a class="block block-rounded block-transparent text-center bg-image"
                 style="background-image: url('{{ asset('/media/photos/lenovo-desktop.png') }}');"
@@ -69,7 +80,7 @@
             <div class="col-md-6 col-xl-3">
               <a class="block block-rounded block-transparent text-center bg-image"
                 style="background-image: url('{{ asset('/media/photos/laptop-lenovo.png') }}');"
-                href="{{ route('admin.pcs.portatil_create') }}">
+                href="javascript:void(0)">
                 <div class="block-content block-content-full">
                   <span class="img-avatar"></span>
                 </div>
