@@ -43,6 +43,11 @@
         text-align:center;
     }
 
+    table.dataTable.td-slider{
+        width: 4;
+        background-color: brown;
+    }
+
     table.dataTable tfoot {
         font-size: 14px;
     }

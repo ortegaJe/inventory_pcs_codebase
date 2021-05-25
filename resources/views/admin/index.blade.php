@@ -132,7 +132,7 @@
   @include('admin.modal_choose_pc')
 
   <div class="col-md-14">
-    {{--<div class="block block-rounded block-bordered">
+    <div class="block block-rounded block-bordered">
       <div class="block-header block-header-default border-b">
         <h3 class="block-title">
           Lista<small> | Equipos informaticos</small>
@@ -149,7 +149,7 @@
       </div>
       <div class="block-content block-content-full">
         <div class="table-responsive">
-          <table id="4565" class="table table-hover" style="width:100%">
+          <table id="dt" class="table table-hover" style="width:100%">
             <thead>
               <tr>
                 <th></th>
@@ -189,166 +189,10 @@
           </table>
         </div>
       </div>
-    </div>--}}
-    <div class="block block-fx-shadow">
-      <ul id="crypto-tabs" class="nav nav-tabs nav-tabs-block align-items-center" data-toggle="tabs" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link" href="#pc-desktop">
-            <span class="d-sm-none">MESA</span>
-            <span class="d-none d-sm-inline">De Escritorios</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#crypto-coins-eth">
-            <span class="d-sm-none">AIO</span>
-            <span class="d-none d-sm-inline">All In One</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#crypto-coins-ltc">
-            <span class="d-sm-none">PTL</span>
-            <span class="d-none d-sm-inline">Portátiles</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#crypto-coins-ltc">
-            <span class="d-sm-none">TNR</span>
-            <span class="d-none d-sm-inline">Turneros</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#crypto-coins-ltc">
-            <span class="d-sm-none">RBY</span>
-            <span class="d-none d-sm-inline">Raspberry´s</span>
-          </a>
-        </li>
-        <li class="nav-item ml-auto">
-          <div class="block-options mr-15">
-            <i class="fa fa-calendar mr-5"></i>
-          </div>
-        </li>
-      </ul>
-      <div class="block-content block-content-full tab-content">
-        <div class="tab-pane active" id="pc-desktop">
-          <div>
-            <div class="block-content block-content-full">
-              <div class="table-responsive">
-                <table id="dt" class="table table-hover" style="width:100%">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th>fecha de creación</th>
-                      <th>serial</th>
-                      <th>marca</th>
-                      <th>tipo</th>
-                      <th>ip</th>
-                      <th>mac</th>
-                      <th>
-                        <img class="img-fluid" width="80px"
-                          src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk">
-                      </th>
-                      <th>sede</th>
-                      <th>estado</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th></th>
-                      <th>FECHA DE CREACIÓN</th>
-                      <th>SERIAL</th>
-                      <th>MARCA</th>
-                      <th>TIPO</th>
-                      <th>IP</th>
-                      <th>MAC</th>
-                      <th>
-                        <img class="img-fluid" width="80px"
-                          src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk">
-                      </th>
-                      <th>SEDE</th>
-                      <th>ESTADO</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tab-pane" id="crypto-coins-eth">
-          <div class="block-content block-content-full">
-            <div class="table-responsive">
-              <table id="dt-aio" class="table table-hover" style="width:100%">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>fecha de creación</th>
-                    <th>serial</th>
-                    <th>marca</th>
-                    <th>tipo</th>
-                    <th>ip</th>
-                    <th>mac</th>
-                    <th>
-                      <img class="img-fluid" width="80px"
-                        src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk">
-                    </th>
-                    <th>sede</th>
-                    <th>estado</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th>FECHA DE CREACIÓN</th>
-                    <th>SERIAL</th>
-                    <th>MARCA</th>
-                    <th>TIPO</th>
-                    <th>IP</th>
-                    <th>MAC</th>
-                    <th>
-                      <img class="img-fluid" width="80px"
-                        src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk">
-                    </th>
-                    <th>SEDE</th>
-                    <th>ESTADO</th>
-                    <th>ACTION</th>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="tab-pane" id="crypto-coins-ltc">
-          <div class="row items-push text-center my-20">
-            <div class="col-md-4">
-              <div class="font-size-h3 font-w700">$250</div>
-              <div class="text-muted font-w600 text-uppercase">Litecoin Price</div>
-            </div>
-            <div class="col-md-4">
-              <div class="font-size-h3 font-w700">
-                <span class="text-danger">-</span> $50
-              </div>
-              <div class="text-muted font-w600 text-uppercase">Since Last Month (USD)</div>
-            </div>
-            <div class="col-md-4">
-              <div class="font-size-h3 font-w700">
-                <span class="text-danger">-</span> 17%
-              </div>
-              <div class="text-muted font-w600 text-uppercase">Since Last Month (%)</div>
-            </div>
-          </div>
-          <hr class="my-30">
-          <div>
-            <!-- Litecoin Chart.js functionality is initialized in js/pages/be_pages_crypto_dashboard.min.js which was auto compiled from _es6/pages/be_pages_crypto_dashboard.js -->
-            <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
-            <canvas class="js-chartjs-litecoin" height="300"></canvas>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- END Coins -->
   </div>
+  <!-- END Coins -->
+</div>
 </div>
 <!-- End Page Content -->
 
@@ -362,7 +206,7 @@
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
   let root_url_desktop = <?php echo json_encode(route('admin.pcs.index')) ?>;
-  let root_url_aio = <?php echo json_encode(route('admin.pcs.allinone_index')) ?>;
+  //let root_url_aio = <?php echo json_encode(route('admin.pcs.allinone_index')) ?>;
   let root_url_store = <?php echo json_encode(route('admin.pcs.store')) ?>;
 </script>
 @endpush

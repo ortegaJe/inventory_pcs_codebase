@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <title>Codebase - Bootstrap 4 Admin Template &amp; UI Framework</title>
+    <title>VIVA 1A | InventarioPC</title>
 
     <meta name="description"
         content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
@@ -23,9 +23,9 @@
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-    <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('media/favicons/favicon-192x192.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('media/favicons/apple-touch-icon-180x180.png') }}">
+    <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
     <!-- END Icons -->
 
     <!-- Stylesheets -->
@@ -67,8 +67,8 @@
                             <!-- Header -->
                             <div class="px-30 py-10">
                                 <a class="link-effect font-w700" href="index.html">
-                                    <i class="si si-fire"></i>
-                                    <span class="font-size-xl text-primary-dark">Inventory</span><span
+                                    <i class="si si-screen-desktop"></i>
+                                    <span class="font-size-xl text-primary-dark">Inventario</span><span
                                         class="font-size-xl">PC</span>
                                 </a>
                                 <h1 class="h3 font-w700 mt-30 mb-10">Bienvenido</h1>
@@ -85,7 +85,7 @@
                                     <div class="col-12">
                                         <div class="form-material floating">
                                             <input type="text" class="form-control" id="login-username" name="email">
-                                            <label for="login-username">Username</label>
+                                            <label for="login-username">Email</label>
                                         </div>
                                     </div>
                                 </div>
@@ -94,23 +94,13 @@
                                         <div class="form-material floating">
                                             <input type="password" class="form-control" id="login-password"
                                                 name="password">
-                                            <label for="login-password">Password</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-12">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="login-remember-me"
-                                                name="login-remember-me">
-                                            <label class="custom-control-label" for="login-remember-me">Remember
-                                                Me</label>
+                                            <label for="login-password">Contraseña</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-sm btn-hero btn-alt-primary">
-                                        <i class="si si-login mr-10"></i> {{ __('Login') }}
+                                        <i class="si si-login mr-10"></i> {{ __('Acceder') }}
                                     </button>
                                 </div>
                             </form>

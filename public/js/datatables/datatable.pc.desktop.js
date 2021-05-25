@@ -10,7 +10,7 @@ $(document).ready(function() {
     function format(d) {
         return (
             '<div class="slider">' +
-            '<table class="table-responsive" style="font-size:13">' +
+            '<table class="table-responsive td-slider" style="font-size:13">' +
             "<tr>" +
             "<td>Marca: " +
             '<span class="badge badge-pill badge-success">' +
