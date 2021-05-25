@@ -178,8 +178,9 @@
                   <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($slotOneRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
@@ -196,9 +197,9 @@
                     value="{{ old('val-select2-ram1') }}" style="width: 100%;"
                     data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($slotTwoRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
-                    @empty
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option> @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
@@ -214,7 +215,7 @@
                     name="val-select2-first-storage" style="width: 100%;"
                     data-placeholder="Seleccionar primer almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($firstStorages as $storage)
+                    @forelse ($storages as $storage)
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
@@ -233,7 +234,7 @@
                     name="val-select2-second-storage" style="width: 100%;"
                     data-placeholder="Seleccionar segundo almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($secondStorages as $storage)
+                    @forelse ($storages as $storage)
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
@@ -249,18 +250,21 @@
             </div>
             <div class="form-group row">
               <div class="col-md-6">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="cpu" name="cpu"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="cpu">Procesador</label>
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="fa fa-microchip"></i>
-                    </span>
-                  </div>
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-cpu" name="val-select2-cpu"
+                    style="width: 100%;" data-placeholder="Seleccionar procesador..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($processors as $cpu)
+                    <option value="{{ $cpu->id }}">{{ $cpu->brand }} {{ $cpu->generation }}
+                      {{ $cpu->velocity }}</option>
+                    @empty
+                    <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-cpu">Precesador</label>
                 </div>
-                @if($errors->has('cpu'))
-                <small class="text-danger is-invalid">{{ $errors->first('cpu') }}</small>
+                @if($errors->has('val-select2-cpu'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
                 @endif
               </div>
               <div class="col-md-6">

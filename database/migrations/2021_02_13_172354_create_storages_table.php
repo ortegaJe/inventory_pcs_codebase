@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSlotOneRamsTable extends Migration
+class CreateStoragesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateSlotOneRamsTable extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('slot_one_rams', function (Blueprint $table) {
+    { //storages
+        Schema::create('storages', function (Blueprint $table) {
             $table->id();
             $table->integer('size')->nullable();
             $table->char('storage_unit')->nullable();
             $table->char('type')->nullable();
-            $table->char('format')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });
@@ -31,6 +30,6 @@ class CreateSlotOneRamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('slot_one_rams');
+        Schema::dropIfExists('hdds');
     }
 }

@@ -130,13 +130,9 @@ class AdminDashboardController extends Controller
       ->whereIn('id', [1, 2, 3, 4, 5, 6])
       ->get();
 
-    $slotOneRams = DB::table('slot_one_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
-
-    $slotTwoRams = DB::table('slot_two_rams')->select('id', 'ram')->where('id', '<>', [22])->get();
-
-    $firstStorages = DB::table('first_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
-
-    $secondStorages = DB::table('second_storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
+    $memoryRams = DB::table('memory_rams')->select('id', 'size', 'storage_unit', 'type', 'format')->where('id', '<>', [22])->get();
+    $processors = DB::table('processors')->select('id', 'brand', 'generation', 'velocity')->get();
+    $storages = DB::table('storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
 
     $brands = DB::table('brands')
       ->select('id', 'name')
@@ -162,11 +158,10 @@ class AdminDashboardController extends Controller
     $data =
       [
         'operatingSystems' => $operatingSystems,
-        'slotOneRams' => $slotOneRams,
-        'slotTwoRams' => $slotTwoRams,
-        'firstStorages' => $firstStorages,
-        'secondStorages' => $secondStorages,
+        'memoryRams' => $memoryRams,
+        'storages' => $storages,
         'brands' => $brands,
+        'processors' => $processors,
         'campus' => $campus,
         'status' => $status
       ];
@@ -321,7 +316,7 @@ class AdminDashboardController extends Controller
       $pc->slot_two_ram_id = e($request->input('val-select2-ram1'));
       $pc->first_storage_id = e($request->input('val-select2-first-storage'));
       $pc->second_storage_id = e($request->input('val-select2-second-storage'));
-      $pc->cpu = e($request->input('cpu'));
+      $pc->processor_id = e($request->input('val-select2-cpu'));
       $pc->statu_id = e($request->input('val-select2-status'));
       $pc->ip = e($request->input('ip'));
       $pc->mac = e($request->input('mac'));
