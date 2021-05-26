@@ -14,79 +14,61 @@
         <div class="block-content" style="background-color: #f0f2f5">
           <div class="row">
             <!-- Row #2 -->
-            {{-- <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="javascript:void(0)">
-                <div class="block-content block-content-full">
+            <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.create') }}">
+                <div class="block-content">
                   <i class="si si-screen-desktop fa-4x text-gray-dark"></i>
                 </div>
-                <div class="block-content block-content-full bg-body-light">
-                  <div class="font-w600 mb-5">Carol Ray</div>
-                  <div class="font-size-sm text-muted">Web Designer</div>
-                </div>
-              </a>
-            </div> --}}
-            <div class="col-md-6 col-xl-3">
-              <a class="block block-rounded block-transparent text-center bg-image"
-                style="background-image: url('{{ asset('/media/photos/lenovo-desktop.png') }}');"
-                href="{{ route('admin.pcs.create') }}">
-                <div class=" block-content block-content-full">
-                  <span class="img-avatar"></span>
-                </div>
-                <div class="block-content block-content-full block-content-sm bg-black-op">
-                  <div class="font-w600 text-white mb-5">De escritorios</div>
-                  <div class="font-size-sm text-white-op"></div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    De Escritorios
+                  </p>
                 </div>
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-rounded block-transparent text-center bg-image"
-                style="background-image: url('{{ asset('/media/photos/lenovo-all-in-one.png') }}');"
-                href="{{ route('admin.pcs.allinone_create') }}">
-                <div class="block-content block-content-full">
-                  <span class="img-avatar"></span>
+              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.allinone_create') }}">
+                <div class="block-content">
+                  <i class="fa fa-desktop fa-4x text-gray-dark"></i>
                 </div>
-                <div class="block-content block-content-full block-content-sm bg-black-op">
-                  <div class="font-w600 text-white mb-5">All in one</div>
-                  <div class="font-size-sm text-white-op"></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-md-6 col-xl-3">
-              <a class="block block-rounded block-transparent text-center bg-image"
-                style="background-image: url('{{ asset('/media/photos/atril-turnero.png') }}');"
-                href="{{ route('admin.pcs.turnero_create') }}">
-                <div class="block-content block-content-full">
-                  <span class="img-avatar"></span>
-                </div>
-                <div class="block-content block-content-full block-content-sm bg-black-op">
-                  <div class="font-w600 text-white mb-5">Tuneros</div>
-                  <div class="font-size-sm text-white-op"></div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    All In One
+                  </p>
                 </div>
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-rounded block-transparent text-center bg-image"
-                style="background-image: url('{{ asset('/media/photos/raspberry-pi.png') }}');"
-                href="{{ route('admin.pcs.raspberry_create') }}">
-                <div class="block-content block-content-full">
-                  <span class="img-avatar"></span>
+              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.turnero_create') }}">
+                <div class="block-content">
+                  <i class="fa fa-ticket fa-4x text-gray-dark"></i>
                 </div>
-                <div class="block-content block-content-full block-content-sm bg-black-op">
-                  <div class="font-w600 text-white mb-5">Raspberry´s</div>
-                  <div class="font-size-sm text-white-op"></div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    Turneros
+                  </p>
                 </div>
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-rounded block-transparent text-center bg-image"
-                style="background-image: url('{{ asset('/media/photos/laptop-lenovo.png') }}');"
-                href="javascript:void(0)">
-                <div class="block-content block-content-full">
-                  <span class="img-avatar"></span>
+              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.raspberry_create') }}">
+                <div class="block-content" width="5px">
+                  <img class="img-avatar" src="{{ asset('media/various/raspberry-pi.svg') }}" alt="raspberry-pi.svg">
                 </div>
-                <div class="block-content block-content-full block-content-sm bg-black-op">
-                  <div class="font-w600 text-white mb-5">Portátiles</div>
-                  <div class="font-size-sm text-white-op"></div>
+                <div class="block-content bg-body-light">
+                  <div class="font-w600 mb-5">Raspberry's</div>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.portatil_create') }}">
+                <div class="block-content">
+                  <i class="fa fa-laptop fa-4x text-gray-dark"></i>
+                </div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    Portátiles
+                  </p>
                 </div>
               </a>
             </div>

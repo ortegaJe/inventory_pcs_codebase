@@ -27,6 +27,9 @@ Route::group([
 ], function () {
     Route::resource('pcs', 'AdminDashboardController');
 
+    //Routes Desktop PC
+    Route::get('de-escritorios', 'AdminDashboardController@indexDesktop')->name('pcs.desktop_index');
+
     //Routes All In One PC
     Route::get('data-all-in-one', 'AdminDashboardController@indexAio')->name('pcs.allinone_index');
     Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('pcs.allinone_create');

@@ -299,7 +299,7 @@
                   <label for="ip">Dirección IP</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -314,7 +314,7 @@
                   <label for="mac">Dirección MAC</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -345,6 +345,9 @@
                     value="{{ old('pc-domain-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-domain-name">Nombre de dominio</label>
                   <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-sitemap"></i>
+                    </span>
                   </div>
                 </div>
                 @if($errors->has('pc-domain-name'))
@@ -392,7 +395,7 @@
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2-campus">Sede del equipo</label>
+                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del equipo</label>
                   </div>
                   @if($errors->has('val-select2-campus'))
                   <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>

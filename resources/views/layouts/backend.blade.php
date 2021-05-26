@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-  <title>InventorioPC | @yield('title')</title>
+  <title>InventarioPC | @yield('title')</title>
   <meta name="description"
     content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
   <meta name="author" content="pixelcave">
@@ -63,7 +63,7 @@
           <div class="content-header-section sidebar-mini-visible-b">
             <!-- Logo -->
             <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
-              <span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
+              <span class="text-dual-primary-dark">i</span><span class="text-primary">pc</span>
             </span>
             <!-- END Logo -->
           </div>
@@ -81,9 +81,9 @@
 
             <!-- Logo -->
             <div class="content-header-item">
-              <a class="link-effect font-w700" href="index.html">
-                <i class="si si-fire text-primary"></i>
-                <span class="font-size-xl text-dual-primary-dark">Inventory</span><span
+              <a class="link-effect font-w700" href="javascript:void(0)">
+                <i class="si si-screen-desktop text-primary"></i>
+                <span class="font-size-xl text-dual-primary-dark">Inventario</span><span
                   class="font-size-xl text-primary">PC</span>
               </a>
             </div>
@@ -145,8 +145,8 @@
                 <span class="sidebar-mini-hide">Dashboard Admin</span></a>
               <ul>
                 <li>
-                  <a class="{{ request()->is( 'admin/dashboard/pcs' ) ? ' active' : '' }}"
-                    href="{{ route('admin.pcs.index') }}">
+                <li class="{{ request()->is('admin/dashboard/pcs/de-escritorios') ? 'open' : '' }}">
+                  <a class="nav-submenu" data-toggle="nav-submenu">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       @php $globalPcCount = DB::table('computers')->select('id')
@@ -154,45 +154,56 @@
                       ->where('is_active',[1])
                       ->where('deleted_at', null)
                       ->count(); @endphp
-                      {{ $globalPcCount ?? '0' }}</span>
+                      {{ $globalPcCount ?? '0' }}
+                    </span>
                   </a>
+                  <ul>
+                    <li>
+                      <a class="{{ request()->is('admin/dashboard/pcs/de-escritorios') ? 'active' : '' }}"
+                        href="{{ route('admin.pcs.desktop_index') }}">De escritorios
+                      </a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">All in one</a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Portátiles</a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Turneros</a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="#">Raspberry's</a>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Usuarios</a>
-                </li>
-                <li>
-                  <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="#">Sedes</a>
-                </li>
-              </ul>
-            </li>
-            </li>
-            <li class="nav-main-heading">
-              <span class="sidebar-mini-visible">VR</span><span class="sidebar-mini-hidden">Various</span>
-            </li>
-            <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-              <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
-                  class="sidebar-mini-hide">Examples</span></a>
-              <ul>
-                <li>
-                  <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
-                    href="/pages/datatables">DataTables</a>
-                </li>
-                <li>
-                  <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
-                </li>
-                <li>
-                  <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-main-heading">
-              <span class="sidebar-mini-visible">MR</span><span class="sidebar-mini-hidden">More</span>
             </li>
             <li>
-              <a href="/">
-                <i class="si si-globe"></i><span class="sidebar-mini-hide">Landing</span>
-              </a>
+              <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Usuarios</a>
             </li>
+            <li>
+              <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="#">Sedes</a>
+            </li>
+          </ul>
+          <li class="nav-main-heading">
+            <span class="sidebar-mini-visible">A</span><span class="sidebar-mini-hidden">asignaciones</span>
+          </li>
+          {{-- <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
+          <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
+              class="sidebar-mini-hide">Examples</span></a>
+          <ul>
+            <li>
+              <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
+                href="/pages/datatables">DataTables</a>
+            </li>
+            <li>
+              <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
+            </li>
+            <li>
+              <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
+            </li>
+          </ul>
+          </li>--}}
           </ul>
         </div>
         <!-- END Side Navigation -->
