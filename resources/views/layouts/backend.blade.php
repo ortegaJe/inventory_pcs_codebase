@@ -140,13 +140,14 @@
               <a class="{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span>
               </a>
-            <li class="{{ request()->is('admin/dashboard/pcs') ? ' open' : '' }}">
+            </li>
+            <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }}">
               <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-cup"></i>
-                <span class="sidebar-mini-hide">Dashboard Admin</span></a>
+                <span class="sidebar-mini-hide">Dashboard Admin</span>
+              </a>
               <ul>
-                <li>
-                <li class="{{ request()->is('admin/dashboard/pcs/de-escritorios') ? 'open' : '' }}">
-                  <a class="nav-submenu" data-toggle="nav-submenu">
+                <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }}">
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       @php $globalPcCount = DB::table('computers')->select('id')
@@ -159,12 +160,13 @@
                   </a>
                   <ul>
                     <li>
-                      <a class="{{ request()->is('admin/dashboard/pcs/de-escritorios') ? 'active' : '' }}"
-                        href="{{ route('admin.pcs.desktop_index') }}">De escritorios
+                      <a class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'active' : '' }}"
+                        href="{{ route('admin.inventario.desktop_index') }}">De escritorios
                       </a>
                     </li>
                     <li>
-                      <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">All in one</a>
+                      <a class="{{ request()->is('admin/dashboard/inventario/all-ine-one') ? 'active' : '' }}"
+                        href="{{ route('admin.inventario.allinone_index') }}">All in one</a>
                     </li>
                     <li>
                       <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Portátiles</a>
@@ -175,35 +177,92 @@
                     <li>
                       <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="#">Raspberry's</a>
                     </li>
+                    {{-- <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#">Sub Level 2</a>
+                    <ul>
+                      <li>
+                        <a href="#">Link 2-1</a>
+                      </li>
+                      <li>
+                        <a href="#">Link 2-2</a>
+                      </li>
+                      <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#">Sub Level 3</a>
+                        <ul>
+                          <li>
+                            <a href="#">Link 3-1</a>
+                          </li>
+                          <li>
+                            <a href="#">Link 3-2</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li> --}}
                   </ul>
                 </li>
+                <li>
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                    <span class="sidebar-mini-hide">Usuarios</span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
+                      {{-- @php $globalPcCount = DB::table('computers')->select('id')
+                    ->whereIn('statu_id',[1,2,3,5,6,7,8])
+                    ->where('is_active',[1])
+                    ->where('deleted_at', null)
+                    ->count(); @endphp
+                    {{ $globalPcCount ?? '0' }} --}}
+                    </span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a class="active" href="#">Lista de Usuarios
+                      </a>
+                    </li>
+                    <li>
+                      <a class="active" href="#">Roles
+                      </a>
+                  </ul>
+                </li>
+                <li>
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                    <span class="sidebar-mini-hide">Sedes</span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-stethoscope"></i>
+                      {{-- @php $globalPcCount = DB::table('computers')->select('id')
+                        ->whereIn('statu_id',[1,2,3,5,6,7,8])
+                        ->where('is_active',[1])
+                        ->where('deleted_at', null)
+                        ->count(); @endphp
+                        {{ $globalPcCount ?? '0' }} --}}
+                    </span>
+                  </a>
+                  <ul>
+                    <li>
+                      <a class="active" href="#">Lista de Sedes
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </li>
-            <li>
-              <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Usuarios</a>
+            <li class="nav-main-heading">
+              <span class="sidebar-mini-visible">AS</span><span class="sidebar-mini-hidden">asignaciones</span>
             </li>
-            <li>
-              <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="#">Sedes</a>
-            </li>
-          </ul>
-          <li class="nav-main-heading">
-            <span class="sidebar-mini-visible">A</span><span class="sidebar-mini-hidden">asignaciones</span>
-          </li>
-          {{-- <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-          <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
-              class="sidebar-mini-hide">Examples</span></a>
-          <ul>
-            <li>
-              <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
-                href="/pages/datatables">DataTables</a>
-            </li>
-            <li>
-              <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
-            </li>
-            <li>
-              <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
-            </li>
-          </ul>
-          </li>--}}
+            {{-- <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
+            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
+                class="sidebar-mini-hide">Examples</span></a>
+            <ul>
+              <li>
+                <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
+                  href="/pages/datatables">DataTables</a>
+              </li>
+              <li>
+                <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
+              </li>
+              <li>
+                <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
+              </li>
+            </ul>
+            </li>--}}
           </ul>
         </div>
         <!-- END Side Navigation -->

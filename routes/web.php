@@ -20,32 +20,34 @@ Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 Route::group([
-    'prefix' => 'admin/dashboard',
-    'as' => 'admin.',
+    'prefix' => 'admin/dashboard/inventario',
+    'as' => 'admin.inventario.',
     'namespace' => 'App\Http\Controllers\Admin',
     'middleware' => ['auth']
 ], function () {
-    Route::resource('pcs', 'AdminDashboardController');
+    Route::resource('', 'AdminDashboardController');
 
     //Routes Desktop PC
-    Route::get('de-escritorios', 'AdminDashboardController@indexDesktop')->name('pcs.desktop_index');
+    Route::get('de-escritorios', [App\Http\Controllers\Computer\DesktopController::class, 'indexAdminDesktop'])->name('desktop_index');
+    Route::post('registrar-pc-de-escritorios', [App\Http\Controllers\Computer\DesktopController::class, 'storeAdminDesktop'])->name('desktop_store');
+    //Route::delete('eliminar-pc-de-escritorios', [App\Http\Controllers\Computer\DesktopController::class, 'destroyAdminDesktop'])->name('desktop_destroy');
 
     //Routes All In One PC
-    Route::get('data-all-in-one', 'AdminDashboardController@indexAio')->name('pcs.allinone_index');
-    Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('pcs.allinone_create');
-    Route::post('guardar-pc-all-in-one', 'AdminDashboardController@storeAllInOne')->name('pcs.allinone_store');
+    Route::get('all-in-one', 'AdminDashboardController@indexAio')->name('allinone_index');
+    Route::get('registrar-pc-all-in-one', 'AdminDashboardController@createAllInOne')->name('allinone_create');
+    Route::post('guardar-pc-all-in-one', 'AdminDashboardController@storeAllInOne')->name('allinone_store');
 
     //Routes Turnero PC
-    Route::get('registrar-pc-turnero', 'AdminDashboardController@createTurnero')->name('pcs.turnero_create');
-    Route::post('guardar-pc-turnero', 'AdminDashboardController@storeTurnero')->name('pcs.turnero_store');
+    Route::get('registrar-pc-turnero', 'AdminDashboardController@createTurnero')->name('turnero_create');
+    Route::post('guardar-pc-turnero', 'AdminDashboardController@storeTurnero')->name('turnero_store');
 
     //Routes Raspberry PC
-    Route::get('registrar-pc-raspberry', 'AdminDashboardController@createRaspberry')->name('pcs.raspberry_create');
-    Route::post('guardar-pc-raspberry', 'AdminDashboardController@storeRaspberry')->name('pcs.raspberry_store');
+    Route::get('registrar-pc-raspberry', 'AdminDashboardController@createRaspberry')->name('raspberry_create');
+    Route::post('guardar-pc-raspberry', 'AdminDashboardController@storeRaspberry')->name('raspberry_store');
 
     //Routes Laptop PC
-    Route::get('registrar-pc-portatil', 'AdminDashboardController@createLaptop')->name('pcs.portatil_create');
-    Route::post('guardar-pc-portatil', 'AdminDashboardController@storeLaptop')->name('pcs.portatil_store');
+    Route::get('registrar-pc-portatil', 'AdminDashboardController@createLaptop')->name('portatil_create');
+    Route::post('guardar-pc-portatil', 'AdminDashboardController@storeLaptop')->name('portatil_store');
 });
 
 Route::get('example-faker', function () {

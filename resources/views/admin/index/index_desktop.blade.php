@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('css')
-<link href="{{ asset('/css/datatables/datatable.pc.desktop.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
 
 @section('content')
@@ -198,13 +198,12 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.pc.desktop.js') }}"></script>
-<script src="{{ asset('/js/datatables/datatable.pc.aio.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.pc.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
-  let root_url_desktop = <?php echo json_encode(route('admin.pcs.index')) ?>;
-  let root_url_store = <?php echo json_encode(route('admin.pcs.store')) ?>;
+  let root_url_desktop = <?php echo json_encode(route('admin.inventario.desktop_index')) ?>;
+  let root_url_desktop_store = <?php echo json_encode(route('admin.inventario.desktop_store')) ?>;
 </script>
 @endpush

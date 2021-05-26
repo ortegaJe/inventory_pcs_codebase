@@ -10,7 +10,7 @@ $(document).ready(function() {
     function format(d) {
         return (
             '<div class="slider">' +
-            '<table class="table-responsive" style="font-size:13">' +
+            '<table class="table-responsive td-slider" style="font-size:13">' +
             "<tr>" +
             "<td>Marca: " +
             '<span class="badge badge-pill badge-success">' +
@@ -95,10 +95,10 @@ $(document).ready(function() {
     }
 
     $(document).ready(function() {
-        let dtAio = $("#dt-aio").DataTable({
+        let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url_aio,
+            ajax: root_url_desktop,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -197,7 +197,7 @@ $(document).ready(function() {
                     let id = $(this).attr("data-id");
                     //console.log(id);
                     $.ajax({
-                        url: root_url_store + "/" + id,
+                        url: root_url_desktop_store + "/" + id,
                         type: "DELETE",
                         data: {
                             _token: $('input[name="_token"]').val()
@@ -213,7 +213,7 @@ $(document).ready(function() {
                                 response.message,
                                 "success"
                             );
-                            $("#dt-aio")
+                            $("#dt")
                                 .DataTable()
                                 .ajax.reload();
                             //console.log(id);
@@ -226,9 +226,9 @@ $(document).ready(function() {
         });
 
         // Array to track the ids of the details displayed rows
-        $("#dt-aio tbody").on("click", "td.details-control", function() {
+        $("#dt tbody").on("click", "td.details-control", function() {
             let tr = $(this).closest("tr");
-            let row = dtAio.row(tr);
+            let row = dt.row(tr);
 
             if (row.child.isShown()) {
                 // This row is already open - close it

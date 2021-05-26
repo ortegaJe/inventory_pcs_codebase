@@ -86,7 +86,7 @@ $(document).ready(function() {
 
     function getComputerData() {
         $.ajax({
-            url: root_url,
+            url: root_url_aio,
             type: "GET",
             data: {}
         }).done(function(data) {
@@ -98,7 +98,7 @@ $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url_desktop,
+            ajax: root_url_aio,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -197,7 +197,7 @@ $(document).ready(function() {
                     let id = $(this).attr("data-id");
                     //console.log(id);
                     $.ajax({
-                        url: root_url_store + "/" + id,
+                        url: root_url_store_aio + "/" + id,
                         type: "DELETE",
                         data: {
                             _token: $('input[name="_token"]').val()

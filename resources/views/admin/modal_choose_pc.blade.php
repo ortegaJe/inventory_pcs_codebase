@@ -15,7 +15,7 @@
           <div class="row">
             <!-- Row #2 -->
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('admin.inventario.create') }}">
                 <div class="block-content">
                   <i class="si si-screen-desktop fa-4x text-gray-dark"></i>
                 </div>
@@ -27,7 +27,7 @@
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.allinone_create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('admin.inventario.allinone_create') }}">
                 <div class="block-content">
                   <i class="fa fa-desktop fa-4x text-gray-dark"></i>
                 </div>
@@ -39,7 +39,7 @@
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.turnero_create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('admin.inventario.turnero_create') }}">
                 <div class="block-content">
                   <i class="fa fa-ticket fa-4x text-gray-dark"></i>
                 </div>
@@ -51,7 +51,7 @@
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.raspberry_create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('admin.inventario.raspberry_create') }}">
                 <div class="block-content" width="5px">
                   <img class="img-avatar" src="{{ asset('media/various/raspberry-pi.svg') }}" alt="raspberry-pi.svg">
                 </div>
@@ -61,7 +61,7 @@
               </a>
             </div>
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('admin.pcs.portatil_create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('admin.inventario.portatil_create') }}">
                 <div class="block-content">
                   <i class="fa fa-laptop fa-4x text-gray-dark"></i>
                 </div>

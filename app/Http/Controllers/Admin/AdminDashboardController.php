@@ -54,7 +54,7 @@ class AdminDashboardController extends Controller
       $datatables->addColumn('action', function ($pcs) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
         $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
+                   href = '" . route('admin.inventario.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
         $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -134,6 +134,11 @@ class AdminDashboardController extends Controller
 
   public function indexAio(Request $request)
   {
+    $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
+    $globalTurneroPcCount = Computer::countPc(2);   //TURNERO
+    $globalLaptopPcCount  = Computer::countPc(3);   //PORTATIL
+    $globalRaspberryPcCount = Computer::countPc(4); //RASPBERRY
+    $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
     if ($request->ajax()) {
       $pcs = DB::table('view_all_pcs_aio')->get();
@@ -158,18 +163,28 @@ class AdminDashboardController extends Controller
       $datatables->addColumn('action', function ($pcs) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
         $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
+                   href = '" . route('admin.inventario.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
         $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
                                         <i class='fa fa-times'></i>";
         return $btn;
       });
+
       $datatables->rawColumns(['action', 'EstadoPC']);
       return $datatables->make(true);
     }
 
-    return view('admin.index');
+    $data =
+      [
+        'globalDesktopPcCount' => $globalDesktopPcCount,
+        'globalTurneroPcCount' => $globalTurneroPcCount,
+        'globalLaptopPcCount' => $globalLaptopPcCount,
+        'globalRaspberryPcCount' => $globalRaspberryPcCount,
+        'globalAllInOnePcCount' => $globalAllInOnePcCount,
+      ];
+
+    return view('admin.index.index_all_in_one')->with($data);
   }
 
   /**

@@ -205,8 +205,7 @@
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
-  let root_url_desktop = <?php echo json_encode(route('admin.pcs.index')) ?>;
-  //let root_url_aio = <?php echo json_encode(route('admin.pcs.allinone_index')) ?>;
-  let root_url_store = <?php echo json_encode(route('admin.pcs.store')) ?>;
+  let root_url_desktop = <?php echo json_encode(route('admin.inventario.index')) ?>;
+  let root_url_store = <?php echo json_encode(route('admin.inventario.store')) ?>;
 </script>
 @endpush
