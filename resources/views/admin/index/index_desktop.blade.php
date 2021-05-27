@@ -202,6 +202,27 @@
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+@if(Session::has('pc_created'))
+<script>
+  Swal.fire(
+'Creado con Exito!',
+'{!! Session::get('pc_created') !!}',
+'success'
+)
+</script>
+@endif
+
+@if(Session::has('pc_updated'))
+<script>
+  Swal.fire(
+'Actualizado con Exito!',
+'{!! Session::get('pc_updated') !!}',
+'success'
+)
+</script>
+@endif
+
 <script>
   let root_url_desktop = <?php echo json_encode(route('admin.inventory.desktop.index')) ?>;
   let root_url_desktop_store = <?php echo json_encode(route('admin.inventory.desktop.store')) ?>;

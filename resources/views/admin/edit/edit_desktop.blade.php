@@ -39,7 +39,7 @@
       <!-- Form -->
       <form action="{{ route('admin.inventory.desktop.update', $pcs->id) }}" method="POST">
         @csrf
-        @method('PATH')
+        @method('PATCH')
         <!-- Steps Content -->
         <div class="block-content block-content-full tab-content" style="min-height: 274px;">
           <!-- Step 1 -->
@@ -365,7 +365,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="pc-domain-name" name="pc-domain-name" maxlength="20"
-                    value="{{ $pcs->pc_domain_name }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ $pcs->pc_name_domain }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-domain-name">Nombre de dominio</label>
                   <div class="input-group-append">
                   </div>
@@ -474,7 +474,7 @@
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                     data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                    value="{{ $pcs->observation }}"></textarea>
+                    value="">{{ $pcs->observation }}</textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>
