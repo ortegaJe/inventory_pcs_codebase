@@ -36,10 +36,10 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::resourceVerbs([
-        'create' => 'registrar-pc-de-escritorio',
-        'edit' => 'editar-pc-de-escritorio',
+            'create' => 'registrar-equipo',
+            'edit' => 'editar-equipo',
         ]);
-        
+
         $this->configureRateLimiting();
 
         $this->routes(function () {

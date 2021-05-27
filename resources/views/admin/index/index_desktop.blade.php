@@ -164,7 +164,7 @@
                 </th>
                 <th>sede</th>
                 <th>estado</th>
-                <th>Action</th>
+                <th>acciones</th>
               </tr>
             </thead>
             <tfoot>
@@ -182,7 +182,7 @@
                 </th>
                 <th>SEDE</th>
                 <th>ESTADO</th>
-                <th>ACTION</th>
+                <th>ACCIONES</th>
               </tr>
             </tfoot>
           </table>
@@ -203,7 +203,7 @@
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
-  let root_url_desktop = <?php echo json_encode(route('admin.inventario.desktop_index')) ?>;
-  let root_url_desktop_store = <?php echo json_encode(route('admin.inventario.desktop_store')) ?>;
+  let root_url_desktop = <?php echo json_encode(route('admin.inventory.desktop.index')) ?>;
+  let root_url_desktop_store = <?php echo json_encode(route('admin.inventory.desktop.store')) ?>;
 </script>
 @endpush

@@ -39,7 +39,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.portatil_store') }}" method="POST">
+      <form action="{{ route('admin.inventory.laptop.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -157,8 +157,9 @@
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
-                    @forelse ($slotOneRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
@@ -176,8 +177,9 @@
                     data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
-                    @forelse ($slotTwoRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
@@ -195,9 +197,8 @@
                     data-placeholder="Seleccionar primer almacenamiento..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
-                    @forelse ($firstStorages as $storage)
-                    <option value="{{ $storage->id }}">{{ $storage->size }}
-                      {{ $storage->storage_unit }}
+                    @forelse ($storages as $storage)
+                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
@@ -216,9 +217,8 @@
                     data-placeholder="Seleccionar segundo almacenamiento..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
-                    @forelse ($secondStorages as $storage)
-                    <option value="{{ $storage->id }}">{{ $storage->size }}
-                      {{ $storage->storage_unit }}
+                    @forelse ($storages as $storage)
+                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>

@@ -77,61 +77,6 @@ class AdminDashboardController extends Controller
     return view('admin.index')->with($data);
   }
 
-  public function indexDesktop(Request $request)
-  {
-    $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
-    $globalTurneroPcCount = Computer::countPc(2);   //TURNERO
-    $globalLaptopPcCount  = Computer::countPc(3);   //PORTATIL
-    $globalRaspberryPcCount = Computer::countPc(4); //RASPBERRY
-    $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
-
-
-    if ($request->ajax()) {
-      $pcs = DB::table('view_all_pcs_desktop')->get();
-      //dd($pcs);
-
-      $datatables = DataTables::of($pcs);
-      $datatables->editColumn('FechaCreacion', function ($pcs) {
-        return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
-          ->format('d/m/Y h:i A')    : '';
-      });
-      $datatables->addColumn('EstadoPC', function ($pcs) {
-        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
-
-        return $pcs->EstadoPC;
-      });
-
-      $datatables->editColumn('EstadoPC', function ($pcs) {
-        $status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPC</span>";
-        return Str::title($status);
-      });
-
-      $datatables->addColumn('action', function ($pcs) {
-        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
-        $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('admin.pcs.edit', $pcs->PcID) . "'>
-                  <i class='fa fa-pencil'></i>
-                </a>";
-        $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
-                                        <i class='fa fa-times'></i>";
-        return $btn;
-      });
-      $datatables->rawColumns(['action', 'EstadoPC']);
-      return $datatables->make(true);
-    }
-
-    $data =
-      [
-        'globalDesktopPcCount' => $globalDesktopPcCount,
-        'globalTurneroPcCount' => $globalTurneroPcCount,
-        'globalLaptopPcCount' => $globalLaptopPcCount,
-        'globalRaspberryPcCount' => $globalRaspberryPcCount,
-        'globalAllInOnePcCount' => $globalAllInOnePcCount,
-      ];
-
-    return view('admin.index.index_desktop')->with($data);
-  }
-
   public function indexAio(Request $request)
   {
     $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO

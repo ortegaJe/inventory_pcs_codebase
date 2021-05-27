@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.inventario.store') }}" method="POST">
+      <form action="{{ route('admin.inventory.desktop.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -199,7 +199,8 @@
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
                     <option value="{{ $ram->id }}">
-                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option> @empty
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
+                    @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
