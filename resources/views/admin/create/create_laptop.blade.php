@@ -234,18 +234,21 @@
             </div>
             <div class="form-group row">
               <div class="col-md-6">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="cpu" name="cpu"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="cpu">Procesador</label>
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="fa fa-microchip"></i>
-                    </span>
-                  </div>
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-cpu" name="val-select2-cpu"
+                    style="width: 100%;" data-placeholder="Seleccionar procesador..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($processors as $cpu)
+                    <option value="{{ $cpu->id }}">{{ $cpu->brand }} {{ $cpu->generation }}
+                      {{ $cpu->velocity }}</option>
+                    @empty
+                    <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-cpu">Precesador</label>
                 </div>
-                @if($errors->has('cpu'))
-                <small class="text-danger is-invalid">{{ $errors->first('cpu') }}</small>
+                @if($errors->has('val-select2-cpu'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
                 @endif
               </div>
               <div class="col-md-6">
@@ -281,7 +284,7 @@
                   <label for="ip">Dirección IP</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -296,7 +299,7 @@
                   <label for="mac">Dirección MAC</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -327,6 +330,7 @@
                     value="{{ old('pc-domain-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-domain-name">Nombre de dominio</label>
                   <div class="input-group-append">
+                    <i class="fa fa-sitemap"></i>
                   </div>
                 </div>
                 @if($errors->has('pc-domain-name'))
@@ -374,7 +378,7 @@
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2-campus">Sede del equipo</label>
+                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del equipo</label>
                   </div>
                   @if($errors->has('val-select2-campus'))
                   <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>

@@ -32,9 +32,8 @@ class LaptopController extends Controller
         $globalRaspberryPcCount = Computer::countPc(4); //RASPBERRY
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
-
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_laptop')->get();
+            $pcs = DB::table('view_all_pcs_laptop')->where('TipoPc', 'portatil')->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);
@@ -95,6 +94,10 @@ class LaptopController extends Controller
             ->orWhere('id', [21])
             ->get();
 
+        $processors = DB::table('processors')
+            ->select('id', 'brand', 'generation', 'velocity')
+            ->get();
+
         $termTypeLaptopStorageSsd = 'ssd';
         $termTypeLaptopStorageNvme = 'pcie nvme';
         $termTypeLaptopStorage = 'portatil';
@@ -126,6 +129,7 @@ class LaptopController extends Controller
             'operatingSystems' => $operatingSystems,
             'memoryRams' => $memoryRams,
             'storages' => $storages,
+            'processors' => $processors,
             'brands' => $brands,
             'campus' => $campus,
             'status' => $status
@@ -240,7 +244,7 @@ class LaptopController extends Controller
                 ->withInput()
                 ->with(
                     'message',
-                    'Revisar los campos con errores'
+                    'Upsss! Se encontraron campos con errores, por favor revisar'
                 )->with(
                     'typealert',
                     'danger'
@@ -249,7 +253,7 @@ class LaptopController extends Controller
             $pc = new Computer();
             $pc->inventory_code_number =  $this->generatorID;
             $pc->inventory_active_code = e($request->input('activo-fijo-pc'));
-            $pc->type_device_id = Computer::LAPTOP_PC_ID;
+            $pc->type_device_id = Computer::DESKTOP_PC_ID; //ID equipo de escritorio
             $pc->brand_id = e($request->input('marca-pc-select2'));
             $pc->os_id = e($request->input('os-pc-select2'));
             $pc->model = e($request->input('modelo-pc'));
@@ -258,12 +262,12 @@ class LaptopController extends Controller
             $pc->slot_two_ram_id = e($request->input('val-select2-ram1'));
             $pc->first_storage_id = e($request->input('val-select2-first-storage'));
             $pc->second_storage_id = e($request->input('val-select2-second-storage'));
-            $pc->cpu = e($request->input('cpu'));
+            $pc->processor_id = e($request->input('val-select2-cpu'));
             $pc->statu_id = e($request->input('val-select2-status'));
             $pc->ip = e($request->input('ip'));
             $pc->mac = e($request->input('mac'));
+            $pc->pc_name_domain = e($request->input('pc-domain-name'));
             $pc->anydesk = e($request->input('anydesk'));
-            $pc->pc_name_domain = e($request->input('pc-name-domain'));
             $pc->pc_image = $pcImage;
             $pc->pc_name = e($request->input('pc-name'));
             $pc->campu_id = e($request->input('val-select2-campus'));
@@ -275,7 +279,7 @@ class LaptopController extends Controller
             $pc->created_at = now('America/Bogota');
 
             if ($pc->save()) :
-                return redirect()->route('admin.pcs.index')
+                return redirect()->route('admin.inventory.laptop.index')
                     ->withErrors($validator)
                     ->with('pc_created', 'Nuevo equipo añadido al inventario!');
             endif;
@@ -289,9 +293,29 @@ class LaptopController extends Controller
             ->whereIn('id', [1, 2, 3, 4, 5, 6])
             ->get();
 
-        $memoryRams = DB::table('memory_rams')->select('id', 'size', 'storage_unit', 'type', 'format')->where('id', '<>', [22])->get();
-        $processors = DB::table('processors')->select('id', 'brand', 'generation', 'velocity')->get();
-        $storages = DB::table('storages')->select('id', 'size', 'storage_unit', 'type')->where('id', '<>', [29])->get();
+        $termTypeLaptopRam = 'so-dimm';
+        $memoryRams = DB::table('memory_rams')
+            ->select('id', 'size', 'storage_unit', 'type', 'format')
+            ->where('format', 'LIKE', '%' . $termTypeLaptopRam . '%')
+            ->orWhere('id', [1])
+            ->orWhere('id', [21])
+            ->get();
+
+        $processors = DB::table('processors')
+            ->select('id', 'brand', 'generation', 'velocity')
+            ->get();
+
+        $termTypeLaptopStorageSsd = 'ssd';
+        $termTypeLaptopStorageNvme = 'pcie nvme';
+        $termTypeLaptopStorage = 'portatil';
+        $storages = DB::table('storages')
+            ->select('id', 'size', 'storage_unit', 'type')
+            ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
+            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
+            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
+            ->orWhere('id', [1])
+            ->orWhere('id', [30])
+            ->get();
 
         $brands = DB::table('brands')
             ->select('id', 'name')
@@ -308,6 +332,16 @@ class LaptopController extends Controller
             ->where('id', '<>', [10])
             ->get();
 
+        $data = [
+            'operatingSystems' => $operatingSystems,
+            'memoryRams' => $memoryRams,
+            'storages' => $storages,
+            'processors' => $processors,
+            'brands' => $brands,
+            'campus' => $campus,
+            'status' => $status
+        ];
+
         $data =
             [
                 'pcs' => Computer::findOrFail($id),
@@ -320,7 +354,7 @@ class LaptopController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.edit.edit_desktop')->with($data);
+        return view('admin.edit.edit_laptop')->with($data);
     }
 
     public function update(Request $request, $id)

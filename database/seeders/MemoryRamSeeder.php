@@ -23,22 +23,6 @@ class MemoryRamSeeder extends Seeder
         ]);
 
         DB::table('memory_rams')->insert([
-            'size' => 1,
-            'storage_unit' => 'GB',
-            'type' => 'DDR2',
-            'format' => 'DIMM',
-            'created_at' => now(),
-        ]);
-
-        DB::table('memory_rams')->insert([
-            'size' => 1,
-            'storage_unit' => 'GB',
-            'type' => 'DDR2',
-            'format' => 'SO-DIMM',
-            'created_at' => now(),
-        ]);
-
-        DB::table('memory_rams')->insert([
             'size' => 2,
             'storage_unit' => 'GB',
             'type' => 'DDR2',

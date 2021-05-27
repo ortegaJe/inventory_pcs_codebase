@@ -26,8 +26,9 @@ $(document).ready(function() {
             d.PrimerUnidadAlmacenamiento +
             '<i class="fa fa-hdd-o fa-1x"></i>' +
             "</td>" +
-            "<td>Número de serial monitor: " +
-            d.SerialMonitor +
+            "</td>" +
+            "<td>Número de serial: " +
+            d.Serial +
             "</td>" +
             "</td>" +
             "</tr>" +
@@ -48,10 +49,6 @@ $(document).ready(function() {
             "</td>" +
             "<td>Ubicación: " +
             d.Ubicacion +
-            "</td>" +
-            "<td>Número de serial: " +
-            d.Serial +
-            "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Tipo: " +
