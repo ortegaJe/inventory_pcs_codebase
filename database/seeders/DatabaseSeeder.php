@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
                         CampusSeeder::class,
                         CampuUsersSeeder::class,
                         StatusSeeder::class,
-                        StatuCodesSeeder::class,
+                        //StatuCodesSeeder::class,
                 ]);
                 //\App\Models\Computer::factory(100)->create();
         }

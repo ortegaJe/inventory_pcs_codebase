@@ -16,7 +16,7 @@ class CreateComputersTable extends Migration
         Schema::create('computers', function (Blueprint $table) {
             $table->id();
             $table->string('batch', 20)->nullable();
-            $table->string('inventory_code_number', 12)->nullable()->unique();
+            $table->string('inventory_code_number', 12)->unique();
             $table->string('inventory_active_code', 15)->nullable()->unique();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->char('model')->nullable();
@@ -55,7 +55,7 @@ class CreateComputersTable extends Migration
             $table->foreign('first_storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('second_storage_id')->references('id')->on('storages')->OnDelete('no action')->OnUpdate('no action');
             $table->foreign('processor_id')->references('id')->on('processors')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('statu_id')->references('id')->on('statu_computer_codes')->nullOnDelete()->cascadeOnUpdate();
+            //$table->foreign('statu_id')->references('id')->on('statu_computer_codes')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

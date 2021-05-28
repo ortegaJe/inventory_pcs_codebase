@@ -30,6 +30,6 @@ class CreateStoragesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hdds');
+        Schema::dropIfExists('storages');
     }
 }

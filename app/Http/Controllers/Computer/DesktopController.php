@@ -44,12 +44,12 @@ class DesktopController extends Controller
             $datatables->addColumn('EstadoPC', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
 
-                return $pcs->EstadoPC;
+                //return $pcs->EstadoPC;
             });
 
             $datatables->editColumn('EstadoPC', function ($pcs) {
-                $status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPC</span>";
-                return Str::title($status);
+                //$status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPC</span>";
+                //return Str::title($status);
             });
 
             $datatables->addColumn('action', function ($pcs) {
@@ -276,7 +276,7 @@ class DesktopController extends Controller
             $pc->first_storage_id = e($request->input('val-select2-first-storage'));
             $pc->second_storage_id = e($request->input('val-select2-second-storage'));
             $pc->processor_id = e($request->input('val-select2-cpu'));
-            $pc->statu_id = e($request->input('val-select2-status'));
+            //$pc->statu_id = e($request->input('val-select2-status'));
             $pc->ip = e($request->input('ip'));
             $pc->mac = e($request->input('mac'));
             $pc->pc_name_domain = e($request->input('pc-domain-name'));
@@ -294,7 +294,7 @@ class DesktopController extends Controller
             if ($pc->save()) :
                 return redirect()->route('admin.inventory.desktop.index')
                     ->withErrors($validator)
-                    ->with('pc_created', 'Nuevo equipo añadido al inventario!');
+                    ->with('pc_created', 'Nuevo equipo añadido al inventario!' . $pc->inventory_code_number . '');
             endif;
         endif;
     }

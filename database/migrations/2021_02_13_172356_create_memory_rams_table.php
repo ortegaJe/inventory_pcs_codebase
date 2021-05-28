@@ -31,6 +31,6 @@ class CreateMemoryRamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('slot_one_rams');
+        Schema::dropIfExists('memory_rams');
     }
 }

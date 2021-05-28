@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusComputerCodesTable extends Migration
+class CreateStatuComputerCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,13 @@ class CreateStatusComputerCodesTable extends Migration
     {
         Schema::create('statu_computer_codes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('statu_id')->nullable();
+            $table->unsignedBigInteger('statu_id');
+            $table->unsignedBigInteger('pc_id');
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
 
-            $table->foreign('statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('statu_id')->references('id')->on('status')->onDelete('no action')->onDelete('cascade');
+            $table->foreign('pc_id')->references('id')->on('computers')->onDelete('no action')->onDelete('cascade');
         });
     }
 
@@ -30,6 +32,6 @@ class CreateStatusComputerCodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_computer_codes');
+        Schema::dropIfExists('statu_computer_codes');
     }
 }
