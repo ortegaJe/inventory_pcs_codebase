@@ -73,7 +73,7 @@ $(document).ready(function() {
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
-            d.Observacion +
+            "<p>"+d.Observacion +"</p>"+
             "</td>" +
             "<td></td>" +
             "<td></td>" +

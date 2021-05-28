@@ -26,10 +26,8 @@ $(document).ready(function() {
             d.PrimerUnidadAlmacenamiento +
             '<i class="fa fa-hdd-o fa-1x"></i>' +
             "</td>" +
-            "</td>" +
             "<td>Número de serial: " +
             d.Serial +
-            "</td>" +
             "</td>" +
             "</tr>" +
             "<tr>" +
@@ -49,6 +47,8 @@ $(document).ready(function() {
             "</td>" +
             "<td>Ubicación: " +
             d.Ubicacion +
+            "</td>" +
+            "<td></td>" +
             "</tr>" +
             "<tr>" +
             "<td>Tipo: " +
@@ -70,7 +70,7 @@ $(document).ready(function() {
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
-            d.Observacion +
+            "<p>"+d.Observacion +"</p>"+
             "</td>" +
             "<td></td>" +
             "<td></td>" +

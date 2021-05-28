@@ -19,14 +19,14 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-Route::prefix('admin/dashboard/inventario')->middleware('auth')->group(function () {
+Route::prefix('admin/dashboard/inventario')->middleware('auth')
+    ->group(function () {
+        Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
 
-    Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
+        Route::resource('de-escritorios', 'App\Http\Controllers\Computer\DesktopController')->names('admin.inventory.desktop');
 
-    Route::resource('de-escritorios', 'App\Http\Controllers\Computer\DesktopController')->names('admin.inventory.desktop');
-
-    Route::resource('portatiles', 'App\Http\Controllers\Computer\LaptopController')->names('admin.inventory.laptop');
-});
+        Route::resource('portatiles', 'App\Http\Controllers\Computer\LaptopController')->names('admin.inventory.laptop');
+    });
 
 /*//Routes Desktop PC
 Route::get('de-escritorios', 'DesktopController@indexAdminDesktop')->name('desktop_index');
