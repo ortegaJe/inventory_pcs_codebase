@@ -168,10 +168,6 @@ $(document).ready(function() {
                     searcheable: true
                 },
                 {
-                    data: "EstadoPC",
-                    searcheable: true
-                },
-                {
                     data: "action",
                     searcheable: false,
                     orderable: false

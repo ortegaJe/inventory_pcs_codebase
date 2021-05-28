@@ -21,11 +21,14 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('da
 
 Route::prefix('admin/dashboard/inventario')->middleware('auth')
     ->group(function () {
-        Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
+        Route::resource('/', [App\Http\Controllers\Admin\AdminDashboardController::class])->names('admin.inventory.dash');
 
-        Route::resource('de-escritorios', 'App\Http\Controllers\Computer\DesktopController')->names('admin.inventory.desktop');
+        Route::resource('de-escritorios', [App\Http\Controllers\Computer\DesktopController::class])->names('admin.inventory.desktop');
 
-        Route::resource('portatiles', 'App\Http\Controllers\Computer\LaptopController')->names('admin.inventory.laptop');
+        Route::resource('portatiles', [App\Http\Controllers\Computer\LaptopController::class])->names('admin.inventory.laptop');
+
+        Route::prefix('tecnico/dashboard/inventario')->middleware('is_tec')->group(function () {
+        });
     });
 
 /*//Routes Desktop PC

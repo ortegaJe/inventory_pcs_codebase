@@ -44,14 +44,14 @@
     }
 
     .td-slider tr td:nth-child(1){
-        width: 310px;
+        width: 210px;
         text-align: justify;
         text-justify: inter-word;
         
     }
 
     .td-slider tr td:nth-child(2){
-        width: 355px;
+        width: 290px;
         
     }
 
