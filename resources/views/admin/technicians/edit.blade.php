@@ -22,13 +22,14 @@
             </div>
         </div>
         <div class="block-content">
-            <form action="{{ route('admin.inventory.technicians.update', $id) }}" method="POST">
+            <form action="{{ route('admin.inventory.technicians.update', $user->id) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 <div class="form-group row">
                     <div class="col-3">
                         <div class="form-material floating">
-                            <input type="text" class="form-control" id="tec-firstname" name="tec-firstname" value="">
+                            <input type="text" class="form-control" id="tec-firstname" name="tec-firstname"
+                                value="{{ $user->name }}">
                             <label for="tec-firstname">Primer nombre</label>
                         </div>
                     </div>

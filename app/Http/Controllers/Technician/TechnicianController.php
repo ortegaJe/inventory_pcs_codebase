@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Technician;
 
 use App\Http\Controllers\Controller;
 use App\Models\Computer;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,24 @@ class TechnicianController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = DB::table('model_has_roles AS MR')
+            ->select(
+                'U.id AS UserID',
+                DB::raw("CONCAT(U.name,' ',
+                U.middle_name,' ',
+                U.last_name,' ',
+                U.second_last_name) AS NombreCompletoTecnico"),
+                'U.nick_name AS NombreSesionTecnico',
+                'P.name AS CargoUsuario',
+                'R.guard_name AS RolUsuario',
+                'U.email AS EmailTecnico',
+                'U.avatar AS ImagenPerfil'
+            )
+            ->leftJoin('users AS U', 'U.id', 'MR.model_id')
+            ->leftJoin('roles AS R', 'R.id', 'MR.role_id')
+            ->leftJoin('user_profiles AS UP', 'UP.user_id', 'MR.model_id')
+            ->leftJoin('profiles AS P', 'P.id', 'MR.model_id')
+            ->get();
 
         $data = [
             'users' => $users,
@@ -36,9 +54,12 @@ class TechnicianController extends Controller
     public function create()
     {
         $profiles = DB::table('profiles')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'description')->get();
+
 
         $data = [
             'profiles' => $profiles,
+            'campus' => $campus,
         ];
 
         return view('admin.technicians.create')->with($data);
@@ -74,12 +95,13 @@ class TechnicianController extends Controller
      */
     public function edit($id)
     {
-        //$users = User::findOrFail($id);
+        //$user = User::where('id', $id)->get();
+        $user = User::findOrFail($id);
         //dd($id);
 
         $roles = Role::all();
 
-        return view('admin.technicians.edit', ['id' => $id, 'roles' => $roles]);
+        return view('admin.technicians.edit', ['user' => $user, 'roles' => $roles]);
     }
 
     /**
