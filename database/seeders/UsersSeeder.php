@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Models\User;
 
 class UsersSeeder extends Seeder
 {
@@ -15,20 +14,40 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        User::create([
+            'cc' => rand(0, 11),
+            'name' => 'Jefferson',
+            'middle_name' => 'Javier',
+            'last_name' => 'Ortega',
+            'second_last_name' => 'Pacheco',
+            'nick_name' => 'ADMIN',
+            'age' => '1991/08/10',
+            'sex' => 'M',
+            'phone_number' => '3002777694',
+            'optional_phone_number' => '3002777694',
+            'avatar' => 'boss.svg',
+            'email' => 'admin.inventor@viva1a.com.co',
+            'password' => bcrypt('123.*'),
+            'created_at' => now('America/Bogota')->toDateTimeString(),
+            'is_active' => true
+        ])->assignRole('admin');
+
+        User::create([
             'cc' => '1143434718',
-            'name' => 'Jefferson Javier',
-            'last_name' => 'Ortega Pacheco',
+            'name' => 'Jefferson',
+            'middle_name' => 'Javier',
+            'last_name' => 'Ortega',
+            'second_last_name' => 'Pacheco',
             'nick_name' => 'JORTEGA',
-            'age' => '19910810',
-            'phone' => '3002777694',
+            'age' => '1991/08/10',
+            'sex' => 'M',
+            'phone_number' => '3002777694',
+            'optional_phone_number' => '3002777694',
             'avatar' => 'boss.svg',
             'email' => 'jortega@viva1a.com.co',
-            'email_verified_at' => now(),
             'password' => bcrypt('123.*'),
-            'remember_token' => Str::random(10),
-            'created_at' => now(),
+            'created_at' => now('America/Bogota')->toDateTimeString(),
             'is_active' => 1,
-        ]);
+        ])->assignRole('tec_mac');
     }
 }

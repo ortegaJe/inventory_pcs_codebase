@@ -141,12 +141,13 @@
                 <i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span>
               </a>
             </li>
-            <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }}">
+            <li class="open">
               <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-cup"></i>
                 <span class="sidebar-mini-hide">Dashboard Admin</span>
               </a>
               <ul>
-                <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }}">
+                <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }} || 
+                  {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
@@ -201,26 +202,26 @@
                   </ul>
                 </li> --}}
               </ul>
-            </li>
-            <li>
+            <li class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'open' : '' }}">
               <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                 <span class="sidebar-mini-hide">Usuarios</span>
                 <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
                   {{-- @php $globalPcCount = DB::table('computers')->select('id')
-                    ->whereIn('statu_id',[1,2,3,5,6,7,8])
-                    ->where('is_active',[1])
-                    ->where('deleted_at', null)
-                    ->count(); @endphp
-                    {{ $globalPcCount ?? '0' }} --}}
+                                              ->whereIn('statu_id',[1,2,3,5,6,7,8])
+                                              ->where('is_active',[1])
+                                              ->where('deleted_at', null)
+                                              ->count(); @endphp
+                                              {{ $globalPcCount ?? '0' }} --}}
                 </span>
               </a>
               <ul>
                 <li>
-                  <a class="active" href="#">Lista de Usuarios
+                  <a class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'active' : '' }}"
+                    href="{{ route('admin.inventory.technicians.index') }}">Lista de Usuarios
                   </a>
                 </li>
                 <li>
-                  <a class="active" href="#">Roles
+                  <a class="" href="#">Roles
                   </a>
               </ul>
             </li>

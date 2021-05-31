@@ -17,19 +17,32 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
 
-Route::prefix('admin/dashboard/inventario')->middleware('auth')
-    ->group(function () {
-        Route::resource('/', [App\Http\Controllers\Admin\AdminDashboardController::class])->names('admin.inventory.dash');
+Route::prefix('admin/dashboard/inventario')->group(function () {
 
-        Route::resource('de-escritorios', [App\Http\Controllers\Computer\DesktopController::class])->names('admin.inventory.desktop');
+    Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
 
-        Route::resource('portatiles', [App\Http\Controllers\Computer\LaptopController::class])->names('admin.inventory.laptop');
+    Route::resource('de-escritorios', 'App\Http\Controllers\Computer\DesktopController')->names('admin.inventory.desktop');
 
-        Route::prefix('tecnico/dashboard/inventario')->middleware('is_tec')->group(function () {
-        });
-    });
+    Route::resource('portatiles', 'App\Http\Controllers\Computer\LaptopController')->names('admin.inventory.laptop');
+
+    Route::resource('tecnicos', 'App\Http\Controllers\Technician\TechnicianController')->names('admin.inventory.technicians');
+});
+
+Route::prefix('tecnico/costa/dashboard/inventario')->middleware('is_tec')->group(function () {
+
+    Route::resource('/sede-macarena', 'App\Http\Controllers\Campu\Costa\MacarenaController')->names('admin.inventory.campu.macarena');
+});
+
+/*Route::get('/sp', function () {
+    $serial = 'PC12345678';
+    $inventory_number = 'XDF123';
+    $status = 1;
+
+    $sp = DB::select("EXEC sp_insert_pc " . $inventory_number . ", " . $serial . ", " . $status . "");
+    dd($sp);
+});*/
 
 /*//Routes Desktop PC
 Route::get('de-escritorios', 'DesktopController@indexAdminDesktop')->name('desktop_index');

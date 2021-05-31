@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
-class ProfilesSeeder extends Seeder
+class ProfileUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +14,15 @@ class ProfilesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('profiles')->insert([
-            'name' => 'administrador',
+        DB::table('user_profiles')->insert([
+            'profile_id' => 1,
+            'user_id' => 1,
             'created_at' => now(),
         ]);
 
-        DB::table('profiles')->insert([
-            'name' => 'soporte ti',
+        DB::table('user_profiles')->insert([
+            'profile_id' => 2,
+            'user_id' => 2,
             'created_at' => now(),
         ]);
     }

@@ -195,7 +195,7 @@
 </div>
 <!-- End Page Content -->
 
-@endsection
+@section('content')
 
 @push('js')
 <script src="{{ asset('/js/datatables/datatable.inventory.aio.js') }}"></script>
