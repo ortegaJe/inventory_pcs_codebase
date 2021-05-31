@@ -295,7 +295,7 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
-                    <option value="{{ $statu->id }}" {{ $statu->id == $pcs->statu_id ? 'selected' : '' }}>
+                    <option value="{{ $statu->id }}" {{ $statu->id == $statu->codigo_estado ? 'selected' : '' }}>
                       {{ Str::title($statu->name) }}
                     </option>
                     @empty

@@ -30,7 +30,7 @@ class CreateComputersTable extends Migration
             $table->unsignedBigInteger('processor_id')->nullable();
             $table->ipAddress('ip', 15)->nullable()->unique();
             $table->macAddress('mac')->nullable()->unique();
-            $table->char('nat')->nullable()->unique();
+            $table->char('nat')->nullable();
             $table->char('pc_name_domain', 20)->nullable();
             $table->char('anydesk')->nullable()->unique();
             $table->char('pc_name')->nullable()->unique();
@@ -45,7 +45,6 @@ class CreateComputersTable extends Migration
             $table->dateTime('updated_at')->nullable();
             $table->softDeletes();
             $table->boolean('is_active')->default(true);
-            $table->unsignedBigInteger('statu_id')->nullable();
 
             $table->foreign('campu_id')->references('id')->on('campus')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('type_device_id')->references('id')->on('type_devices')->nullOnDelete()->cascadeOnUpdate();
@@ -55,7 +54,6 @@ class CreateComputersTable extends Migration
             $table->foreign('first_storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('second_storage_id')->references('id')->on('storages')->OnDelete('no action')->OnUpdate('no action');
             $table->foreign('processor_id')->references('id')->on('processors')->nullOnDelete()->cascadeOnUpdate();
-            //$table->foreign('statu_id')->references('id')->on('statu_computer_codes')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

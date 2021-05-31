@@ -20,6 +20,8 @@ class Computer extends Model
     {
         return $query->select('type_device_id')
             ->where('type_device_id', $id)
+            ->where('is_active', [1])
+            ->where('deleted_at', null)
             ->count();
     }
 

@@ -68,7 +68,8 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
+            '<i class="si si-screen-desktop fa-4x text-gray-dark"></i>' +
+            //'<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
             //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
@@ -165,6 +166,10 @@ $(document).ready(function() {
                 },
                 {
                     data: "Sede",
+                    searcheable: true
+                },
+                {
+                    data: "EstadoPC",
                     searcheable: true
                 },
                 {

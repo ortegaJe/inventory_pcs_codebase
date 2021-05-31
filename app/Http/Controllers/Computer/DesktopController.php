@@ -44,12 +44,12 @@ class DesktopController extends Controller
             $datatables->addColumn('EstadoPC', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
 
-                //return $pcs->EstadoPC;
+                return $pcs->EstadoPc;
             });
 
             $datatables->editColumn('EstadoPC', function ($pcs) {
-                //$status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPC</span>";
-                //return Str::title($status);
+                $status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPc</span>";
+                return Str::title($status);
             });
 
             $datatables->addColumn('action', function ($pcs) {
@@ -253,7 +253,7 @@ class DesktopController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) :
             return back()->withErrors($validator)
-                ->withInput()
+                ->withget()
                 ->with(
                     'message',
                     'Upsss! Se encontraron campos con errores, por favor revisar'
@@ -262,40 +262,46 @@ class DesktopController extends Controller
                     'danger'
                 );
         else :
-            $pc = new Computer();
-            $pc->inventory_code_number =  $this->generatorID;
-            $pc->inventory_active_code = e($request->input('activo-fijo-pc'));
-            $pc->type_device_id = Computer::DESKTOP_PC_ID; //ID equipo de escritorio
-            $pc->brand_id = e($request->input('marca-pc-select2'));
-            $pc->os_id = e($request->input('os-pc-select2'));
-            $pc->model = e($request->input('modelo-pc'));
-            $pc->serial_number = e($request->input('serial-pc'));
-            $pc->monitor_serial_number = e($request->input('serial-monitor-pc'));
-            $pc->slot_one_ram_id = e($request->input('val-select2-ram0'));
-            $pc->slot_two_ram_id = e($request->input('val-select2-ram1'));
-            $pc->first_storage_id = e($request->input('val-select2-first-storage'));
-            $pc->second_storage_id = e($request->input('val-select2-second-storage'));
-            $pc->processor_id = e($request->input('val-select2-cpu'));
-            //$pc->statu_id = e($request->input('val-select2-status'));
-            $pc->ip = e($request->input('ip'));
-            $pc->mac = e($request->input('mac'));
-            $pc->pc_name_domain = e($request->input('pc-domain-name'));
-            $pc->anydesk = e($request->input('anydesk'));
-            $pc->pc_image = $pcImage;
-            $pc->pc_name = e($request->input('pc-name'));
-            $pc->campu_id = e($request->input('val-select2-campus'));
-            $pc->location = e($request->input('location'));
-            $pc->custodian_assignment_date = e($request->input('custodian-assignment-date'));
-            $pc->custodian_name = e($request->input('custodian-name'));
-            $pc->observation = e($request->input('observation'));
-            $pc->rowguid = Uuid::uuid();
-            $pc->created_at = now('America/Bogota');
+            DB::insert(
+                "EXEC SP_InsertPc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //27
+                [
+                    $pc = new Computer(),
+                    $pc->inventory_code_number = $this->generatorID, //27
+                    $pc->inventory_active_code = e($request->get('activo-fijo-pc')),
+                    $pc->brand_id = e($request->get('marca-pc-select2')),
+                    $pc->model = e($request->get('modelo-pc')),
+                    $pc->serial_number = e($request->get('serial-pc')),
+                    $pc->monitor_serial_number = e($request->get('serial-monitor-pc')),
+                    $pc->type_device_id = Computer::DESKTOP_PC_ID, //ID equipo de escritorio
+                    $pc->slot_one_ram_id = e($request->get('val-select2-ram0')),
+                    $pc->slot_two_ram_id = e($request->get('val-select2-ram1')),
+                    $pc->first_storage_id = e($request->get('val-select2-first-storage')),
+                    $pc->second_storage_id = e($request->get('val-select2-second-storage')),
+                    $pc->processor_id = e($request->get('val-select2-cpu')),
+                    $pc->ip = e($request->get('ip')),
+                    $pc->mac = e($request->get('mac')),
+                    $pc->nat = Str::random(15),
+                    $pc->pc_name = e($request->get('pc-name')),
+                    $pc->anydesk = e($request->get('anydesk')),
+                    $pc->pc_image = $pcImage,
+                    $pc->campu_id = e($request->get('val-select2-campus')),
+                    $pc->location = e($request->get('location')),
+                    $pc->custodian_assignment_date = e($request->get('custodian-assignment-date')),
+                    $pc->custodian_name = e($request->get('custodian-name')),
+                    $pc->observation = e($request->get('observation')),
+                    $pc->rowguid = Uuid::uuid(),
+                    $pc->pc_name_domain = e($request->get('pc-domain-name')),
+                    $pc->created_at = now('America/Bogota')->toDateTimeString(),
+                    $pc->os_id = e($request->get('os-pc-select2')),
 
-            if ($pc->save()) :
-                return redirect()->route('admin.inventory.desktop.index')
-                    ->withErrors($validator)
-                    ->with('pc_created', 'Nuevo equipo añadido al inventario!' . $pc->inventory_code_number . '');
-            endif;
+                    e($request->get('val-select2-status')),
+                    true,
+                    now('America/Bogota'),
+                ]
+            );
+            return redirect()->route('admin.inventory.desktop.index')
+                ->withErrors($validator)
+                ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
     }
 
@@ -330,11 +336,13 @@ class DesktopController extends Controller
             ->select('id', 'description')
             ->get();
 
-        $status = DB::table('status')
-            ->select('id', 'name')
-            ->where('id', '<>', [4])
-            ->where('id', '<>', [9])
-            ->where('id', '<>', [10])
+        $status = DB::table('status AS S')
+            ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
+            ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
+            ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
+            ->where('S.id', '<>', [4])
+            ->where('S.id', '<>', [9])
+            ->where('S.id', '<>', [10])
             ->get();
 
         $data =
@@ -354,7 +362,7 @@ class DesktopController extends Controller
 
     public function update(Request $request, $id)
     {
-        //$pcImage = 'lenovo-desktop.png';
+        $pcImage = 'lenovo-desktop.png';
         $pc = Computer::findOrFail($id);
 
         /*$this->validate(
@@ -367,9 +375,9 @@ class DesktopController extends Controller
             ['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:computers,anydesk' . $id]],
             ['pc-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:computers,pc_name',]]
 
-        );
+        );*/
 
-        $rules = [
+        /*$rules = [
             'marca-pc-select2' => 'not_in:0',
             'marca-pc-select2' => [
                 'required',
@@ -411,7 +419,7 @@ class DesktopController extends Controller
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
             'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i',
-        ];
+        ];*/
 
         $messages = [
             'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
@@ -463,10 +471,10 @@ class DesktopController extends Controller
             'observation.regex' => 'Símbolo(s) no permitido en el campo observación',
         ];
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), $messages);
         if ($validator->fails()) :
             return back()->withErrors($validator)
-                ->withInput()
+                ->withget()
                 ->with(
                     'message',
                     'Upsss! Se encontraron campos con errores, por favor revisar'
@@ -474,42 +482,46 @@ class DesktopController extends Controller
                     'typealert',
                     'danger'
                 );
-        else :*/
-        $pc->inventory_active_code = $request->get('activo-fijo-pc');
-        $pc->brand_id = $request->get('marca-pc-select2');
-        $pc->os_id = $request->get('os-pc-select2');
-        $pc->model = $request->get('modelo-pc');
-        $pc->serial_number = $request->get('serial-pc');
-        $pc->monitor_serial_number = $request->get('serial-monitor-pc');
-        $pc->slot_one_ram_id = $request->get('val-select2-ram0');
-        $pc->slot_two_ram_id = $request->get('val-select2-ram1');
-        $pc->first_storage_id = $request->get('val-select2-first-storage');
-        $pc->second_storage_id = $request->get('val-select2-second-storage');
-        $pc->processor_id = $request->get('val-select2-cpu');
-        $pc->statu_id = $request->get('val-select2-status');
-        $pc->ip = $request->get('ip');
-        $pc->mac = $request->get('mac');
-        $pc->pc_name_domain = $request->get('pc-domain-name');
-        $pc->anydesk = $request->get('anydesk');
-        //$pc->pc_image = $pcImage;
-        $pc->pc_name = $request->get('pc-name');
-        $pc->campu_id = $request->get('val-select2-campus');
-        $pc->location = $request->get('location');
-        $pc->custodian_assignment_date = $request->get('custodian-assignment-date');
-        $pc->custodian_name = $request->get('custodian-name');
-        $pc->observation = $request->get('observation');
-        $pc->updated_at = now('America/Bogota');
-        $pc->save();
+        else :
+            DB::insert(
+                "EXEC SP_UpdatePc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //23
+                [
+                    $pc->inventory_active_code = $request->get('activo-fijo-pc'),
+                    $pc->brand_id = $request->get('marca-pc-select2'),
+                    $pc->model = $request->get('modelo-pc'),
+                    $pc->serial_number = $request->get('serial-pc'),
+                    $pc->monitor_serial_number = $request->get('serial-monitor-pc'),
+                    $pc->type_device_id = Computer::DESKTOP_PC_ID, //ID equipo de escritorio
+                    $pc->slot_one_ram_id = $request->get('val-select2-ram0'),
+                    $pc->slot_two_ram_id = $request->get('val-select2-ram1'),
+                    $pc->first_storage_id = $request->get('val-select2-first-storage'),
+                    $pc->second_storage_id = $request->get('val-select2-second-storage'),
+                    $pc->processor_id = $request->get('val-select2-cpu'),
+                    $pc->ip = $request->get('ip'),
+                    $pc->mac = $request->get('mac'),
+                    $pc->nat = Str::random(15),
+                    $pc->pc_name = $request->get('pc-name'),
+                    $pc->anydesk = $request->get('anydesk'),
+                    $pc->pc_image = $pcImage,
+                    $pc->campu_id = $request->get('val-select2-campus'),
+                    $pc->location = $request->get('location'),
+                    $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
+                    $pc->custodian_name = $request->get('custodian-name'),
+                    $pc->observation = $request->get('observation'),
+                    $pc->pc_name_domain = $request->get('pc-domain-name'),
+                    $pc->updated_at = now('America/Bogota'),
+                    $pc->os_id = $request->get('os-pc-select2'),
 
-        return redirect()->route('admin.inventory.desktop.index')
-            ->with('pc_updated', 'Equipo con codigo de inventario ' . $pc->inventory_code_number . '');
-
-        /*if ($pc->save()) :
-                return redirect()->route('admin.inventory.desktop.index')
-                    ->withErrors($validator)
-                    ->with('pc_updated', 'Equipo actualizado en el inventario!');
-            endif;
-        endif;*/
+                    $request->get('val-select2-status'),
+                    true,
+                    now('America/Bogota')->toDateTimeString(),
+                    $id,
+                ]
+            );
+            return redirect()->route('admin.inventory.desktop.index')
+                ->withErrors($validator)
+                ->with('pc_updated', 'Equipo actualizado en el inventario!');
+        endif;
     }
 
     public function destroy($id)
@@ -522,8 +534,15 @@ class DesktopController extends Controller
             $pcTemp[] = DB::table('computers')->where('id', $id)->get();
             //("SELECT * FROM computers WHERE id = $id", [1]);
             $ts = now('America/Bogota')->toDateTimeString();
-            $data = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
-            $pcs = DB::table('computers')->where('id', $id)->update($data);
+            $datain = array('deleted_at' => $ts, 'is_active' => false);
+            $pcs = DB::table('computers')->where('id', $id)->update($datain);
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
+
+            $datadel = array('active' => false);
+            $pcs = DB::table('statu_computer_codes')->where('pc_id', $id)->update($datadel);
+
+            $dataup = array('statu_id' => 4, 'pc_id' => $id, 'active' => true, 'created_at' => $ts);
+            $pcs = DB::table('statu_computer_codes')->where('pc_id', $id)->insert($dataup);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
         } catch (ModelNotFoundException $e) {
             // Handle the error.
