@@ -30,7 +30,7 @@ class UsersSeeder extends Seeder
             'password' => bcrypt('123.*'),
             'created_at' => now('America/Bogota')->toDateTimeString(),
             'is_active' => true
-        ])->assignRole('admin');
+        ])->assignRole('super_admin');
 
         User::create([
             'cc' => '1143434718',

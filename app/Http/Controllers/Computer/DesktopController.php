@@ -141,6 +141,7 @@ class DesktopController extends Controller
     public function store(Request $request)
     {
         $pcImage = 'lenovo-desktop.png';
+        $pc = new Computer();
         //$queryStorages = $this->queryStorages();
 
         $rules = [
@@ -265,7 +266,6 @@ class DesktopController extends Controller
             DB::insert(
                 "EXEC SP_InsertPc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //27
                 [
-                    $pc = new Computer(),
                     $pc->inventory_code_number = $this->generatorID, //27
                     $pc->inventory_active_code = e($request->get('activo-fijo-pc')),
                     $pc->brand_id = e($request->get('marca-pc-select2')),

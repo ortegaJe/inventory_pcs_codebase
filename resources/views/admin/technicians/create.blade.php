@@ -22,7 +22,15 @@
     </div>
     <div class="block-content">
       <form action="{{ route('admin.inventory.technicians.store') }}" method="POST">
+        @csrf
+        @method('POST')
         <div class="form-group row">
+          <div class="col-3">
+            <div class="form-material floating">
+              <input type="text" class="form-control" id="tec-id" name="tec-id">
+              <label for="tec-id">Identificacacíon</label>
+            </div>
+          </div>
           <div class="col-3">
             <div class="form-material floating">
               <input type="text" class="form-control" id="tec-firstname" name="tec-firstname">
@@ -31,8 +39,8 @@
           </div>
           <div class="col-3">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-second-middlename" name="tec-second-middlename">
-              <label for="tec-second-middlename">Segundo nombre</label>
+              <input type="text" class="form-control" id="tec-middlename" name="tec-middlename">
+              <label for="tec-middlename">Segundo nombre</label>
             </div>
           </div>
           <div class="col-3">
@@ -41,15 +49,21 @@
               <label for="tec-lastname">Primer apellido</label>
             </div>
           </div>
+        </div>
+        <div class="form-group row">
           <div class="col-3">
             <div class="form-material floating">
               <input type="text" class="form-control" id="tec-second-lastname" name="tec-second-lastname">
               <label for="tec-second-lastname">Segundo apellido</label>
             </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="form-group col-md-2">
+          <div class="col-3">
+            <div class="form-material floating">
+              <input type="text" class="form-control" id="tec-nick-name" name="tec-nick-name">
+              <label for="tec-nick-name">Nombre de usuario</label>
+            </div>
+          </div>
+          <div class="col-md-2">
             <div class="form-material">
               <input type="text" class="js-flatpickr form-control" id="tec-age" name="tec-age" placeholder="d-m-Y"
                 data-allow-input="true" maxlength="10">
@@ -59,46 +73,67 @@
             <small class="text-danger is-invalid">{{ $errors->first('tec-age') }}</small>
             @endif
           </div>
-          <div class="col-3">
+          <div class="col-4">
             <div class="form-material floating">
               <input type="text" class="form-control" id="tec-phone" name="tec-phone">
               <label for="tec-phone">Telefono</label>
             </div>
           </div>
-          <div class="col-md-3 mb-3">
-            <div class="form-group">
-              <div class="form-material">
-                <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile"
-                  style="width: 100%;" data-placeholder="Seleccionar cargo..">
-                  <option></option>
-                  <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                  @forelse ($profiles as $profile)
-                  <option value="{{ $profile->id }}">{{ Str::upper($profile->name) }}</option>
-                  @empty
-                  <option>NO EXISTEN CARGOS REGISTRADOS</option>
-                  @endforelse
-                </select>
-                <label for="val-select2-profile">Cargos de trabajo</label>
-              </div>
-              @if($errors->has('val-select2-profile'))
-              <small class="text-danger is-invalid">{{ $errors->first('val-select2-profile') }}</small>
-              @endif
-            </div>
-          </div>
-          <div class="col-2">
-            <label for="">Genero: </label>
+        </div>
+        <div clas="form-group row">
+          <div class="col-4">
+            <!-- Colors -->
             <label class="css-control css-control-success css-radio">
-              <input type="radio" class="css-control-input" name="tec-gen[]" checked="" value="F">
+              <input type="radio" class="css-control-input" name="tec-gen" value="F">
               <span class="css-control-indicator"></span> F
             </label>
             <label class="css-control css-control-success css-radio">
-              <input type="radio" class="css-control-input" name="tec-gen[]" value="M">
+              <input type="radio" class="css-control-input" name="tec-gen" value="M">
               <span class="css-control-indicator"></span> M
             </label>
             <label class="css-control css-control-success css-radio">
-              <input type="radio" class="css-control-input" name="tec-gen[]" value="O">
+              <input type="radio" class="css-control-input" name="tec-gen" value="O">
               <span class="css-control-indicator"></span> Otro
             </label>
+            <!-- END Colors -->
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-6">
+            <div class="form-material">
+              <select class="js-select2 form-control" id="val-select2-campu" name="val-select2-campu"
+                style="width: 100%;" data-placeholder="Seleccionar sede..">
+                <option></option>
+                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                @forelse ($campus as $campu)
+                <option value="{{ $campu->id }}">{{ Str::upper($campu->description) }}</option>
+                @empty
+                <option>NO EXISTEN SEDES REGISTRADAS</option>
+                @endforelse
+              </select>
+              <label for="val-select2-campu">Sede principal</label>
+            </div>
+            @if($errors->has('val-select2-campu'))
+            <small class="text-danger is-invalid">{{ $errors->first('val-select2-campu') }}</small>
+            @endif
+          </div>
+          <div class="col-6">
+            <div class="form-material">
+              <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile"
+                style="width: 100%;" data-placeholder="Seleccionar cargo..">
+                <option></option>
+                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                @forelse ($profiles as $profile)
+                <option value="{{ $profile->id }}">{{ Str::upper($profile->name) }}</option>
+                @empty
+                <option>NO EXISTEN CARGOS REGISTRADOS</option>
+                @endforelse
+              </select>
+              <label for="val-select2-profile">Cargos de trabajo</label>
+            </div>
+            @if($errors->has('val-select2-profile'))
+            <small class="text-danger is-invalid">{{ $errors->first('val-select2-profile') }}</small>
+            @endif
           </div>
         </div>
         <div class="form-group row">

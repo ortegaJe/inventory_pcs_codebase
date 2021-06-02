@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $roleAdmin = Role::create(['name' => 'admin']);
+        $roleAdmin = Role::create(['name' => 'administrador']);
         $roleMacarena = Role::create(['name' => 'tec_mac']);
 
         Permission::create(['name' => 'admin.inventory.dash.index'])->syncRoles([$roleAdmin, $roleMacarena]);

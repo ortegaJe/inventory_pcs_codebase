@@ -73,37 +73,38 @@
           <div class="dropdown">
             <button type="button" class="btn-block-option" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false">
-              <i class="si si-wrench"></i>
+              <i class="fa fa-cogs"></i>
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ route('admin.inventory.technicians.edit', $user->id) }}">
-                <i class="fa fa-fw fa-cog mr-5"></i>Asignar un rol
+              <a class="dropdown-item" href="{{ route('admin.inventory.technicians.edit', $user->UserID) }}">
+                <i class="si si-badge mr-5"></i>Asignar rol
               </a>
-              <a class="dropdown-item" href="javascript:void(0)">
+              {{--<a class="dropdown-item" href="javascript:void(0)">
                 <i class="fa fa-fw fa-hand-stop-o mr-5"></i>Privacy
               </a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="javascript:void(0)">
                 <i class="fa fa-fw fa-envelope-o mr-5"></i>Messages
-              </a>
+              </a>--}}
             </div>
           </div>
         </div>
         <img class="img-avatar img-avatar-thumb" src="{{ asset('/media/avatars/avatar7.jpg') }}" alt="">
       </div>
       <div class="block-content block-content-full block-content-sm bg-earth-dark">
-        <div class="font-w600 text-white mb-5">{{ $user->nick_name }}</div>
-        <div class="font-size-sm text-white-op">Professor</div>
+        <div class="font-w600 text-white mb-5">{{ Str::title($user->NombreCompletoTecnico) }}</div>
+        <div class="font-size-sm text-white-op">{{ Str::title($user->CargoUsuario) }} |
+          {{ Str::title($user->RolUsuario) }}</div>
       </div>
       <div class="block-content">
         <div class="row items-push">
-          <div class="col-6">
-            <div class="mb-5"><i class="si si-badge fa-2x"></i></div>
-            <div class="font-size-sm text-muted">9 Awards</div>
+          <div class="col-6 text-center">
+            <div class="mb-5"><i class="fa fa-building-o fa-2x"></i></div>
+            <div class="font-size-sm text-muted"> Sedes</div>
           </div>
           <div class="col-6">
-            <div class="mb-5"><i class="si si-calendar fa-2x"></i></div>
-            <div class="font-size-sm text-muted">2 Events</div>
+            <div class="mb-5"><i class="si si-badge fa-2x"></i></div>
+            <div class="font-size-sm text-muted"> Roles</div>
           </div>
         </div>
       </div>

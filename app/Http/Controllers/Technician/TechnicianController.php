@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Technician;
 
 use App\Http\Controllers\Controller;
 use App\Models\Computer;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
@@ -19,7 +21,25 @@ class TechnicianController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+
+        $users = DB::table('users AS U')
+            ->select(
+                'U.id AS UserID',
+                DB::raw("CONCAT(U.name,' ',
+                U.middle_name,' ',
+                U.last_name,' ',
+                U.second_last_name) AS NombreCompletoTecnico"),
+                'U.nick_name AS NombreSesionTecnico',
+                'P.name AS CargoUsuario',
+                'R.guard_name AS RolUsuario',
+                'U.email AS EmailTecnico',
+                'U.avatar AS ImagenPerfil'
+            )
+            //->leftJoin('model_has_roles AS MR', 'MR.model_id', 'U.id')
+            ->leftJoin('roles AS R', 'R.id', 'U.id')
+            ->leftJoin('user_profiles AS UP', 'UP.user_id', 'U.id')
+            ->leftJoin('profiles AS P', 'P.id', 'U.id')
+            ->get()->dd();
 
         $data = [
             'users' => $users,
@@ -36,9 +56,12 @@ class TechnicianController extends Controller
     public function create()
     {
         $profiles = DB::table('profiles')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'description')->get();
+
 
         $data = [
             'profiles' => $profiles,
+            'campus' => $campus,
         ];
 
         return view('admin.technicians.create')->with($data);
@@ -52,7 +75,35 @@ class TechnicianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User();
+
+        DB::insert(
+            "EXEC SP_CreateUsers ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",
+            [
+                //16
+                $user->cc = e($request->input('tec-id')),
+                $user->name = e($request->input('tec-firstname')),
+                $user->middle_name = e($request->input('tec-middlename')),
+                $user->last_name = e($request->input('tec-lastname')),
+                $user->second_last_name = e($request->input('tec-second-lastname')),
+                $user->nick_name = e($request->input('tec-nick-name')),
+                $user->age = e($request->input('tec-age')),
+                $user->sex = e($request->input('tec-gen')),
+                $user->phone_number = e($request->input('tec-phone')),
+                $user->avatar = null,
+                $user->email = e($request->input('tec-email')),
+                $user->password = Hash::make($request['tec-password']),
+                //$user->password = e($request->input('tec-password2')),
+                $user->created_at = now('America/Bogota'),
+                true,
+                e($request->input('val-select2-profile')),
+                e($request->input('val-select2-campu')),
+                //$request->all(),
+
+            ]
+        );
+        return redirect()->route('admin.inventory.technicians.index')
+            ->with('pc_created', 'Nuevo equipo añadido al inventario!');
     }
 
     /**
@@ -74,12 +125,13 @@ class TechnicianController extends Controller
      */
     public function edit($id)
     {
-        //$users = User::findOrFail($id);
+        //$user = User::where('id', $id)->get();
+        $user = User::findOrFail($id);
         //dd($id);
 
         $roles = Role::all();
 
-        return view('admin.technicians.edit', ['id' => $id, 'roles' => $roles]);
+        return view('admin.technicians.edit', ['user' => $user, 'roles' => $roles]);
     }
 
     /**

@@ -30,41 +30,6 @@ class AdminDashboardController extends Controller
     $globalRaspberryPcCount = Computer::countPc(4); //RASPBERRY
     $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
-
-    if ($request->ajax()) {
-      $pcs = DB::table('view_all_pcs_desktop')->get();
-      //dd($pcs);
-
-      $datatables = DataTables::of($pcs);
-      $datatables->editColumn('FechaCreacion', function ($pcs) {
-        return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
-          ->format('d/m/Y h:i A')    : '';
-      });
-      $datatables->addColumn('EstadoPC', function ($pcs) {
-        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
-
-        return $pcs->EstadoPC;
-      });
-
-      $datatables->editColumn('EstadoPC', function ($pcs) {
-        $status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPC</span>";
-        return Str::title($status);
-      });
-
-      $datatables->addColumn('action', function ($pcs) {
-        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
-        $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('admin.inventario.edit', $pcs->PcID) . "'>
-                  <i class='fa fa-pencil'></i>
-                </a>";
-        $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
-                                        <i class='fa fa-times'></i>";
-        return $btn;
-      });
-      $datatables->rawColumns(['action', 'EstadoPC']);
-      return $datatables->make(true);
-    }
-
     $data =
       [
         'globalDesktopPcCount' => $globalDesktopPcCount,
@@ -190,16 +155,6 @@ class AdminDashboardController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function queryStorages()
-  {
-    $q = DB::table('first_storages')->pluck('id');
-
-    foreach ($q as $query) {
-      echo $query, ",";
-    }
-
-    return $query;
-  }
 
   public function store(Request $request)
   {
