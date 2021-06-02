@@ -94,13 +94,14 @@
       <div class="block-content block-content-full block-content-sm bg-earth-dark">
         <div class="font-w600 text-white mb-5">{{ Str::title($user->NombreCompletoTecnico) }}</div>
         <div class="font-size-sm text-white-op">{{ Str::title($user->CargoUsuario) }} |
-          {{ Str::title($user->RolUsuario) }}</div>
+          {{ Str::upper($user->SedeTecnico) }}
+        </div>
       </div>
       <div class="block-content">
         <div class="row items-push">
           <div class="col-6 text-center">
             <div class="mb-5"><i class="fa fa-building-o fa-2x"></i></div>
-            <div class="font-size-sm text-muted"> Sedes</div>
+            <div class="font-size-sm text-muted">{{ $countCampus ?? '0' }} Sedes</div>
           </div>
           <div class="col-6">
             <div class="mb-5"><i class="si si-badge fa-2x"></i></div>

@@ -19,6 +19,7 @@ class CreateStatuComputerCodesTable extends Migration
             $table->unsignedBigInteger('pc_id');
             $table->boolean('active')->default(1);
             $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
 
             $table->foreign('statu_id')->references('id')->on('status')->onDelete('no action')->onDelete('cascade');
             $table->foreign('pc_id')->references('id')->on('computers')->onDelete('no action')->onDelete('cascade');

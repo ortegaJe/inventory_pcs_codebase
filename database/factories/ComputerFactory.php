@@ -40,18 +40,17 @@ class ComputerFactory extends Factory
             'serial_number' => Str::random(10),
             'monitor_serial_number' => Str::random(10),
             'type_device_id' => 1,
-            'slot_one_ram_id' => rand(5, 12),
-            'slot_two_ram_id' => 21,
+            'slot_one_ram_id' => 14,
+            'slot_two_ram_id' => 1,
             'first_storage_id' => 23,
             'second_storage_id' => 30,
-            'campu_id' => 'V1AMAC',
+            'campu_id' => 'TMP',
             'processor_id' => rand(1, 20),
             'ip' => $this->faker->ipv4(),
             'mac' => $this->faker->macAddress(),
             'os_id' => rand(1, 8),
             'anydesk' => rand(1, 302) . ' ' . rand(1, 485) . ' ' . rand(1, 801),
             'pc_name' => $pc_name_chain,
-            'pc_image' => $this->faker->imageUrl(),
             'location' => $this->faker->name(),
             'observation' => $this->faker->text(),
             'rowguid' => $this->faker->uuid(),
@@ -59,7 +58,6 @@ class ComputerFactory extends Factory
             'updated_at' => null,
             'deleted_at' => null,
             'is_active' => true,
-            'statu_id' => 1
         ];
     }
 

@@ -21,6 +21,10 @@ class TechnicianController extends Controller
      */
     public function index()
     {
+        $countCampus = DB::table('campu_users AS CP')->select('user_id')
+            ->join('users AS U', 'U.id', 'CP.user_id')->count();
+
+        //dd($countCampus);
 
         $users = DB::table('users AS U')
             ->select(
@@ -31,18 +35,22 @@ class TechnicianController extends Controller
                 U.second_last_name) AS NombreCompletoTecnico"),
                 'U.nick_name AS NombreSesionTecnico',
                 'P.name AS CargoUsuario',
-                'R.guard_name AS RolUsuario',
+                'C.description AS SedeTecnico',
                 'U.email AS EmailTecnico',
                 'U.avatar AS ImagenPerfil'
             )
+            ->join('user_profiles AS UP', 'UP.id', 'U.id')
+            ->join('profiles AS P', 'P.id', 'UP.profile_id')
+            ->join('campu_users AS CP', 'CP.user_id', 'U.id')
+            ->join('campus AS C', 'C.id', 'CP.campu_id')
+            ->orderBy('U.id', 'ASC')
             //->leftJoin('model_has_roles AS MR', 'MR.model_id', 'U.id')
-            ->leftJoin('roles AS R', 'R.id', 'U.id')
-            ->leftJoin('user_profiles AS UP', 'UP.user_id', 'U.id')
-            ->leftJoin('profiles AS P', 'P.id', 'U.id')
-            ->get()->dd();
+            //->leftJoin('roles AS R', 'R.id', 'MR.role_id')
+            ->get();
 
         $data = [
             'users' => $users,
+            'countCampus' => $countCampus,
         ];
 
         return view('admin.technicians.index')->with($data);

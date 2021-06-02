@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Computer;
+namespace App\Http\Controllers\Campu\Costa;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class DesktopController extends Controller
+class TemporalController extends Controller
 {
     private $generatorID;
 
@@ -76,7 +76,7 @@ class DesktopController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('admin.index.index_desktop')->with($data);
+        return view('admin.campus.costa.temporal.index')->with($data);
     }
 
     public function create()
@@ -136,7 +136,7 @@ class DesktopController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.create.create_desktop')->with($data);
+        return view('admin.campus.costa.temporal.create')->with($data);
     }
 
     public function store(Request $request)
@@ -303,7 +303,7 @@ class DesktopController extends Controller
                     Auth::id(),
                 ]
             );
-            return redirect()->route('admin.inventory.desktop.index')
+            return redirect()->route('admin.inventory.campu.temporal.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -361,7 +361,7 @@ class DesktopController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.edit.edit_desktop')->with($data);
+        return view('admin.campus.costa.temporal.edit')->with($data);
     }
 
     public function update(Request $request, $id)
@@ -522,7 +522,7 @@ class DesktopController extends Controller
                     Auth::id(),
                 ]
             );
-            return redirect()->route('admin.inventory.desktop.index')
+            return redirect()->route('admin.campus.costa.temporal.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;
