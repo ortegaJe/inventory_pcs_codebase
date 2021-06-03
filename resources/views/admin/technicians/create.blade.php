@@ -22,6 +22,8 @@
     </div>
     <div class="block-content">
       <form action="{{ route('admin.inventory.technicians.store') }}" method="POST">
+        @csrf
+        @method('POST')
         <div class="form-group row">
           <div class="col-3">
             <div class="form-material floating">
@@ -37,8 +39,8 @@
           </div>
           <div class="col-3">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-second-middlename" name="tec-second-middlename">
-              <label for="tec-second-middlename">Segundo nombre</label>
+              <input type="text" class="form-control" id="tec-middlename" name="tec-middlename">
+              <label for="tec-middlename">Segundo nombre</label>
             </div>
           </div>
           <div class="col-3">
@@ -79,31 +81,20 @@
           </div>
         </div>
         <div clas="form-group row">
-          <div class="col-sm-4">
+          <div class="col-4">
             <!-- Colors -->
-            <div class="block">
-              <div class="block-header block-header-default bg-info-light">
-                <h3 class="block-title">Genero</h3>
-              </div>
-              <div class="block-content">
-                <div class="row no-gutters items-push">
-                  <div class="col-8">
-                    <label class="css-control css-control-success css-radio">
-                      <input type="radio" class="css-control-input" name="tec-gen[]" value="F">
-                      <span class="css-control-indicator"></span> F
-                    </label>
-                    <label class="css-control css-control-success css-radio">
-                      <input type="radio" class="css-control-input" name="tec-gen[]" value="M">
-                      <span class="css-control-indicator"></span> M
-                    </label>
-                    <label class="css-control css-control-success css-radio">
-                      <input type="radio" class="css-control-input" name="tec-gen[]" value="O">
-                      <span class="css-control-indicator"></span> Otro
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <label class="css-control css-control-success css-radio">
+              <input type="radio" class="css-control-input" name="tec-gen" value="F">
+              <span class="css-control-indicator"></span> F
+            </label>
+            <label class="css-control css-control-success css-radio">
+              <input type="radio" class="css-control-input" name="tec-gen" value="M">
+              <span class="css-control-indicator"></span> M
+            </label>
+            <label class="css-control css-control-success css-radio">
+              <input type="radio" class="css-control-input" name="tec-gen" value="O">
+              <span class="css-control-indicator"></span> Otro
+            </label>
             <!-- END Colors -->
           </div>
         </div>
@@ -120,7 +111,10 @@
                 <option>NO EXISTEN SEDES REGISTRADAS</option>
                 @endforelse
               </select>
-              <label for="val-select2-campu">Sedes</label>
+              <<<<<<< HEAD <label for="val-select2-campu">Sedes</label>
+                =======
+                <label for="val-select2-campu">Sede principal</label>
+                >>>>>>> d24d6eb376f0093faa3e1eb35e2a37ec6585275e
             </div>
             @if($errors->has('val-select2-campu'))
             <small class="text-danger is-invalid">{{ $errors->first('val-select2-campu') }}</small>

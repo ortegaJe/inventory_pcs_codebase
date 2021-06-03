@@ -389,7 +389,7 @@
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="location" name="location" maxlength="56"
                     value="{{ old('location') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="location">Ubicacion</label>
+                  <label for="location">Ubicación en la sede</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-map-marker"></i>

@@ -30,9 +30,10 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::resource('tecnicos', 'App\Http\Controllers\Technician\TechnicianController')->names('admin.inventory.technicians');
 });
 
-Route::prefix('tecnico/costa/dashboard/inventario')->middleware('is_tec')->group(function () {
+Route::prefix('tecnico/dashboard/inventario/costa')->group(function () {
 
     Route::resource('/sede-macarena', 'App\Http\Controllers\Campu\Costa\MacarenaController')->names('admin.inventory.campu.macarena');
+    Route::resource('/temporal', 'App\Http\Controllers\Campu\Costa\TemporalController')->names('admin.inventory.campu.temporal');
 });
 
 /*Route::get('/sp', function () {

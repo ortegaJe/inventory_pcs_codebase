@@ -137,13 +137,13 @@
         <div class="content-side content-side-full">
           <ul class="nav-main">
             <li>
-              <a class="{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span>
+              <a class="{{ request()->is('/') ? ' active' : '' }}" href="{{ route('dashboard') }}">
+                <i class="si si-home"></i><span class="sidebar-mini-hide">Home</span>
               </a>
             </li>
             <li class="open">
               <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-cup"></i>
-                <span class="sidebar-mini-hide">Dashboard Admin</span>
+                <span class="sidebar-mini-hide">Dashboard</span>
               </a>
               <ul>
                 <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }} || 
@@ -242,6 +242,34 @@
                   <a class="active" href="#">Lista de Sedes
                   </a>
                 </li>
+                @if (\App\Models\User::where('id', 1))
+                <li>
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">Costa</a>
+                  <ul>
+                    <li style="font-size: 10px">
+                      <a href="#">VIVA 1A IPS CALLE 30</a>
+                    </li>
+                    <li style="font-size: 10px">
+                      <a href="#">VIVA 1A IPS CARRERA 16</a>
+                    </li>
+                    <li style="font-size: 10px">
+                      <a href="#">VIVA 1A IPS COUNTRY</a>
+                    </li>
+                    <li style="font-size: 10px">
+                      <a href="#">VIVA 1A IPS MACARENA</a>
+                    </li>
+                    <li style="font-size: 10px">
+                      <a href="{{ route('admin.inventory.campu.temporal.index') }}">TEMPORAL</a>
+                    </li>
+                    <li style="font-size: 10px">
+                      <a href="#">VIVA 1A IPS SAN JOSE</a>
+                    </li>
+                    <li style="font-size: 10px">
+                      <a href="#">VIVA 1A IPS MATRIZ</a>
+                    </li>
+                  </ul>
+                </li>
+                @endif
               </ul>
             </li>
           </ul>
@@ -380,23 +408,9 @@
               <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">{{ Auth::user()->name }}
                 {{ Auth::user()->last_name }}</h5>
               <a class="dropdown-item" href="be_pages_generic_profile.html">
-                <i class="si si-user mr-5"></i> Profile
-              </a>
-              <a class="dropdown-item d-flex align-items-center justify-content-between"
-                href="be_pages_generic_inbox.html">
-                <span><i class="si si-envelope-open mr-5"></i> Inbox</span>
-                <span class="badge badge-primary">3</span>
-              </a>
-              <a class="dropdown-item" href="be_pages_generic_invoice.html">
-                <i class="si si-note mr-5"></i> Invoices
+                <i class="si si-user mr-5"></i> Perfil
               </a>
               <div class="dropdown-divider"></div>
-
-              <!-- Toggle Side Overlay -->
-              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-              <a class="dropdown-item" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_toggle">
-                <i class="si si-wrench mr-5"></i> Settings
-              </a>
               <!-- END Side Overlay -->
 
               <div class="dropdown-divider"></div>

@@ -21,7 +21,7 @@ class CreateComputersTable extends Migration
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->char('model')->nullable();
             $table->char('serial_number')->unique();
-            $table->char('monitor_serial_number')->nullable()->unique();
+            $table->char('monitor_serial_number')->nullable();
             $table->unsignedBigInteger('type_device_id')->nullable();
             $table->unsignedBigInteger('slot_one_ram_id')->nullable();
             $table->unsignedBigInteger('slot_two_ram_id')->nullable();
@@ -32,10 +32,10 @@ class CreateComputersTable extends Migration
             $table->macAddress('mac')->nullable()->unique();
             $table->char('nat')->nullable();
             $table->char('pc_name_domain', 20)->nullable();
-            $table->char('anydesk')->nullable()->unique();
+            $table->char('anydesk')->nullable();
             $table->char('pc_name')->nullable()->unique();
             $table->char('pc_image')->nullable();
-            $table->char('campu_id', 7)->nullable();
+            $table->char('campu_id', 3)->nullable();
             $table->text('location')->nullable();
             $table->date('custodian_assignment_date')->nullable();
             $table->string('custodian_name', 56)->nullable();
