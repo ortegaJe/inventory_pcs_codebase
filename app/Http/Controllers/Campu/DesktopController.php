@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Computer;
+namespace App\Http\Controllers\Campu;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\User;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -25,7 +26,7 @@ class DesktopController extends Controller
         $this->generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
     }
 
-    public function index(Request $request)
+    public function index(Request $request, User $user = null)
     {
         $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
         $globalTurneroPcCount = Computer::countPc(2);   //TURNERO
@@ -56,7 +57,7 @@ class DesktopController extends Controller
             $datatables->addColumn('action', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('admin.inventory.desktop.edit', $pcs->PcID) . "'>
+                   href = '" . route('user.inventory.campu.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -76,7 +77,7 @@ class DesktopController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('admin.index.index_desktop')->with($data);
+        return view('user.index.index_desktop')->with($data);
     }
 
     public function create()
@@ -136,7 +137,7 @@ class DesktopController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.create.create_desktop')->with($data);
+        return view('user.create.create_desktop')->with($data);
     }
 
     public function store(Request $request)
@@ -303,7 +304,7 @@ class DesktopController extends Controller
                     Auth::id(),
                 ]
             );
-            return redirect()->route('admin.inventory.desktop.index')
+            return redirect()->route('user.inventory.desktop.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -361,7 +362,7 @@ class DesktopController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.edit.edit_desktop')->with($data);
+        return view('user.edit.edit_desktop')->with($data);
     }
 
     public function update(Request $request, $id)
@@ -522,7 +523,7 @@ class DesktopController extends Controller
                     Auth::id(),
                 ]
             );
-            return redirect()->route('admin.inventory.desktop.index')
+            return redirect()->route('user.inventory.desktop.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;

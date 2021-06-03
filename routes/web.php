@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -32,8 +33,9 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
 Route::prefix('tecnico/dashboard/inventario/costa')->group(function () {
 
-    Route::resource('/sede-macarena', 'App\Http\Controllers\Campu\Costa\MacarenaController')->names('admin.inventory.campu.macarena');
-    Route::resource('/temporal', 'App\Http\Controllers\Campu\Costa\TemporalController')->names('admin.inventory.campu.temporal');
+    //Route::resource('/de-escritorios', 'App\Http\Controllers\Campu\DesktopController')->names('tec.inventory.campu.macarena');
+
+    Route::resource('/de-escritorios', 'App\Http\Controllers\Campu\DesktopController')->names('tec.inventory.campu.desktop');
 });
 
 /*Route::get('/sp', function () {

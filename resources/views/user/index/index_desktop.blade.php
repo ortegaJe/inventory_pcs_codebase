@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Técnico Dashboard')
 
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
@@ -127,7 +127,7 @@
     <!-- END Add Product -->
   </div>
 
-  @include('admin.modal_choose_pc')
+  @include('user.partials.modal')
 
   <div class="col-md-14">
     <div class="block block-rounded block-bordered">

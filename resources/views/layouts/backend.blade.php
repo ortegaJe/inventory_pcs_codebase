@@ -146,6 +146,7 @@
                 <span class="sidebar-mini-hide">Dashboard</span>
               </a>
               <ul>
+                @can('admin.inventory.desktop.index')
                 <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }} || 
                   {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
@@ -169,128 +170,103 @@
                       <a class="{{ request()->is('admin/dashboard/inventario/portatiles') ? 'active' : '' }}"
                         href="{{ route('admin.inventory.laptop.index') }}">Portátiles</a>
                     </li>
-                    {{--<li>
-                      <a class="{{ request()->is('admin/dashboard/inventario/all-ine-one') ? 'active' : '' }}"
-                    href="{{ route('admin.inventario.allinone_index') }}">All in one</a>
-                </li>
-                <li>
-                  <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="#">Turneros</a>
-                </li>
-                <li>
-                  <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="#">Raspberry's</a>
-                </li>
-                <li>
-                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">Sub Level 2</a>
-                  <ul>
-                    <li>
-                      <a href="#">Link 2-1</a>
-                    </li>
-                    <li>
-                      <a href="#">Link 2-2</a>
-                    </li>
-                    <li>
-                      <a class="nav-submenu" data-toggle="nav-submenu" href="#">Sub Level 3</a>
-                      <ul>
-                        <li>
-                          <a href="#">Link 3-1</a>
-                        </li>
-                        <li>
-                          <a href="#">Link 3-2</a>
-                        </li>
-                      </ul>
-                    </li>
                   </ul>
-                </li> --}}
-              </ul>
-            <li class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'open' : '' }}">
-              <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                <span class="sidebar-mini-hide">Usuarios</span>
-                <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
-                  {{-- @php $globalPcCount = DB::table('computers')->select('id')
+                <li class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'open' : '' }}">
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                    <span class="sidebar-mini-hide">Usuarios</span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
+                      {{-- @php $globalPcCount = DB::table('computers')->select('id')
                                               ->whereIn('statu_id',[1,2,3,5,6,7,8])
                                               ->where('is_active',[1])
                                               ->where('deleted_at', null)
                                               ->count(); @endphp
                                               {{ $globalPcCount ?? '0' }} --}}
-                </span>
-              </a>
-              <ul>
-                <li>
-                  <a class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'active' : '' }}"
-                    href="{{ route('admin.inventory.technicians.index') }}">Lista de Usuarios
+                    </span>
                   </a>
+                  <ul>
+                    <li>
+                      <a class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'active' : '' }}"
+                        href="{{ route('admin.inventory.technicians.index') }}">Lista de Usuarios
+                      </a>
+                    </li>
+                    <li>
+                      <a class="" href="#">Roles
+                      </a>
+                  </ul>
                 </li>
+                @endcan
                 <li>
-                  <a class="" href="#">Roles
-                  </a>
-              </ul>
-            </li>
-            <li>
-              <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                <span class="sidebar-mini-hide">Sedes</span>
-                <span class="badge badge-pill bg-gray-darker"><i class="fa fa-stethoscope"></i>
-                  {{-- @php $globalPcCount = DB::table('computers')->select('id')
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                    <span class="sidebar-mini-hide">Sedes</span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-stethoscope"></i>
+                      {{-- @php $globalPcCount = DB::table('computers')->select('id')
                         ->whereIn('statu_id',[1,2,3,5,6,7,8])
                         ->where('is_active',[1])
                         ->where('deleted_at', null)
                         ->count(); @endphp
                         {{ $globalPcCount ?? '0' }} --}}
-                </span>
-              </a>
-              <ul>
-                <li>
-                  <a class="active" href="#">Lista de Sedes
+                    </span>
                   </a>
-                </li>
-                <li>
-                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">Costa</a>
                   <ul>
-                    <li style="font-size: 10px">
-                      <a href="#">VIVA 1A IPS CALLE 30</a>
-                    </li>
-                    <li style="font-size: 10px">
-                      <a href="#">VIVA 1A IPS CARRERA 16</a>
-                    </li>
-                    <li style="font-size: 10px">
-                      <a href="#">VIVA 1A IPS COUNTRY</a>
-                    </li>
-                    <li style="font-size: 10px">
-                      <a href="#">VIVA 1A IPS MACARENA</a>
-                    </li>
-                    <li style="font-size: 10px">
-                      <a href="{{ route('admin.inventory.campu.temporal.create') }}">TEMPORAL</a>
-                    </li>
-                    <li style="font-size: 10px">
-                      <a href="#">VIVA 1A IPS SAN JOSE</a>
-                    </li>
-                    <li style="font-size: 10px">
-                      <a href="#">VIVA 1A IPS MATRIZ</a>
+                    {{--  <li>
+                      <a class="open" href="#">Lista de Sedes
+                      </a>
+                    </li>--}}
+                    <li>
+                      <a class="nav-submenu" data-toggle="nav-submenu" href="#">Costa</a>
+                      <ul>
+                        {{-- <li style="font-size: 10px">
+                      <a href="{{ route('admin.inventory.campu.temporal.index') }}">TEMPORAL</a>
+                    </li>--}}
+                    <li
+                      class="{{ request()->is('tecnico/dashboard/inventario/costa') ? 'open' : '' }} || 
+                                                    {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
+                      <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                        <span class="sidebar-mini-hide">Equipos</span>
+                        <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
+                          @php $globalPcCount = DB::table('computers')->select('id')
+                          //->whereIn('statu_id',[1,2,3,5,6,7,8])
+                          ->where('is_active',[1])
+                          ->where('deleted_at', null)
+                          ->count(); @endphp
+                          {{ $globalPcCount ?? '0' }}
+                        </span>
+                      </a>
+                      <ul>
+                        <li>
+                          <a class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'active' : '' }}"
+                            href="{{ route('tec.inventory.campu.desktop.index') }}">De escritorios
+                          </a>
+                        </li>
+                        <li>
+                          <a class="{{ request()->is('admin/dashboard/inventario/portatiles') ? 'active' : '' }}"
+                            href="{{ route('admin.inventory.laptop.index') }}">Portátiles</a>
+                        </li>
+                      </ul>
                     </li>
                   </ul>
                 </li>
               </ul>
             </li>
-          </ul>
-          </li>
-          <li class="nav-main-heading">
-            <span class="sidebar-mini-visible">AS</span><span class="sidebar-mini-hidden">asignaciones</span>
-          </li>
-          {{-- <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-          <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
-              class="sidebar-mini-hide">Examples</span></a>
-          <ul>
-            <li>
-              <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
-                href="/pages/datatables">DataTables</a>
+            <li class="nav-main-heading">
+              <span class="sidebar-mini-visible">AS</span><span class="sidebar-mini-hidden">asignaciones</span>
             </li>
-            <li>
-              <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
-            </li>
-            <li>
-              <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
-            </li>
-          </ul>
-          </li>--}}
+            {{-- <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
+            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
+                class="sidebar-mini-hide">Examples</span></a>
+            <ul>
+              <li>
+                <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
+                  href="/pages/datatables">DataTables</a>
+              </li>
+              <li>
+                <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
+              </li>
+              <li>
+                <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
+              </li>
+            </ul>
+            </li>--}}
           </ul>
         </div>
         <!-- END Side Navigation -->

@@ -36,11 +36,11 @@
         <div class="block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
-              <i class="fa fa-desktop fa-2x text-elegance-lighter"></i>
+              <i class="fa fa-desktop fa-2x text-warning-light"></i>
             </div>
           </div>
           <div class="py-20 text-center">
-            <div class="font-size-h2 font-w700 mb-0 text-elegance-light" data-toggle="countTo"
+            <div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo"
               data-to="{{ $globalAllInOnePcCount }}">0</div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">all in one</div>
           </div>
@@ -55,11 +55,11 @@
         <div class="block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
-              <i class="fa fa-laptop fa-2x text-flat-lighter"></i>
+              <i class="fa fa-warning fa-2x text-danger-light"></i>
             </div>
           </div>
           <div class="py-20 text-center">
-            <div class="font-size-h2 font-w700 mb-0 text-flat" data-toggle="countTo"
+            <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo"
               data-to="{{ $globalLaptopPcCount }}">0</div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">portátiles</div>
           </div>
@@ -93,7 +93,7 @@
         <div class="block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
-              <img width="30px" src="{{ asset('media/various/raspberry-pi-0.svg') }}" alt="raspberry-pi.svg">
+              <i class="fa fa-warning fa-2x" style="color: #c51d4a"></i>
             </div>
           </div>
           <div class="py-20 text-center">
@@ -109,14 +109,15 @@
 
     <!-- Add Product -->
     <div class="col-md-6 col-xl-2">
-      <a class="block block-rounded block-link-shadow" data-toggle="modal" data-target="#modal-popout">
+      <a class="block block-link-shadow block-link-shadow" data-toggle="modal" data-target="#modal-popout">
         <div class="block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
+              <i class="si si-screen-desktop fa-2x text-success-light"></i>
             </div>
           </div>
           <div class="py-20 text-center">
-            <div class="font-size-h2 font-w700 mb-3 text-success">
+            <div class="font-size-h2 font-w700 mb-0 text-success">
               <i class="fa fa-plus"></i>
             </div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
@@ -197,33 +198,12 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.pc.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.laptop.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-@if(Session::has('pc_created'))
 <script>
-  Swal.fire(
-'Creado con Exito!',
-'{!! Session::get('pc_created') !!}',
-'success'
-)
-</script>
-@endif
-
-@if(Session::has('pc_updated'))
-<script>
-  Swal.fire(
-'Actualizado con Exito!',
-'{!! Session::get('pc_updated') !!}',
-'success'
-)
-</script>
-@endif
-
-<script>
-  let root_url_desktop = <?php echo json_encode(route('admin.inventory.desktop.index')) ?>;
-  let root_url_desktop_store = <?php echo json_encode(route('admin.inventory.desktop.store')) ?>;
+  let root_url_laptop = <?php echo json_encode(route('admin.inventory.laptop.index')) ?>;
+  let root_url_laptop_store = <?php echo json_encode(route('admin.inventory.laptop.store')) ?>;
 </script>
 @endpush

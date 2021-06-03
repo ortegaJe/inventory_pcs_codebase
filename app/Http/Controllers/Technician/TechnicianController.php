@@ -84,6 +84,10 @@ class TechnicianController extends Controller
     public function store(Request $request)
     {
         $user = new User();
+        $isActive = true;
+        $profileUser = e($request->input('val-select2-profile'));
+        $campuUser =  e($request->input('val-select2-campu'));
+        $is_principal = true;
 
         DB::insert(
             "EXEC SP_CreateUsers ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",
@@ -103,10 +107,10 @@ class TechnicianController extends Controller
                 $user->password = Hash::make($request['tec-password']),
                 //$user->password = e($request->input('tec-password2')),
                 $user->created_at = now('America/Bogota'),
-                true,
-                e($request->input('val-select2-profile')),
-                e($request->input('val-select2-campu')),
-                //$request->all(),
+                $isActive,
+                $profileUser,
+                $campuUser,
+                $is_principal,
 
             ]
         );
