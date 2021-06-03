@@ -63,7 +63,7 @@
               <label for="tec-nick-name">Nombre de usuario</label>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-3">
             <div class="form-material">
               <input type="text" class="js-flatpickr form-control" id="tec-age" name="tec-age" placeholder="d-m-Y"
                 data-allow-input="true" maxlength="10">
@@ -73,7 +73,7 @@
             <small class="text-danger is-invalid">{{ $errors->first('tec-age') }}</small>
             @endif
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <div class="form-material floating">
               <input type="text" class="form-control" id="tec-phone" name="tec-phone">
               <label for="tec-phone">Telefono</label>

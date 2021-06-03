@@ -242,7 +242,6 @@
                   <a class="active" href="#">Lista de Sedes
                   </a>
                 </li>
-                @if (\App\Models\User::where('id', 1))
                 <li>
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">Costa</a>
                   <ul>
@@ -259,7 +258,7 @@
                       <a href="#">VIVA 1A IPS MACARENA</a>
                     </li>
                     <li style="font-size: 10px">
-                      <a href="{{ route('admin.inventory.campu.temporal.index') }}">TEMPORAL</a>
+                      <a href="{{ route('admin.inventory.campu.temporal.create') }}">TEMPORAL</a>
                     </li>
                     <li style="font-size: 10px">
                       <a href="#">VIVA 1A IPS SAN JOSE</a>
@@ -269,7 +268,6 @@
                     </li>
                   </ul>
                 </li>
-                @endif
               </ul>
             </li>
           </ul>

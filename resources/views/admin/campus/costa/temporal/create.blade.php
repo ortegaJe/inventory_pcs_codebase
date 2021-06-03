@@ -393,7 +393,7 @@
                                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                                 @endif
                                 <div class="block-content block-content-full">
-                                    <button type="button" class="btn btn-alt-info ml-2 float-right"
+                                    {{--  <button type="button" class="btn btn-alt-info ml-2 float-right"
                                         data-toggle="tooltip" data-placement="bottom"
                                         title="Ver abreviados de las sedes">
                                         <i class="fa fa-info-circle"></i>
@@ -403,7 +403,7 @@
                                         data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
                                         <i class="fa fa-info-circle"></i>
                                         Como nombrar equipos?
-                                    </button>
+                                    </button>--}}
                                 </div>
                             </div>
                         </div>
