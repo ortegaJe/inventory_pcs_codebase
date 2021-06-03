@@ -34,7 +34,7 @@ class TemporalController extends Controller
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_desktop')->get();
+            $pcs = DB::table('view_all_pcs_desktop')->where('Sede', 'TEMPORAL')->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);
@@ -143,6 +143,10 @@ class TemporalController extends Controller
     {
         $pcImage = 'lenovo-desktop.png';
         $pc = new Computer();
+        $statuId = e($request->input('val-select2-status'));
+        $isActive =  true;
+        $userId =  Auth::id();
+
         //$queryStorages = $this->queryStorages();
 
         $rules = [
@@ -298,9 +302,9 @@ class TemporalController extends Controller
                     $pc->created_at = now('America/Bogota')->toDateTimeString(),
                     $pc->os_id = e($request->input('os-pc-select2')),
 
-                    e($request->input('val-select2-status')),
-                    true,
-                    Auth::id(),
+                    $statuId,
+                    $isActive,
+                    $userId,
                 ]
             );
             return redirect()->route('admin.inventory.campu.temporal.index')
@@ -368,6 +372,9 @@ class TemporalController extends Controller
     {
         $pcImage = 'lenovo-desktop.png';
         $pc = Computer::findOrFail($id);
+        $statuId = $request->get('val-select2-status');
+        $isActive = true;
+        $userId = Auth::id();
 
         /*$this->validate(
             request(),
@@ -516,10 +523,10 @@ class TemporalController extends Controller
                     $pc->updated_at = now('America/Bogota'),
                     $pc->os_id = $request->get('os-pc-select2'),
 
-                    $request->get('val-select2-status'),
-                    true,
+                    $statuId,
+                    $isActive,
                     $id,
-                    Auth::id(),
+                    $userId,
                 ]
             );
             return redirect()->route('admin.campus.costa.temporal.index')

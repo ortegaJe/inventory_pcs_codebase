@@ -111,10 +111,7 @@
                 <option>NO EXISTEN SEDES REGISTRADAS</option>
                 @endforelse
               </select>
-              <<<<<<< HEAD <label for="val-select2-campu">Sedes</label>
-                =======
-                <label for="val-select2-campu">Sede principal</label>
-                >>>>>>> d24d6eb376f0093faa3e1eb35e2a37ec6585275e
+              <label for="val-select2-campu">Sede principal</label>
             </div>
             @if($errors->has('val-select2-campu'))
             <small class="text-danger is-invalid">{{ $errors->first('val-select2-campu') }}</small>

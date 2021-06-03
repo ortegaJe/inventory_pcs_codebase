@@ -25,7 +25,7 @@ class CreateCampusTable extends Migration
         Schema::create('campu_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->char('campu_id', 3)->nullable()->unique();
+            $table->char('campu_id', 3)->nullable();
             $table->boolean('is_principal')->default(0);
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
