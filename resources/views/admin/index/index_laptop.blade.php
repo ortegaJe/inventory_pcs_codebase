@@ -203,7 +203,7 @@
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script>
-  let root_url_laptop = <?php echo json_encode(route('admin.inventory.laptop.index')) ?>;
-  let root_url_laptop_store = <?php echo json_encode(route('admin.inventory.laptop.store')) ?>;
+  let root_url_laptop = <?php echo json_encode(route('tec.inventory.laptop.index')) ?>;
+  let root_url_laptop_store = <?php echo json_encode(route('tec.inventory.laptop.store')) ?>;
 </script>
 @endpush

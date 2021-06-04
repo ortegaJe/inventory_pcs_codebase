@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Campu;
+namespace App\Http\Controllers\Tecnico\Inventario;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Computer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
-use App\Models\User;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -26,7 +25,7 @@ class DesktopController extends Controller
         $this->generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
     }
 
-    public function index(Request $request, User $user = null)
+    public function index(Request $request)
     {
         $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
         $globalTurneroPcCount = Computer::countPc(2);   //TURNERO
@@ -35,9 +34,12 @@ class DesktopController extends Controller
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_desktop')->where('TecnicoID', Auth::id())->get();
-            //dd($pcs);
 
+            $pcs = DB::table('view_all_pcs')
+                ->where('TipoPc', 'DE ESCRITORIO')
+                ->where('TecnicoID', Auth::id())
+                ->get();
+            //dd($pcs);
             $datatables = DataTables::of($pcs);
             $datatables->editColumn('FechaCreacion', function ($pcs) {
                 return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
@@ -57,7 +59,7 @@ class DesktopController extends Controller
             $datatables->addColumn('action', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('user.inventory.campu.edit', $pcs->PcID) . "'>
+                   href = '" . route('tec.inventory.desktop.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -109,9 +111,10 @@ class DesktopController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::table('campus')
-            ->select('id', 'description')
-            ->get();
+        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+                                INNER JOIN campu_users CU ON CU.campu_id = C.id
+                                INNER JOIN users U ON U.id = CU.user_id
+                                WHERE U.id=' . Auth::id() . '', [1]);
 
         $status = DB::table('status')
             ->select('id', 'name')
@@ -144,7 +147,9 @@ class DesktopController extends Controller
     {
         $pcImage = 'lenovo-desktop.png';
         $pc = new Computer();
-        //$queryStorages = $this->queryStorages();
+        $statusId = e($request->input('val-select2-status'));
+        $isActive = true;
+        $userId = Auth::id();
 
         $rules = [
             //'marca-pc-select2' => 'not_in:0',
@@ -299,12 +304,12 @@ class DesktopController extends Controller
                     $pc->created_at = now('America/Bogota')->toDateTimeString(),
                     $pc->os_id = e($request->input('os-pc-select2')),
 
-                    e($request->input('val-select2-status')),
-                    true,
-                    Auth::id(),
+                    $statusId,
+                    $isActive,
+                    $userId,
                 ]
             );
-            return redirect()->route('user.inventory.desktop.index')
+            return redirect()->route('tec.inventory.desktop.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -337,9 +342,10 @@ class DesktopController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::table('campus')
-            ->select('id', 'description')
-            ->get();
+        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+                                INNER JOIN campu_users CU ON CU.campu_id = C.id
+                                INNER JOIN users U ON U.id = CU.user_id
+                                WHERE U.id=' . Auth::id() . '', [1]);
 
         $status = DB::table('status AS S')
             ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
@@ -369,6 +375,10 @@ class DesktopController extends Controller
     {
         $pcImage = 'lenovo-desktop.png';
         $pc = Computer::findOrFail($id);
+        $statuId = $request->get('val-select2-status');
+        $isActive = true;
+        $pcId = $id;
+        $userId = Auth::id();
 
         /*$this->validate(
             request(),
@@ -517,13 +527,13 @@ class DesktopController extends Controller
                     $pc->updated_at = now('America/Bogota'),
                     $pc->os_id = $request->get('os-pc-select2'),
 
-                    $request->get('val-select2-status'),
-                    true,
-                    $id,
-                    Auth::id(),
+                    $statuId,
+                    $isActive,
+                    $pcId,
+                    $userId,
                 ]
             );
-            return redirect()->route('user.inventory.desktop.index')
+            return redirect()->route('tec.inventory.desktop.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;

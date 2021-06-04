@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Campu\Costa;
+namespace App\Http\Controllers\Tecnico\Inventario;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Computer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class TemporalController extends Controller
+class LaptopController extends Controller
 {
     private $generatorID;
 
@@ -34,9 +34,12 @@ class TemporalController extends Controller
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_desktop')->where('Sede', 'TEMPORAL')->get();
-            //dd($pcs);
 
+            $pcs = DB::table('view_all_pcs')
+                ->where('TipoPc', 'PORTATIL')
+                ->where('TecnicoID', Auth::id())
+                ->get();
+            //dd($pcs);
             $datatables = DataTables::of($pcs);
             $datatables->editColumn('FechaCreacion', function ($pcs) {
                 return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
@@ -56,7 +59,7 @@ class TemporalController extends Controller
             $datatables->addColumn('action', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('admin.inventory.desktop.edit', $pcs->PcID) . "'>
+                   href = '" . route('user.inventory.laptop.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -76,7 +79,7 @@ class TemporalController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('admin.campus.costa.temporal.index')->with($data);
+        return view('user.index.index_laptop')->with($data);
     }
 
     public function create()
@@ -108,9 +111,10 @@ class TemporalController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::table('campus')
-            ->select('id', 'description')
-            ->get();
+        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+                                INNER JOIN campu_users CU ON CU.campu_id = C.id
+                                INNER JOIN users U ON U.id = CU.user_id
+                                WHERE U.id=' . Auth::id() . '', [1]);
 
         $status = DB::table('status')
             ->select('id', 'name')
@@ -136,18 +140,15 @@ class TemporalController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.campus.costa.temporal.create')->with($data);
+        return view('user.create.create_laptop')->with($data);
     }
 
     public function store(Request $request)
     {
-        $pcImage = 'lenovo-desktop.png';
         $pc = new Computer();
-        $statuId = e($request->input('val-select2-status'));
-        $isActive =  true;
-        $userId =  Auth::id();
-
-        //$queryStorages = $this->queryStorages();
+        $statusId = e($request->input('val-select2-status'));
+        $isActive = true;
+        $userId = Auth::id();
 
         $rules = [
             //'marca-pc-select2' => 'not_in:0',
@@ -280,7 +281,7 @@ class TemporalController extends Controller
                     $pc->model = e($request->input('modelo-pc')),
                     $pc->serial_number = e($request->input('serial-pc')),
                     $pc->monitor_serial_number = e($request->input('serial-monitor-pc')),
-                    $pc->type_device_id = Computer::DESKTOP_PC_ID, //ID equipo de escritorio
+                    $pc->type_device_id = Computer::LAPTOP_PC_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
                     $pc->slot_two_ram_id = e($request->input('val-select2-ram1')),
                     $pc->first_storage_id = e($request->input('val-select2-first-storage')),
@@ -291,7 +292,7 @@ class TemporalController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = e($request->input('pc-name')),
                     $pc->anydesk = e($request->input('anydesk')),
-                    $pc->pc_image = $pcImage,
+                    $pc->pc_image = null,
                     $pc->campu_id = e($request->input('val-select2-campus')),
                     $pc->location = e($request->input('location')),
                     $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
@@ -302,12 +303,12 @@ class TemporalController extends Controller
                     $pc->created_at = now('America/Bogota')->toDateTimeString(),
                     $pc->os_id = e($request->input('os-pc-select2')),
 
-                    $statuId,
+                    $statusId,
                     $isActive,
                     $userId,
                 ]
             );
-            return redirect()->route('admin.inventory.campu.temporal.index')
+            return redirect()->route('tec.inventory.laptop.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -340,9 +341,10 @@ class TemporalController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::table('campus')
-            ->select('id', 'description')
-            ->get();
+        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+                                INNER JOIN campu_users CU ON CU.campu_id = C.id
+                                INNER JOIN users U ON U.id = CU.user_id
+                                WHERE U.id=' . Auth::id() . '', [1]);
 
         $status = DB::table('status AS S')
             ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
@@ -365,15 +367,15 @@ class TemporalController extends Controller
                 'status' => $status
             ];
 
-        return view('admin.campus.costa.temporal.edit')->with($data);
+        return view('user.edit.edit_laptop')->with($data);
     }
 
     public function update(Request $request, $id)
     {
-        $pcImage = 'lenovo-desktop.png';
         $pc = Computer::findOrFail($id);
         $statuId = $request->get('val-select2-status');
         $isActive = true;
+        $pcId = $id;
         $userId = Auth::id();
 
         /*$this->validate(
@@ -513,7 +515,7 @@ class TemporalController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = $request->get('pc-name'),
                     $pc->anydesk = $request->get('anydesk'),
-                    $pc->pc_image = $pcImage,
+                    $pc->pc_image = null,
                     $pc->campu_id = $request->get('val-select2-campus'),
                     $pc->location = $request->get('location'),
                     $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
@@ -525,11 +527,11 @@ class TemporalController extends Controller
 
                     $statuId,
                     $isActive,
-                    $id,
+                    $pcId,
                     $userId,
                 ]
             );
-            return redirect()->route('admin.campus.costa.temporal.index')
+            return redirect()->route('tec.inventory.laptop.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;

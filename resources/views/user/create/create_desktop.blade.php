@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.inventory.desktop.store') }}" method="POST">
+      <form action="{{ route('tec.inventory.desktop.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->

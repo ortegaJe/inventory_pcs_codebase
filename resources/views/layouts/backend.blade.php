@@ -176,11 +176,11 @@
                     <span class="sidebar-mini-hide">Usuarios</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
                       {{-- @php $globalPcCount = DB::table('computers')->select('id')
-                                              ->whereIn('statu_id',[1,2,3,5,6,7,8])
-                                              ->where('is_active',[1])
-                                              ->where('deleted_at', null)
-                                              ->count(); @endphp
-                                              {{ $globalPcCount ?? '0' }} --}}
+                                ->whereIn('statu_id',[1,2,3,5,6,7,8])
+                                ->where('is_active',[1])
+                                ->where('deleted_at', null)
+                                ->count(); @endphp
+                                {{ $globalPcCount ?? '0' }} --}}
                     </span>
                   </a>
                   <ul>
@@ -195,78 +195,34 @@
                   </ul>
                 </li>
                 @endcan
-                <li>
+                <li
+                  class="{{ request()->is('tecnico/dashboard/inventario/costa') ? 'open' : '' }} ||
+                                                                              {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                    <span class="sidebar-mini-hide">Sedes</span>
-                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-stethoscope"></i>
-                      {{-- @php $globalPcCount = DB::table('computers')->select('id')
-                        ->whereIn('statu_id',[1,2,3,5,6,7,8])
-                        ->where('is_active',[1])
-                        ->where('deleted_at', null)
-                        ->count(); @endphp
-                        {{ $globalPcCount ?? '0' }} --}}
+                    <span class="sidebar-mini-hide">Equipos</span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
+                      {{--  @php $globalPcCount = DB::table('computers')->select('id')
+                                                              //->whereIn('statu_id',[1,2,3,5,6,7,8])
+                                                              ->where('is_active',[1])
+                                                              ->where('deleted_at', null)
+                                                              ->count(); @endphp
+                                                              {{ $globalPcCount ?? '0' }}--}}
                     </span>
                   </a>
                   <ul>
-                    {{--  <li>
-                      <a class="open" href="#">Lista de Sedes
-                      </a>
-                    </li>--}}
                     <li>
-                      <a class="nav-submenu" data-toggle="nav-submenu" href="#">Costa</a>
-                      <ul>
-                        {{-- <li style="font-size: 10px">
-                      <a href="{{ route('admin.inventory.campu.temporal.index') }}">TEMPORAL</a>
-                    </li>--}}
-                    <li
-                      class="{{ request()->is('tecnico/dashboard/inventario/costa') ? 'open' : '' }} || 
-                                                    {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
-                      <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                        <span class="sidebar-mini-hide">Equipos</span>
-                        <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
-                          @php $globalPcCount = DB::table('computers')->select('id')
-                          //->whereIn('statu_id',[1,2,3,5,6,7,8])
-                          ->where('is_active',[1])
-                          ->where('deleted_at', null)
-                          ->count(); @endphp
-                          {{ $globalPcCount ?? '0' }}
-                        </span>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'active' : '' }}"
+                        href="{{ route('tec.inventory.desktop.index') }}">De escritorios
                       </a>
-                      <ul>
-                        <li>
-                          <a class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'active' : '' }}"
-                            href="{{ route('tec.inventory.campu.desktop.index') }}">De escritorios
-                          </a>
-                        </li>
-                        <li>
-                          <a class="{{ request()->is('admin/dashboard/inventario/portatiles') ? 'active' : '' }}"
-                            href="{{ route('admin.inventory.laptop.index') }}">Portátiles</a>
-                        </li>
-                      </ul>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'active' : '' }}"
+                        href="{{ route('tec.inventory.laptop.index') }}">Portátiles</a>
                     </li>
                   </ul>
                 </li>
               </ul>
             </li>
-            <li class="nav-main-heading">
-              <span class="sidebar-mini-visible">AS</span><span class="sidebar-mini-hidden">asignaciones</span>
-            </li>
-            {{-- <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-            <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-bulb"></i><span
-                class="sidebar-mini-hide">Examples</span></a>
-            <ul>
-              <li>
-                <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}"
-                  href="/pages/datatables">DataTables</a>
-              </li>
-              <li>
-                <a class="{{ request()->is('pages/slick') ? ' active' : '' }}" href="/pages/slick">Slick Slider</a>
-              </li>
-              <li>
-                <a class="{{ request()->is('pages/blank') ? ' active' : '' }}" href="/pages/blank">Blank</a>
-              </li>
-            </ul>
-            </li>--}}
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -369,6 +325,15 @@
             </div>
           </div>--}}
           <!-- END Notifications -->
+          @php
+          $campusTec = DB::table('users AS U')
+          ->select('C.description AS SedeTecnico')
+          ->join('campu_users AS CU', 'CU.user_id', 'U.id')
+          ->join('campus AS C', 'C.id', 'CU.campu_id')
+          ->where('CU.is_principal', 1)
+          ->where('U.id', Auth::id())
+          ->first();
+          @endphp
 
           <!-- User Dropdown -->
           <div class="btn-group" role="group">
@@ -380,12 +345,14 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
               <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">{{ Auth::user()->name }}
-                {{ Auth::user()->last_name }}</h5>
-              <a class="dropdown-item" href="be_pages_generic_profile.html">
+                {{ Auth::user()->last_name }}
+                <div class="mt-2"><i class="fa fa-building-o"></i> {{ $campusTec->SedeTecnico }}</div>
+              </h5>
+              <a class="dropdown-item" href="#">
                 <i class="si si-user mr-5"></i> Perfil
               </a>
-              <div class="dropdown-divider"></div>
-              <!-- END Side Overlay -->
+              <!--<div class="dropdown-divider"></div>
+               END Side Overlay -->
 
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

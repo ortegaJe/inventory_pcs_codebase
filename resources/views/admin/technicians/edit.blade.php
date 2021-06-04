@@ -12,7 +12,7 @@
         @csrf
         @method('PATCH')
         <div class="block pull-r-l">
-            <div class="block-header bg-body-light">
+            <div class="block-header bg-gray-light">
                 <h3 class="block-title">
                     <i class="si si-badge fa-2x font-size-default mr-5"></i>Asignar Rol | {{ $user->name }}
                     {{ $user->last_name }}

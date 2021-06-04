@@ -15,7 +15,7 @@
           <div class="row">
             <!-- Row #2 -->
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('tec.inventory.campu.desktop.create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('tec.inventory.desktop.create') }}">
                 <div class="block-content">
                   <i class="si si-screen-desktop fa-4x text-gray-dark"></i>
                 </div>

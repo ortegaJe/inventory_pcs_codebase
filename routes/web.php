@@ -33,9 +33,15 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
 Route::prefix('tecnico/dashboard/inventario/costa')->group(function () {
 
-    //Route::resource('/de-escritorios', 'App\Http\Controllers\Campu\DesktopController')->names('tec.inventory.campu.macarena');
+    Route::resource('de-escritorios', 'App\Http\Controllers\Tecnico\Inventario\DesktopController')->names('tec.inventory.desktop');
 
-    Route::resource('/de-escritorios', 'App\Http\Controllers\Campu\DesktopController')->names('tec.inventory.campu.desktop');
+    Route::resource('portatiles', 'App\Http\Controllers\Tecnico\Inventario\LaptopController')->names('tec.inventory.laptop');
+
+    //Route::resource('all-in-one', 'App\Http\Controllers\Tecnico\Inventario\AllinoneController')->names('tec.inventory.allinone');
+
+    //Route::resource('turnero', 'App\Http\Controllers\Tecnico\Inventario\TurneroController')->names('tec.inventory.turnero');
+
+    //Route::resource('raspberry', 'App\Http\Controllers\Tecnico\Inventario\RaspberryController')->names('tec.inventory.raspberry');
 });
 
 /*Route::get('/sp', function () {

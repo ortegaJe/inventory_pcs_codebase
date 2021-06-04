@@ -43,6 +43,7 @@ class TechnicianController extends Controller
             ->join('profiles AS P', 'P.id', 'UP.profile_id')
             ->join('campu_users AS CP', 'CP.user_id', 'U.id')
             ->join('campus AS C', 'C.id', 'CP.campu_id')
+            ->where('is_principal', 1)
             ->orderBy('U.id', 'ASC')
             //->leftJoin('model_has_roles AS MR', 'MR.model_id', 'U.id')
             //->leftJoin('roles AS R', 'R.id', 'MR.role_id')
@@ -90,7 +91,7 @@ class TechnicianController extends Controller
         $is_principal = true;
 
         DB::insert(
-            "EXEC SP_CreateUsers ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",
+            "EXEC SP_CreateUsers ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",
             [
                 //16
                 $user->cc = e($request->input('tec-id')),

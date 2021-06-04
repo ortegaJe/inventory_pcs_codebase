@@ -34,7 +34,7 @@ class DesktopController extends Controller
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_desktop')->where('TecnicoID', Auth::id())->get();
+            $pcs = DB::table('view_all_pcs_desktop')->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);
@@ -141,9 +141,7 @@ class DesktopController extends Controller
 
     public function store(Request $request)
     {
-        $pcImage = 'lenovo-desktop.png';
         $pc = new Computer();
-        //$queryStorages = $this->queryStorages();
 
         $rules = [
             //'marca-pc-select2' => 'not_in:0',
@@ -287,7 +285,7 @@ class DesktopController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = e($request->input('pc-name')),
                     $pc->anydesk = e($request->input('anydesk')),
-                    $pc->pc_image = $pcImage,
+                    $pc->pc_image = null,
                     $pc->campu_id = e($request->input('val-select2-campus')),
                     $pc->location = e($request->input('location')),
                     $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
