@@ -34,7 +34,7 @@ class DesktopController extends Controller
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_desktop')->get();
+            $pcs = DB::table('view_all_pcs')->where('TipoPc', 'de escritorio')->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);

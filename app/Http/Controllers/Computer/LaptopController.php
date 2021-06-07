@@ -33,7 +33,7 @@ class LaptopController extends Controller
         $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
-            $pcs = DB::table('view_all_pcs_laptop')->where('TipoPc', 'portatil')->get();
+            $pcs = DB::table('view_all_pcs')->where('TipoPc', 'portatil')->get();
             //dd($pcs);
 
             $datatables = DataTables::of($pcs);
