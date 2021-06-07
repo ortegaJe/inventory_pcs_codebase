@@ -69,15 +69,15 @@ class RoleSeeder extends Seeder
                 Permission::create(['name' => 'admin.inventory.campus.show'])->syncRoles([$roleAdmin]);
                 Permission::create(['name' => 'admin.inventory.campus.destroy'])->syncRoles([$roleAdmin]);
 
-                Permission::create(['name' => 'admin.inventory.campu.desktop.index'])
+                Permission::create(['name' => 'user.inventory.desktop.index'])
                         ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
-                Permission::create(['name' => 'admin.inventory.campu..desktopcreate'])
+                Permission::create(['name' => 'user.inventory..desktopcreate'])
                         ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
-                Permission::create(['name' => 'admin.inventory.campu.desktop.edit'])
+                Permission::create(['name' => 'user.inventory.desktop.edit'])
                         ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
-                Permission::create(['name' => 'admin.inventory.campu.desktop.show'])
+                Permission::create(['name' => 'user.inventory.desktop.show'])
                         ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
-                Permission::create(['name' => 'admin.inventory.campu.desktop.destroy'])
+                Permission::create(['name' => 'user.inventory.desktop.destroy'])
                         ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
         }
 }

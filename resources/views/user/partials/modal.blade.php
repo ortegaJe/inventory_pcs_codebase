@@ -61,7 +61,7 @@
             </a>
           </div>--}}
           <div class="col-md-6 col-xl-3">
-            <a class="block block-link-pop text-center" href="{{ route('admin.inventory.laptop.create') }}">
+            <a class="block block-link-pop text-center" href="{{ route('tec.inventory.laptop.create') }}">
               <div class="block-content">
                 <i class="fa fa-laptop fa-4x text-gray-dark"></i>
               </div>

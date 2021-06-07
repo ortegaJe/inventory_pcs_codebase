@@ -195,32 +195,37 @@
                   </ul>
                 </li>
                 @endcan
-                <li
-                  class="{{ request()->is('tecnico/dashboard/inventario/costa') ? 'open' : '' }} ||
-                                                                              {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
+                @can('user.inventory.desktop.index')
+                <li class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/costa/portatiles') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/costa/portatiles/registrar') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios/registrar') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       {{--  @php $globalPcCount = DB::table('computers')->select('id')
-                                                              //->whereIn('statu_id',[1,2,3,5,6,7,8])
-                                                              ->where('is_active',[1])
-                                                              ->where('deleted_at', null)
-                                                              ->count(); @endphp
-                                                              {{ $globalPcCount ?? '0' }}--}}
+                                                //->whereIn('statu_id',[1,2,3,5,6,7,8])
+                                                ->where('is_active',[1])
+                                                ->where('deleted_at', null)
+                                                ->count(); @endphp
+                                                {{ $globalPcCount ?? '0' }}--}}
                     </span>
                   </a>
                   <ul>
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'active' : '' }} ||
+                        {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios/registrar') ? 'active' : '' }}"
                         href="{{ route('tec.inventory.desktop.index') }}">De escritorios
                       </a>
                     </li>
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/portatiles') ? 'active' : '' }} ||
+                        {{ request()->is('tecnico/dashboard/inventario/costa/portatiles/registrar') ? 'active' : '' }}"
                         href="{{ route('tec.inventory.laptop.index') }}">Portátiles</a>
                     </li>
                   </ul>
                 </li>
+                @endcan
               </ul>
             </li>
           </ul>
