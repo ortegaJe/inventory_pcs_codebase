@@ -48,6 +48,6 @@ class UsersSeeder extends Seeder
             'password' => bcrypt('123.*'),
             'created_at' => now('America/Bogota')->toDateTimeString(),
             'is_active' => 1,
-        ])->assignRole('tec_mac');
+        ])->assignRole('tec_sedes');
     }
 }

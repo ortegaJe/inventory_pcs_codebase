@@ -59,7 +59,7 @@ class DesktopController extends Controller
             $datatables->addColumn('action', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('tec.inventory.desktop.edit', $pcs->PcID) . "'>
+                   href = '" . route('user.inventory.desktop.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -145,7 +145,6 @@ class DesktopController extends Controller
 
     public function store(Request $request)
     {
-        $pcImage = 'lenovo-desktop.png';
         $pc = new Computer();
         $statusId = e($request->input('val-select2-status'));
         $isActive = true;
@@ -201,7 +200,7 @@ class DesktopController extends Controller
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:computers,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
-            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
+            'pc-name' => 'required|unique:computers,pc_name|max:20|regex:/^[0-9a-zA-Z-]+$/i',
 
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
@@ -246,6 +245,7 @@ class DesktopController extends Controller
             'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
             'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
             'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+            'pc-name.required' => 'Es requerido un nombre de equipo',
             'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
             'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
             'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
@@ -293,7 +293,7 @@ class DesktopController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = e($request->input('pc-name')),
                     $pc->anydesk = e($request->input('anydesk')),
-                    $pc->pc_image = $pcImage,
+                    $pc->pc_image = null,
                     $pc->campu_id = e($request->input('val-select2-campus')),
                     $pc->location = e($request->input('location')),
                     $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
@@ -309,7 +309,7 @@ class DesktopController extends Controller
                     $userId,
                 ]
             );
-            return redirect()->route('tec.inventory.desktop.index')
+            return redirect()->route('user.inventory.desktop.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -517,7 +517,7 @@ class DesktopController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = $request->get('pc-name'),
                     $pc->anydesk = $request->get('anydesk'),
-                    $pc->pc_image = $pcImage,
+                    $pc->pc_image = null,
                     $pc->campu_id = $request->get('val-select2-campus'),
                     $pc->location = $request->get('location'),
                     $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
@@ -533,7 +533,7 @@ class DesktopController extends Controller
                     $userId,
                 ]
             );
-            return redirect()->route('tec.inventory.desktop.index')
+            return redirect()->route('user.inventory.desktop.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;

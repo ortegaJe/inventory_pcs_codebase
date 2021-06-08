@@ -39,7 +39,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('tec.inventory.laptop.store') }}" method="POST">
+      <form action="{{ route('user.inventory.laptop.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -347,16 +347,6 @@
                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                 @endif
                 <div class="block-content block-content-full">
-                  <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
-                    data-placement="bottom" title="Ver abreviados de las sedes">
-                    <i class="fa fa-info-circle"></i>
-                  </button>
-                  <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
-                    title=" Nombre de equipos" data-placement="Right"
-                    data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
-                    <i class="fa fa-info-circle"></i>
-                    Como nombrar equipos?
-                  </button>
                 </div>
               </div>
             </div>

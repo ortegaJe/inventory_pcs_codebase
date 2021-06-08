@@ -15,7 +15,7 @@
           <div class="row">
             <!-- Row #2 -->
             <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('tec.inventory.desktop.create') }}">
+              <a class="block block-link-pop text-center" href="{{ route('user.inventory.desktop.create') }}">
                 <div class="block-content">
                   <i class="si si-screen-desktop fa-4x text-gray-dark"></i>
                 </div>
@@ -26,60 +26,60 @@
                 </div>
               </a>
             </div>
-            {{--  <div class="col-md-6 col-xl-3">
-              <a class="block block-link-pop text-center" href="{{ route('admin.inventory.allinone_create') }}">
-            <div class="block-content">
-              <i class="fa fa-desktop fa-4x text-gray-dark"></i>
+            <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="{{ route('user.inventory.allinone.create') }}">
+                <div class="block-content">
+                  <i class="fa fa-desktop fa-4x text-gray-dark"></i>
+                </div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    All In One
+                  </p>
+                </div>
+              </a>
             </div>
-            <div class="block-content bg-body-light">
-              <p class="font-w600">
-                All In One
-              </p>
+            <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="{{ route('user.inventory.turnero.create') }}">
+                <div class="block-content">
+                  <i class="fa fa-ticket fa-4x text-gray-dark"></i>
+                </div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    Turneros
+                  </p>
+                </div>
+              </a>
             </div>
-            </a>
+            <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="{{ route('user.inventory.raspberry.create') }}">
+                <div class="block-content" width="5px">
+                  <img width="72px" src="{{ asset('media/various/raspberry-pi.svg') }}" alt="raspberry-pi.svg">
+                </div>
+                <div class="block-content bg-body-light">
+                  <div class="font-w600 mb-5">Raspberry's</div>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <a class="block block-link-pop text-center" href="{{ route('user.inventory.laptop.create') }}">
+                <div class="block-content">
+                  <i class="fa fa-laptop fa-4x text-gray-dark"></i>
+                </div>
+                <div class="block-content bg-body-light">
+                  <p class="font-w600">
+                    Portátiles
+                  </p>
+                </div>
+              </a>
+            </div>
+            <!-- END Row #2 -->
           </div>
-          <div class="col-md-6 col-xl-3">
-            <a class="block block-link-pop text-center" href="{{ route('admin.inventory.turnero_create') }}">
-              <div class="block-content">
-                <i class="fa fa-ticket fa-4x text-gray-dark"></i>
-              </div>
-              <div class="block-content bg-body-light">
-                <p class="font-w600">
-                  Turneros
-                </p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-xl-3">
-            <a class="block block-link-pop text-center" href="{{ route('admin.inventory.raspberry_create') }}">
-              <div class="block-content" width="5px">
-                <img class="img-avatar" src="{{ asset('media/various/raspberry-pi.svg') }}" alt="raspberry-pi.svg">
-              </div>
-              <div class="block-content bg-body-light">
-                <div class="font-w600 mb-5">Raspberry's</div>
-              </div>
-            </a>
-          </div>--}}
-          <div class="col-md-6 col-xl-3">
-            <a class="block block-link-pop text-center" href="{{ route('tec.inventory.laptop.create') }}">
-              <div class="block-content">
-                <i class="fa fa-laptop fa-4x text-gray-dark"></i>
-              </div>
-              <div class="block-content bg-body-light">
-                <p class="font-w600">
-                  Portátiles
-                </p>
-              </div>
-            </a>
-          </div>
-          <!-- END Row #2 -->
         </div>
       </div>
-    </div>
-    <div class="modal-footer" style="background-color: #f0f2f5">
-      <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Cerrar</button>
+      <div class="modal-footer" style="background-color: #f0f2f5">
+        <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
     </div>
   </div>
-</div>
 </div>
 <!-- END Pop Out Modal -->

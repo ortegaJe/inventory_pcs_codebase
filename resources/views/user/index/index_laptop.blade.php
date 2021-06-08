@@ -223,7 +223,7 @@
 @endif
 
 <script>
-  let root_url_laptop = <?php echo json_encode(route('tec.inventory.laptop.index')) ?>;
-  let root_url_laptop_store = <?php echo json_encode(route('tec.inventory.laptop.store')) ?>;
+  let root_url_laptop = <?php echo json_encode(route('user.inventory.laptop.index')) ?>;
+  let root_url_laptop_store = <?php echo json_encode(route('user.inventory.laptop.store')) ?>;
 </script>
 @endpush

@@ -26,8 +26,9 @@ $(document).ready(function() {
             d.PrimerUnidadAlmacenamiento +
             '<i class="fa fa-hdd-o fa-1x"></i>' +
             "</td>" +
-            "<td>Número de serial: " +
-            d.Serial +
+            "<td>Número de serial monitor: " +
+            d.SerialMonitor +
+            "</td>" +
             "</td>" +
             "</tr>" +
             "<tr>" +
@@ -48,7 +49,9 @@ $(document).ready(function() {
             "<td>Ubicación: " +
             d.Ubicacion +
             "</td>" +
-            "<td></td>" +
+            "<td>Número de serial: " +
+            d.Serial +
+            "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Tipo: " +
@@ -65,7 +68,8 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<i class="fa fa-desktop fa-4x text-gray-dark"></i>' +
+            '<i class="fa fa-ticket fa-4x text-gray-dark"></i>' +
+            //'<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
             //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
@@ -95,7 +99,7 @@ $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url_allinone,
+            ajax: root_url_turnero,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -194,7 +198,7 @@ $(document).ready(function() {
                     let id = $(this).attr("data-id");
                     //console.log(id);
                     $.ajax({
-                        url: root_url_allinone_store + "/" + id,
+                        url: root_url_turnero_store + "/" + id,
                         type: "DELETE",
                         data: {
                             _token: $('input[name="_token"]').val()

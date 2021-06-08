@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class LaptopController extends Controller
+class RaspberryController extends Controller
 {
     private $generatorID;
 
@@ -36,7 +36,7 @@ class LaptopController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'PORTATIL')
+                ->where('TipoPc', 'RASPBERRY')
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);
@@ -59,7 +59,7 @@ class LaptopController extends Controller
             $datatables->addColumn('action', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('user.inventory.laptop.edit', $pcs->PcID) . "'>
+                   href = '" . route('user.inventory.raspberry.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -79,7 +79,7 @@ class LaptopController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('user.index.index_laptop')->with($data);
+        return view('user.index.index_raspberry')->with($data);
     }
 
     public function create()
@@ -100,16 +100,9 @@ class LaptopController extends Controller
             ->select('id', 'brand', 'generation', 'velocity')
             ->get();
 
-        $termTypeLaptopStorageSsd = 'ssd';
-        $termTypeLaptopStorageNvme = 'pcie nvme';
-        $termTypeLaptopStorage = 'portatil';
         $storages = DB::table('storages')
             ->select('id', 'size', 'storage_unit', 'type')
-            ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
-            ->orWhere('id', [1])
-            ->orWhere('id', [30])
+            ->where('id', '<>', [29])
             ->get();
 
         $brands = DB::table('brands')
@@ -140,7 +133,7 @@ class LaptopController extends Controller
             'status' => $status
         ];
 
-        return view('user.create.create_laptop')->with($data);
+        return view('user.create.create_raspberry')->with($data);
     }
 
     public function store(Request $request)
@@ -179,12 +172,12 @@ class LaptopController extends Controller
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
+                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
             ],
             'val-select2-second-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
+                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
             ],
             'val-select2-cpu' => [
                 'numeric',
@@ -282,7 +275,7 @@ class LaptopController extends Controller
                     $pc->model = e($request->input('modelo-pc')),
                     $pc->serial_number = e($request->input('serial-pc')),
                     $pc->monitor_serial_number = e($request->input('serial-monitor-pc')),
-                    $pc->type_device_id = Computer::LAPTOP_PC_ID, //ID equipo de escritorio
+                    $pc->type_device_id = Computer::RASPBERRY_PI_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
                     $pc->slot_two_ram_id = e($request->input('val-select2-ram1')),
                     $pc->first_storage_id = e($request->input('val-select2-first-storage')),
@@ -309,7 +302,7 @@ class LaptopController extends Controller
                     $userId,
                 ]
             );
-            return redirect()->route('user.inventory.laptop.index')
+            return redirect()->route('user.inventory.raspberry.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -332,16 +325,9 @@ class LaptopController extends Controller
             ->select('id', 'brand', 'generation', 'velocity')
             ->get();
 
-        $termTypeLaptopStorageSsd = 'ssd';
-        $termTypeLaptopStorageNvme = 'pcie nvme';
-        $termTypeLaptopStorage = 'portatil';
         $storages = DB::table('storages')
             ->select('id', 'size', 'storage_unit', 'type')
-            ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
-            ->orWhere('id', [1])
-            ->orWhere('id', [30])
+            ->where('id', '<>', [29])
             ->get();
 
         $brands = DB::table('brands')
@@ -376,7 +362,7 @@ class LaptopController extends Controller
                 'status' => $status
             ];
 
-        return view('user.edit.edit_laptop')->with($data);
+        return view('user.edit.edit_raspberry')->with($data);
     }
 
     public function update(Request $request, $id)
@@ -513,7 +499,7 @@ class LaptopController extends Controller
                     $pc->model = $request->get('modelo-pc'),
                     $pc->serial_number = $request->get('serial-pc'),
                     $pc->monitor_serial_number = $request->get('serial-monitor-pc'),
-                    $pc->type_device_id = Computer::LAPTOP_PC_ID, //ID equipo de escritorio
+                    $pc->type_device_id = Computer::RASPBERRY_PI_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = $request->get('val-select2-ram0'),
                     $pc->slot_two_ram_id = $request->get('val-select2-ram1'),
                     $pc->first_storage_id = $request->get('val-select2-first-storage'),
@@ -540,7 +526,7 @@ class LaptopController extends Controller
                     $userId,
                 ]
             );
-            return redirect()->route('user.inventory.laptop.index')
+            return redirect()->route('user.inventory.raspberry.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;

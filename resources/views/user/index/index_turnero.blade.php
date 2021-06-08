@@ -198,7 +198,7 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.aio.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.turnero.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -224,7 +224,7 @@
 @endif
 
 <script>
-    let root_url_allinone = <?php echo json_encode(route('user.inventory.allinone.index')) ?>;
-  let root_url_allinone_store = <?php echo json_encode(route('user.inventory.allinone.store')) ?>;
+    let root_url_turnero = <?php echo json_encode(route('user.inventory.turnero.index')) ?>;
+  let root_url_turnero_store = <?php echo json_encode(route('user.inventory.turnero.store')) ?>;
 </script>
 @endpush

@@ -9,7 +9,9 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo Raspberry</h2>
+    <h2 class="content-heading">Registrar Nueva Raspberry</h2>
+    {{-- <button type="button" class="js-notify btn btn-sm btn-alt-danger" data-type="danger" data-icon="fa fa-times"
+      data-message="Update failed! :-(">Error</button> --}}
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -37,7 +39,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.raspberry_store') }}" method="POST">
+      <form action="{{ route('user.inventory.raspberry.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -56,26 +58,15 @@
               </span><a href="#" target="_blank" data-notify="url"></a>
             </div>
             @endif
-            {{-- @if (Session::has('message'))
-            <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-ban"></i> Upsss!</h5>
-            {{ Session::get('message') }}
-            @if ($errors->any())
-            <ul>
-              @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-            @endif --}}
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="marca-pc-select2" name="marca-pc-select2"
                     style="width: 100%;" data-placeholder="Seleccionar fabricante..">
-                    <option disabled></option><!-- Empty value for demostrating material select box -->
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}" selected>{{ $brand->name }}</option>
+                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                     @empty
                     <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
                     @endforelse
@@ -90,9 +81,11 @@
                 <div class="form-material">
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
                     @forelse ($operatingSystems as $os)
-                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
+                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }}
+                      {{ $os->architecture }}</option>
                     @empty
                     <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
@@ -138,7 +131,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
-                    value="{{ old('activo-fijo-pc') }}" maxlength="20"
+                    value="{{ old('activo-fijo-pc') }}" maxlength="15"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="activo-fijo-pc">Codigo de activo fijo</label>
                   <div class="input-group-append">
@@ -158,13 +151,15 @@
           <!-- Step 2 -->
           <div class="tab-pane" id="wizard-progress2-step2" role="tabpanel">
             <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($slotOneRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
@@ -175,13 +170,34 @@
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram0') }}</small>
                 @endif
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-ram1" name="val-select2-ram1"
+                    value="{{ old('val-select2-ram1') }}" style="width: 100%;"
+                    data-placeholder="Seleccionar RAM ranura 2">
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
+                    @empty
+                    <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-ram1">Memorias RAM <small>(Opcional)</small></label>
+                </div>
+                @if($errors->has('val-select2-ram1'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram1') }}</small>
+                @endif
+              </div>
+              <div class="col-md-3">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-first-storage"
                     name="val-select2-first-storage" style="width: 100%;"
                     data-placeholder="Seleccionar primer almacenamiento..">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($firstStorages as $storage)
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
+                    @forelse ($storages as $storage)
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
@@ -194,28 +210,53 @@
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-first-storage') }}</small>
                 @endif
               </div>
+              <div class="col-md-3">
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-second-storage"
+                    name="val-select2-second-storage" style="width: 100%;"
+                    data-placeholder="Seleccionar segundo almacenamiento..">
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
+                    @forelse ($storages as $storage)
+                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
+                      {{ $storage->type }}</option>
+                    @empty
+                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-second-storage">Almacenamiento
+                    <small>(Opcional)</small></label>
+                </div>
+                @if($errors->has('val-select2-second-storage'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-second-storage') }}</small>
+                @endif
+              </div>
             </div>
             <div class="form-group row">
               <div class="col-md-6">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="cpu" name="cpu"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="cpu">Procesador</label>
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="fa fa-microchip"></i>
-                    </span>
-                  </div>
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-cpu" name="val-select2-cpu"
+                    style="width: 100%;" data-placeholder="Seleccionar procesador..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($processors as $cpu)
+                    <option value="{{ $cpu->id }}">{{ $cpu->brand }} {{ $cpu->generation }}
+                      {{ $cpu->velocity }}</option>
+                    @empty
+                    <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-cpu">Precesador</label>
                 </div>
-                @if($errors->has('cpu'))
-                <small class="text-danger is-invalid">{{ $errors->first('cpu') }}</small>
+                @if($errors->has('val-select2-cpu'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
                 @endif
               </div>
               <div class="col-md-6">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-status" name="val-select2-status"
                     style="width: 100%;" data-placeholder="Seleccionar un estado..">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
                     <option value="{{ $statu->id }}">{{ Str::title($statu->name) }}
                     </option>
@@ -243,7 +284,7 @@
                   <label for="ip">Dirección IP</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -258,7 +299,7 @@
                   <label for="mac">Dirección MAC</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -289,6 +330,7 @@
                     value="{{ old('pc-domain-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-domain-name">Nombre de dominio</label>
                   <div class="input-group-append">
+                    <i class="fa fa-sitemap"></i>
                   </div>
                 </div>
                 @if($errors->has('pc-domain-name'))
@@ -305,16 +347,6 @@
                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                 @endif
                 <div class="block-content block-content-full">
-                  <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
-                    data-placement="bottom" title="Ver abreviados de las sedes">
-                    <i class="fa fa-info-circle"></i>
-                  </button>
-                  <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
-                    title=" Nombre de equipos" data-placement="Right"
-                    data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
-                    <i class="fa fa-info-circle"></i>
-                    Como nombrar equipos?
-                  </button>
                 </div>
               </div>
             </div>
@@ -336,7 +368,7 @@
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2-campus">Sede del equipo</label>
+                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del equipo</label>
                   </div>
                   @if($errors->has('val-select2-campus'))
                   <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>
@@ -347,7 +379,7 @@
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="location" name="location" maxlength="56"
                     value="{{ old('location') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="location">Ubicacion</label>
+                  <label for="location">Ubicación en la sede</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-map-marker"></i>

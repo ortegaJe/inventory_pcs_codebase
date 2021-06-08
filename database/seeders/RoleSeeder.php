@@ -16,10 +16,9 @@ class RoleSeeder extends Seeder
         public function run()
         {
                 $roleAdmin = Role::create(['name' => 'super_admin']);
-                $roleMacarena = Role::create(['name' => 'tec_mac']);
-                $roleTemporal = Role::create(['name' => 'tec_tmp']);
+                $roleUser = Role::create(['name' => 'tec_sedes']);
 
-                Permission::create(['name' => 'admin.inventory.dash.index'])->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
+                Permission::create(['name' => 'admin.inventory.dash.index'])->syncRoles([$roleAdmin, $roleUser]);
 
                 Permission::create(['name' => 'admin.inventory.desktop.index'])->syncRoles([$roleAdmin]);
                 Permission::create(['name' => 'admin.inventory.desktop.create'])->syncRoles([$roleAdmin]);
@@ -70,14 +69,58 @@ class RoleSeeder extends Seeder
                 Permission::create(['name' => 'admin.inventory.campus.destroy'])->syncRoles([$roleAdmin]);
 
                 Permission::create(['name' => 'user.inventory.desktop.index'])
-                        ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
-                Permission::create(['name' => 'user.inventory..desktopcreate'])
-                        ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.desktop.create'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
                 Permission::create(['name' => 'user.inventory.desktop.edit'])
-                        ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
+                        ->syncRoles([$roleAdmin, $roleUser]);
                 Permission::create(['name' => 'user.inventory.desktop.show'])
-                        ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
+                        ->syncRoles([$roleAdmin, $roleUser]);
                 Permission::create(['name' => 'user.inventory.desktop.destroy'])
-                        ->syncRoles([$roleAdmin, $roleMacarena, $roleTemporal]);
+                        ->syncRoles([$roleAdmin, $roleUser]);
+
+                Permission::create(['name' => 'user.inventory.allinone.index'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.allinone.create'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.allinone.edit'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.allinone.show'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.allinone.destroy'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+
+                Permission::create(['name' => 'user.inventory.laptop.index'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.laptop.create'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.laptop.edit'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.laptop.show'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.laptop.destroy'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+
+                Permission::create(['name' => 'user.inventory.turnero.index'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.turnero.create'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.turnero.edit'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.turnero.show'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.turnero.destroy'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+
+                Permission::create(['name' => 'user.inventory.raspberry.index'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.raspberry.create'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.raspberry.edit'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.raspberry.show'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
+                Permission::create(['name' => 'user.inventory.raspberry.destroy'])
+                        ->syncRoles([$roleAdmin, $roleUser]);
         }
 }

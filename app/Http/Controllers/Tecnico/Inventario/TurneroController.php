@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class LaptopController extends Controller
+class TurneroController extends Controller
 {
     private $generatorID;
 
@@ -36,7 +36,7 @@ class LaptopController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'PORTATIL')
+                ->where('TipoPc', 'TURNERO')
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);
@@ -59,7 +59,7 @@ class LaptopController extends Controller
             $datatables->addColumn('action', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->ComputerID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('user.inventory.laptop.edit', $pcs->PcID) . "'>
+                   href = '" . route('user.inventory.turnero.edit', $pcs->PcID) . "'>
                   <i class='fa fa-pencil'></i>
                 </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$pcs->PcID' id='btn-delete'>
@@ -79,11 +79,17 @@ class LaptopController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('user.index.index_laptop')->with($data);
+        return view('user.index.index_turnero')->with($data);
     }
 
     public function create()
     {
+
+        $brands = DB::table('brands')
+            ->select('id', 'name')
+            ->where('id', '<>', [4])
+            ->where('id', '<>', [5])
+            ->get();
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
@@ -92,30 +98,17 @@ class LaptopController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
-            //->orWhere('id', [19])
+            ->where('id', '<>', [22])
+            ->where('id', '<>', [8])
             ->get();
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
             ->get();
 
-        $termTypeLaptopStorageSsd = 'ssd';
-        $termTypeLaptopStorageNvme = 'pcie nvme';
-        $termTypeLaptopStorage = 'portatil';
         $storages = DB::table('storages')
             ->select('id', 'size', 'storage_unit', 'type')
-            ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
-            ->orWhere('id', [1])
-            ->orWhere('id', [30])
-            ->get();
-
-        $brands = DB::table('brands')
-            ->select('id', 'name')
-            ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
+            ->where('id', '<>', [29])
             ->get();
 
         $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
@@ -130,17 +123,24 @@ class LaptopController extends Controller
             ->where('id', '<>', [10])
             ->get();
 
-        $data = [
-            'operatingSystems' => $operatingSystems,
-            'memoryRams' => $memoryRams,
-            'storages' => $storages,
-            'processors' => $processors,
-            'brands' => $brands,
-            'campus' => $campus,
-            'status' => $status
-        ];
+        //$campus = Campu::select('id', 'description')->get();
+        //dd($campus);
+        //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
+        /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
+        dd($slug);*/
 
-        return view('user.create.create_laptop')->with($data);
+        $data =
+            [
+                'operatingSystems' => $operatingSystems,
+                'memoryRams' => $memoryRams,
+                'storages' => $storages,
+                'brands' => $brands,
+                'processors' => $processors,
+                'campus' => $campus,
+                'status' => $status
+            ];
+
+        return view('user.create.create_turnero')->with($data);
     }
 
     public function store(Request $request)
@@ -160,7 +160,7 @@ class LaptopController extends Controller
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'serial-pc' => 'required|unique:computers,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
             'activo-fijo-pc' => 'nullable|max:15|regex:/^[0-9a-zA-Z-]+$/i',
-            //'serial-monitor-pc' => 'nullable|max:24|regex:/^[0-9a-zA-Z-]+$/i',
+            'serial-monitor-pc' => 'nullable|max:24|regex:/^[0-9a-zA-Z-]+$/i',
             'os-pc-select2' => [
                 'required',
                 'numeric',
@@ -169,22 +169,22 @@ class LaptopController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+                Rule::in([1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
             ],
             'val-select2-ram1' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+                Rule::in([1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
             ],
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
+                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
             ],
             'val-select2-second-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
+                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
             ],
             'val-select2-cpu' => [
                 'numeric',
@@ -282,7 +282,7 @@ class LaptopController extends Controller
                     $pc->model = e($request->input('modelo-pc')),
                     $pc->serial_number = e($request->input('serial-pc')),
                     $pc->monitor_serial_number = e($request->input('serial-monitor-pc')),
-                    $pc->type_device_id = Computer::LAPTOP_PC_ID, //ID equipo de escritorio
+                    $pc->type_device_id = Computer::TURNERO_PC_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
                     $pc->slot_two_ram_id = e($request->input('val-select2-ram1')),
                     $pc->first_storage_id = e($request->input('val-select2-first-storage')),
@@ -309,7 +309,7 @@ class LaptopController extends Controller
                     $userId,
                 ]
             );
-            return redirect()->route('user.inventory.laptop.index')
+            return redirect()->route('user.inventory.turnero.index')
                 ->withErrors($validator)
                 ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
         endif;
@@ -317,6 +317,12 @@ class LaptopController extends Controller
 
     public function edit($id)
     {
+        $brands = DB::table('brands')
+            ->select('id', 'name')
+            ->where('id', '<>', [4])
+            ->where('id', '<>', [5])
+            ->get();
+
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
             ->whereIn('id', [1, 2, 3, 4, 5, 6])
@@ -324,30 +330,16 @@ class LaptopController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
-            //->orWhere('id', [19])
+            ->where('id', '<>', [22])
             ->get();
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
             ->get();
 
-        $termTypeLaptopStorageSsd = 'ssd';
-        $termTypeLaptopStorageNvme = 'pcie nvme';
-        $termTypeLaptopStorage = 'portatil';
         $storages = DB::table('storages')
             ->select('id', 'size', 'storage_unit', 'type')
-            ->where('type', 'LIKE', '%' . $termTypeLaptopStorage . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageSsd . '%')
-            ->orWhere('type', 'LIKE', '%' . $termTypeLaptopStorageNvme . '%')
-            ->orWhere('id', [1])
-            ->orWhere('id', [30])
-            ->get();
-
-        $brands = DB::table('brands')
-            ->select('id', 'name')
-            ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
+            ->where('id', '<>', [29])
             ->get();
 
         $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
@@ -376,11 +368,12 @@ class LaptopController extends Controller
                 'status' => $status
             ];
 
-        return view('user.edit.edit_laptop')->with($data);
+        return view('user.edit.edit_turnero')->with($data);
     }
 
     public function update(Request $request, $id)
     {
+        $pcImage = 'lenovo-desktop.png';
         $pc = Computer::findOrFail($id);
         $statuId = $request->get('val-select2-status');
         $isActive = true;
@@ -389,13 +382,13 @@ class LaptopController extends Controller
 
         /*$this->validate(
             request(),
-            ['serial-pc' => ['required', 'max:24', 'unique:computers,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['activo-fijo-pc' => ['nullable', 'max:15', 'unique:computers,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['serial-monitor-pc' => ['nullable', 'max:24', 'unique:computers,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            ['serial-pc' => ['required', 'max:24', 'unique:computers,serial_number' . $id]],
+            ['activo-fijo-pc' => ['nullable', 'max:15', 'unique:computers,inventory_active_code' . $id]],
+            ['serial-monitor-pc' => ['nullable', 'max:24', 'unique:computers,monitor_serial_number' . $id]],
             ['ip' => ['nullable', 'ipv4', 'unique:computers,ip' . $id]],
             ['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:computers', 'mac' . $id]],
-            ['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:computers,anydesk' . $id]],
-            ['pc-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:computers,pc_name',]]
+            ['anydesk' => ['nullable', 'max:24', 'unique:computers,anydesk' . $id]],
+            ['pc-name' => ['nullable', 'max:20', 'unique:computers,pc_name',]]
 
         );*/
 
@@ -505,7 +498,7 @@ class LaptopController extends Controller
                     'danger'
                 );
         else :
-            DB::update(
+            DB::insert(
                 "EXEC SP_UpdatePc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //23
                 [
                     $pc->inventory_active_code = $request->get('activo-fijo-pc'),
@@ -513,7 +506,7 @@ class LaptopController extends Controller
                     $pc->model = $request->get('modelo-pc'),
                     $pc->serial_number = $request->get('serial-pc'),
                     $pc->monitor_serial_number = $request->get('serial-monitor-pc'),
-                    $pc->type_device_id = Computer::LAPTOP_PC_ID, //ID equipo de escritorio
+                    $pc->type_device_id = Computer::TURNERO_PC_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = $request->get('val-select2-ram0'),
                     $pc->slot_two_ram_id = $request->get('val-select2-ram1'),
                     $pc->first_storage_id = $request->get('val-select2-first-storage'),
@@ -540,7 +533,7 @@ class LaptopController extends Controller
                     $userId,
                 ]
             );
-            return redirect()->route('user.inventory.laptop.index')
+            return redirect()->route('user.inventory.turnero.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;

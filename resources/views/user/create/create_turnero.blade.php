@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo Turnero</h2>
+    <h2 class="content-heading">Registrar Nuevo Equipo De Escritorio</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.pcs.store') }}" method="POST">
+      <form action="{{ route('user.inventory.turnero.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -178,8 +178,9 @@
                   <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($slotOneRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
@@ -196,8 +197,9 @@
                     value="{{ old('val-select2-ram1') }}" style="width: 100%;"
                     data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($slotTwoRams as $ram)
-                    <option value="{{ $ram->id }}">{{ $ram->ram }}</option>
+                    @forelse ($memoryRams as $ram)
+                    <option value="{{ $ram->id }}">
+                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
@@ -214,7 +216,7 @@
                     name="val-select2-first-storage" style="width: 100%;"
                     data-placeholder="Seleccionar primer almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($firstStorages as $storage)
+                    @forelse ($storages as $storage)
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
@@ -233,7 +235,7 @@
                     name="val-select2-second-storage" style="width: 100%;"
                     data-placeholder="Seleccionar segundo almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($secondStorages as $storage)
+                    @forelse ($storages as $storage)
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}</option>
                     @empty
@@ -249,18 +251,21 @@
             </div>
             <div class="form-group row">
               <div class="col-md-6">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="cpu" name="cpu"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="cpu">Procesador</label>
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="fa fa-microchip"></i>
-                    </span>
-                  </div>
+                <div class="form-material">
+                  <select class="js-select2 form-control" id="val-select2-cpu" name="val-select2-cpu"
+                    style="width: 100%;" data-placeholder="Seleccionar procesador..">
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    @forelse ($processors as $cpu)
+                    <option value="{{ $cpu->id }}">{{ $cpu->brand }} {{ $cpu->generation }}
+                      {{ $cpu->velocity }}</option>
+                    @empty
+                    <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
+                    @endforelse
+                  </select>
+                  <label for="val-select2-cpu">Precesador</label>
                 </div>
-                @if($errors->has('cpu'))
-                <small class="text-danger is-invalid">{{ $errors->first('cpu') }}</small>
+                @if($errors->has('val-select2-cpu'))
+                <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
                 @endif
               </div>
               <div class="col-md-6">
@@ -295,7 +300,7 @@
                   <label for="ip">Dirección IP</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -310,7 +315,7 @@
                   <label for="mac">Dirección MAC</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-sitemap"></i>
                     </span>
                   </div>
                 </div>
@@ -341,6 +346,9 @@
                     value="{{ old('pc-domain-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-domain-name">Nombre de dominio</label>
                   <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-sitemap"></i>
+                    </span>
                   </div>
                 </div>
                 @if($errors->has('pc-domain-name'))
@@ -357,16 +365,17 @@
                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                 @endif
                 <div class="block-content block-content-full">
-                  <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
-                    data-placement="bottom" title="Ver abreviados de las sedes">
-                    <i class="fa fa-info-circle"></i>
+                  {{--  <button type="button" class="btn btn-alt-info ml-2 float-right"
+                      data-toggle="tooltip" data-placement="bottom"
+                      title="Ver abreviados de las sedes">
+                      <i class="fa fa-info-circle"></i>
                   </button>
                   <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
-                    title=" Nombre de equipos" data-placement="Right"
-                    data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
-                    <i class="fa fa-info-circle"></i>
-                    Como nombrar equipos?
-                  </button>
+                      title=" Nombre de equipos" data-placement="Right"
+                      data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
+                      <i class="fa fa-info-circle"></i>
+                      Como nombrar equipos?
+                  </button>--}}
                 </div>
               </div>
             </div>
@@ -388,7 +397,7 @@
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2-campus">Sede del equipo</label>
+                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del equipo</label>
                   </div>
                   @if($errors->has('val-select2-campus'))
                   <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>
@@ -399,7 +408,7 @@
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="location" name="location" maxlength="56"
                     value="{{ old('location') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="location">Ubicacion</label>
+                  <label for="location">Ubicación en la sede</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-map-marker"></i>

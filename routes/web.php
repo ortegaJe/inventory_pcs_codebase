@@ -33,15 +33,15 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
 Route::prefix('tecnico/dashboard/inventario/costa')->group(function () {
 
-    Route::resource('de-escritorios', 'App\Http\Controllers\Tecnico\Inventario\DesktopController')->names('tec.inventory.desktop');
+    Route::resource('de-escritorios', 'App\Http\Controllers\Tecnico\Inventario\DesktopController')->names('user.inventory.desktop');
 
-    Route::resource('portatiles', 'App\Http\Controllers\Tecnico\Inventario\LaptopController')->names('tec.inventory.laptop');
+    Route::resource('portatiles', 'App\Http\Controllers\Tecnico\Inventario\LaptopController')->names('user.inventory.laptop');
 
-    //Route::resource('all-in-one', 'App\Http\Controllers\Tecnico\Inventario\AllinoneController')->names('tec.inventory.allinone');
+    Route::resource('all-in-one', 'App\Http\Controllers\Tecnico\Inventario\AllinOneController')->names('user.inventory.allinone');
 
-    //Route::resource('turnero', 'App\Http\Controllers\Tecnico\Inventario\TurneroController')->names('tec.inventory.turnero');
+    Route::resource('turneros', 'App\Http\Controllers\Tecnico\Inventario\TurneroController')->names('user.inventory.turnero');
 
-    //Route::resource('raspberry', 'App\Http\Controllers\Tecnico\Inventario\RaspberryController')->names('tec.inventory.raspberry');
+    Route::resource('raspberry', 'App\Http\Controllers\Tecnico\Inventario\RaspberryController')->names('user.inventory.raspberry');
 });
 
 /*Route::get('/sp', function () {

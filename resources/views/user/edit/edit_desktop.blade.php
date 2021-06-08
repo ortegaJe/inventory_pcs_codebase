@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('tec.inventory.desktop.update', $pcs->id) }}" method="POST">
+      <form action="{{ route('user.inventory.desktop.update', $pcs->id) }}" method="POST">
         @csrf
         @method('PATCH')
         <!-- Steps Content -->

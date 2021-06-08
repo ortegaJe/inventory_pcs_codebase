@@ -197,7 +197,7 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.pc.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.raspberry.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -223,7 +223,7 @@
 @endif
 
 <script>
-  let root_url_desktop = <?php echo json_encode(route('user.inventory.desktop.index')) ?>;
-  let root_url_desktop_store = <?php echo json_encode(route('user.inventory.desktop.store')) ?>;
+  let root_url_raspberry = <?php echo json_encode(route('user.inventory.raspberry.index')) ?>;
+  let root_url_raspberry_store = <?php echo json_encode(route('user.inventory.raspberry.store')) ?>;
 </script>
 @endpush

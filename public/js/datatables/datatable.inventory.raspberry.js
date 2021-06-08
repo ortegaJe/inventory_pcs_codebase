@@ -65,7 +65,7 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<i class="fa fa-desktop fa-4x text-gray-dark"></i>' +
+            '<i class="fa fa-laptop fa-4x text-gray-dark"></i>' +
             //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
@@ -95,7 +95,7 @@ $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url_allinone,
+            ajax: root_url_raspberry,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -194,7 +194,7 @@ $(document).ready(function() {
                     let id = $(this).attr("data-id");
                     //console.log(id);
                     $.ajax({
-                        url: root_url_allinone_store + "/" + id,
+                        url: root_url_raspberry_store + "/" + id,
                         type: "DELETE",
                         data: {
                             _token: $('input[name="_token"]').val()
