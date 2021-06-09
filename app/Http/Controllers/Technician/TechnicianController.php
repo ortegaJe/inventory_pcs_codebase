@@ -14,11 +14,10 @@ use Spatie\Permission\Models\Role;
 
 class TechnicianController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        //$this->middleware('can:admin.inventory.technicians.index')->only('index');
+    }
     public function index()
     {
         $countCampus = DB::table('campu_users AS CP')->select('user_id')

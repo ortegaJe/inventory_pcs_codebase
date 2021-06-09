@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo De Escritorio</h2>
+    <h2 class="content-heading">Registrar Nuevo Turnero</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->

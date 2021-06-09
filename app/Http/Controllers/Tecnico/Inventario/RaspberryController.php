@@ -87,13 +87,12 @@ class RaspberryController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [1, 2, 3, 4, 5, 6])
+            ->whereIn('id', [7, 8])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
-            //->orWhere('id', [19])
+            ->whereIn('id', [1, 6, 19])
             ->get();
 
         $processors = DB::table('processors')
@@ -102,13 +101,12 @@ class RaspberryController extends Controller
 
         $storages = DB::table('storages')
             ->select('id', 'size', 'storage_unit', 'type')
-            ->where('id', '<>', [29])
+            ->whereIn('id', [1, 29, 30])
             ->get();
 
         $brands = DB::table('brands')
             ->select('id', 'name')
-            ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
+            ->whereIn('id', [4])
             ->get();
 
         $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
@@ -148,7 +146,7 @@ class RaspberryController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3])
+                Rule::in([4])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'serial-pc' => 'required|unique:computers,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
@@ -157,27 +155,27 @@ class RaspberryController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([7, 8])
             ],
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+                Rule::in([1, 6, 19])
             ],
             'val-select2-ram1' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+                Rule::in([1, 6, 19])
             ],
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
+                Rule::in([1, 29, 30])
             ],
             'val-select2-second-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
+                Rule::in([1, 29, 30])
             ],
             'val-select2-cpu' => [
                 'numeric',
@@ -312,13 +310,12 @@ class RaspberryController extends Controller
     {
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [1, 2, 3, 4, 5, 6])
+            ->whereIn('id', [7, 8])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
-            //->orWhere('id', [19])
+            ->whereIn('id', [1, 6, 19])
             ->get();
 
         $processors = DB::table('processors')
@@ -327,13 +324,12 @@ class RaspberryController extends Controller
 
         $storages = DB::table('storages')
             ->select('id', 'size', 'storage_unit', 'type')
-            ->where('id', '<>', [29])
+            ->whereIn('id', [1, 29, 30])
             ->get();
 
         $brands = DB::table('brands')
             ->select('id', 'name')
-            ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
+            ->whereIn('id', [4])
             ->get();
 
         $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C

@@ -166,11 +166,14 @@
                         href="{{ route('admin.inventory.desktop.index') }}">De escritorios
                       </a>
                     </li>
+                    @can('admin.inventory.laptop.index')
                     <li>
                       <a class="{{ request()->is('admin/dashboard/inventario/portatiles') ? 'active' : '' }}"
                         href="{{ route('admin.inventory.laptop.index') }}">Portátiles</a>
                     </li>
+                    @endcan
                   </ul>
+                  @can('admin.inventory.tecnicos.index')
                 <li class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Usuarios</span>
@@ -194,6 +197,7 @@
                       </a>
                   </ul>
                 </li>
+                @endcan
                 @endcan
                 <li class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||
                   {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||  

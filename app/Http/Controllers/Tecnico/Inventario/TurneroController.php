@@ -88,7 +88,6 @@ class TurneroController extends Controller
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')
@@ -98,8 +97,7 @@ class TurneroController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->where('id', '<>', [22])
-            ->where('id', '<>', [8])
+            ->where('id', '<>', [6])
             ->get();
 
         $processors = DB::table('processors')
@@ -155,7 +153,7 @@ class TurneroController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3])
+                Rule::in([1, 2, 3, 4])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'serial-pc' => 'required|unique:computers,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
@@ -320,7 +318,6 @@ class TurneroController extends Controller
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')
@@ -330,7 +327,7 @@ class TurneroController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->where('id', '<>', [22])
+            ->where('id', '<>', [6])
             ->get();
 
         $processors = DB::table('processors')

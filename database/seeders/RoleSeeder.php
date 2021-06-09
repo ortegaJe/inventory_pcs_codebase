@@ -50,11 +50,11 @@ class RoleSeeder extends Seeder
                 Permission::create(['name' => 'admin.inventory.raspberry.show'])->syncRoles([$roleAdmin]);
                 Permission::create(['name' => 'admin.inventory.raspberry.destroy'])->syncRoles([$roleAdmin]);
 
-                Permission::create(['name' => 'admin.inventory.tecnicos.index'])->syncRoles([$roleAdmin]);
-                Permission::create(['name' => 'admin.inventory.tecnicos.create'])->syncRoles([$roleAdmin]);
-                Permission::create(['name' => 'admin.inventory.tecnicos.edit'])->syncRoles([$roleAdmin]);
-                Permission::create(['name' => 'admin.inventory.tecnicos.show'])->syncRoles([$roleAdmin]);
-                Permission::create(['name' => 'admin.inventory.tecnicos.destroy'])->syncRoles([$roleAdmin]);
+                Permission::create(['name' => 'admin.inventory.technicians.index'])->syncRoles([$roleAdmin]);
+                Permission::create(['name' => 'admin.inventory.technicians.create'])->syncRoles([$roleAdmin]);
+                Permission::create(['name' => 'admin.inventory.technicians.edit'])->syncRoles([$roleAdmin]);
+                Permission::create(['name' => 'admin.inventory.technicians.show'])->syncRoles([$roleAdmin]);
+                Permission::create(['name' => 'admin.inventory.technicians.destroy'])->syncRoles([$roleAdmin]);
 
                 Permission::create(['name' => 'admin.inventory.roles.index'])->syncRoles([$roleAdmin]);
                 Permission::create(['name' => 'admin.inventory.roles.create'])->syncRoles([$roleAdmin]);

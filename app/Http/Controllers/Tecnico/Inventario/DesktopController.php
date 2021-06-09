@@ -98,8 +98,7 @@ class DesktopController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->where('id', '<>', [22])
-            ->where('id', '<>', [8])
+            ->where('id', '<>', [6])
             ->get();
 
         $processors = DB::table('processors')
@@ -330,7 +329,7 @@ class DesktopController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->where('id', '<>', [22])
+            ->where('id', '<>', [6])
             ->get();
 
         $processors = DB::table('processors')

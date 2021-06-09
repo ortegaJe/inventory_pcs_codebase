@@ -31,7 +31,7 @@ class CampuUsersSeeder extends Seeder
         DB::table('campu_users')->insert([
             'user_id' => 2,
             'campu_id' => 'C16',
-            'is_principal' => true,
+            'is_principal' => false,
             'created_at' => now(),
         ]);
     }
