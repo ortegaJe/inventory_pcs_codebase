@@ -339,7 +339,7 @@ class DesktopController extends Controller
             ->get();
 
         $status = DB::table('status AS S')
-            ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
+            ->select('SCC.statu_id AS CodigoEstado', 'S.id AS EstadoID', 'S.name AS NombreEstado')
             ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
             ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
             ->where('S.id', '<>', [4])

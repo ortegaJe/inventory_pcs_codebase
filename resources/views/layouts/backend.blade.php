@@ -173,6 +173,7 @@
                     </li>
                     @endcan
                   </ul>
+                  @endcan
                   @can('admin.inventory.tecnicos.index')
                 <li class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
@@ -189,15 +190,21 @@
                   <ul>
                     <li>
                       <a class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'active' : '' }}"
-                        href="{{ route('admin.inventory.technicians.index') }}">Lista de Usuarios
+                        href="{{ route('admin.inventory.technicians.index') }}">Usuarios
                       </a>
                     </li>
                     <li>
-                      <a class="" href="#">Roles
+                      <a class="{{ request()->is('admin/dashboard/inventario/roles') ? 'active' : '' }}"
+                        href="{{ route('admin.inventory.roles.index') }}">Roles & Permisos
                       </a>
                   </ul>
                 </li>
-                @endcan
+                <li>
+                  <a class="{{ request()->is('admin/dashboard/inventario/sedes') ? 'active' : '' }}"
+                    href="{{ route('admin.inventory.campus.index') }}">Sedes
+                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-building-o"></i></span>
+                  </a>
+                </li>
                 @endcan
                 <li class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||
                   {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||  

@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('admin.inventory.desktop.update', $pcs->id) }}" method="POST">
+      <form action="{{ route('user.inventory.desktop.update', $pcs->id) }}" method="POST">
         @csrf
         @method('PATCH')
         <!-- Steps Content -->
@@ -295,8 +295,9 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
-                    <option value="{{ $statu->id }}" {{ $statu->id == $statu->codigo_estado ? 'selected' : '' }}>
-                      {{ Str::title($statu->name) }}
+                    <option value="{{ $statu->EstadoID }}"
+                      {{ $statu->EstadoID == $statu->CodigoEstado ? 'selected' : '' }}>
+                      {{ Str::title($statu->NombreEstado) }}
                     </option>
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
@@ -384,16 +385,6 @@
                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                 @endif
                 <div class="block-content block-content-full">
-                  <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
-                    data-placement="bottom" title="Ver abreviados de las sedes">
-                    <i class="fa fa-info-circle"></i>
-                  </button>
-                  <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
-                    title=" Nombre de equipos" data-placement="Right"
-                    data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
-                    <i class="fa fa-info-circle"></i>
-                    Como nombrar equipos?
-                  </button>
                 </div>
               </div>
             </div>

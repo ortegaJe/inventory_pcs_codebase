@@ -102,6 +102,7 @@ class TurneroController extends Controller
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
+            ->where('id', '<>', [32])
             ->get();
 
         $storages = DB::table('storages')
@@ -167,12 +168,12 @@ class TurneroController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+                Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
             ],
             'val-select2-ram1' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+                Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
             ],
             'val-select2-first-storage' => [
                 'required',
@@ -332,6 +333,7 @@ class TurneroController extends Controller
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
+            ->where('id', '<>', [32])
             ->get();
 
         $storages = DB::table('storages')

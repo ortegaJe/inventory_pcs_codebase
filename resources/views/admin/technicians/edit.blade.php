@@ -6,6 +6,12 @@
 
 @section('content')
 
+@if(session('info'))
+<div class="alert alert-success">
+    <strong>{{ session('info') }}</strong>
+</div>
+@endif
+
 <div class="col-xl-12">
     <!-- Roles -->
     <form action="{{ route('admin.inventory.technicians.update', $user->id) }}" method="POST">
@@ -18,8 +24,8 @@
                     {{ $user->last_name }}
                 </h3>
                 <div class="block-options">
-                    <button type="submit" class="btn btn-sm btn-alt-success">
-                        <i class="fa fa-check"></i> Guardar
+                    <button type="button" class="btn btn-sm btn-alt-success min-width-125" data-toggle="click-ripple">
+                        <i class="si si-energy"></i> Asignar
                     </button>
                 </div>
             </div>
@@ -28,7 +34,7 @@
                     @foreach ($roles as $rol)
                     <div class="col-6 mb-2">
                         <label class="css-control css-control-success css-checkbox">
-                            <input type="checkbox" class="css-control-input" name="rol[]" value="{{ $rol->id }}">
+                            <input type="checkbox" class="css-control-input" name="rol[]" value="{{ $rol->id }} ">
                             <span class="css-control-indicator"></span> {{ $rol->name }}
                         </label>
                     </div>

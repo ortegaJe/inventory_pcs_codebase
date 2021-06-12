@@ -79,7 +79,7 @@ class AllInOneController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('user.index.index_all_in_one')->with($data);
+        return view('user.inventory.allinone.index')->with($data);
     }
 
     public function create()
@@ -97,6 +97,7 @@ class AllInOneController extends Controller
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
+            ->where('id', '<>', [32])
             ->get();
 
         $storages = DB::table('storages')
@@ -132,7 +133,7 @@ class AllInOneController extends Controller
             'status' => $status
         ];
 
-        return view('user.create.create_all_in_one')->with($data);
+        return view('user.inventory.allinone.create')->with($data);
     }
 
     public function store(Request $request)
@@ -321,6 +322,7 @@ class AllInOneController extends Controller
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
+            ->where('id', '<>', [32])
             ->get();
 
         $storages = DB::table('storages')
@@ -360,7 +362,7 @@ class AllInOneController extends Controller
                 'status' => $status
             ];
 
-        return view('user.edit.edit_all_in_one')->with($data);
+        return view('user.inventory.allinone.edit')->with($data);
     }
 
     public function update(Request $request, $id)

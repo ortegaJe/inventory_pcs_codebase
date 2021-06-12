@@ -4,8 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Campu extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
+
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'description'
+            ]
+        ];
+    }
+
+    protected $fillable = [
+        'campu-abrev',
+        'description',
+        'slug',
+    ];
 }

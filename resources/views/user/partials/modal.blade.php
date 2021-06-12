@@ -52,11 +52,11 @@
             </div>
             <div class="col-md-6 col-xl-3">
               <a class="block block-link-pop text-center" href="{{ route('user.inventory.raspberry.create') }}">
-                <div class="block-content" width="5px">
-                  <img width="72px" src="{{ asset('media/various/raspberry-pi.svg') }}" alt="raspberry-pi.svg">
+                <div class="block-content">
+                  <img width="58px" src="{{ asset('media/various/raspberry-pi.svg') }}" alt="raspberry-pi.svg">
                 </div>
                 <div class="block-content bg-body-light">
-                  <div class="font-w600 mb-5">Raspberry's</div>
+                  <div class="font-w600 mb-4">Raspberry's</div>
                 </div>
               </a>
             </div>

@@ -16,7 +16,8 @@ class TechnicianController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('can:admin.inventory.technicians.index')->only('index');
+        $this->middleware('can:admin.inventory.tecnicos.index')->only('index');
+        $this->middleware('can:admin.inventory.tecnicos.index')->only('edit', 'update');
     }
     public function index()
     {
@@ -29,9 +30,7 @@ class TechnicianController extends Controller
             ->select(
                 'U.id AS UserID',
                 DB::raw("CONCAT(U.name,' ',
-                U.middle_name,' ',
-                U.last_name,' ',
-                U.second_last_name) AS NombreCompletoTecnico"),
+                U.last_name) AS NombreCompletoTecnico"),
                 'U.nick_name AS NombreSesionTecnico',
                 'P.name AS CargoUsuario',
                 'C.description AS SedeTecnico',
@@ -158,7 +157,7 @@ class TechnicianController extends Controller
         $user = User::findOrFail($id);
         $user->roles()->sync($request['rol']);
 
-        return redirect()->route('admin.inventory.technicians.index');
+        return redirect()->route('admin.inventory.technicians.edit', $user)->with('info', 'Se asignarón los roles correctamente!');
     }
 
     /**

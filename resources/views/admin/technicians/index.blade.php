@@ -1,80 +1,81 @@
 @extends('layouts.backend')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Usuarios')
 
 @section('content')
 
 <!-- Overview -->
-<h2 class="content-heading">Técnicos</h2>
-<div class="row gutters-tiny mb-4">
-  <!-- Delete Product -->
-  <div class="col-xl-4">
-    <a class="block block-rounded block-link-shadow" href="{{ route('admin.inventory.technicians.create') }}">
-      <div class="block-content block-content-full block-sticky-options">
-        <div class="block-options">
-          <div class="block-options-item">
-            <i class="fa fa-user fa-2x text-success-light"></i>
-          </div>
+<div class="content-heading">
+  <div class="dropdown float-right">
+    <button type="button" onclick="window.location='{{ route('admin.inventory.technicians.create') }}'"
+      class="btn btn-sm btn-alt-success min-width-125" data-toggle="click-ripple">
+      <i class="si si-user"></i> Nuevo Usuario
+    </button>
+  </div>
+  Usuarios <small class="d-none d-sm-inline">Técnicos</small>
+</div>
+<!-- END Overview -->
+
+<div class="row">
+  @foreach ($users as $user )
+  <div class="col-md-6 col-xl-3">
+    <a class="block block-link-shadow" href="javascript:void(0)">
+      <div class="block-content block-content-full clearfix">
+        <div class="float-right">
+          <img class="img-avatar" src="{{ asset('/media/avatars/avatar8.jpg') }}" alt="">
         </div>
-        <div class="py-20 text-center">
-          <div class="font-size-h2 font-w700 mb-0 text-success">
-            <i class="fa fa-plus"></i>
-          </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Agregar Nuevo</div>
+        <div class="float-left mt-10">
+          <div class="font-w600 mb-5">{{ Str::title($user->NombreCompletoTecnico) }}</div>
+          <div class="font-size-xs text-muted"><small>{{ Str::upper($user->SedeTecnico) }}</small></div>
+        </div>
+        <div class="float-left mt-30">
+          <button type="button" class="btn btn-circle btn-alt-success mt-2" data-toggle="tooltip" title="Actualizar">
+            <i class="fa fa-pencil"></i>
+          </button>
+          <button type="button"
+            onclick="window.location='{{ route('admin.inventory.technicians.edit', $user->UserID) }}'"
+            class="btn btn-circle btn-alt-warning mt-2" data-toggle="tooltip" title="Asignar Rol">
+            <i class="si si-badge"></i>
+          </button>
+          <button type="button" class="btn btn-circle btn-alt-danger mt-2" data-toggle="tooltip" title="Eliminar">
+            <i class="fa fa-times"></i>
+          </button>
         </div>
       </div>
     </a>
   </div>
-  <!-- END Delete Product -->
-</div>
-<!-- END Overview -->
-<div class="row">
-  @foreach ($users as $user )
-  <div class="col-md-3 col-xl-3">
-    <div class="block block-themed text-center">
-      <div class="block-content block-content-full block-sticky-options pt-30 bg-earth">
-        <div class="block-options block-options-left">
-          <div class="dropdown">
-            <button type="button" class="btn-block-option" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              <i class="fa fa-cogs"></i>
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ route('admin.inventory.technicians.edit', $user->UserID) }}">
-                <i class="si si-badge mr-5"></i>Asignar rol
-              </a>
-              {{--<a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-hand-stop-o mr-5"></i>Privacy
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-envelope-o mr-5"></i>Messages
-              </a>--}}
-            </div>
-          </div>
-        </div>
-        <img class="img-avatar img-avatar-thumb" src="{{ asset('/media/avatars/avatar7.jpg') }}" alt="">
-      </div>
-      <div class="block-content block-content-full block-content-sm bg-earth-dark">
-        <div class="font-w600 text-white mb-5">{{ Str::title($user->NombreCompletoTecnico) }}</div>
-        <div class="font-size-sm text-white-op">{{ Str::upper($user->SedeTecnico) }}
-        </div>
-      </div>
-      <div class="block-content">
-        <div class="row items-push">
-          <div class="col-6 text-center">
-            {{--<div class="mb-5"><i class="fa fa-building-o fa-2x"></i></div>
-             <div class="font-size-sm text-muted">{{ $countCampus ?? '0' }} Sedes</div>--}}
-        </div>
-        <div class="col-6">
-          {{--<div class="mb-5"><i class="si si-badge fa-2x"></i></div>
-            <div class="font-size-sm text-muted"> Roles</div>--}}
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-@endforeach
+  @endforeach
 </div>
 
+{{--  <div class="col-md-6 col-xl-3">
+  <div class="block text-center">
+    <div class="block-content block-content-full block-sticky-options pt-30">
+      <div class="block-options">
+        <div class="dropdown">
+          <button type="button" class="btn-block-option" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <i class="fa fa-fw fa-ellipsis-v"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="">
+            <a class="dropdown-item" href="javascript:void(0)">
+              <i class="fa fa-fw fa-plus mr-5"></i>Add friend
+            </a>
+            <a class="dropdown-item" href="javascript:void(0)">
+              <i class="fa fa-fw fa-user mr-5"></i>Check out profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)">
+              <i class="fa fa-fw fa-envelope-o mr-5"></i>Send a message
+            </a>
+          </div>
+        </div>
+      </div>
+      <img class="img-avatar" src="assets/media/avatars/avatar11.jpg" alt="">
+    </div>
+    <div class="block-content block-content-full block-content-sm bg-body-light">
+      <div class="font-w600 mb-5">Jose Parker</div>
+      <div class="font-size-sm text-muted">Web Developer</div>
+    </div>
+  </div>
+</div>--}}
 @endsection
