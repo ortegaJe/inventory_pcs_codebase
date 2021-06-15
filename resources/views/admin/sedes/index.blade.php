@@ -19,37 +19,19 @@
 <div class="row">
   @foreach ($campus as $campu )
   <div class="col-md-6 col-xl-3">
-    <div class="block text-center">
-      <div class="block-content block-content-full block-sticky-options pt-30">
-        <div class="block-options">
-          <div class="dropdown">
-            <button type="button" class="btn-block-option" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              <i class="fa fa-fw fa-ellipsis-v"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" style="">
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-eye mr-5"></i>Ver inventario
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-pencil mr-5"></i>Actualizar
-              </a>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-times mr-5"></i>Borrar
-              </a>
-            </div>
-          </div>
+    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.campus.show', [trim($campu->slug)]) }}">
+      <div class="block-content text-center">
+        <div class="item item-circle bg-success-light text-success mx-auto my-10">
+          <i class="fa fa-building-o"></i>
         </div>
-        <i class="fa fa-building-o fa-3x"></i>
+        {{-- <divclass="font-size-smtext-muted">equipos --}}
       </div>
-      <div class="block-content block-content-full block-content-sm bg-body-light">
-        <div class="font-w400 mb-5">
+      <div class="block-content bg-body-light">
+        <p class="font-w600">
           {{ Str::upper($campu->description) }}
-        </div>
-        {{--  <div class="font-size-sm text-muted">Web Developer</div>--}}
+        </p>
       </div>
-    </div>
+    </a>
   </div>
   @endforeach
 </div>

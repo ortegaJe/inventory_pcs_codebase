@@ -34,7 +34,8 @@
             <div class="form-material">
               <input type="text" class="js-maxlength form-control" id="campu-abrev" name="campu-abrev" maxlength="4"
                 placeholder="4 letras es el limite.." data-always-show="true" data-pre-text="Used "
-                data-separator=" of " data-post-text=" characters" onkeypress="return /[a-z]/i.test(event.key)">
+                data-separator=" of " data-post-text=" characters"
+                onkeyup="javascript:this.value=this.value.toUpperCase();">
               <label for="campu-abrev">Abreviado de la sede</label>
               @error('campu-abrev')
               <small class="text-danger">
@@ -45,7 +46,8 @@
           </div>
           <div class="col-6 mb-2">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="description" name="description">
+              <input type="text" class="form-control" id="description" name="description"
+                onkeyup="javascript:this.value=this.value.toUpperCase();">
               <label for="description">Nombre de la sede</label>
               @error('description')
               <small class="text-danger">
@@ -55,22 +57,22 @@
             </div>
           </div>
         </div>
-        {{--  <div class="form-group row">
+        <div class="form-group row">
           <div class="col-6 mb-2">
-            <div class="form-material floating">
-              <input type="text" class="form-control" id="slug" name="slug">
+            <div class="form-material">
+              <input type="text" class="form-control" id="slug" name="slug" data-always-show="true" readonly>
               <label for="slug">Slug de la sede</label>
               @error('slug')
               <small class="text-danger">
                 {{ $message }}
-        </small>
-        @enderror
+              </small>
+              @enderror
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-</div>--}}
-</div>
-</div>
-</form>
+  </form>
 </div>
 <!-- END Roles -->
 
@@ -80,20 +82,20 @@
 <!-- Page JS Code -->
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
 
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
-  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });
+  jQuery(function(){ Codebase.helpers(['maxlength']); });
 </script>
 
 <script>
-  $("#description").change(function(e){
-    $.get('{{ route('admin.inventory.campus.slug') }}',
-       {"description" : $(this).val() },
-        function(data){
-          $("#slug").val(data.slug);
-      }
-    );
+  $(document).ready( function() {
+    $("#description").stringToSlug({
+      setEvents: 'keyup keydown blur',
+      getPut: '#slug',
+      space: '-'
   });
+});
 </script>
 @endpush
