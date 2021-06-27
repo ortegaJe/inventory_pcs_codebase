@@ -35,7 +35,7 @@ class CreateComputersTable extends Migration
             $table->char('anydesk')->nullable();
             $table->char('pc_name')->nullable()->unique();
             $table->char('pc_image')->nullable();
-            $table->char('campu_id', 3)->nullable();
+            $table->unsignedBigInteger('campu_id')->nullable();
             $table->text('location')->nullable();
             $table->date('custodian_assignment_date')->nullable();
             $table->string('custodian_name', 56)->nullable();

@@ -79,7 +79,7 @@ class RaspberryController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('user.index.index_raspberry')->with($data);
+        return view('user.inventory.raspberry.index')->with($data);
     }
 
     public function create()
@@ -110,7 +110,7 @@ class RaspberryController extends Controller
             ->whereIn('id', [4])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
@@ -132,7 +132,7 @@ class RaspberryController extends Controller
             'status' => $status
         ];
 
-        return view('user.create.create_raspberry')->with($data);
+        return view('user.inventory.raspberry.create')->with($data);
     }
 
     public function store(Request $request)
@@ -163,17 +163,7 @@ class RaspberryController extends Controller
                 'numeric',
                 Rule::in([1, 6, 19])
             ],
-            'val-select2-ram1' => [
-                'required',
-                'numeric',
-                Rule::in([1, 6, 19])
-            ],
             'val-select2-first-storage' => [
-                'required',
-                'numeric',
-                Rule::in([1, 29, 30])
-            ],
-            'val-select2-second-storage' => [
                 'required',
                 'numeric',
                 Rule::in([1, 29, 30])
@@ -273,19 +263,19 @@ class RaspberryController extends Controller
                     $pc->brand_id = e($request->input('marca-pc-select2')),
                     $pc->model = e($request->input('modelo-pc')),
                     $pc->serial_number = e($request->input('serial-pc')),
-                    $pc->monitor_serial_number = e($request->input('serial-monitor-pc')),
+                    $pc->monitor_serial_number = '',
                     $pc->type_device_id = Computer::RASPBERRY_PI_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
-                    $pc->slot_two_ram_id = e($request->input('val-select2-ram1')),
+                    $pc->slot_two_ram_id = '',
                     $pc->first_storage_id = e($request->input('val-select2-first-storage')),
-                    $pc->second_storage_id = e($request->input('val-select2-second-storage')),
+                    $pc->second_storage_id = '',
                     $pc->processor_id = e($request->input('val-select2-cpu')),
                     $pc->ip = e($request->input('ip')),
                     $pc->mac = e($request->input('mac')),
-                    $pc->nat = null,
+                    $pc->nat = '',
                     $pc->pc_name = e($request->input('pc-name')),
                     $pc->anydesk = e($request->input('anydesk')),
-                    $pc->pc_image = null,
+                    $pc->pc_image = '',
                     $pc->campu_id = e($request->input('val-select2-campus')),
                     $pc->location = e($request->input('location')),
                     $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
@@ -334,18 +324,30 @@ class RaspberryController extends Controller
             ->whereIn('id', [4])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
 
+        $getIdStatusByComputers = DB::table('statu_computer_codes')
+            ->select('statu_id')
+            ->where('pc_id', $id)
+            ->first();
+
         $status = DB::table('status AS S')
-            ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
+            ->select(
+                'SCC.statu_id AS codigo_estado',
+                'S.id',
+                'S.name'
+            )
             ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
             ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
             ->where('S.id', '<>', [4])
             ->where('S.id', '<>', [9])
             ->where('S.id', '<>', [10])
+            ->orWhere('SCC.statu_id', ($getIdStatusByComputers) ? $getIdStatusByComputers->statu_id : 0)
+            ->distinct()
+            ->orderBy('S.id', 'asc')
             ->get();
 
         $data =
@@ -360,7 +362,7 @@ class RaspberryController extends Controller
                 'status' => $status
             ];
 
-        return view('user.edit.edit_raspberry')->with($data);
+        return view('user.inventory.raspberry.edit')->with($data);
     }
 
     public function update(Request $request, $id)
@@ -508,7 +510,7 @@ class RaspberryController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = $request->get('pc-name'),
                     $pc->anydesk = $request->get('anydesk'),
-                    $pc->pc_image = null,
+                    $pc->pc_image = '',
                     $pc->campu_id = $request->get('val-select2-campus'),
                     $pc->location = $request->get('location'),
                     $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),

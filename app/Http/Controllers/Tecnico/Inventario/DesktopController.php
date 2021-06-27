@@ -111,7 +111,7 @@ class DesktopController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
@@ -169,26 +169,26 @@ class DesktopController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
             ],
             'val-select2-ram1' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
             ],
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
             ],
             'val-select2-second-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
             ],
             'val-select2-cpu' => [
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34])
             ],
             'val-select2-status' => [
                 'required',
@@ -343,19 +343,47 @@ class DesktopController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
 
+        $getIdStatusByComputers = DB::table('statu_computer_codes')
+            ->select('statu_id', 'active')
+            ->where('pc_id', $id)
+            ->first();
+
+        $distinctNameStatus = DB::table('statu_computer_codes')
+            ->select('active')
+            ->where('active', '=', true)
+            ->first();
+
+        //dd($distinctNameStatus);
+
         $status = DB::table('status AS S')
-            ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
+            ->select(
+                'SCC.statu_id',
+                'S.id',
+                'S.name',
+                'SCC.active'
+            )
             ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
             ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
             ->where('S.id', '<>', [4])
             ->where('S.id', '<>', [9])
             ->where('S.id', '<>', [10])
+            ->orWhere(
+                'SCC.active',
+                '=',
+                true,
+                'SCC.statu_id',
+                ($getIdStatusByComputers) ? $getIdStatusByComputers->statu_id : 0
+            )
+            ->orderBy('S.id', 'asc')
+            ->distinct()
             ->get();
+
+        //dd($status);
 
         $data =
             [
@@ -381,17 +409,17 @@ class DesktopController extends Controller
         $pcId = $id;
         $userId = Auth::id();
 
-        /*$this->validate(
+        $this->validate(
             request(),
-            ['serial-pc' => ['required', 'max:24', 'unique:computers,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['activo-fijo-pc' => ['nullable', 'max:15', 'unique:computers,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['serial-monitor-pc' => ['nullable', 'max:24', 'unique:computers,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['ip' => ['nullable', 'ipv4', 'unique:computers,ip' . $id]],
-            ['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:computers', 'mac' . $id]],
-            ['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:computers,anydesk' . $id]],
-            ['pc-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:computers,pc_name',]]
+            //['serial-pc' => ['required', 'max:24', 'unique:computers,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:computers,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            //['serial-monitor-pc' => ['nullable', 'max:24', 'unique:computers,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            //['ip' => ['nullable', 'ipv4', 'unique:computers,ip' . $id]],
+            //['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:computers', 'mac' . $id]],
+            //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:computers,anydesk' . $id]],
+            ['pc-name' => ['max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:computers,pc_name,' . $id]]
 
-        );*/
+        );
 
         $rules = [
             'marca-pc-select2' => 'not_in:0',
@@ -430,7 +458,7 @@ class DesktopController extends Controller
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
-            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
+            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',

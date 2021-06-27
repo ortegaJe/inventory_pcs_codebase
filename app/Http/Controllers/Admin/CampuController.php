@@ -4,18 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Campu;
-use App\Models\Computer;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\DB;
 
 class CampuController extends Controller
 {
     public function index()
     {
-        $campus = Campu::select(['description', 'slug'])
-            ->orderByDesc('created_at')
-            ->get();
+        $campus = Campu::all();
 
         return view('admin.sedes.index', compact('campus'));
     }
@@ -43,16 +40,58 @@ class CampuController extends Controller
         return redirect()->route('admin.inventory.campus.create', $campu)->with('info', 'Sede creada exitosamente!');
     }
 
-    public function show(Campu $campu)
+    public function show($id)
     {
+        $campus = Campu::findOrFail($id);
 
-        $campus = Campu::findOrFail($campu)->dd();
+        $campusCount = DB::table('computers')
+            ->select('campu_id')
+            ->where('campu_id', $id)
+            ->count();
 
-        return view('admin.sedes.show', compact('campus'));
+        $getIdUserByCampus = DB::table('campu_users')
+            ->select('user_id')
+            ->where('campu_id', $id)
+            ->first();
+
+        $campuAssignedCount = DB::table('campu_users')
+            ->select(DB::raw("campu_id,user_id,COUNT(user_id) AS NumberCampus"))
+            ->where('campu_id', $id)
+            ->orWhere('user_id', ($getIdUserByCampus) ? $getIdUserByCampus->user_id : 0)
+            ->count();
+
+        //dd($campuAssignedCount);
+
+        $campuAssigned = DB::table('campus AS C')
+            ->select(
+                'C.id AS SedeID',
+                'C.name AS NombreSede',
+                DB::raw("CONCAT(U.name,' ',
+                U.last_name) AS NombreCompletoTecnico"),
+                'P.name AS CargoTecnico',
+                'U.email AS EmailTecnico'
+            )
+            ->leftJoin('campu_users AS CU', 'CU.campu_id', 'C.id')
+            ->leftJoin('users AS U', 'U.id', 'CU.user_id')
+            ->join('user_profiles AS UP', 'UP.id', 'U.id')
+            ->join('profiles AS P', 'P.id', 'UP.profile_id')
+            ->where('CU.campu_id', $id)
+            ->get();
+
+        $data =
+            [
+                'campus' => $campus,
+                'campusCount' => $campusCount,
+                'campuAssigned' => $campuAssigned,
+                'campuAssignedCount' => $campuAssignedCount,
+            ];
+
+        return view('admin.sedes.show')->with($data);
     }
 
     public function edit(Campu $campu)
     {
+        return view('admin.sedes.edit', compact('campu'));
     }
 
     public function update(Request $request, Campu $campu)

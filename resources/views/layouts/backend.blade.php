@@ -373,7 +373,7 @@
           <!-- END Notifications -->
           @php
           $campusTec = DB::table('users AS U')
-          ->select('C.description AS SedeTecnico')
+          ->select('C.name AS SedeTecnico')
           ->join('campu_users AS CU', 'CU.user_id', 'U.id')
           ->join('campus AS C', 'C.id', 'CU.campu_id')
           ->where('CU.is_principal', 1)
@@ -386,7 +386,7 @@
             <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user d-sm-none"></i>
-              <span class="d-none d-sm-inline-block">{{ Auth::user()->nick_name }}</span>
+              <span class="d-none d-sm-inline-block">{{Str::upper(Auth::user()->nick_name) }}</span>
               <i class="fa fa-angle-down ml-5"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">

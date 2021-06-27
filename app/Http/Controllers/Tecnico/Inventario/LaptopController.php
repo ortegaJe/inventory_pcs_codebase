@@ -79,7 +79,7 @@ class LaptopController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('user.index.index_laptop')->with($data);
+        return view('user.inventory.laptop.index')->with($data);
     }
 
     public function create()
@@ -92,7 +92,7 @@ class LaptopController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19, 20])
             ->get();
 
         $processors = DB::table('processors')
@@ -118,7 +118,7 @@ class LaptopController extends Controller
             ->where('id', '<>', [5])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
@@ -140,7 +140,7 @@ class LaptopController extends Controller
             'status' => $status
         ];
 
-        return view('user.create.create_laptop')->with($data);
+        return view('user.inventory.laptop.create')->with($data);
     }
 
     public function store(Request $request)
@@ -169,26 +169,26 @@ class LaptopController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+                //Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19, 20])
             ],
             'val-select2-ram1' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+                //Rule::in([1, 3, 4, 7, 9, 11, 13, 15, 17, 19, 20])
             ],
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
+                //Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
             ],
             'val-select2-second-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
+                //Rule::in([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 24, 25, 26, 27, 28, 30])
             ],
             'val-select2-cpu' => [
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
             ],
             'val-select2-status' => [
                 'required',
@@ -324,7 +324,7 @@ class LaptopController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19, 20])
             ->get();
 
         $processors = DB::table('processors')
@@ -350,18 +350,30 @@ class LaptopController extends Controller
             ->where('id', '<>', [5])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
 
+        $getIdStatusByComputers = DB::table('statu_computer_codes')
+            ->select('statu_id')
+            ->where('pc_id', $id)
+            ->first();
+
         $status = DB::table('status AS S')
-            ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
+            ->select(
+                'SCC.statu_id AS codigo_estado',
+                'S.id',
+                'S.name'
+            )
             ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
             ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
             ->where('S.id', '<>', [4])
             ->where('S.id', '<>', [9])
             ->where('S.id', '<>', [10])
+            ->orWhere('SCC.statu_id', ($getIdStatusByComputers) ? $getIdStatusByComputers->statu_id : 0)
+            ->distinct()
+            ->orderBy('S.id', 'asc')
             ->get();
 
         $data =
@@ -376,7 +388,7 @@ class LaptopController extends Controller
                 'status' => $status
             ];
 
-        return view('user.edit.edit_laptop')->with($data);
+        return view('user.inventory.laptop.edit')->with($data);
     }
 
     public function update(Request $request, $id)
@@ -513,7 +525,7 @@ class LaptopController extends Controller
                     $pc->model = $request->get('modelo-pc'),
                     $pc->serial_number = $request->get('serial-pc'),
                     $pc->monitor_serial_number = $request->get('serial-monitor-pc'),
-                    $pc->type_device_id = Computer::LAPTOP_PC_ID, //ID equipo de escritorio
+                    $pc->type_device_id = Computer::LAPTOP_PC_ID,
                     $pc->slot_one_ram_id = $request->get('val-select2-ram0'),
                     $pc->slot_two_ram_id = $request->get('val-select2-ram1'),
                     $pc->first_storage_id = $request->get('val-select2-first-storage'),

@@ -401,7 +401,7 @@
                                             @forelse ($campus as $campu)
                                             <option value="{{ $campu->id }}"
                                                 {{ $campu->id == $pcs->campu_id ? 'selected' : '' }}>
-                                                {{ $campu->description }}
+                                                {{ $campu->name }}
                                                 @empty
                                             <option>NO EXISTEN SEDES REGISTRADAS</option>
                                             @endforelse

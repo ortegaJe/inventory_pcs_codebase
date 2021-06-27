@@ -295,9 +295,9 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
-                    <option value="{{ $statu->EstadoID }}"
-                      {{ $statu->EstadoID == $statu->CodigoEstado ? 'selected' : '' }}>
-                      {{ Str::title($statu->NombreEstado) }}
+                    <option value="{{ $statu->id }}" {{ $statu->id == $statu->statu_id }}
+                      {{ $statu->active == true ? 'selected' : '' }}>
+                      {{ Str::title($statu->name) }}
                     </option>
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
@@ -402,7 +402,7 @@
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                       @forelse ($campus as $campu)
                       <option value="{{ $campu->id }}" {{ $campu->id == $pcs->campu_id ? 'selected' : '' }}>
-                        {{ $campu->description }}
+                        {{ $campu->name }}
                       </option>
                       @empty
                       <option>NO EXISTEN SEDES REGISTRADAS</option>

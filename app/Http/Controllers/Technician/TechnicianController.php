@@ -33,7 +33,7 @@ class TechnicianController extends Controller
                 U.last_name) AS NombreCompletoTecnico"),
                 'U.nick_name AS NombreSesionTecnico',
                 'P.name AS CargoUsuario',
-                'C.description AS SedeTecnico',
+                'C.name AS SedeTecnico',
                 'U.email AS EmailTecnico',
                 'U.avatar AS ImagenPerfil'
             )
@@ -63,7 +63,7 @@ class TechnicianController extends Controller
     public function create()
     {
         $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'description')->get();
+        $campus = DB::table('campus')->select('id', 'name')->get();
 
 
         $data = [

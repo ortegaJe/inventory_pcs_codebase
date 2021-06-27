@@ -65,7 +65,7 @@ $(document).ready(function() {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<i class="fa fa-laptop fa-4x text-gray-dark"></i>' +
+            '<img width="58px" src="/media/various/raspberry-pi.svg" alt="raspberry-pi.svg">' +
             //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +

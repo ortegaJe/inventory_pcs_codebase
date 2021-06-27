@@ -79,7 +79,7 @@ class TurneroController extends Controller
                 'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
-        return view('user.index.index_turnero')->with($data);
+        return view('user.inventory.turnero.index')->with($data);
     }
 
     public function create()
@@ -110,7 +110,7 @@ class TurneroController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
@@ -121,12 +121,6 @@ class TurneroController extends Controller
             ->where('id', '<>', [9])
             ->where('id', '<>', [10])
             ->get();
-
-        //$campus = Campu::select('id', 'description')->get();
-        //dd($campus);
-        //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
-        /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
-        dd($slug);*/
 
         $data =
             [
@@ -139,7 +133,7 @@ class TurneroController extends Controller
                 'status' => $status
             ];
 
-        return view('user.create.create_turnero')->with($data);
+        return view('user.inventory.turnero.create')->with($data);
     }
 
     public function store(Request $request)
@@ -154,7 +148,7 @@ class TurneroController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4])
+                Rule::in([1, 2, 3, 5])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'serial-pc' => 'required|unique:computers,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
@@ -168,26 +162,26 @@ class TurneroController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
             ],
             'val-select2-ram1' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
             ],
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
             ],
             'val-select2-second-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
             ],
             'val-select2-cpu' => [
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
             ],
             'val-select2-status' => [
                 'required',
@@ -341,18 +335,31 @@ class TurneroController extends Controller
             ->where('id', '<>', [29])
             ->get();
 
-        $campus = DB::select('SELECT DISTINCT(C.description),C.id FROM campus C
+        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
                                 INNER JOIN campu_users CU ON CU.campu_id = C.id
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
 
+        $getIdStatusByComputers = DB::table('statu_computer_codes')
+            ->select('statu_id')
+            ->where('pc_id', $id)
+            ->orWhere('active', [1])
+            ->first();
+
         $status = DB::table('status AS S')
-            ->select('SCC.statu_id AS codigo_estado', 'S.id', 'S.name')
+            ->select(
+                'SCC.statu_id AS codigo_estado',
+                'S.id',
+                'S.name'
+            )
             ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
             ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
             ->where('S.id', '<>', [4])
             ->where('S.id', '<>', [9])
             ->where('S.id', '<>', [10])
+            ->orWhere('SCC.statu_id', ($getIdStatusByComputers) ? $getIdStatusByComputers->statu_id : 0)
+            ->distinct()
+            ->orderBy('S.id', 'asc')
             ->get();
 
         $data =
@@ -367,7 +374,7 @@ class TurneroController extends Controller
                 'status' => $status
             ];
 
-        return view('user.edit.edit_turnero')->with($data);
+        return view('user.inventory.turnero.edit')->with($data);
     }
 
     public function update(Request $request, $id)
@@ -396,7 +403,7 @@ class TurneroController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3])
+                Rule::in([1, 2, 3, 5])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'os-pc-select2' => [
