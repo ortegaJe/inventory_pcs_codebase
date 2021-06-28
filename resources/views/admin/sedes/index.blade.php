@@ -4,15 +4,77 @@
 
 @section('content')
 
+@if(session('info'))
+<div class="alert alert-success">
+  <strong>{{ session('info') }}</strong>
+</div>
+@endif
+
 <!-- Overview -->
 <div class="content-heading">
-  <div class="dropdown float-right">
-    <button type="button" onclick="window.location='{{ route('admin.inventory.campus.create') }}'"
+  {{--  <div class="dropdown float-right">
+    <button type="button" onclick="Codebase.blocks('#cb-add-server', 'open');"
       class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple">
-      <i class="fa fa-building-o"></i> Nueva Sede
+      <i class="fa fa-building-o"></i> Agregar Sede
     </button>
   </div>
-  Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small>
+  Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small>--}}
+  <div class="d-flex justify-content-between align-items-center mt-50 mb-20">
+    <h2 class="h4 font-w300 mb-0">Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small></h2>
+    <button type="button" class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
+      onclick="Codebase.blocks('#cb-add-server', 'open');">
+      <i class="fa fa-building-o mr-1"></i> Agregar sede
+    </button>
+  </div>
+  <div id="cb-add-server" class="block bg-body-light animated fadeIn d-none">
+    <div class="block-header">
+      <h3 class="block-title">Agregar nueva sede</h3>
+      <div class="block-options">
+        <button type="button" class="btn-sm btn-block-option" data-toggle="block-option" data-action="close">
+          <i class="si si-close"></i>
+        </button>
+      </div>
+    </div>
+    <div class="block-content">
+      <form action="{{ route('admin.inventory.campus.store') }}" method="POST">
+        @csrf
+        @method('POST')
+        <div class="form-group row gutters-tiny mb-0 items-push">
+          <div class="col-md-2">
+            <input type="text" class="js-maxlength form-control" id="abreviature" name="abreviature" maxlength="4"
+              placeholder="Abreviado de la sede" data-always-show="true" data-pre-text="Used " data-separator=" of "
+              data-post-text=" letters" onkeyup="javascript:this.value=this.value.toUpperCase();">
+            @error('abreviature')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre de la sede"
+              onkeyup="javascript:this.value=this.value.toUpperCase();">
+            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" id="slug" name="slug" placeholder="Nombre de la sede"
+              onkeyup="javascript:this.value=this.value.toUpperCase();">
+            @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre de la sede"
+              onkeyup="javascript:this.value=this.value.toUpperCase();">
+            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre de la sede"
+              onkeyup="javascript:this.value=this.value.toUpperCase();">
+            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-alt-success btn-block" data-toggle="click-ripple">
+              <i class="fa fa-plus mr-1"></i> Crear
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 <!-- END Overview -->
 
@@ -37,3 +99,25 @@
   @endforeach
 </div>
 @endsection
+
+@push('js')
+<!-- Page JS Code -->
+<script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
+
+<!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
+<script>
+  jQuery(function(){ Codebase.helpers(['maxlength']); });
+</script>
+
+<script>
+  $(document).ready( function() {
+    $("#name").stringToSlug({
+      setEvents: 'keyup keydown blur',
+      getPut: '#slug',
+      space: '-'
+  });
+});
+</script>
+@endpush

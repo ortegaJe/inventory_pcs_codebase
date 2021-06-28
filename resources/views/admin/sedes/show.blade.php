@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Sedes')
+@section('title', 'Sede '.$campus->name)
 
 @section('content')
 <!-- Hero -->

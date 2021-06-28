@@ -25,19 +25,13 @@ class CampuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'campu-abrev' => 'required',
-            'description' => 'required',
+            'abreviature' => 'required',
+            'name' => 'required',
         ]);
 
-        $campu = new Campu();
-        $campu->id = $request['campu-abrev'];
-        $campu->description = $request['description'];
-        $campu->created_at = now('America/Bogota');
-        $campu->updated_at = null;
-        //dd($campu);
-        $campu->save();
+        $campu = Campu::create($request->all());
 
-        return redirect()->route('admin.inventory.campus.create', $campu)->with('info', 'Sede creada exitosamente!');
+        return redirect()->route('admin.inventory.campus.index', $campu)->with('info', 'Sede creada exitosamente! ' . $campu->name);
     }
 
     public function show($id)

@@ -15,10 +15,11 @@ class CreateCampusTable extends Migration
     {
         Schema::create('campus', function (Blueprint $table) {
             $table->id();
-            $table->char('abrev', 4)->unique();
-            $table->char('description')->unique();
+            $table->char('abreviature', 4)->unique();
+            $table->char('name')->unique();
             $table->char('slug')->unique();
-            $table->char('address')->nullable()->unique();
+            $table->char('address')->nullable();
+            $table->char('phone')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });

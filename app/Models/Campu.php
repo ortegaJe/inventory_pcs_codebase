@@ -9,20 +9,21 @@ use App\Models\Computer;
 
 class Campu extends Model
 {
-    use HasFactory, Sluggable;
+    use HasFactory; //Sluggable;
 
-    public function sluggable()
+    /*public function sluggable()
     {
         return [
             'slug' => [
                 'source' => 'description'
             ]
         ];
-    }
+    }*/
 
     protected $fillable = [
-        'campu-abrev',
-        'description',
+        'abreviature',
+        'name',
+        'address',
         'slug',
     ];
 }
