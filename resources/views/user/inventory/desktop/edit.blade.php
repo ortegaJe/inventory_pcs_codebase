@@ -111,8 +111,9 @@
               </div>
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="modelo-pc" name="modelo-pc" value="{{ $pcs->model }}"
-                    maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <input type="text" class="form-control" id="modelo-pc" name="modelo-pc"
+                    value="{{ trim($pcs->model) }}" maxlength="100"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="modelo-pc">Modelo</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -129,7 +130,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc"
-                    value="{{ $pcs->serial_number }}" maxlength="24"
+                    value="{{ trim($pcs->serial_number) }}" maxlength="24"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="serial-pc">Numero Serial</label>
                   <div class="input-group-append">
@@ -145,7 +146,8 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc" maxlength="24"
-                    value="{{ $pcs->monitor_serial_number }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ trim($pcs->monitor_serial_number) }}"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="serial-monitor-pc">Número Serial de monitor</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -160,7 +162,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
-                    value="{{ $pcs->inventory_active_code }}" maxlength="20"
+                    value="{{ trim($pcs->inventory_active_code) }}" maxlength="20"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="activo-fijo-pc">Codigo de activo fijo</label>
                   <div class="input-group-append">
@@ -351,7 +353,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
-                    value="{{ $pcs->anydesk }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ trim($pcs->anydesk) }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="ip">Anydesk</label>
                   <div class="input-group-append">
                     <label for="anydesk"><img class="img-fluid" width="20px"
@@ -366,7 +368,7 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="pc-domain-name" name="pc-domain-name" maxlength="20"
-                    value="{{ $pcs->pc_name_domain }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ trim($pcs->pc_name_domain) }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-domain-name">Nombre de dominio</label>
                   <div class="input-group-append">
                   </div>
@@ -378,7 +380,7 @@
               <div class="col-md-4">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
-                    value="{{ $pcs->pc_name }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ trim($pcs->pc_name) }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-name">Nombre del equipo</label>
                 </div>
                 @if($errors->has('pc-name'))
@@ -418,7 +420,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="location" name="location" maxlength="56"
-                    value="{{ $pcs->location }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ trim($pcs->location) }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="location">Ubicacion</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -446,7 +448,7 @@
               <div class="col-md-9">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="custodian-name" name="custodian-name" maxlength="56"
-                    value="{{ $pcs->custodian_name }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ trim($pcs->custodian_name) }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="custodian-name">Nombre del custodio</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -465,7 +467,7 @@
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                     data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                    value="">{{ $pcs->observation }}</textarea>
+                    value="">{{ trim($pcs->observation) }}</textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>
