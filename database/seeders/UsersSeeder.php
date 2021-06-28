@@ -15,13 +15,13 @@ class UsersSeeder extends Seeder
     public function run()
     {
         User::create([
-            'cc' => rand(1, 11),
+            'cc' => rand(1, 111111111),
             'name' => 'Jefferson',
             'middle_name' => 'Javier',
             'last_name' => 'Ortega',
             'second_last_name' => 'Pacheco',
             'nick_name' => 'ADMIN',
-            'age' => '1991/08/10',
+            'birthday' => '1991/08/10',
             'sex' => 'M',
             'phone_number' => '3002777694',
             'optional_phone_number' => '3002777694',
@@ -39,7 +39,7 @@ class UsersSeeder extends Seeder
             'last_name' => 'Ortega',
             'second_last_name' => 'Pacheco',
             'nick_name' => 'JORTEGA',
-            'age' => '1991/08/10',
+            'birthday' => '1991/08/10',
             'sex' => 'M',
             'phone_number' => '3002777694',
             'optional_phone_number' => '3002777694',
