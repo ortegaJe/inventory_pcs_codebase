@@ -42,7 +42,7 @@
         <div class="form-group row gutters-tiny mb-0 items-push">
           <div class="col-md-2">
             <input type="text" class="js-maxlength form-control" id="abreviature" name="abreviature" maxlength="4"
-              placeholder="Abreviado de la sede" data-always-show="true" data-pre-text="Used " data-separator=" of "
+              placeholder="Abreviado sede" data-always-show="true" data-pre-text="Used " data-separator=" of "
               data-post-text=" letters" onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('abreviature')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
@@ -52,19 +52,31 @@
             @error('name')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
           <div class="col-md-5">
-            <input type="text" class="form-control" id="slug" name="slug" placeholder="Nombre de la sede"
+            <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug sede" readonly
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          <div class="col-md-5">
-            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre de la sede"
+          <div class="col-md-3">
+            <input type="text" class="form-control" id="address" name="address" placeholder="Dirección"
               onkeyup="javascript:this.value=this.value.toUpperCase();">
-            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+            @error('address')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          <div class="col-md-5">
-            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre de la sede"
+          <div class="col-md-3">
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Telefono"
               onkeyup="javascript:this.value=this.value.toUpperCase();">
-            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+            @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-4">
+            <select class="js-select2 form-control" id="tecnicos" name="tecnicos" style="width: 100%;"
+              data-placeholder="Asignar sede..">
+              <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+              @forelse ($users as $tecnico)
+              <option value="{{ $tecnico->id }}">{{ $tecnico->name }} {{ $tecnico->last_name }}</option>
+              @empty
+              <option value="?">TECNICOS NO DISPONIBLES</option>
+              @endforelse
+
+            </select>
           </div>
           <div class="col-md-2">
             <button type="submit" class="btn btn-alt-success btn-block" data-toggle="click-ripple">

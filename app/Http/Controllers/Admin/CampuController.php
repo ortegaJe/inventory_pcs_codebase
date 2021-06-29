@@ -13,8 +13,10 @@ class CampuController extends Controller
     public function index()
     {
         $campus = Campu::all();
+        $users = User::get(['id', 'name', 'last_name']);
+        //dd($users);
 
-        return view('admin.sedes.index', compact('campus'));
+        return view('admin.sedes.index', compact('campus', 'users'));
     }
 
     public function create()
@@ -37,6 +39,8 @@ class CampuController extends Controller
     public function show($id)
     {
         $campus = Campu::findOrFail($id);
+
+        $typeDevices = DB::table('type_devices')->select('name')->get();
 
         $campusCount = DB::table('computers')
             ->select('campu_id')
@@ -75,6 +79,7 @@ class CampuController extends Controller
         $data =
             [
                 'campus' => $campus,
+                'typeDevices' => $typeDevices,
                 'campusCount' => $campusCount,
                 'campuAssigned' => $campuAssigned,
                 'campuAssignedCount' => $campuAssignedCount,
