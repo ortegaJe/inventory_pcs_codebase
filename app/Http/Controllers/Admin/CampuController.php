@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateCampuRequest;
 use App\Models\Campu;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -40,7 +41,22 @@ class CampuController extends Controller
     {
         $campus = Campu::findOrFail($id);
 
-        $typeDevices = DB::table('type_devices')->select('name')->get();
+        $typeDevices = DB::table('computers as pc')
+            ->leftJoin('type_devices as td', 'td.id', 'pc.type_device_id')
+            ->select(
+                DB::raw("COUNT(pc.type_device_id) AS numberTypeDevice"),
+                'td.name as nameTypeDevice',
+                'pc.campu_id as SedeId'
+            )
+            ->where('pc.campu_id', $id)
+            ->groupBy('pc.type_device_id', 'td.name', 'pc.campu_id')
+            ->get();
+        //dd($typeDevices);
+
+        $campusCount = DB::table('computers')
+            ->select('campu_id')
+            ->where('campu_id', $id)
+            ->count();
 
         $campusCount = DB::table('computers')
             ->select('campu_id')
@@ -88,14 +104,21 @@ class CampuController extends Controller
         return view('admin.sedes.show')->with($data);
     }
 
-    public function edit(Campu $campu)
+    public function edit($id)
     {
         return view('admin.sedes.edit', compact('campu'));
     }
 
     public function update(Request $request, Campu $campu)
     {
-        //
+        //$campu = Campu::findOrFail($id);
+
+        $campu->update($request->all());
+
+        return redirect()->route(
+            'admin.inventory.campus.show'
+            //$campu->name
+        )->with('info', 'Sede actualizada con exito!');
     }
 
     public function destroy($id)

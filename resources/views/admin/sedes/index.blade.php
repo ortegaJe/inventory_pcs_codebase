@@ -71,7 +71,8 @@
               data-placeholder="Asignar sede..">
               <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
               @forelse ($users as $tecnico)
-              <option value="{{ $tecnico->id }}">{{ $tecnico->name }} {{ $tecnico->last_name }}</option>
+              <option value="{{ $tecnico->id }}">{{ Str::title($tecnico->name) }} {{ Str::title($tecnico->last_name) }}
+              </option>
               @empty
               <option value="?">TECNICOS NO DISPONIBLES</option>
               @endforelse
@@ -93,8 +94,7 @@
 <div class="row">
   @foreach ($campus as $campu )
   <div class="col-md-6 col-xl-3">
-    <a class="block block-link-pop text-center"
-      href="{{ route('admin.inventory.campus.show', [$campu, '=', trim($campu->slug)]) }}">
+    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.campus.show', $campu) }}">
       <div class="block-content text-center">
         <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
           <i class="fa fa-building-o"></i>

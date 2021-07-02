@@ -24,6 +24,8 @@ class Campu extends Model
         'abreviature',
         'name',
         'address',
+        'phone',
+        'optional_phone',
         'slug',
     ];
 }

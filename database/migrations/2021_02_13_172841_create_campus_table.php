@@ -20,6 +20,7 @@ class CreateCampusTable extends Migration
             $table->char('slug')->unique();
             $table->char('address')->nullable();
             $table->char('phone')->nullable();
+            $table->char('phone_optional')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
         });

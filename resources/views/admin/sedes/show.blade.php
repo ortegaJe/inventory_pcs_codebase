@@ -105,42 +105,71 @@
         </h3>
     </div>
     <div class="block-content">
-        <div class="col-lg-12">
-            <div class="form-row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="hosting-settings-address-firstname">Firstname</label>
-                        <input type="text" class="form-control form-control-lg" id="hosting-settings-address-firstname"
-                            name="hosting-settings-address-firstname" value="John" disabled>
+        <form action="{{ route('admin.inventory.campus.update', $campus->id) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <div class="col-lg-12">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <div class="form-material">
+                            <input type="text" class="js-maxlength form-control" id="abreviature" name="abreviature"
+                                maxlength="4" placeholder="4 letras es el limite.." data-always-show="true"
+                                data-pre-text="Used " data-separator=" of " data-post-text=" characters"
+                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                value="{{ trim($campus->abreviature) }}">
+                            <label for="abreviature">Abreviado de la sede</label>
+                            @error('abreviature')<small class="text-danger"> {{ $message }}</small>@enderror
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-material floating">
+                            <input type="text" class="form-control" id="name" name="name"
+                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                value="{{ trim($campus->name) }}">
+                            <label for="name">Nombre de la sede</label>
+                            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-material">
+                            <input type="text" class="form-control" id="slug" name="slug" readonly
+                                value="{{ trim($campus->slug) }}">
+                            <label for="slug">Slug de la sede</label>
+                            @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
+                        </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="hosting-settings-address-lastname">Lastname</label>
-                        <input type="text" class="form-control form-control-lg" id="hosting-settings-address-lastname"
-                            name="hosting-settings-address-lastname" value="Smith" disabled>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <div class="form-material floating">
+                            <input type="text" class="form-control" id="address" name="address"
+                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                value="{{ trim($campus->address) }}">
+                            <label for="address">Dirección</label>
+                            @error('address')<small class="text-danger">{{ $message }}</small>@enderror
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-material floating">
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                value="{{ trim($campus->phone) }}">
+                            <label for="phone">Telefono</label>
+                            @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
+                        </div>
+                    </div>
+                    <div class="col-4 mt-3">
+                        <button type="button" class="btn btn-hero btn-alt-primary btn-block" data-toggle="click-ripple">
+                            <i class="si si-user-follow mr-1"></i> Asignar nuevo técnico
+                        </button>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="hosting-settings-address-firstname">Firstname</label>
-                        <input type="text" class="form-control form-control-lg" id="hosting-settings-address-firstname"
-                            name="hosting-settings-address-firstname" value="John" disabled>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="hosting-settings-address-street-1">Street Address 1</label>
-                        <input type="text" class="form-control form-control-lg" id="hosting-settings-address-street-1"
-                            name="hosting-settings-address-street-1">
-                    </div>
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-sm btn-alt-success min-width-125"
+                        data-toggle="click-ripple">Actualizar</button>
                 </div>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-sm btn-alt-success min-width-125"
-                    data-toggle="click-ripple">Actualizar</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 <!-- END Settings -->
@@ -153,10 +182,12 @@
             <div class="block block-bordered block-rounded invisible" data-toggle="appear" data-offset="-200">
                 <div class="block-content block-content-full">
                     <div class="py-30 text-center">
-                        <div class="item item-2x item-circle bg-gray-light text-white mx-auto">
-                            <i class="fa fa-desktop text-muted"></i>
+                        <div class="item item-2x item-circle bg-primary-lighter text-white mx-auto">
+                            <i class="si si-screen-desktop text-primary"></i>
                         </div>
-                        <div class="h5 pt-20 mb-0">{{ Str::title($typeDevice->name) }}</div>
+                        <div class="font-size-h5 font-w600 pt-20 mb-0">{{ Str::title($typeDevice->nameTypeDevice) }}
+                        </div>
+                        <span class="badge badge-pill badge-primary">{{ $typeDevice->numberTypeDevice }}</span>
                     </div>
                 </div>
             </div>
@@ -180,7 +211,7 @@
 <!-- END Timeouts -->
 
 <!-- Files Filtering -->
-<h2 class="content-heading">Files <small>Filtering with slower animation</small></h2>
+{{--  <h2 class="content-heading">Files <small>Filtering with slower animation</small></h2>
 
 <!-- Content Filtering (.js-filter class is initialized in Helpers.contentFilter()) -->
 <!-- You can set the animation duration through data-speed="speed_in_ms" -->
@@ -348,16 +379,32 @@
             </a>
         </div>
     </div>
-</div>
+</div>--}}
 <!-- END Files Filtering -->
 
 @endsection
 
 @push('js')
 
+<!-- Page JS Code -->
+<script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
+
 <!-- Page JS Helpers (Content Filtering helper) -->
 <script>
     jQuery(function(){ Codebase.helpers('content-filter'); });
+    jQuery(function(){ Codebase.helpers(['maxlength']); });
+</script>
+
+<script>
+    $(document).ready( function() {
+    $("#name").stringToSlug({
+      setEvents: 'keyup keydown blur',
+      getPut: '#slug',
+      space: '-'
+  });
+});
 </script>
 
 @endpush
