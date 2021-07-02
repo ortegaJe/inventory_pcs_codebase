@@ -16,7 +16,7 @@
     <!-- Roles -->
     <form action="{{ route('admin.inventory.technicians.update', $user->id) }}" method="POST">
         @csrf
-        @method('PATCH')
+        @method('PUT')
         <div class="block pull-r-l">
             <div class="block-header bg-gray-light">
                 <h3 class="block-title">
@@ -24,7 +24,7 @@
                     {{ $user->last_name }}
                 </h3>
                 <div class="block-options">
-                    <button type="button" class="btn btn-sm btn-alt-success min-width-125" data-toggle="click-ripple">
+                    <button type="submit" class="btn btn-sm btn-alt-success min-width-125" data-toggle="click-ripple">
                         <i class="si si-energy"></i> Asignar
                     </button>
                 </div>

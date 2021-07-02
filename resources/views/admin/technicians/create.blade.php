@@ -106,7 +106,7 @@
                 <option></option>
                 <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($campus as $campu)
-                <option value="{{ $campu->id }}">{{ Str::upper($campu->description) }}</option>
+                <option value="{{ $campu->id }}">{{ Str::upper($campu->name) }}</option>
                 @empty
                 <option>NO EXISTEN SEDES REGISTRADAS</option>
                 @endforelse

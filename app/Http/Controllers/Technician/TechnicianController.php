@@ -141,6 +141,7 @@ class TechnicianController extends Controller
         //dd($id);
 
         $roles = Role::all();
+        //dd($roles);
 
         return view('admin.technicians.edit', ['user' => $user, 'roles' => $roles]);
     }
