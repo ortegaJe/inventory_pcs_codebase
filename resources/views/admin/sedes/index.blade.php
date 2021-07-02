@@ -94,7 +94,8 @@
 <div class="row">
   @foreach ($campus as $campu )
   <div class="col-md-6 col-xl-3">
-    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.campus.show', $campu) }}">
+    <a class="block block-link-pop text-center"
+      href="{{ route('admin.inventory.campus.show', [$campu, '=', $campu->slug]) }}">
       <div class="block-content text-center">
         <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
           <i class="fa fa-building-o"></i>

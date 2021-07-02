@@ -8,6 +8,7 @@ use App\Models\Campu;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CampuController extends Controller
 {
@@ -109,16 +110,30 @@ class CampuController extends Controller
         return view('admin.sedes.edit', compact('campu'));
     }
 
-    public function update(Request $request, Campu $campu)
+    public function update(Request $request, $id)
     {
-        //$campu = Campu::findOrFail($id);
+        $campu = Campu::findOrFail($id);
 
-        $campu->update($request->all());
+        $this->validate(
+            request(),
+            ['abreviature' => ['required', 'max:4', 'unique:campus,abreviature,' . $id]],
+            ['name' => ['required', 'unique:campus,name,' . $id]],
+            //['address' => ['required', 'unique:campus,address,' . $id]],
+            //['phone' => ['required', 'unique:campus,phone,' . $id]],
+            ['slug' => ['required', 'unique:campus,slug,' . $id]]
+        );
 
-        return redirect()->route(
-            'admin.inventory.campus.show'
-            //$campu->name
-        )->with('info', 'Sede actualizada con exito!');
+        $campu->abreviature = $request->get('abreviature');
+        $campu->name = $request->get('name');
+        $campu->address = $request->get('address');
+        $campu->phone = $request->get('phone');
+        $campu->slug = $request->get('slug');
+        $campu->updated_at = now('America/Bogota');
+
+        $campu->save();
+
+
+        return back()->with('info', 'Sede ' . $campu->name . ' actualizada con exito!');
     }
 
     public function destroy($id)

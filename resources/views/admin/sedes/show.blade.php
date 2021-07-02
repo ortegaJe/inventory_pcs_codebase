@@ -87,7 +87,7 @@
                 </p>
                 <p>
                     <strong>Telefonos:</strong>
-                    <span class="text-muted"></span>
+                    <span class="text-muted">{{ $campus->phone }}</span>
                 </p>
 
             </div>
@@ -105,7 +105,7 @@
         </h3>
     </div>
     <div class="block-content">
-        <form action="{{ route('admin.inventory.campus.update', $campus->id) }}" method="POST">
+        <form action="{{ route('admin.inventory.campus.update', [$campus->id, $campus->slug]) }}" method="POST">
             @csrf
             @method('PATCH')
             <div class="col-lg-12">
@@ -193,7 +193,7 @@
             </div>
         </div>
         @empty
-        <div class="col-sm-4">
+        {{--  <div class="col-sm-4">
             <div class="block block-bordered block-rounded invisible" data-toggle="appear" data-offset="-200">
                 <div class="block-content block-content-full">
                     <div class="py-30 text-center">
@@ -204,7 +204,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--}}
         @endforelse
     </div>
 </div>
