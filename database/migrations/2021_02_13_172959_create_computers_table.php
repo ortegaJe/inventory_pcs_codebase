@@ -34,6 +34,7 @@ class CreateComputersTable extends Migration
             $table->char('pc_name_domain', 20)->nullable();
             $table->char('anydesk')->nullable();
             $table->char('pc_name')->nullable()->unique();
+            $table->unsignedBigInteger('statu_id')->nullable();
             $table->char('pc_image')->nullable();
             $table->unsignedBigInteger('campu_id')->nullable();
             $table->text('location')->nullable();
@@ -54,6 +55,7 @@ class CreateComputersTable extends Migration
             $table->foreign('first_storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('second_storage_id')->references('id')->on('storages')->OnDelete('no action')->OnUpdate('no action');
             $table->foreign('processor_id')->references('id')->on('processors')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

@@ -14,7 +14,7 @@ class AddOsIdToComputers extends Migration
     public function up()
     {
         Schema::table('computers', function (Blueprint $table) {
-            $table->unsignedBigInteger('os_id')->nullable()->after('cpu');
+            $table->unsignedBigInteger('os_id')->nullable()->after('processor_id');
 
             $table->foreign('os_id')->references('id')->on('operating_systems')->nullOnDelete()->cascadeOnUpdate();
         });
