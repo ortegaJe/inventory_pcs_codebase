@@ -292,11 +292,11 @@
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-status" name="val-select2-status"
                     style="width: 100%;" data-placeholder="Seleccionar un estado..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($status as $statu)
-                    <option value="{{ $statu->id }}" {{ $statu->id == $statu->codigo_estado ? 'selected' : '' }}>
-                      {{ Str::title($statu->name) }}
+                    <option disabled></option>
+                    <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                    @forelse ($campus as $campu)
+                    <option value="{{ $campu->id }}" {{ $campu->id == $pcs->campu_id ? 'selected' : '' }}>
+                      {{ $campu->name }}
                     </option>
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
@@ -363,16 +363,20 @@
                 @endif
               </div>
               <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="pc-domain-name" name="pc-domain-name" maxlength="20"
-                    value="{{ $pcs->pc_name_domain }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="pc-domain-name">Nombre de dominio</label>
-                  <div class="input-group-append">
+                <div class="form-group">
+                  <div class="form-material">
+                    <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
+                      style="width: 100%;" data-placeholder="Seleccionar dominio..">
+                      <option></option>
+                      <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                      <option selected>{{ $pcs->pc_name_domain }}</option>
+                    </select>
+                    <label for="pc-domain-name"><i class="fa fa-sitemap"></i> Dominio</label>
                   </div>
+                  @if($errors->has('pc-domain-name'))
+                  <small class="text-danger is-invalid">{{ $errors->first('pc-domain-name') }}</small>
+                  @endif
                 </div>
-                @if($errors->has('pc-domain-name'))
-                <small class="text-danger is-invalid">{{ $errors->first('pc-domain-name') }}</small>
-                @endif
               </div>
               <div class="col-md-4">
                 <div class="form-material floating">

@@ -52,7 +52,8 @@ class AllInOneController extends Controller
             });
 
             $datatables->editColumn('EstadoPC', function ($pcs) {
-                $status = "<span class='badge badge-pill badge-primary btn-block'>$pcs->EstadoPc</span>";
+                $status = "<span class='badge badge-pill" . " " . $pcs->ColorEstado . " btn-block'>
+                            $pcs->EstadoPc</span>";
                 return Str::title($status);
             });
 
@@ -123,6 +124,8 @@ class AllInOneController extends Controller
             ->where('id', '<>', [10])
             ->get();
 
+        $domainNames = Computer::DOMAIN_NAME;
+
         $data = [
             'operatingSystems' => $operatingSystems,
             'memoryRams' => $memoryRams,
@@ -130,7 +133,8 @@ class AllInOneController extends Controller
             'processors' => $processors,
             'brands' => $brands,
             'campus' => $campus,
-            'status' => $status
+            'status' => $status,
+            'domainNames' => $domainNames
         ];
 
         return view('user.inventory.allinone.create')->with($data);
@@ -341,26 +345,14 @@ class AllInOneController extends Controller
                                 INNER JOIN users U ON U.id = CU.user_id
                                 WHERE U.id=' . Auth::id() . '', [1]);
 
-        $getIdStatusByComputers = DB::table('statu_computer_codes')
-            ->select('statu_id')
-            ->where('pc_id', $id)
-            ->first();
-
-        $status = DB::table('status AS S')
-            ->select(
-                'SCC.statu_id AS codigo_estado',
-                'S.id',
-                'S.name'
-            )
-            ->leftJoin('statu_computer_codes AS SCC', 'SCC.statu_id', 'S.id')
-            ->leftJoin('computers AS C', 'C.id', 'SCC.pc_id')
+        $status = DB::table('status as S')
             ->where('S.id', '<>', [4])
             ->where('S.id', '<>', [9])
             ->where('S.id', '<>', [10])
-            ->orWhere('SCC.statu_id', ($getIdStatusByComputers) ? $getIdStatusByComputers->statu_id : 0)
-            ->distinct()
-            ->orderBy('S.id', 'asc')
+            ->select('S.id as StatusID', 'S.name as NameStatus')
             ->get();
+
+        $domainNames = Computer::DOMAIN_NAME;
 
         $data =
             [
@@ -371,7 +363,8 @@ class AllInOneController extends Controller
                 'brands' => $brands,
                 'processors' => $processors,
                 'campus' => $campus,
-                'status' => $status
+                'status' => $status,
+                'domainNames' => $domainNames
             ];
 
         return view('user.inventory.allinone.edit')->with($data);
@@ -554,20 +547,16 @@ class AllInOneController extends Controller
             $pcTemp[] = DB::table('computers')->where('id', $id)->get();
             //("SELECT * FROM computers WHERE id = $id", [1]);
             $ts = now('America/Bogota')->toDateTimeString();
-            $datain = array('deleted_at' => $ts, 'is_active' => false);
-            $pcs = DB::table('computers')->where('id', $id)->update($datain);
+            $softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
+            $pcs = DB::table('computers')->where('id', $id)->update($softDeletePc);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
 
-            $datadel = array('active' => false);
-            $pcs = DB::table('statu_computer_codes')->where('pc_id', $id)->update($datadel);
-
-            $tsdel = now('America/Bogota')->toDateString();
-            $pclogdel = array('pc_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $tsdel);
-            $pcs = DB::table('computer_log')->where('pc_id', $id)->insert($pclogdel);
-
-            $dataup = array('statu_id' => 4, 'pc_id' => $id, 'active' => true, 'created_at' => $ts);
-            $pcs = DB::table('statu_computer_codes')->where('pc_id', $id)->insert($dataup);
+            $dateLogDeletePc = array('statu_id' => 4, 'pc_id' => $id, 'date_log' => $ts);
+            $pcs = DB::table('statu_computers')->where('pc_id', $id)->insert($dateLogDeletePc);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
+
+            $pcLogDelete = array('pc_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $ts);
+            $pcs = DB::table('computer_log')->where('pc_id', $id)->insert($pcLogDelete);
         } catch (ModelNotFoundException $e) {
             // Handle the error.
         }

@@ -53,7 +53,7 @@ class DesktopController extends Controller
 
             $datatables->editColumn('EstadoPC', function ($pcs) {
                 $status = "<span class='badge badge-pill" . " " . $pcs->ColorEstado . " btn-block'>
-                            <i class='fa fa-check mr-5'></i>$pcs->EstadoPc</span>";
+                            $pcs->EstadoPc</span>";
                 return Str::title($status);
             });
 
@@ -124,6 +124,8 @@ class DesktopController extends Controller
             ->where('id', '<>', [10])
             ->get();
 
+        $domainNames = Computer::DOMAIN_NAME;
+
         //$campus = Campu::select('id', 'description')->get();
         //dd($campus);
         //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
@@ -138,7 +140,8 @@ class DesktopController extends Controller
                 'brands' => $brands,
                 'processors' => $processors,
                 'campus' => $campus,
-                'status' => $status
+                'status' => $status,
+                'domainNames' => $domainNames
             ];
 
         return view('user.inventory.desktop.create')->with($data);
@@ -356,6 +359,8 @@ class DesktopController extends Controller
             ->select('S.id as StatusID', 'S.name as NameStatus')
             ->get();
 
+        $domainNames = Computer::DOMAIN_NAME;
+
         $data =
             [
                 'pcs' => Computer::findOrFail($id),
@@ -365,7 +370,8 @@ class DesktopController extends Controller
                 'brands' => $brands,
                 'processors' => $processors,
                 'campus' => $campus,
-                'status' => $status
+                'status' => $status,
+                'domainNames' => $domainNames
             ];
 
         return view('user.inventory.desktop.edit')->with($data);
@@ -551,8 +557,8 @@ class DesktopController extends Controller
             $pcs = DB::table('computers')->where('id', $id)->update($softDeletePc);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
 
-            $dataLogDeletePc = array('statu_id' => 4, 'pc_id' => $id, 'date_log' => $ts);
-            $pcs = DB::table('statu_computers')->where('pc_id', $id)->insert($dataLogDeletePc);
+            $dateLogDeletePc = array('statu_id' => 4, 'pc_id' => $id, 'date_log' => $ts);
+            $pcs = DB::table('statu_computers')->where('pc_id', $id)->insert($dateLogDeletePc);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
 
             $pcLogDelete = array('pc_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $ts);
