@@ -17,6 +17,8 @@ class Computer extends Model
     const RASPBERRY_PI_ID = 4;
     const ALL_IN_ONE_PC_ID = 5;
 
+    const DOMAIN_NAME = ['DOMAIN.LOCAL', 'TEMPORALES.LOCAL'];
+
     public function scopeCountPc($query, $id)
     {
         return $query->select('type_device_id')

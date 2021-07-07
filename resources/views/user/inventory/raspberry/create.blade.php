@@ -284,17 +284,24 @@
                 @endif
               </div>
               <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="pc-domain-name" name="pc-domain-name" maxlength="20"
-                    value="{{ old('pc-domain-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="pc-domain-name">Nombre de dominio</label>
-                  <div class="input-group-append">
-                    <i class="fa fa-sitemap"></i>
+                <div class="form-group">
+                  <div class="form-material">
+                    <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
+                      style="width: 100%;" data-placeholder="Seleccionar dominio..">
+                      <option></option>
+                      <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                      @forelse ($domainNames as $domainName)
+                      <option>{{ $domainName }}</option>
+                      @empty
+                      <option>NO EXISTEN DOMINIOS REGISTRADAS</option>
+                      @endforelse
+                    </select>
+                    <label for="pc-domain-name"><i class="fa fa-sitemap"></i> Dominio</label>
                   </div>
+                  @if($errors->has('pc-domain-name'))
+                  <small class="text-danger is-invalid">{{ $errors->first('pc-domain-name') }}</small>
+                  @endif
                 </div>
-                @if($errors->has('pc-domain-name'))
-                <small class="text-danger is-invalid">{{ $errors->first('pc-domain-name') }}</small>
-                @endif
               </div>
               <div class="col-md-4">
                 <div class="form-material floating">

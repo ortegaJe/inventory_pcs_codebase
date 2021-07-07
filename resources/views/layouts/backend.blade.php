@@ -386,7 +386,8 @@
             <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user d-sm-none"></i>
-              <span class="d-none d-sm-inline-block">{{Str::upper(Auth::user()->nick_name) }}</span>
+              <span
+                class="d-none d-sm-inline-block">{{Str::upper(Auth::user()->nick_name) ? Auth::user()->nick_name : 0 }}</span>
               <i class="fa fa-angle-down ml-5"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
