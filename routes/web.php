@@ -35,7 +35,7 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
 });
 
-Route::prefix('tecnico/dashboard/inventario/costa')->group(function () {
+Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
     Route::resource('de-escritorios', 'App\Http\Controllers\Tecnico\Inventario\DesktopController')->names('user.inventory.desktop');
 

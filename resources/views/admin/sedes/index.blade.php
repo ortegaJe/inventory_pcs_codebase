@@ -68,15 +68,14 @@
           </div>
           <div class="col-md-4">
             <select class="js-select2 form-control" id="tecnicos" name="tecnicos" style="width: 100%;"
-              data-placeholder="Asignar sede..">
+              data-placeholder="">
               <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
               @forelse ($users as $tecnico)
               <option value="{{ $tecnico->id }}">{{ Str::title($tecnico->name) }} {{ Str::title($tecnico->last_name) }}
               </option>
               @empty
-              <option value="?">TECNICOS NO DISPONIBLES</option>
+              <option>TECNICOS NO DISPONIBLES</option>
               @endforelse
-
             </select>
           </div>
           <div class="col-md-2">

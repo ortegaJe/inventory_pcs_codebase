@@ -199,6 +199,8 @@
                       </a>
                   </ul>
                 </li>
+                @endcan
+                @can('admin.inventory.campus.index')
                 <li>
                   <a class="{{ request()->is('admin/dashboard/inventario/sedes') ? 'active' : '' }}"
                     href="{{ route('admin.inventory.campus.index') }}">Sedes
@@ -206,17 +208,17 @@
                   </a>
                 </li>
                 @endcan
-                <li class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||
-                  {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'open' : '' }} ||  
-                  {{ request()->is('tecnico/dashboard/inventario/costa/portatiles') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/costa/all-in-one') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/costa/turneros') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/costa/raspberry') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios/registrar') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/costa/portatiles/registrar') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/costa/all-in-one/registrar') ? 'open' : '' }}
-                    {{ request()->is('tecnico/dashboard/inventario/costa/turneros/registrar') ? 'open' : '' }}
-                  {{ request()->is('tecnico/dashboard/inventario/costa/raspberry/registrar') ? 'open' : '' }}">
+                <li class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }} ||
+                  {{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }} ||  
+                  {{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/turneros') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
+                    {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'open' : '' }}
+                  {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
@@ -231,37 +233,37 @@
                   <ul>
                     @can('user.inventory.desktop.index')
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/costa/de-escritorios/registrar') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.desktop.index') }}">De escritorios
                       </a>
                     </li>
                     @endcan
                     @can('user.inventory.laptop.index')
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/portatiles') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/costa/portatiles/registrar') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.laptop.index') }}">Portátiles</a>
                     </li>
                     @endcan
                     @can('user.inventory.allinone.index')
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/all-in-one') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/costa/all-in-one/registrar') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.allinone.index') }}">All In One</a>
                     </li>
                     @endcan
                     @can('user.inventory.turnero.index')
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/turneros') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/costa/turneros/registrar') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/turneros') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.turnero.index') }}">Turneros</a>
                     </li>
                     @endcan
                     @can('user.inventory.raspberry.index')
                     <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/costa/raspberry') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/costa/raspberry/registrar') ? 'active' : '' }}"
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.raspberry.index') }}">Raspberry's</a>
                     </li>
                     @endcan
@@ -386,8 +388,7 @@
             <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user d-sm-none"></i>
-              <span
-                class="d-none d-sm-inline-block">{{Str::upper(Auth::user()->nick_name) ? Auth::user()->nick_name : 0 }}</span>
+              <span class="d-none d-sm-inline-block">{{Str::upper(Auth::user()->nick_name) }}</span>
               <i class="fa fa-angle-down ml-5"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">

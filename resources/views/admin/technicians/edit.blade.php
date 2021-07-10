@@ -20,8 +20,8 @@
         <div class="block pull-r-l">
             <div class="block-header bg-gray-light">
                 <h3 class="block-title">
-                    <i class="si si-badge fa-2x font-size-default mr-5"></i>Asignar Rol | {{ $user->name }}
-                    {{ $user->last_name }}
+                    <i class="si si-badge fa-2x font-size-default mr-5"></i>Asignar Rol | {{ Str::title($user->name) }}
+                    {{ Str::title($user->last_name) }}
                 </h3>
                 <div class="block-options">
                     <button type="submit" class="btn btn-sm btn-alt-success min-width-125" data-toggle="click-ripple">
