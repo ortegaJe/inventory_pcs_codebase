@@ -282,12 +282,12 @@
                                     <select class="js-select2 form-control" id="val-select2-status"
                                         name="val-select2-status" style="width: 100%;"
                                         data-placeholder="Seleccionar un estado..">
-                                        <option disabled selected></option>
+                                        <option disabled></option>
                                         <!-- Empty value for demostrating material select box -->
                                         @forelse ($status as $statu)
-                                        <option value="{{ $statu->id }}"
-                                            {{ $statu->id == $statu->codigo_estado ? 'selected' : '' }}>
-                                            {{ Str::title($statu->name) }}
+                                        <option value="{{ $statu->StatusID }}"
+                                            {{ $statu->StatusID == $pcs->statu_id ? 'selected' : '' }}>
+                                            {{ Str::title($statu->NameStatus) }}
                                         </option>
                                         @empty
                                         <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>

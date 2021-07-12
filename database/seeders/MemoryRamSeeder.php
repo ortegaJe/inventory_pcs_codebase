@@ -165,5 +165,23 @@ class MemoryRamSeeder extends Seeder
             'format' => NULL,
             'created_at' => now(),
         ]);
+
+
+        DB::table('memory_rams')->insert([
+            'size' => NULL,
+            'storage_unit' => NULL,
+            'type' => 'DISPONIBLE',
+            'format' => NULL,
+            'created_at' => now(),
+        ]);
+
+
+        DB::table('memory_rams')->insert([
+            'size' => 1,
+            'storage_unit' => 'GB',
+            'type' => 'LPDDR4',
+            'format' => NULL,
+            'created_at' => now(),
+        ]);
     }
 }

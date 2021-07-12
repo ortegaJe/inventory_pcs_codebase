@@ -12,13 +12,6 @@
 
 <!-- Overview -->
 <div class="content-heading">
-  {{--  <div class="dropdown float-right">
-    <button type="button" onclick="Codebase.blocks('#cb-add-server', 'open');"
-      class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple">
-      <i class="fa fa-building-o"></i> Agregar Sede
-    </button>
-  </div>
-  Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small>--}}
   <div class="d-flex justify-content-between align-items-center mt-50 mb-20">
     <h2 class="h4 font-w300 mb-0">Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small></h2>
     <button type="button" class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
@@ -28,7 +21,7 @@
   </div>
   <div id="cb-add-server" class="block bg-body-light animated fadeIn d-none">
     <div class="block-header">
-      <h3 class="block-title">Agregar nueva sede</h3>
+      <h3 class="block-title">Nueva sede</h3>
       <div class="block-options">
         <button type="button" class="btn-sm btn-block-option" data-toggle="block-option" data-action="close">
           <i class="si si-close"></i>
@@ -68,7 +61,7 @@
           </div>
           <div class="col-md-4">
             <select class="js-select2 form-control" id="tecnicos" name="tecnicos" style="width: 100%;"
-              data-placeholder="">
+              data-placeholder="Asignar técnico..">
               <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
               @forelse ($users as $tecnico)
               <option value="{{ $tecnico->id }}">{{ Str::title($tecnico->name) }} {{ Str::title($tecnico->last_name) }}

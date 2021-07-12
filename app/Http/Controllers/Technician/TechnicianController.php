@@ -89,7 +89,7 @@ class TechnicianController extends Controller
         $is_principal = true;
 
         DB::insert(
-            "EXEC SP_CreateUsers ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",
+            "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [
                 //16
                 $user->cc = e($request->input('tec-id')),

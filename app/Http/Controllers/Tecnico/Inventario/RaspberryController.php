@@ -93,12 +93,12 @@ class RaspberryController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 6, 19])
+            ->whereIn('id', [1, 6, 19, 21])
             ->get();
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
-            ->whereIn('id', [32])
+            ->whereIn('id', [32, 36])
             ->get();
 
         $storages = DB::table('storages')
@@ -165,7 +165,7 @@ class RaspberryController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 6, 19])
+                Rule::in([1, 6, 19, 21])
             ],
             'val-select2-first-storage' => [
                 'required',
@@ -174,15 +174,15 @@ class RaspberryController extends Controller
             ],
             'val-select2-cpu' => [
                 'numeric',
-                Rule::in([32])
+                Rule::in([32, 36])
             ],
             'val-select2-status' => [
                 'required',
                 'numeric',
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
-            'ip' => 'nullable|ipv4|unique:computers,ip',
-            'mac' => 'nullable|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
+            'ip' => 'required|ipv4|unique:computers,ip',
+            'mac' => 'required|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:computers,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
@@ -260,26 +260,26 @@ class RaspberryController extends Controller
                 );
         else :
             DB::insert(
-                "EXEC SP_InsertPc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //27
+                "CALL SP_insertPc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //27
                 [
                     $pc->inventory_code_number = $this->generatorID, //27
                     $pc->inventory_active_code = e($request->input('activo-fijo-pc')),
                     $pc->brand_id = e($request->input('marca-pc-select2')),
                     $pc->model = e($request->input('modelo-pc')),
                     $pc->serial_number = e($request->input('serial-pc')),
-                    $pc->monitor_serial_number = '',
+                    $pc->monitor_serial_number = null,
                     $pc->type_device_id = Computer::RASPBERRY_PI_ID, //ID equipo de escritorio
                     $pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
-                    $pc->slot_two_ram_id = '',
+                    $pc->slot_two_ram_id = null,
                     $pc->first_storage_id = e($request->input('val-select2-first-storage')),
-                    $pc->second_storage_id = '',
+                    $pc->second_storage_id = null,
                     $pc->processor_id = e($request->input('val-select2-cpu')),
                     $pc->ip = e($request->input('ip')),
                     $pc->mac = e($request->input('mac')),
-                    $pc->nat = '',
+                    $pc->nat = null,
                     $pc->pc_name = e($request->input('pc-name')),
                     $pc->anydesk = e($request->input('anydesk')),
-                    $pc->pc_image = '',
+                    $pc->pc_image = null,
                     $pc->campu_id = e($request->input('val-select2-campus')),
                     $pc->location = e($request->input('location')),
                     $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
@@ -310,12 +310,12 @@ class RaspberryController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 6, 19])
+            ->whereIn('id', [1, 6, 19, 21])
             ->get();
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
-            ->whereIn('id', [32])
+            ->whereIn('id', [32, 36])
             ->get();
 
         $storages = DB::table('storages')
@@ -362,7 +362,6 @@ class RaspberryController extends Controller
     {
         $pc = Computer::findOrFail($id);
         $statuId = $request->get('val-select2-status');
-        $isActive = true;
         $pcId = $id;
         $userId = Auth::id();
 
@@ -485,7 +484,7 @@ class RaspberryController extends Controller
                 );
         else :
             DB::update(
-                "EXEC SP_UpdatePc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //23
+                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
                 [
                     $pc->inventory_active_code = $request->get('activo-fijo-pc'),
                     $pc->brand_id = $request->get('marca-pc-select2'),
@@ -503,7 +502,7 @@ class RaspberryController extends Controller
                     $pc->nat = null,
                     $pc->pc_name = $request->get('pc-name'),
                     $pc->anydesk = $request->get('anydesk'),
-                    $pc->pc_image = '',
+                    $pc->pc_image = null,
                     $pc->campu_id = $request->get('val-select2-campus'),
                     $pc->location = $request->get('location'),
                     $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
@@ -514,11 +513,11 @@ class RaspberryController extends Controller
                     $pc->os_id = $request->get('os-pc-select2'),
 
                     $statuId,
-                    $isActive,
                     $pcId,
                     $userId,
                 ]
             );
+
             return redirect()->route('user.inventory.raspberry.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');

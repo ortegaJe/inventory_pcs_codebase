@@ -14,7 +14,7 @@ class CampusSeeder extends Seeder
      */
     public function run()
     {
-        DB::unprepared('SET IDENTITY_INSERT campus ON;');
+        //DB::unprepared('SET IDENTITY_INSERT campus ON;');
         DB::table('campus')->insert([
             'id' => 1,
             'abreviature' => 'MAC',
@@ -54,6 +54,6 @@ class CampusSeeder extends Seeder
             'created_at' => NOW(),
             'updated_at' => null,
         ]);
-        DB::unprepared('SET IDENTITY_INSERT campus OFF;');
+        //DB::unprepared('SET IDENTITY_INSERT campus OFF;');
     }
 }

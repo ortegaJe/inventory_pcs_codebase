@@ -40,6 +40,7 @@ class CreateComputersTable extends Migration
             $table->text('location')->nullable();
             $table->date('custodian_assignment_date')->nullable();
             $table->string('custodian_name', 56)->nullable();
+            $table->unsignedBigInteger('assignment_statu_id')->nullable();
             $table->text('observation')->nullable();
             $table->uuid('rowguid')->nullable();
             $table->timestamp('created_at')->nullable();
@@ -54,8 +55,9 @@ class CreateComputersTable extends Migration
             $table->foreign('slot_two_ram_id')->references('id')->on('memory_rams')->OnDelete('no action')->OnUpdate('no action');
             $table->foreign('first_storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('second_storage_id')->references('id')->on('storages')->OnDelete('no action')->OnUpdate('no action');
-            $table->foreign('processor_id')->references('id')->on('processors')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('processor_id')->references('id')->on('processors')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('assignment_statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

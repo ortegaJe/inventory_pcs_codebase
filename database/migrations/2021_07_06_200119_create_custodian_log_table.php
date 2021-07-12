@@ -19,10 +19,10 @@ class CreateCustodianLogTable extends Migration
             $table->char('custodian_name', 56);
             $table->char('position', 56)->nullable();
             $table->char('location', 56);
-            $table->unsignedBigInteger('statu_id')->nullable();
+            $table->unsignedBigInteger('assignment_statu_id')->nullable();
             $table->timestamp('assignment_date')->nullable();
 
-            $table->foreign('statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('assignment_statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('computer_id')->references('id')->on('computers')->nullOnDelete()->cascadeOnUpdate();
         });
     }

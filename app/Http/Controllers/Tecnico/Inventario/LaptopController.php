@@ -199,8 +199,8 @@ class LaptopController extends Controller
                 'numeric',
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
-            'ip' => 'nullable|ipv4|unique:computers,ip',
-            'mac' => 'nullable|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
+            'ip' => 'required|ipv4|unique:computers,ip',
+            'mac' => 'required|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:computers,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
@@ -278,7 +278,7 @@ class LaptopController extends Controller
                 );
         else :
             DB::insert(
-                "EXEC SP_InsertPc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //27
+                "CALL SP_insertPc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //27
                 [
                     $pc->inventory_code_number = $this->generatorID, //27
                     $pc->inventory_active_code = e($request->input('activo-fijo-pc')),
@@ -511,7 +511,7 @@ class LaptopController extends Controller
                 );
         else :
             DB::update(
-                "EXEC SP_UpdatePc ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?", //23
+                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
                 [
                     $pc->inventory_active_code = $request->get('activo-fijo-pc'),
                     $pc->brand_id = $request->get('marca-pc-select2'),
@@ -540,7 +540,6 @@ class LaptopController extends Controller
                     $pc->os_id = $request->get('os-pc-select2'),
 
                     $statuId,
-                    $isActive,
                     $pcId,
                     $userId,
                 ]

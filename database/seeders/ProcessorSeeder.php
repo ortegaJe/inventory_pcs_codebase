@@ -219,7 +219,7 @@ class ProcessorSeeder extends Seeder
         DB::table('processors')->insert([
             'brand' => 'AMD',
             'generation' => 'RYZEN 5 PRO GEN 3',
-            'velocity' => '3700 MHZ',
+            'velocity' => '3.70 MHZ',
             'created_at' => now(),
         ]);
     }

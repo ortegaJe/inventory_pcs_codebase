@@ -28,14 +28,30 @@ class CampuController extends Controller
 
     public function store(Request $request)
     {
+        $campu = new Campu();
+
         $request->validate([
             'abreviature' => 'required',
             'name' => 'required',
         ]);
 
-        $campu = Campu::create($request->all());
+        DB::insert(
+            "CALL SP_createCampuWithUser (?,?,?,?,?,?,?,?)",
+            [
+                $campu->abreviature = e($request->input('abreviature')),
+                $campu->name = e($request->input('name')),
+                $campu->slug = e($request->input('slug')),
+                $campu->address = e($request->input('address')),
+                $campu->phone = e($request->input('phone')),
+                $campu->created_at = now('America/Bogota'),
 
-        return redirect()->route('admin.inventory.campus.index', $campu)->with('info', 'Sede creada exitosamente! ' . $campu->name);
+                $campu->user_id = e($request->input('tecnicos')),
+                now('America/Bogota'),
+            ]
+        );
+
+        return redirect()->route('admin.inventory.campus.index', $campu)
+            ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
     }
 
     public function show($id)
