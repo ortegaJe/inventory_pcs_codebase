@@ -28,7 +28,7 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('portatiles', 'App\Http\Controllers\Computer\LaptopController')->names('admin.inventory.laptop');
 
-    Route::resource('tecnicos', 'App\Http\Controllers\Technician\TechnicianController')->names('admin.inventory.technicians');
+    Route::resource('tecnicos', 'App\Http\Controllers\Admin\TechnicianController')->names('admin.inventory.technicians');
 
     Route::resource('roles', 'App\Http\Controllers\Admin\RoleController')->names('admin.inventory.roles');
 

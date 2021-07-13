@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Technician;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Computer;
@@ -92,18 +92,18 @@ class TechnicianController extends Controller
             "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [
                 //16
-                $user->cc = e($request->input('tec-id')),
-                $user->name = e($request->input('tec-firstname')),
-                $user->middle_name = e($request->input('tec-middlename')),
-                $user->last_name = e($request->input('tec-lastname')),
-                $user->second_last_name = e($request->input('tec-second-lastname')),
-                $user->nick_name = e($request->input('tec-nick-name')),
-                $user->age = e($request->input('tec-age')),
-                $user->sex = e($request->input('tec-gen')),
-                $user->phone_number = e($request->input('tec-phone')),
+                $user->cc = e($request->input('cc')),
+                $user->name = e($request->input('firstname')),
+                $user->middle_name = e($request->input('middlename')),
+                $user->last_name = e($request->input('lastname')),
+                $user->second_last_name = e($request->input('second-lastname')),
+                $user->nick_name = e($request->input('nick-name')),
+                $user->age = e($request->input('birthday')),
+                $user->sex = e($request->input('sex')),
+                $user->phone_number = e($request->input('phone')),
                 $user->avatar = null,
-                $user->email = e($request->input('tec-email')),
-                $user->password = Hash::make($request['tec-password']),
+                $user->email = e($request->input('email')),
+                $user->password = Hash::make($request['password']),
                 //$user->password = e($request->input('tec-password2')),
                 $user->created_at = now('America/Bogota'),
                 $isActive,
