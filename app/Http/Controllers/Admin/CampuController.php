@@ -31,8 +31,8 @@ class CampuController extends Controller
         $campu = new Campu();
 
         $request->validate([
-            'abreviature' => 'required',
-            'name' => 'required',
+            'abreviature' => 'required|unique:campus,abreviature',
+            'name' => 'required|unique:campus,name',
         ]);
 
         DB::insert(

@@ -7,17 +7,14 @@
 
 @section('content')
 
+<!-- Material (floating) Register -->
 <div class="col-xl-12">
-  <!-- Material (floating) Register -->
-  <div class="block block-themed">
-    <div class="block-header bg-corporative">
-      <h3 class="block-title">Registrar nuevo técnico</h3>
+  <div class="block pull-r-l">
+    <div class="block-header bg-gray-light">
+      <h3 class="block-title">
+        <i class="si si-user fa-2x font-size-default mr-5"></i>Crear Usuario
+      </h3>
       <div class="block-options">
-        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
-          data-action-mode="demo">
-          <i class="si si-refresh"></i>
-        </button>
-        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="content_toggle"></button>
       </div>
     </div>
     <div class="block-content">
@@ -25,77 +22,63 @@
         @csrf
         @method('POST')
         <div class="form-group row">
-          <div class="col-3">
+          <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-id" name="tec-id">
-              <label for="tec-id">Identificacacíon</label>
+              <input type="text" class="form-control" id="cc" name="cc">
+              <label for="cc">Identificación</label>
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-firstname" name="tec-firstname">
-              <label for="tec-firstname">Primer nombre</label>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-middlename" name="tec-middlename">
-              <label for="tec-middlename">Segundo nombre</label>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-lastname" name="tec-lastname">
-              <label for="tec-lastname">Primer apellido</label>
+              <input type="text" class="form-control" id="firstname" name="firstname">
+              <label for="firstname">Primer nombre</label>
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-3">
+          <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-second-lastname" name="tec-second-lastname">
-              <label for="tec-second-lastname">Segundo apellido</label>
+              <input type="text" class="form-control" id="middlename" name="middlename">
+              <label for="middlename">Segundo nombre</label>
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-nick-name" name="tec-nick-name">
-              <label for="tec-nick-name">Nombre de usuario</label>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="form-material">
-              <input type="text" class="js-flatpickr form-control" id="tec-age" name="tec-age" placeholder="d-m-Y"
-                data-allow-input="true" maxlength="10">
-              <label for="tec-age">Fecha de nacimiento</label>
-            </div>
-            @if($errors->has('tec-age'))
-            <small class="text-danger is-invalid">{{ $errors->first('tec-age') }}</small>
-            @endif
-          </div>
-          <div class="col-3">
-            <div class="form-material floating">
-              <input type="text" class="form-control" id="tec-phone" name="tec-phone">
-              <label for="tec-phone">Telefono</label>
+              <input type="text" class="form-control" id="lastname" name="lastname">
+              <label for="lastname">Primer apellido</label>
             </div>
           </div>
         </div>
-        <div clas="form-group row">
-          <div class="col-4">
-            <!-- Colors -->
-            <label class="css-control css-control-success css-radio">
-              <input type="radio" class="css-control-input" name="tec-gen" value="F">
-              <span class="css-control-indicator"></span> F
-            </label>
-            <label class="css-control css-control-success css-radio">
-              <input type="radio" class="css-control-input" name="tec-gen" value="M">
-              <span class="css-control-indicator"></span> M
-            </label>
-            <label class="css-control css-control-success css-radio">
-              <input type="radio" class="css-control-input" name="tec-gen" value="O">
-              <span class="css-control-indicator"></span> Otro
-            </label>
-            <!-- END Colors -->
+        <div class="form-group row">
+          <div class="col-6">
+            <div class="form-material floating">
+              <input type="text" class="form-control" id="second-lastname" name="second-lastname">
+              <label for="second-lastname">Segundo apellido</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-material floating">
+              <input type="text" class="form-control" id="nick-name" name="nick-name">
+              <label for="nick-name">Nombre de usuario</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-6">
+            <div class="form-material floating">
+              <input type="text" class="form-control" id="phone" name="phone">
+              <label for="phone">Telefono</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-material">
+              <input type="text" class="js-flatpickr form-control" id="birthday" name="birthday" placeholder="d-m-Y"
+                data-allow-input="true" maxlength="10">
+              <label for="birthday">Fecha de nacimiento</label>
+            </div>
+            @if($errors->has('birthday'))
+            <small class="text-danger is-invalid">{{ $errors->first('birthday') }}</small>
+            @endif
           </div>
         </div>
         <div class="form-group row">
@@ -137,10 +120,28 @@
           </div>
         </div>
         <div class="form-group row">
+          <label class="col-12">Genero</label>
+          <div class="col-6">
+            <div class="custom-control custom-radio custom-control-inline mb-5">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="M"
+                checked="">
+              <label class="custom-control-label" for="example-inline-radio1">F</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mb-5">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" value="F">
+              <label class="custom-control-label" for="example-inline-radio2">M</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mb-5">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio3" value="O">
+              <label class="custom-control-label" for="example-inline-radio3">Otro</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="email" class="form-control" id="tec-email" name="tec-email">
-              <label for="tec-email">Email</label>
+              <input type="email" class="form-control" id="email" name="email">
+              <label for="email">Email</label>
               <div class="input-group-append">
                 <span class="input-group-text">
                   <i class="fa fa-envelope-o"></i>
@@ -152,8 +153,8 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="password" class="form-control" id="tec-password" name="tec-password">
-              <label for="tec-password">Password</label>
+              <input type="password" class="form-control" id="password" name="password">
+              <label for="password">Password</label>
               <div class="input-group-append">
                 <span class="input-group-text">
                   <i class="fa fa-asterisk"></i>
@@ -165,8 +166,8 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="password" class="form-control" id="tec-password2" name="tec-password2">
-              <label for="tec-password2">Confirm Password</label>
+              <input type="password" class="form-control" id="password2" name="password2">
+              <label for="password2">Confirm Password</label>
               <div class="input-group-append">
                 <span class="input-group-text">
                   <i class="fa fa-asterisk"></i>
@@ -175,18 +176,14 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <div class="col-12">
-            <button type="submit" class="btn btn-alt-success">
-              <i class="fa fa-plus mr-5"></i> Registrar
-            </button>
-          </div>
-        </div>
+        <button type="submit" class="btn btn-sm btn-alt-success min-width-125 mt-4 mb-4" data-toggle="click-ripple">
+          <i class="fa fa-save"></i> Guardar
+        </button>
       </form>
     </div>
   </div>
-  <!-- END Material (floating) Register -->
 </div>
+<!-- END Material (floating) Register -->
 
 @endsection
 
