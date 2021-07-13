@@ -35,23 +35,31 @@ class CampuController extends Controller
             'name' => 'required|unique:campus,name',
         ]);
 
-        DB::insert(
-            "CALL SP_createCampuWithUser (?,?,?,?,?,?,?,?)",
-            [
-                $campu->abreviature = e($request->input('abreviature')),
-                $campu->name = e($request->input('name')),
-                $campu->slug = e($request->input('slug')),
-                $campu->address = e($request->input('address')),
-                $campu->phone = e($request->input('phone')),
-                $campu->created_at = now('America/Bogota'),
+        DB::beginTransaction();
 
-                $campu->user_id = e($request->input('tecnicos')),
-                now('America/Bogota'),
-            ]
-        );
+        try {
+            DB::insert(
+                "CALL SP_createCampuWithUser (?,?,?,?,?,?,?,?)",
+                [
+                    $campu->abreviature = e($request->input('abreviature')),
+                    $campu->name = e($request->input('name')),
+                    $campu->slug = e($request->input('slug')),
+                    $campu->address = e($request->input('address')),
+                    $campu->phone = e($request->input('phone')),
+                    $campu->created_at = now('America/Bogota'),
 
-        return redirect()->route('admin.inventory.campus.index', $campu)
-            ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
+                    $campu->user_id = e($request->input('tecnicos')),
+                    now('America/Bogota'),
+                ]
+            );
+            DB::commit();
+            return redirect()->route('admin.inventory.campus.index', $campu)
+                ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return back()->with('info_error', 'Intentelo de nuevo con otro nombre');
+            throw $e;
+        }
     }
 
     public function show($id)

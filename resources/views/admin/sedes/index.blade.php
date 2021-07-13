@@ -125,4 +125,14 @@
   });
 });
 </script>
+
+@if(Session::has('info_error'))
+<script>
+    Swal.fire(
+'Ya existe una sede con este nombre',
+'{!! Session::get('info_error') !!}',
+'error'
+)
+</script>
+@endif
 @endpush
