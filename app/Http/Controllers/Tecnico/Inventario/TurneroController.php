@@ -123,6 +123,11 @@ class TurneroController extends Controller
             ->where('id', '<>', [10])
             ->get();
 
+        $statusAssignments = DB::table('status')
+            ->select('id', 'name')
+            ->whereIn('id', [9, 10])
+            ->get();
+
         $domainNames = Computer::DOMAIN_NAME;
 
         $data =
@@ -134,7 +139,8 @@ class TurneroController extends Controller
                 'processors' => $processors,
                 'campus' => $campus,
                 'status' => $status,
-                'domainNames' => $domainNames
+                'domainNames' => $domainNames,
+                'statusAssignments' => $statusAssignments
             ];
 
         return view('user.inventory.turnero.create')->with($data);
@@ -271,7 +277,7 @@ class TurneroController extends Controller
                 );
         else :
             DB::insert(
-                "CALL SP_insertPc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //27
+                "CALL SP_insertPc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //27
                 [
                     $pc->inventory_code_number = $this->generatorID, //27
                     $pc->inventory_active_code = e($request->input('activo-fijo-pc')),
@@ -295,6 +301,7 @@ class TurneroController extends Controller
                     $pc->location = e($request->input('location')),
                     $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
                     $pc->custodian_name = e($request->input('custodian-name')),
+                    $pc->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $pc->observation = e($request->input('observation')),
                     $pc->rowguid = Uuid::uuid(),
                     $pc->pc_name_domain = e($request->input('pc-domain-name')),
@@ -351,6 +358,11 @@ class TurneroController extends Controller
             ->select('S.id as StatusID', 'S.name as NameStatus')
             ->get();
 
+        $statusAssignments = DB::table('status')
+            ->select('id', 'name')
+            ->whereIn('id', [9, 10])
+            ->get();
+
         $domainNames = Computer::DOMAIN_NAME;
 
         $data =
@@ -363,7 +375,8 @@ class TurneroController extends Controller
                 'processors' => $processors,
                 'campus' => $campus,
                 'status' => $status,
-                'domainNames' => $domainNames
+                'domainNames' => $domainNames,
+                'statusAssignments' => $statusAssignments
             ];
 
         return view('user.inventory.turnero.edit')->with($data);
@@ -497,7 +510,7 @@ class TurneroController extends Controller
                 );
         else :
             DB::update(
-                "call SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
+                "call SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $pc->inventory_active_code = $request->get('activo-fijo-pc'),
                     $pc->brand_id = $request->get('marca-pc-select2'),
@@ -520,13 +533,13 @@ class TurneroController extends Controller
                     $pc->location = $request->get('location'),
                     $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $pc->custodian_name = $request->get('custodian-name'),
+                    $pc->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $pc->observation = $request->get('observation'),
                     $pc->pc_name_domain = $request->get('pc-domain-name'),
                     $pc->updated_at = now('America/Bogota'),
                     $pc->os_id = $request->get('os-pc-select2'),
 
                     $statuId,
-                    $isActive,
                     $pcId,
                     $userId,
                 ]

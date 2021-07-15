@@ -448,7 +448,7 @@
                                     class="text-danger is-invalid">{{ $errors->first('custodian-assignment-date') }}</small>
                                 @endif
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <div class="form-material floating input-group">
                                     <input type="text" class="form-control" id="custodian-name" name="custodian-name"
                                         maxlength="56" value="{{ $pcs->custodian_name }}"
@@ -462,6 +462,29 @@
                                 </div>
                                 @if($errors->has('custodian-name'))
                                 <small class="text-danger is-invalid">{{ $errors->first('custodian-name') }}</small>
+                                @endif
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-material">
+                                    <select class="js-select2 form-control" id="val-select2-status-assignment"
+                                        name="val-select2-status-assignment" style="width: 100%;"
+                                        data-placeholder="Seleccionar concepto..">
+                                        <option disabled></option>
+                                        <!-- Empty value for demostrating material select box -->
+                                        @forelse ($statusAssignments as $statuAssignment)
+                                        <option value="{{ $statuAssignment->id }}"
+                                            {{ $statuAssignment->id == $pcs->assignment_statu_id ? 'selected' : '' }}>
+                                            {{ Str::title($statuAssignment->name) }}
+                                        </option>
+                                        @empty
+                                        <option>NO EXISTEN ESTADOS REGISTRADOS</option>
+                                        @endforelse
+                                    </select>
+                                    <label for="val-select2-status-assignment">Concepto</label>
+                                </div>
+                                @if($errors->has('val-select2-status-assignment'))
+                                <small
+                                    class="text-danger is-invalid">{{ $errors->first('val-select2-status-assignment') }}</small>
                                 @endif
                             </div>
                         </div>

@@ -366,6 +366,11 @@ class DesktopController extends Controller
             ->select('S.id as StatusID', 'S.name as NameStatus')
             ->get();
 
+        $statusAssignments = DB::table('status')
+            ->select('id', 'name')
+            ->whereIn('id', [9, 10])
+            ->get();
+
         $domainNames = Computer::DOMAIN_NAME;
 
         $data =
@@ -378,7 +383,8 @@ class DesktopController extends Controller
                 'processors' => $processors,
                 'campus' => $campus,
                 'status' => $status,
-                'domainNames' => $domainNames
+                'domainNames' => $domainNames,
+                'statusAssignments' => $statusAssignments,
             ];
 
         return view('user.inventory.desktop.edit')->with($data);
@@ -511,7 +517,7 @@ class DesktopController extends Controller
                 );
         else :
             DB::update(
-                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
+                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
                 [
                     $pc->inventory_active_code = $request->get('activo-fijo-pc'),
                     $pc->brand_id = $request->get('marca-pc-select2'),
@@ -534,6 +540,7 @@ class DesktopController extends Controller
                     $pc->location = $request->get('location'),
                     $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $pc->custodian_name = $request->get('custodian-name'),
+                    $pc->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $pc->observation = $request->get('observation'),
                     $pc->pc_name_domain = $request->get('pc-domain-name'),
                     $pc->updated_at = now('America/Bogota'),
