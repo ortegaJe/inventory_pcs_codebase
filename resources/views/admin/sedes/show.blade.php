@@ -158,11 +158,11 @@
                             @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
                         </div>
                     </div>
-                    <div class="col-4 mt-3">
+                    {{--  <div class="col-4 mt-3">
                         <button type="button" class="btn btn-hero btn-alt-primary btn-block" data-toggle="click-ripple">
                             <i class="si si-user-follow mr-1"></i> Asignar nuevo técnico
                         </button>
-                    </div>
+                    </div>--}}
                 </div>
                 <div class="form-group mt-4">
                     <button type="submit" class="btn btn-sm btn-alt-success min-width-125"

@@ -162,6 +162,9 @@
               </div>
             </div>
           </div>
+          @if($errors->has('password'))
+          <small class="text-danger is-invalid">{{ $errors->first('password') }}</small>
+          @endif
         </div>
         <div class="form-group row">
           <div class="col-12">
