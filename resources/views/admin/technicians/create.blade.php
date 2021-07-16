@@ -24,13 +24,13 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="cc" name="cc">
+              <input type="text" class="form-control" id="cc" name="cc" required>
               <label for="cc">Identificación</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="firstname" name="firstname">
+              <input type="text" class="form-control" id="firstname" name="firstname" required>
               <label for="firstname">Primer nombre</label>
             </div>
           </div>
@@ -44,7 +44,7 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="lastname" name="lastname">
+              <input type="text" class="form-control" id="lastname" name="lastname" required>
               <label for="lastname">Primer apellido</label>
             </div>
           </div>
@@ -58,7 +58,7 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="nick-name" name="nick-name">
+              <input type="text" class="form-control" id="nick-name" name="nick-name" required>
               <label for="nick-name">Nombre de usuario</label>
             </div>
           </div>
@@ -73,7 +73,7 @@
           <div class="col-6">
             <div class="form-material">
               <input type="text" class="js-flatpickr form-control" id="birthday" name="birthday" placeholder="d-m-Y"
-                data-allow-input="true" maxlength="10">
+                required data-allow-input="true" maxlength="10">
               <label for="birthday">Fecha de nacimiento</label>
             </div>
             @if($errors->has('birthday'))
@@ -84,7 +84,7 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material">
-              <select class="js-select2 form-control" id="val-select2-campu" name="val-select2-campu"
+              <select class="js-select2 form-control" id="val-select2-campu" name="val-select2-campu" required
                 style="width: 100%;" data-placeholder="Seleccionar sede..">
                 <option></option>
                 <!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -102,7 +102,7 @@
           </div>
           <div class="col-6">
             <div class="form-material">
-              <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile"
+              <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile" required
                 style="width: 100%;" data-placeholder="Seleccionar cargo..">
                 <option></option>
                 <!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -140,7 +140,7 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="email" class="form-control" id="email" name="email">
+              <input type="email" class="form-control" id="email" name="email" required>
               <label for="email">Email</label>
               <div class="input-group-append">
                 <span class="input-group-text">
@@ -153,7 +153,7 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="password" class="form-control" id="password" name="password">
+              <input type="password" class="form-control" id="password" name="password" required>
               <label for="password">Password</label>
               <div class="input-group-append">
                 <span class="input-group-text">
@@ -161,10 +161,10 @@
                 </span>
               </div>
             </div>
+            @if($errors->has('password'))
+            <small class="text-danger is-invalid">{{ $errors->first('password') }}</small>
+            @endif
           </div>
-          @if($errors->has('password'))
-          <small class="text-danger is-invalid">{{ $errors->first('password') }}</small>
-          @endif
         </div>
         <div class="form-group row">
           <div class="col-12">

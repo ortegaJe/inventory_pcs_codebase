@@ -19,7 +19,7 @@
 <div class="row">
   @foreach ($users as $user )
   <div class="col-md-6 col-xl-3">
-    <a class="block block-link-shadow" href="javascript:void(0)">
+    <a class="block block-link-shadow" href="#">
       <div class="block-content block-content-full clearfix">
         <div class="float-right">
           <img class="img-avatar" src="{{ asset('/media/avatars/avatar8.jpg') }}" alt="">
@@ -29,17 +29,19 @@
           <div class="font-size-xs text-muted"><small>{{ Str::upper($user->SedeTecnico) }}</small></div>
         </div>
         <div class="float-left mt-30">
-          <button type="button" class="btn btn-circle btn-alt-success mt-2" data-toggle="tooltip" title="Actualizar">
-            <i class="fa fa-pencil"></i>
+          <button type="button" class="btn btn-circle btn-alt-primary mt-2" data-toggle="tooltip"
+            onclick="window.location='{{ route('admin.inventory.technicians.show', $user->UserID) }}'"
+            title="Configuraciones">
+            <i class="fa fa-cog"></i>
           </button>
           <button type="button"
             onclick="window.location='{{ route('admin.inventory.technicians.edit', $user->UserID) }}'"
             class="btn btn-circle btn-alt-warning mt-2" data-toggle="tooltip" title="Asignar Rol">
             <i class="si si-badge"></i>
           </button>
-          <button type="button" class="btn btn-circle btn-alt-danger mt-2" data-toggle="tooltip" title="Eliminar">
+          {{--  <button type="button" class="btn btn-circle btn-alt-danger mt-2" data-toggle="tooltip" title="Eliminar">
             <i class="fa fa-times"></i>
-          </button>
+          </button>--}}
         </div>
       </div>
     </a>

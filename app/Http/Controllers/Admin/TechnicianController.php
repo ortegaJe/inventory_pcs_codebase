@@ -82,6 +82,10 @@ class TechnicianController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
         $user = new User();
         $isActive = true;
         $profileUser = e($request->input('val-select2-profile'));
@@ -123,9 +127,9 @@ class TechnicianController extends Controller
      * @param  int  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($user)
+    public function show($id)
     {
-        //
+        return view('admin.technicians.show')->with($id);
     }
 
     /**
