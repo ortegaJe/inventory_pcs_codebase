@@ -33,22 +33,29 @@ class CampuController extends Controller
         $request->validate([
             'abreviature' => 'required|unique:campus,abreviature',
             'name' => 'required|unique:campus,name',
+            //'tecnicos' => 'required',
         ]);
 
-        DB::beginTransaction();
+        $campu->abreviature = e($request->input('abreviature'));
+        $campu->name = e($request->input('name'));
+        $campu->slug = e($request->input('slug'));
+        $campu->address = e($request->input('address'));
+        $campu->phone = e($request->input('phone'));
+        $campu->created_at = now('America/Bogota');
+
+        $campu->save();
+
+        return redirect()->route('admin.inventory.campus.index', $campu)
+            ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
+
+        /*DB::beginTransaction();
 
         try {
             DB::insert(
-                "CALL SP_createCampuWithUser (?,?,?,?,?,?,?,?)",
+                "CALL SP_createCampuWithUser (?,?,?,?,?,?,?)",
                 [
-                    $campu->abreviature = e($request->input('abreviature')),
-                    $campu->name = e($request->input('name')),
-                    $campu->slug = e($request->input('slug')),
-                    $campu->address = e($request->input('address')),
-                    $campu->phone = e($request->input('phone')),
-                    $campu->created_at = now('America/Bogota'),
 
-                    $campu->user_id = e($request->input('tecnicos')),
+                    //$campu->user_id = e($request->input('tecnicos')),
                     now('America/Bogota'),
                 ]
             );
@@ -57,9 +64,9 @@ class CampuController extends Controller
                 ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
         } catch (\Throwable $e) {
             DB::rollback();
-            return back()->with('info_error', 'Intentelo de nuevo con otro nombre');
+            return back()->with('info_error', 'Upss! se ha producido un error');
             throw $e;
-        }
+        }*/
     }
 
     public function show($id)
