@@ -34,8 +34,7 @@
             title="Configuraciones">
             <i class="fa fa-cog"></i>
           </button>
-          <button type="button"
-            onclick="window.location='{{ route('admin.inventory.technicians.edit', $user->UserID) }}'"
+          <button type="button" onclick="window.location='{{ route('admin.inventory.assing-role', $user->UserID) }}'"
             class="btn btn-circle btn-alt-warning mt-2" data-toggle="tooltip" title="Asignar Rol">
             <i class="si si-badge"></i>
           </button>

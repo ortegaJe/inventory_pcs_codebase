@@ -90,11 +90,6 @@ class CampuController extends Controller
             ->where('campu_id', $id)
             ->count();
 
-        $campusCount = DB::table('computers')
-            ->select('campu_id')
-            ->where('campu_id', $id)
-            ->count();
-
         $getIdUserByCampus = DB::table('campu_users')
             ->select('user_id')
             ->where('campu_id', $id)
@@ -111,6 +106,7 @@ class CampuController extends Controller
         $campuAssigned = DB::table('campus AS C')
             ->select(
                 'C.id AS SedeID',
+                'U.id AS UserID',
                 'C.name AS NombreSede',
                 DB::raw("CONCAT(U.name,' ',
                 U.last_name) AS NombreCompletoTecnico"),
@@ -122,6 +118,7 @@ class CampuController extends Controller
             ->join('user_profiles AS UP', 'UP.id', 'U.id')
             ->join('profiles AS P', 'P.id', 'UP.profile_id')
             ->where('CU.campu_id', $id)
+            ->where('U.is_active', 1)
             ->get();
 
         $data =

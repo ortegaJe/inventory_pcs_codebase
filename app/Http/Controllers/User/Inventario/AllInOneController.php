@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Tecnico\Inventario;
+namespace App\Http\Controllers\User\Inventario;
 
 use App\Http\Controllers\Controller;
 use App\Models\Computer;

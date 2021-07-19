@@ -24,15 +24,21 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="cc" name="cc" required>
+              <input type="text" class="form-control" id="cc" name="cc">
               <label for="cc">Identificación</label>
             </div>
+            @if($errors->has('cc'))
+            <small class="text-danger is-invalid">{{ $errors->first('cc') }}</small>
+            @endif
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="firstname" name="firstname" required>
+              <input type="text" class="form-control" id="firstname" name="firstname">
               <label for="firstname">Primer nombre</label>
             </div>
+            @if($errors->has('firstname'))
+            <small class="text-danger is-invalid">{{ $errors->first('firstname') }}</small>
+            @endif
           </div>
         </div>
         <div class="form-group row">
@@ -44,9 +50,12 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="lastname" name="lastname" required>
+              <input type="text" class="form-control" id="lastname" name="lastname">
               <label for="lastname">Primer apellido</label>
             </div>
+            @if($errors->has('lastname'))
+            <small class="text-danger is-invalid">{{ $errors->first('lastname') }}</small>
+            @endif
           </div>
         </div>
         <div class="form-group row">
@@ -58,9 +67,12 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="nick-name" name="nick-name" required>
+              <input type="text" class="form-control" id="nick-name" name="nick-name">
               <label for="nick-name">Nombre de usuario</label>
             </div>
+            @if($errors->has('nick-name'))
+            <small class="text-danger is-invalid">{{ $errors->first('nick-name') }}</small>
+            @endif
           </div>
         </div>
         <div class="form-group row">
@@ -73,7 +85,7 @@
           <div class="col-6">
             <div class="form-material">
               <input type="text" class="js-flatpickr form-control" id="birthday" name="birthday" placeholder="d-m-Y"
-                required data-allow-input="true" maxlength="10">
+                data-allow-input="true" maxlength="10">
               <label for="birthday">Fecha de nacimiento</label>
             </div>
             @if($errors->has('birthday'))
@@ -84,10 +96,10 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material">
-              <select class="js-select2 form-control" id="val-select2-campu" name="val-select2-campu" required
+              <select class="js-select2 form-control" id="val-select2-campu" name="val-select2-campu"
                 style="width: 100%;" data-placeholder="Seleccionar sede..">
                 <option></option>
-                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                <!--  for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($campus as $campu)
                 <option value="{{ $campu->id }}">{{ Str::upper($campu->name) }}</option>
                 @empty
@@ -102,10 +114,10 @@
           </div>
           <div class="col-6">
             <div class="form-material">
-              <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile" required
+              <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile"
                 style="width: 100%;" data-placeholder="Seleccionar cargo..">
                 <option></option>
-                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                <!--  for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($profiles as $profile)
                 <option value="{{ $profile->id }}">{{ Str::upper($profile->name) }}</option>
                 @empty
@@ -140,7 +152,7 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="email" class="form-control" id="email" name="email" required>
+              <input type="email" class="form-control" id="email" name="email">
               <label for="email">Email</label>
               <div class="input-group-append">
                 <span class="input-group-text">
@@ -148,12 +160,15 @@
                 </span>
               </div>
             </div>
+            @if($errors->has('email'))
+            <small class="text-danger is-invalid">{{ $errors->first('email') }}</small>
+            @endif
           </div>
         </div>
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="password" class="form-control" id="password" name="password" required>
+              <input type="password" class="form-control" id="password" name="password">
               <label for="password">Password</label>
               <div class="input-group-append">
                 <span class="input-group-text">

@@ -74,58 +74,58 @@ class RoleSeeder extends Seeder
                 Permission::create(['name' => 'admin.inventory.campus.destroy'])->syncRoles([$roleAdmin]);
 
                 Permission::create(['name' => 'user.inventory.desktop.index'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderDesktop]);
+                        ->syncRoles([$roleUser, $builderDesktop]);
                 Permission::create(['name' => 'user.inventory.desktop.create'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderDesktop]);
+                        ->syncRoles([$roleUser, $builderDesktop]);
                 Permission::create(['name' => 'user.inventory.desktop.edit'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderDesktop]);
+                        ->syncRoles([$roleUser, $builderDesktop]);
                 Permission::create(['name' => 'user.inventory.desktop.show'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderDesktop]);
+                        ->syncRoles([$roleUser, $builderDesktop]);
                 Permission::create(['name' => 'user.inventory.desktop.destroy'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderDesktop]);
+                        ->syncRoles([$roleUser, $builderDesktop]);
 
                 Permission::create(['name' => 'user.inventory.allinone.index'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderAllInOne]);
+                        ->syncRoles([$roleUser, $builderAllInOne]);
                 Permission::create(['name' => 'user.inventory.allinone.create'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderAllInOne]);
+                        ->syncRoles([$roleUser, $builderAllInOne]);
                 Permission::create(['name' => 'user.inventory.allinone.edit'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderAllInOne]);
+                        ->syncRoles([$roleUser, $builderAllInOne]);
                 Permission::create(['name' => 'user.inventory.allinone.show'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderAllInOne]);
+                        ->syncRoles([$roleUser, $builderAllInOne]);
                 Permission::create(['name' => 'user.inventory.allinone.destroy'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderAllInOne]);
+                        ->syncRoles([$roleUser, $builderAllInOne]);
 
                 Permission::create(['name' => 'user.inventory.laptop.index'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderLaptop]);
+                        ->syncRoles([$roleUser, $builderLaptop]);
                 Permission::create(['name' => 'user.inventory.laptop.create'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderLaptop]);
+                        ->syncRoles([$roleUser, $builderLaptop]);
                 Permission::create(['name' => 'user.inventory.laptop.edit'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderLaptop]);
+                        ->syncRoles([$roleUser, $builderLaptop]);
                 Permission::create(['name' => 'user.inventory.laptop.show'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderLaptop]);
+                        ->syncRoles([$roleUser, $builderLaptop]);
                 Permission::create(['name' => 'user.inventory.laptop.destroy'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderLaptop]);
+                        ->syncRoles([$roleUser, $builderLaptop]);
 
                 Permission::create(['name' => 'user.inventory.turnero.index'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderTurnero]);
+                        ->syncRoles([$roleUser, $builderTurnero]);
                 Permission::create(['name' => 'user.inventory.turnero.create'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderTurnero]);
+                        ->syncRoles([$roleUser, $builderTurnero]);
                 Permission::create(['name' => 'user.inventory.turnero.edit'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderTurnero]);
+                        ->syncRoles([$roleUser, $builderTurnero]);
                 Permission::create(['name' => 'user.inventory.turnero.show'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderTurnero]);
+                        ->syncRoles([$roleUser, $builderTurnero]);
                 Permission::create(['name' => 'user.inventory.turnero.destroy'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderTurnero]);
+                        ->syncRoles([$roleUser, $builderTurnero]);
 
                 Permission::create(['name' => 'user.inventory.raspberry.index'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderRaspberry]);
+                        ->syncRoles([$roleUser, $builderRaspberry]);
                 Permission::create(['name' => 'user.inventory.raspberry.create'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderRaspberry]);
+                        ->syncRoles([$roleUser, $builderRaspberry]);
                 Permission::create(['name' => 'user.inventory.raspberry.edit'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderRaspberry]);
+                        ->syncRoles([$roleUser, $builderRaspberry]);
                 Permission::create(['name' => 'user.inventory.raspberry.show'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderRaspberry]);
+                        ->syncRoles([$roleUser, $builderRaspberry]);
                 Permission::create(['name' => 'user.inventory.raspberry.destroy'])
-                        ->syncRoles([$roleAdmin, $roleUser, $builderRaspberry]);
+                        ->syncRoles([$roleUser, $builderRaspberry]);
         }
 }

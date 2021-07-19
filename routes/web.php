@@ -24,11 +24,11 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
 
-    Route::resource('de-escritorios', 'App\Http\Controllers\Computer\DesktopController')->names('admin.inventory.desktop');
+    Route::resource('tecnicos', 'App\Http\Controllers\Admin\UserController')->names('admin.inventory.technicians');
 
-    Route::resource('portatiles', 'App\Http\Controllers\Computer\LaptopController')->names('admin.inventory.laptop');
+    Route::get('asignar-rol/{id}', 'App\Http\Controllers\Admin\UserController@editRol')->name('admin.inventory.assing-role');
 
-    Route::resource('tecnicos', 'App\Http\Controllers\Admin\TechnicianController')->names('admin.inventory.technicians');
+    Route::patch('rol-asignado/{id}', 'App\Http\Controllers\Admin\UserController@updateRol')->name('admin.inventory.assingned-role');
 
     Route::resource('roles', 'App\Http\Controllers\Admin\RoleController')->names('admin.inventory.roles');
 
@@ -37,15 +37,15 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
-    Route::resource('de-escritorios', 'App\Http\Controllers\Tecnico\Inventario\DesktopController')->names('user.inventory.desktop');
+    Route::resource('de-escritorios', 'App\Http\Controllers\User\Inventario\DesktopController')->names('user.inventory.desktop');
 
-    Route::resource('portatiles', 'App\Http\Controllers\Tecnico\Inventario\LaptopController')->names('user.inventory.laptop');
+    Route::resource('portatiles', 'App\Http\Controllers\User\Inventario\LaptopController')->names('user.inventory.laptop');
 
-    Route::resource('all-in-one', 'App\Http\Controllers\Tecnico\Inventario\AllinOneController')->names('user.inventory.allinone');
+    Route::resource('all-in-one', 'App\Http\Controllers\User\Inventario\AllinOneController')->names('user.inventory.allinone');
 
-    Route::resource('turneros', 'App\Http\Controllers\Tecnico\Inventario\TurneroController')->names('user.inventory.turnero');
+    Route::resource('turneros', 'App\Http\Controllers\User\Inventario\TurneroController')->names('user.inventory.turnero');
 
-    Route::resource('raspberry', 'App\Http\Controllers\Tecnico\Inventario\RaspberryController')->names('user.inventory.raspberry');
+    Route::resource('raspberry', 'App\Http\Controllers\User\Inventario\RaspberryController')->names('user.inventory.raspberry');
 });
 
 Route::get('example-faker', function () {

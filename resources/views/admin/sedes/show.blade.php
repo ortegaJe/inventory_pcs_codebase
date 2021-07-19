@@ -26,7 +26,7 @@
 <div class="bg-body-light border-b">
     <div class="content py-5 text-center">
         <nav class="breadcrumb bg-body-light mb-0">
-            <a class="breadcrumb-item" href="{{ route('admin.inventory.campus.index') }}">Sedes</a>
+            <a class="breadcrumb-item" href="{{ route('admin.inventory.campus.index') }}">Sede</a>
             <span class="breadcrumb-item active">{{ Str::ucfirst(Str::lower($campus->name)) }}</span>
         </nav>
     </div>
@@ -50,16 +50,22 @@
                         <span class="badge badge-pill badge-primary"><i class="fa fa-building-o"></i>
                             {{ $campuAssignedCount }} Sedes</span>
                     </div>
-                    @empty
-                    <div class="font-size-h4 font-w600">Sin técnico asignado aún</div>
-                    <div class="text-muted">
-                    </div>
-                    @endforelse
                     <div class="pt-20">
-                        <a class="btn btn-rounded btn-alt-primary" href="javascript:void(0)">
+                        <a class="btn btn-rounded btn-alt-primary"
+                            href="{{ route('admin.inventory.technicians.show', $campu->UserID) }}">
                             <i class="fa fa-eye mr-5"></i> Ver Perfil
                         </a>
                     </div>
+                    @empty
+                    <div class="font-size-h4 font-w600">Técnico no asignado</div>
+                    <div class="text-muted">
+                    </div>
+                    <div class="pt-20">
+                        <a class="btn btn-rounded btn-alt-primary" href="#">
+                            Asignar
+                        </a>
+                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

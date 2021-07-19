@@ -14,9 +14,9 @@
 
 <div class="col-xl-12">
     <!-- Roles -->
-    <form action="{{ route('admin.inventory.technicians.update', $user->id) }}" method="POST">
+    <form action="{{ route('admin.inventory.assingned-role', $user->id) }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('PATCH')
         <div class="block pull-r-l">
             <div class="block-header bg-gray-light">
                 <h3 class="block-title">

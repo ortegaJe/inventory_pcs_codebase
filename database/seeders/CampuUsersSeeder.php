@@ -15,13 +15,6 @@ class CampuUsersSeeder extends Seeder
     public function run()
     {
         DB::table('campu_users')->insert([
-            'user_id' => 1,
-            'campu_id' => 2,
-            'is_principal' => true,
-            'created_at' => now(),
-        ]);
-
-        DB::table('campu_users')->insert([
             'user_id' => 2,
             'campu_id' => 1,
             'is_principal' => true,

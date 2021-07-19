@@ -147,34 +147,21 @@
               </a>
               <ul>
                 @can('admin.inventory.desktop.index')
-                <li class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'open' : '' }} || 
-                  {{ request()->is('admin/dashboard/inventario/portatiles') ? 'open' : '' }}">
-                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                    <span class="sidebar-mini-hide">Equipos</span>
+                <li>
+                  <a class="{{ request()->is('admin/dashboard/inventario') ? 'active' : '' }}"
+                    href="{{ route('admin.inventory.dash.index') }}">Inventario
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       @php $globalPcCount = DB::table('computers')->select('id')
-                      //->whereIn('statu_id',[1,2,3,5,6,7,8])
                       ->where('is_active',[1])
                       ->where('deleted_at', null)
+                      ->whereIn('statu_id',[1,2,3,5,6,7,8])
                       ->count(); @endphp
                       {{ $globalPcCount ?? '0' }}
                     </span>
                   </a>
-                  <ul>
-                    <li>
-                      <a class="{{ request()->is('admin/dashboard/inventario/de-escritorios') ? 'active' : '' }}"
-                        href="{{ route('admin.inventory.desktop.index') }}">De escritorios
-                      </a>
-                    </li>
-                    @can('admin.inventory.laptop.index')
-                    <li>
-                      <a class="{{ request()->is('admin/dashboard/inventario/portatiles') ? 'active' : '' }}"
-                        href="{{ route('admin.inventory.laptop.index') }}">Portátiles</a>
-                    </li>
-                    @endcan
-                  </ul>
-                  @endcan
-                  @can('admin.inventory.tecnicos.index')
+                </li>
+                @endcan
+                @can('admin.inventory.tecnicos.index')
                 <li class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Usuarios</span>
@@ -208,6 +195,7 @@
                   </a>
                 </li>
                 @endcan
+                @can('user.inventory.desktop.index')
                 <li class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }} ||
                   {{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }} ||  
                   {{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'open' : '' }} ||
@@ -231,7 +219,6 @@
                     </span>
                   </a>
                   <ul>
-                    @can('user.inventory.desktop.index')
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'active' : '' }}"
@@ -394,7 +381,12 @@
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
               <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">{{ Auth::user()->name }}
                 {{ Auth::user()->last_name }}
-                <div class="mt-2"><i class="fa fa-building-o"></i> {{ $campusTec->SedeTecnico }}</div>
+                <div class="mt-2"><i class="fa fa-building-o"></i>
+                  @if (($campusTec) ? $campusTec->SedeTecnico : 0)
+                  {{ $campusTec->SedeTecnico }}
+                  @else
+                  @endif
+                </div>
               </h5>
               <a class="dropdown-item" href="#">
                 <i class="si si-user mr-5"></i> Perfil

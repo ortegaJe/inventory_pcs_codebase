@@ -94,21 +94,11 @@ $(document).ready(function() {
         );
     }
 
-    function getComputerData() {
-        $.ajax({
-            url: root_url,
-            type: "GET",
-            data: {}
-        }).done(function(data) {
-            //alert(data);
-        });
-    }
-
     $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url_desktop,
+            ajax: root_url_dashboard,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -181,58 +171,8 @@ $(document).ready(function() {
                     data: "EstadoPC",
                     searcheable: true
                 },
-                {
-                    data: "action",
-                    searcheable: false,
-                    orderable: false
-                }
             ],
             order: [[1, "desc"]]
-        });
-
-        $(document).on("click", "#btn-delete", function(e) {
-            //console.log(e);
-            Swal.fire({
-                title: "Estas seguro?",
-                text: "No se podra revertir esto!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Si, borrar!",
-                cancelButtonText: "No, cancelar"
-            }).then(result => {
-                if (result.isConfirmed) {
-                    event.preventDefault();
-                    let id = $(this).attr("data-id");
-                    //console.log(id);
-                    $.ajax({
-                        url: root_url_desktop_store + "/" + id,
-                        type: "DELETE",
-                        data: {
-                            _token: $('input[name="_token"]').val()
-                        },
-                        success: function(response) {
-                            console.log(
-                                response.result[0]["inventory_code_number"]
-                            );
-                            let msg =
-                                response.result[0]["inventory_code_number"];
-                            Swal.fire(
-                                `Numero de inventario #${msg}`,
-                                response.message,
-                                "success"
-                            );
-                            $("#dt")
-                                .DataTable()
-                                .ajax.reload();
-                            //console.log(id);
-                            //getComputerData();
-                        }
-                    });
-                }
-            });
-            return false;
         });
 
         // Array to track the ids of the details displayed rows
