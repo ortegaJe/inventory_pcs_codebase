@@ -135,8 +135,7 @@
           <label class="col-12">Genero</label>
           <div class="col-6">
             <div class="custom-control custom-radio custom-control-inline mb-5">
-              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="M"
-                checked="">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="M">
               <label class="custom-control-label" for="example-inline-radio1">F</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline mb-5">

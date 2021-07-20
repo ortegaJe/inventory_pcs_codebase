@@ -171,7 +171,8 @@
                 <div class="form-group row">
                     <div class="col-6">
                         <div class="form-material floating">
-                            <input type="text" class="form-control" id="phone" name="phone" value="{{ $users->phone }}">
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                value="{{ $users->phone_number }}">
                             <label for="phone">Telefono</label>
                         </div>
                     </div>

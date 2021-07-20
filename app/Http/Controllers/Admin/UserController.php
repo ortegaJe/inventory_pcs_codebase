@@ -88,7 +88,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        /*$request->validate([
+        $request->validate([
             'cc' => 'required|unique:users,cc',
             'firstname' => 'required|unique:users,name',
             'lastname' => 'required|unique:users,last_name',
@@ -97,7 +97,7 @@ class UserController extends Controller
             'val-select2-profile' => 'required|numeric',
             'email' => 'required|email',
             'password' => 'required'
-        ]);*/
+        ]);
 
         $user = new User();
         $isActive = true;
@@ -116,8 +116,8 @@ class UserController extends Controller
                 $user->second_last_name = e($request->input('second-lastname')),
                 $user->nick_name = e($request->input('nick-name')),
                 $user->birthday = e($request->input('birthday')),
-                $user->sex = e($request->input('sex')),
-                $user->phone_number = e($request->input('phone')),
+                $user->sex = e($request->has('sex')),
+                $user->phone_number = e(trim($request->input('phone'))),
                 $user->avatar = null,
                 $user->email = e($request->input('email')),
                 $user->password = Hash::make($request['password']),
