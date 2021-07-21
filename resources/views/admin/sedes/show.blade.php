@@ -3,6 +3,7 @@
 @section('title', 'Sede '.$campus->name)
 
 @section('content')
+@include('admin.sedes.partials.modal')
 <!-- Hero -->
 <div class="bg-gray-lighter">
     <div class="bg-black-op-12">
@@ -61,7 +62,7 @@
                     <div class="text-muted">
                     </div>
                     <div class="pt-20">
-                        <a class="btn btn-rounded btn-alt-primary" href="#">
+                        <a class="btn btn-rounded btn-alt-primary" data-toggle="modal" data-target="#modal-popout">
                             Asignar
                         </a>
                     </div>
@@ -199,18 +200,7 @@
             </div>
         </div>
         @empty
-        {{--  <div class="col-sm-4">
-            <div class="block block-bordered block-rounded invisible" data-toggle="appear" data-offset="-200">
-                <div class="block-content block-content-full">
-                    <div class="py-30 text-center">
-                        <div class="item item-2x item-circle bg-gray-light text-white mx-auto">
-                            <i class="fa fa-desktop text-muted"></i>
-                        </div>
-                        <div class="h4 pt-20 mb-0">TIPO DE DISPOSITIVOS SIN REGISTRAR</div>
-                    </div>
-                </div>
-            </div>
-        </div>--}}
+
         @endforelse
     </div>
 </div>
