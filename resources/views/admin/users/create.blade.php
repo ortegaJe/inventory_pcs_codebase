@@ -67,7 +67,7 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="nick-name" name="nick-name">
+              <input type="text" class="form-control" id="nickname" name="nickname">
               <label for="nick-name">Nombre de usuario</label>
             </div>
             @if($errors->has('nick-name'))
@@ -84,7 +84,7 @@
           </div>
           <div class="col-6">
             <div class="form-material">
-              <input type="text" class="js-flatpickr form-control" id="birthday" name="birthday" placeholder="d-m-Y"
+              <input type="text" class="js-flatpickr form-control" id="birthday" name="birthday" placeholder="Y-m-d"
                 data-allow-input="true" maxlength="10">
               <label for="birthday">Fecha de nacimiento</label>
             </div>
@@ -135,11 +135,11 @@
           <label class="col-12">Genero</label>
           <div class="col-6">
             <div class="custom-control custom-radio custom-control-inline mb-5">
-              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="M">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="F">
               <label class="custom-control-label" for="example-inline-radio1">F</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline mb-5">
-              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" value="F">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" value="M">
               <label class="custom-control-label" for="example-inline-radio2">M</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline mb-5">
@@ -210,7 +210,7 @@
 
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
-  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });
+  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'select2']); });
 </script>
 
 @endpush

@@ -33,6 +33,8 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::resource('roles', 'App\Http\Controllers\Admin\RoleController')->names('admin.inventory.roles');
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
+
+    Route::post('asignar-tecnico-sede', 'App\Http\Controllers\Admin\CampuController@assingUserCampu')->name('admin.inventory.assing-user-campu');
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {

@@ -3,6 +3,7 @@
 @section('title', 'Sede '.$campus->name)
 
 @section('content')
+@include('admin.sedes.partials.modal')
 <!-- Hero -->
 <div class="bg-gray-lighter">
     <div class="bg-black-op-12">
@@ -61,9 +62,10 @@
                     <div class="text-muted">
                     </div>
                     <div class="pt-20">
-                        <a class="btn btn-rounded btn-alt-primary" href="#">
+                        <a class="btn btn-rounded btn-alt-primary" data-toggle="modal" data-target="#modal-popout">
                             Asignar
                         </a>
+                        <br>
                     </div>
                     @endforelse
                 </div>

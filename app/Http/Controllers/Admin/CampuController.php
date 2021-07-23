@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCampuRequest;
 use App\Models\Campu;
+use App\Models\CampuUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +16,8 @@ class CampuController extends Controller
     public function index()
     {
         $campus = Campu::all();
+
         $users = User::get(['id', 'name', 'last_name']);
-        //dd($users);
 
         return view('admin.sedes.index', compact('campus', 'users'));
     }
@@ -24,6 +25,21 @@ class CampuController extends Controller
     public function create()
     {
         return view('admin.sedes.create');
+    }
+
+    public function assingUserCampu(Request $request)
+    {
+        $campuUser = new CampuUser();
+
+        $campuUser->user_id = $request->get('val-select2-lista-tecnicos');
+        $campuUser->campu_id = $request->get('campu-id');
+        $campuUser->is_principal = false;
+        //$campuUser->updated_at = now('America/Bogota');
+
+        $campuUser->save();
+
+
+        return back()->with('info', 'actualizado con exito!');
     }
 
     public function store(Request $request)
@@ -72,6 +88,8 @@ class CampuController extends Controller
     public function show($id)
     {
         $campus = Campu::findOrFail($id);
+
+        $userLists = User::all();
 
         $typeDevices = DB::table('computers as pc')
             ->leftJoin('type_devices as td', 'td.id', 'pc.type_device_id')
@@ -128,6 +146,7 @@ class CampuController extends Controller
                 'campusCount' => $campusCount,
                 'campuAssigned' => $campuAssigned,
                 'campuAssignedCount' => $campuAssignedCount,
+                'userLists' => $userLists,
             ];
 
         return view('admin.sedes.show')->with($data);
