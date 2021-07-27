@@ -14,6 +14,18 @@
 <div class="content-heading">
   <div class="d-flex justify-content-between align-items-center mt-50 mb-20">
     <h2 class="h4 font-w300 mb-0">Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small></h2>
+    <div class="col-md-10 col-lg-8 col-xl-6">
+      <form action="{{ route('admin.inventory.campus.index') }}" method="GET">
+        <div class="input-group input-group-lg">
+          <input type="text" class="form-control" id="search" name="search" placeholder="Buscar sede..">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
     <button type="button" class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
       onclick="Codebase.blocks('#cb-add-server', 'open');">
       <i class="fa fa-building-o mr-1"></i> Agregar sede
@@ -29,7 +41,7 @@
       </div>
     </div>
     <div class="block-content">
-      <form action="{{ route('admin.inventory.campus.store') }}" method="POST">
+      <form action="{{ route('admin.inventory.campus.index') }}" method="POST">
         @csrf
         @method('POST')
         <div class="form-group row gutters-tiny mb-0 items-push">
@@ -104,6 +116,10 @@
   </div>
   @endforeach
 </div>
+<div class="d-flex justify-content-center float-right">
+  {!! $campus->links() !!}
+</div>
+
 @endsection
 
 @push('js')
@@ -111,7 +127,7 @@
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
-
+<script src="{{ asset('/js/bootstrap3-typeahead.min.js') }}"></script>
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
   jQuery(function(){ Codebase.helpers(['maxlength']); });
@@ -136,4 +152,19 @@
 )
 </script>
 @endif
+
+<script>
+  let route = "{{ route('admin.inventory.campus.buscar') }}";
+
+        $('#search').typeahead({
+            source: function (query, process) {
+                return $.get(route, {
+                    query: query
+                }, function (data) {
+                    return process(data);
+                });
+            }
+        });
+</script>
+
 @endpush

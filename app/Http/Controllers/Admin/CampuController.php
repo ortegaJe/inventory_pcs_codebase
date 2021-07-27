@@ -13,13 +13,24 @@ use Carbon\Carbon;
 
 class CampuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $campus = Campu::all();
+        $name = $request->get('search');
 
-        $users = User::get(['id', 'name', 'last_name']);
+        $campus = Campu::orderBy('id', 'desc')
+            ->name($name)
+            ->simplePaginate(8);
 
-        return view('admin.sedes.index', compact('campus', 'users'));
+        return view('admin.sedes.index', compact('campus'));
+    }
+
+    public function autocompleteSearch(Request $request)
+    {
+        $query = $request->get('name');
+
+        $filterResult = Campu::where('name', 'LIKE', '%' . $query . '%')->get();
+
+        return response()->json($filterResult);
     }
 
     public function create()
