@@ -13,13 +13,24 @@ use Carbon\Carbon;
 
 class CampuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $campus = Campu::all();
-        $users = User::get(['id', 'name', 'last_name']);
-        //dd($users);
+        $name = $request->get('search');
 
-        return view('admin.sedes.index', compact('campus', 'users'));
+        $campus = Campu::orderBy('id', 'desc')
+            ->name($name)
+            ->simplePaginate(8);
+
+        return view('admin.sedes.index', compact('campus'));
+    }
+
+    public function autocompleteSearch(Request $request)
+    {
+        $query = $request->get('name');
+
+        $filterResult = Campu::where('name', 'LIKE', '%' . $query . '%')->get();
+
+        return response()->json($filterResult);
     }
 
     public function assingUserCampu(Request $request)
@@ -40,6 +51,21 @@ class CampuController extends Controller
     public function create()
     {
         return view('admin.sedes.create');
+    }
+
+    public function assingUserCampu(Request $request)
+    {
+        $campuUser = new CampuUser();
+
+        $campuUser->user_id = $request->get('val-select2-lista-tecnicos');
+        $campuUser->campu_id = $request->get('campu-id');
+        $campuUser->is_principal = false;
+        //$campuUser->updated_at = now('America/Bogota');
+
+        $campuUser->save();
+
+
+        return back()->with('info', 'actualizado con exito!');
     }
 
     public function store(Request $request)
@@ -88,6 +114,8 @@ class CampuController extends Controller
     public function show($id)
     {
         $campus = Campu::findOrFail($id);
+        $userLists = User::all();
+
         $userLists = User::all();
 
         $typeDevices = DB::table('computers as pc')

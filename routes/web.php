@@ -34,6 +34,8 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
 
+    Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autocompleteSearch')->name('admin.inventory.campus.buscar');
+
     Route::post('asignar-tecnico-sede', 'App\Http\Controllers\Admin\CampuController@assingUserCampu')->name('admin.inventory.assing-user-campu');
 });
 

@@ -28,4 +28,13 @@ class Campu extends Model
         'optional_phone',
         'slug',
     ];
+
+    //Query Scope Sedes
+
+    public function scopeName($query, $name)
+    {
+        if (trim($name) != "") {
+            return $query->where('name', 'LIKE', "%$name%");
+        }
+    }
 }

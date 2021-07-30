@@ -65,6 +65,7 @@
                         <a class="btn btn-rounded btn-alt-primary" data-toggle="modal" data-target="#modal-popout">
                             Asignar
                         </a>
+                        <br>
                     </div>
                     @endforelse
                 </div>

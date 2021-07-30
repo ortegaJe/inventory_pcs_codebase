@@ -88,7 +88,7 @@
                     <div class="font-size-h2 font-w700 mb-0 text-danger">
                         <i class="fa fa-times"></i>
                     </div>
-                    <div class="font-size-sm font-w600 text-uppercase text-muted">Delete User</div>
+                    <div class="font-size-sm font-w600 text-uppercase text-muted">remove user</div>
                 </div>
             </div>
         </a>

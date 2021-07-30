@@ -93,9 +93,10 @@ class UserController extends Controller
             'firstname' => 'required|unique:users,name',
             'lastname' => 'required|unique:users,last_name',
             'nickname' => 'required|unique:users,nick_name',
+            'birthday' => 'nullable|date',
             'val-select2-campu' => 'required|numeric',
             'val-select2-profile' => 'required|numeric',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required'
         ]);
 
@@ -114,14 +115,13 @@ class UserController extends Controller
                 $user->middle_name = e($request->input('middlename')),
                 $user->last_name = e($request->input('lastname')),
                 $user->second_last_name = e($request->input('second-lastname')),
-                $user->nick_name = e($request->input('nick-name')),
+                $user->nick_name = e($request->input('nickname')),
                 $user->birthday = e($request->input('birthday')),
-                $user->sex = e($request->has('sex')),
+                $user->sex = e($request->input('sex')),
                 $user->phone_number = e(trim($request->input('phone'))),
                 $user->avatar = null,
                 $user->email = e($request->input('email')),
                 $user->password = Hash::make($request['password']),
-                //$user->password = e($request->input('tec-password2')),
                 $user->created_at = now('America/Bogota'),
                 $isActive,
                 $profileUser,
@@ -217,7 +217,7 @@ class UserController extends Controller
             ['lastname' => ['required', 'unique:users,last_name,' . $id]],
             ['nickname' => ['required', 'unique:users,nick_name,' . $id]],
             ['email' => ['required', 'unique:users,email,' . $id]],
-            ['password' => ['required,' . $id]],
+            ['password' => ['required,' . $id]]
 
         );
 
