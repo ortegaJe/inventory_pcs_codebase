@@ -26,7 +26,7 @@
         </div>
       </form>
     </div>
-    <button type="button" class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
+    <button type="button" class="btn btn-hero btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
       onclick="Codebase.blocks('#cb-add-server', 'open');">
       <i class="fa fa-building-o mr-1"></i> Agregar sede
     </button>

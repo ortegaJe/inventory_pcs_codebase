@@ -48,7 +48,7 @@
   @endforeach
 </div>
 
-{{--  <div class="col-md-6 col-xl-3">
+{{--<div class="col-md-6 col-xl-3">
   <div class="block text-center">
     <div class="block-content block-content-full block-sticky-options pt-30">
       <div class="block-options">
@@ -59,23 +59,25 @@
           </button>
           <div class="dropdown-menu dropdown-menu-right" style="">
             <a class="dropdown-item" href="javascript:void(0)">
-              <i class="fa fa-fw fa-plus mr-5"></i>Add friend
+              <i class="fa fa-cog mr-5"></i>Configuraciones
             </a>
-            <a class="dropdown-item" href="javascript:void(0)">
+            {{--  <a class="dropdown-item" href="javascript:void(0)">
               <i class="fa fa-fw fa-user mr-5"></i>Check out profile
             </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)">
-              <i class="fa fa-fw fa-envelope-o mr-5"></i>Send a message
+              <i class="fa fa-cog mr-5"></i>Send a message
             </a>
           </div>
         </div>
       </div>
-      <img class="img-avatar" src="assets/media/avatars/avatar11.jpg" alt="">
+      <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
+        <i class="si si-user"></i>
+      </div>
     </div>
     <div class="block-content block-content-full block-content-sm bg-body-light">
       <div class="font-w600 mb-5">Jose Parker</div>
-      <div class="font-size-sm text-muted">Web Developer</div>
+      <div class="font-size-sm text-muted">VIVA 1A IPS SURA SAN JOSE</div>
     </div>
   </div>
 </div>--}}
