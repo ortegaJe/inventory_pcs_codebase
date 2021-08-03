@@ -26,6 +26,8 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('tecnicos', 'App\Http\Controllers\Admin\UserController')->names('admin.inventory.technicians');
 
+    Route::patch('actualizar-contraseña-usuario/{id}', 'App\Http\Controllers\Admin\UserController@updatePassword')->name('admin.inventory.technicians.update-password');
+
     Route::get('asignar-rol/{id}', 'App\Http\Controllers\Admin\UserController@editRol')->name('admin.inventory.assing-role');
 
     Route::patch('rol-asignado/{id}', 'App\Http\Controllers\Admin\UserController@updateRol')->name('admin.inventory.assingned-role');

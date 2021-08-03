@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -257,6 +258,43 @@ class UserController extends Controller
         }
     }
 
+    public function updatePassword(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $rules = [
+            'password' => 'required|confirmed'
+        ];
+
+        $message = [
+            'password.required' => 'Por favor escriba una contraseña.',
+            'password.confirmed' => 'Las contraseñas no coinciden.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $message);
+        if ($validator->fails()) :
+            return back()->withErrors($validator)->with(
+                'message',
+                'Se ha producido un error:'
+            )->with(
+                'typealert',
+                'danger'
+            );
+        else :
+            $pass = $request->get('password');
+            if ($pass != null) {
+                $user->password = Hash::make($request->get('password'));
+            } else {
+                unset($user->password);
+            }
+
+            if ($user->save()) :
+                return back()->withErrors($validator)
+                    ->with('update-message', 'Contraseña actualizada');
+            endif;
+        endif;
+    }
+
     public function editRol($id)
     {
         //$user = User::where('id', $id)->get();
@@ -311,7 +349,7 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'message' => 'Usuario eliminado exitosamente!',
+            'message' => 'Usuario removido exitosamente!',
             'result' => $userTemp[0]
         ]);
     }

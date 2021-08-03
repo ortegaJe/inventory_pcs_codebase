@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Usuario ' .$users->nick_name)
+@section('title', 'Usuario ' .Str::lower($users->nick_name))
 
 @section('content')
 <!-- Hero -->
@@ -75,6 +75,66 @@
         </a>
     </div>
     @endforeach
+</div>
+<!-- END Overview -->
+
+<!-- Settings -->
+<h2 class="h4 font-w300 mt-50">Configuraciones</h2>
+@include('admin.users.partials.modals')
+<div class="row">
+    <div class="col-xl-3">
+        <a class="block p-10 block-rounded block-link-shadow" data-toggle="modal" data-target="#modal-popin">
+            <div class="block-content block-content-full block-sticky-options">
+                <div class="block-options">
+                    <div class="block-options-item">
+                        <i class="si si-user fa-2x text-success-light"></i>
+                    </div>
+                </div>
+                <div class="py-20 text-center">
+                    <div class="font-size-h2 font-w700 mb-0 text-success">
+                        <i class="si si-key"></i>
+                    </div>
+                    <div class="font-size-sm font-w600 text-uppercase text-muted">change password</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xl-3">
+        <a class="block p-10 block-rounded block-link-shadow" data-id="{{ $users->id }}" id="btn-delete"
+            href="javascript:void(0)">
+            <div class="block-content block-content-full block-sticky-options">
+                <div class="block-options">
+                    <div class="block-options-item">
+                        <i class="si si-user fa-2x text-primary-lighter"></i>
+                    </div>
+                </div>
+                <div class="py-20 text-center">
+                    <div class="font-size-h2 font-w700 mb-0 text-primary">
+                        <i class="fa fa-building-o"></i>
+                    </div>
+                    <div class="font-size-sm font-w600 text-uppercase text-muted">change campu</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-xl-3">
+        <a class="block p-10 block-rounded block-link-shadow" data-id="{{ $users->id }}" id="btn-delete"
+            href="javascript:void(0)">
+            <div class="block-content block-content-full block-sticky-options">
+                <div class="block-options">
+                    <div class="block-options-item">
+                        <i class="si si-user fa-2x text-warning-light"></i>
+                    </div>
+                </div>
+                <div class="py-20 text-center">
+                    <div class="font-size-h2 font-w700 mb-0 text-warning">
+                        <i class="si si-briefcase"></i>
+                    </div>
+                    <div class="font-size-sm font-w600 text-uppercase text-muted">change profile</div>
+                </div>
+            </div>
+        </a>
+    </div>
     <div class="col-xl-3">
         <a class="block p-10 block-rounded block-link-shadow" data-id="{{ $users->id }}" id="btn-delete"
             href="javascript:void(0)">
@@ -94,10 +154,6 @@
         </a>
     </div>
 </div>
-<!-- END Overview -->
-
-<!-- Settings -->
-<h2 class="h4 font-w300 mt-50">Configuraciones</h2>
 <div class="block">
     <div class="block-header block-header-default">
         <h3 class="block-title">
@@ -350,6 +406,24 @@
 'Upps! Ha ocurrido un error',
 '{!! Session::get('info_error') !!}',
 'error'
+)
+</script>
+@endif
+
+<script>
+    $(document).ready(function(){
+    @if($message = Session::get('message'))
+    $('#modal-popin').modal('show');
+    @endif
+  })
+</script>
+
+@if(Session::has('update-message'))
+<script>
+    Swal.fire(
+'Actualizado con Exito!',
+'{!! Session::get('update-message') !!}',
+'success'
 )
 </script>
 @endif

@@ -15,33 +15,24 @@
   Usuarios <small class="d-none d-sm-inline">Técnicos</small>
 </div>
 <!-- END Overview -->
-
+{{--{{ Str::title($user->NombreCompletoTecnico) }}
+{{ Str::upper($user->SedeTecnico) }}
+{{ route('admin.inventory.technicians.show', $user->UserID) }}
+{{ route('admin.inventory.assing-role', $user->UserID) }}--}}
 <div class="row">
   @foreach ($users as $user )
   <div class="col-md-6 col-xl-3">
-    <a class="block block-link-shadow" href="#">
-      <div class="block-content block-content-full clearfix">
-        <div class="float-right">
-          <img class="img-avatar" src="{{ asset('/media/avatars/avatar8.jpg') }}" alt="">
+    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.technicians.show', $user->UserID) }}">
+      <div class="block-content text-center">
+        <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
+          <i class="si si-user"></i>
         </div>
-        <div class="float-left mt-10">
-          <div class="font-w600 mb-5">{{ Str::title($user->NombreCompletoTecnico) }}</div>
-          <div class="font-size-xs text-muted"><small>{{ Str::upper($user->SedeTecnico) }}</small></div>
-        </div>
-        <div class="float-left mt-30">
-          <button type="button" class="btn btn-circle btn-alt-primary mt-2" data-toggle="tooltip"
-            onclick="window.location='{{ route('admin.inventory.technicians.show', $user->UserID) }}'"
-            title="Configuraciones">
-            <i class="fa fa-cog"></i>
-          </button>
-          <button type="button" onclick="window.location='{{ route('admin.inventory.assing-role', $user->UserID) }}'"
-            class="btn btn-circle btn-alt-warning mt-2" data-toggle="tooltip" title="Asignar Rol">
-            <i class="si si-badge"></i>
-          </button>
-          {{--  <button type="button" class="btn btn-circle btn-alt-danger mt-2" data-toggle="tooltip" title="Eliminar">
-            <i class="fa fa-times"></i>
-          </button>--}}
-        </div>
+        {{-- <divclass="font-size-smtext-muted">equipos --}}
+      </div>
+      <div class="block-content bg-body-light">
+        <p class="font-w600">
+          {{ Str::title($user->NombreCompletoTecnico) }}
+        </p>
       </div>
     </a>
   </div>
