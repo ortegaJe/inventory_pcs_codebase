@@ -36,7 +36,7 @@ class AllInOneController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'ALL IN ONE')
+                ->where('TipoPc', Computer::EQUIPOS_ALL_IN_ONES)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);

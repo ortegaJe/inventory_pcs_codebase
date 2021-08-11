@@ -36,7 +36,7 @@ class RaspberryController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'RASPBERRY')
+                ->where('TipoPc', Computer::EQUIPOS_RASPBERRY)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);

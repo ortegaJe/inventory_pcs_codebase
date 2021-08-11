@@ -36,7 +36,7 @@ class TurneroController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'TURNERO')
+                ->where('TipoPc', Computer::EQUIPOS_TURNEROS)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);

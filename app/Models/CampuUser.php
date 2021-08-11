@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class CampuUser extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'campu_id',
+        'is_principal',
+    ];
 }

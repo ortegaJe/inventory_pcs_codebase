@@ -36,7 +36,7 @@ class DesktopController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'DE ESCRITORIO')
+                ->where('TipoPc', Computer::EQUIPOS_ESCRITORIOS)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);

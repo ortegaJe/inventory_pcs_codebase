@@ -31,7 +31,7 @@ class AdminDashboardController extends Controller
     $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
 
     if ($request->ajax()) {
-      $pcs = DB::table('view_all_pcs')->get();
+      $pcs = DB::table('view_all_pcs')->orderByDesc('FechaCreacion')->get();
       //dd($pcs);
 
       $datatables = DataTables::of($pcs);
