@@ -2,7 +2,8 @@
 <form action="{{ route('admin.inventory.technicians.update-password', $users->id) }}" method="POST">
 	@csrf
 	@method('PATCH')
-	<div class="modal fade" id="modal-popin" tabindex="-1" role="dialog" aria-labelledby="modal-popin" aria-hidden="true">
+	<div class="modal fade" id="modal-popin-up-password" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
+		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-popin" role="document">
 			<div class="modal-content">
 				<div class="block block-themed block-transparent mb-0">
@@ -34,7 +35,8 @@
 						<div class="form-group row">
 							<div class="col-12 mb-4">
 								<div class="form-material input-group floating">
-									<input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+									<input type="password" class="form-control" id="password_confirmation"
+										name="password_confirmation">
 									<label for="password_confirmation">Confirm Password</label>
 									<div class="input-group-append">
 										<span class="input-group-text">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CampuUser;
 use App\Models\Computer;
 use App\Models\Profile;
 use App\Models\User;
@@ -62,11 +63,6 @@ class UserController extends Controller
         return view('admin.users.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $profiles = DB::table('profiles')->select('id', 'name')->get();
@@ -81,12 +77,6 @@ class UserController extends Controller
         return view('admin.users.create')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -138,15 +128,11 @@ class UserController extends Controller
             ->with('pc_created', 'Nuevo equipo añadido al inventario!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $user
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $profiles = DB::table('profiles')->select('id', 'name')->get();
+
+        $roles = Role::all();
 
         $principalCampuUser = DB::table('campus as c')
             ->join('campu_users as cp', 'cp.campu_id', 'c.id')
@@ -158,12 +144,11 @@ class UserController extends Controller
 
         $campus = DB::table('campus')->select('id', 'name')->get();
 
-
         $dataUsers = DB::table('users as u')
             ->select(
                 'u.id as UserID',
                 'c.id as SedeID',
-                'p.name as CargoUsuario',
+                'p.name as CargoTecnico',
                 'c.name as SedeTecnico',
                 'cp.is_principal as SedePrincipal'
             )
@@ -172,16 +157,14 @@ class UserController extends Controller
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
             ->where('u.id', $id)
-            //->orderBy('u.id', 'asc')
-            //->leftJoin('model_has_roles AS MR', 'MR.model_id', 'U.id')
-            //->leftJoin('roles AS R', 'R.id', 'MR.role_id')
             ->get();
-
+        //return response()->json($dataUsers);
 
         $data = [
             'users' => User::findOrFail($id),
             'dataUsers' => $dataUsers,
             'profiles' => $profiles,
+            'roles' => $roles,
             'campus' => $campus,
             'principalCampuUser' => $principalCampuUser,
         ];
@@ -191,25 +174,9 @@ class UserController extends Controller
         return view('admin.users.show')->with($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
-        $profileUser = e($request->get('val-select2-profile'));
-
-        $campuUser =  e($request->get('val-select2-campu'));
-
-        $request->validate([
-            'val-select2-campu' => 'required|numeric',
-            'val-select2-profile' => 'required|numeric',
-        ]);
 
         $this->validate(
             request(),
@@ -217,43 +184,37 @@ class UserController extends Controller
             ['firstname' => ['required', 'unique:users,name,' . $id]],
             ['lastname' => ['required', 'unique:users,last_name,' . $id]],
             ['nickname' => ['required', 'unique:users,nick_name,' . $id]],
-            ['email' => ['required', 'unique:users,email,' . $id]],
-            ['password' => ['required,' . $id]]
+            ['email' => ['required', 'email', 'unique:users,email,' . $id]]
 
         );
 
         DB::beginTransaction();
 
+        DB::update(
+            "CALL SP_updateUsers (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [
+                //14
+                $user->cc = e($request->get('cc')),
+                $user->name = e($request->get('firstname')),
+                $user->middle_name = e($request->get('middlename')),
+                $user->last_name = e($request->get('lastname')),
+                $user->second_last_name = e($request->get('second-lastname')),
+                $user->nick_name = e($request->get('nickname')),
+                $user->birthday = e($request->get('birthday')),
+                $user->sex = e($request->get('sex')),
+                $user->phone_number = e($request->get('phone')),
+                $user->avatar = null,
+                $user->email = e($request->get('email')),
+                $user->updated_at = now('America/Bogota'),
+                $id,
+            ]
+        );
+        DB::commit();
+        return back()->with('updated-user-success', 'Usuario ' . Str::title($user->name) . " " . Str::title($user->last_name));
         try {
-            DB::insert(
-                "CALL SP_updateUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                [
-                    //14
-                    $user->cc = e($request->get('cc')),
-                    $user->name = e($request->get('firstname')),
-                    $user->middle_name = e($request->get('middlename')),
-                    $user->last_name = e($request->get('lastname')),
-                    $user->second_last_name = e($request->get('second-lastname')),
-                    $user->nick_name = e($request->get('nick-name')),
-                    $user->birthday = e($request->get('birthday')),
-                    $user->sex = e($request->get('sex')),
-                    $user->phone_number = e($request->get('phone')),
-                    $user->avatar = null,
-                    $user->email = e($request->get('email')),
-                    //$user->password = Hash::make($request['password']),
-                    $user->updated_at = now('America/Bogota'),
-                    $profileUser,
-                    $campuUser,
-                    $id,
-                ]
-            );
-
-            DB::commit();
-            return back()->with('info_success', 'Usuario ' . Str::upper($user->name) . " " . Str::upper($user->last_name) .
-                ' actualizado con exito!');
         } catch (\Throwable $e) {
             DB::rollback();
-            //return back()->with('info_error', 'Upss! se ha producido un error');
+            return back()->with('info_error', '');
             throw $e;
         }
     }
@@ -290,49 +251,78 @@ class UserController extends Controller
 
             if ($user->save()) :
                 return back()->withErrors($validator)
-                    ->with('update-message', 'Contraseña actualizada');
+                    ->with('updated-password-success', '');
             endif;
         endif;
     }
 
-    public function editRol($id)
+    public function updateCampu(Request $request, $id)
     {
-        //$user = User::where('id', $id)->get();
-        $user = User::findOrFail($id);
-        //dd($id);
+        User::findOrFail($id);
 
-        $roles = Role::all();
-        //dd($roles);
+        $campuId = $request->get('val-select2-change-campu');
 
-        return view('admin.users.edit', ['user' => $user, 'roles' => $roles]);
+        $update = array('is_principal' => false);
+
+        $foundCampuId = DB::table('campu_users')
+            ->select('campu_id', 'is_principal')
+            ->where('campu_id', '=', $campuId)
+            ->first();
+
+        if ($foundCampuId === null) {
+            CampuUser::where('user_id', $id, 'is_principal' == true)->first();
+            DB::table('campu_users')->where('user_id', $id)->update($update);
+
+            DB::table('campu_users')->insert(
+                ['user_id' => $id, 'campu_id' => $campuId, 'is_principal' => true]
+            );
+        } else {
+            CampuUser::where('user_id', $id, 'is_principal' == true)->first();
+            DB::table('campu_users')->where('user_id', $id)->update($update);
+
+            $updateNewCampu = array('campu_id' => $campuId, 'is_principal' => true);
+            DB::table('campu_users')->where('user_id', $id)->where('campu_id', $campuId)->update($updateNewCampu);
+        }
+
+        return back()->with('updated_campu_success', '');;
+
+        //$campuUsersTemp[] = DB::table('campu_users')->where('user_id', $id)->get();
+
+        //return response()->json($campuUsersTemp);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function updateProfile(Request $request, $id)
+    {
+        User::findOrFail($id);
+
+        $profileId = $request->get('val-select2-change-profile');
+
+        $update = array('profile_id' => $profileId);
+        $updatedProfile = DB::table('user_profiles')->where('user_id', $id)->update($update);
+
+        //$profileUsersTemp[] = DB::table('user_profiles')->where('user_id', $id)->get();
+
+        //return response()->json($profileUsersTemp);
+
+        return back()->with('updated_profile_success', '');
+    }
+
     public function updateRol(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
         $user->roles()->sync($request['rol']);
 
-        return back()->with('info', 'Se asignarón los roles correctamente!');
+        return back()->with('info-rol', 'Se asignarón los roles correctamente!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $users = null;
         $userTemp = [];
         $ts = now('America/Bogota')->toDateTimeString();
+        $rand = Str::random(120);
+        $passwordDisabled = bcrypt($rand);
         //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
         try {
 
@@ -340,7 +330,7 @@ class UserController extends Controller
 
             $userTemp[] = DB::table('users')->where('id', $id)->get();
 
-            $softDeletePc = array('deleted_at' => $ts, 'is_active' => false);
+            $softDeletePc = array('password' => $passwordDisabled, 'deleted_at' => $ts, 'is_active' => false);
             $users = DB::table('users')->where('id', $id)->update($softDeletePc);
 
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($users, true));

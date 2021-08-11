@@ -8,17 +8,14 @@
 <div class="content-heading">
   <div class="dropdown float-right">
     <button type="button" onclick="window.location='{{ route('admin.inventory.technicians.create') }}'"
-      class="btn btn-sm btn-alt-success min-width-125" data-toggle="click-ripple">
+      class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple">
       <i class="si si-user"></i> Nuevo Usuario
     </button>
   </div>
   Usuarios <small class="d-none d-sm-inline">Técnicos</small>
 </div>
 <!-- END Overview -->
-{{--{{ Str::title($user->NombreCompletoTecnico) }}
-{{ Str::upper($user->SedeTecnico) }}
-{{ route('admin.inventory.technicians.show', $user->UserID) }}
-{{ route('admin.inventory.assing-role', $user->UserID) }}--}}
+
 <div class="row">
   @foreach ($users as $user )
   <div class="col-md-6 col-xl-3">

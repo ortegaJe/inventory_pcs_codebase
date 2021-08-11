@@ -10,23 +10,24 @@
 </div>
 @endif
 
+<form action="{{ route('admin.inventory.campus.index') }}" method="GET">
+  <div class="input-group input-group-lg">
+    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar sede..">
+    <div class="input-group-append">
+      <button type="submit" class="btn btn-secondary">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+</form>
+
 <!-- Overview -->
 <div class="content-heading">
   <div class="d-flex justify-content-between align-items-center mt-50 mb-20">
     <h2 class="h4 font-w300 mb-0">Sedes <small class="d-none d-sm-inline">VIVA 1A IPS</small></h2>
     <div class="col-md-10 col-lg-8 col-xl-6">
-      <form action="{{ route('admin.inventory.campus.index') }}" method="GET">
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control" id="search" name="search" placeholder="Buscar sede..">
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-secondary">
-              <i class="fa fa-search"></i>
-            </button>
-          </div>
-        </div>
-      </form>
     </div>
-    <button type="button" class="btn btn-hero btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
+    <button type="button" class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
       onclick="Codebase.blocks('#cb-add-server', 'open');">
       <i class="fa fa-building-o mr-1"></i> Agregar sede
     </button>
@@ -116,7 +117,7 @@
   </div>
   @endforeach
 </div>
-<div class="d-flex justify-content-center float-right">
+<div class="d-flex justify-content-center float-right mb-4">
   {!! $campus->links() !!}
 </div>
 

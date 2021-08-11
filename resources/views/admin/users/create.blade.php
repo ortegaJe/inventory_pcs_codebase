@@ -68,10 +68,10 @@
           <div class="col-6">
             <div class="form-material floating">
               <input type="text" class="form-control" id="nickname" name="nickname">
-              <label for="nick-name">Nombre de usuario</label>
+              <label for="nickname">Nombre de usuario</label>
             </div>
-            @if($errors->has('nick-name'))
-            <small class="text-danger is-invalid">{{ $errors->first('nick-name') }}</small>
+            @if($errors->has('nickname'))
+            <small class="text-danger is-invalid">{{ $errors->first('nickname') }}</small>
             @endif
           </div>
         </div>
