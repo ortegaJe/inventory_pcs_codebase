@@ -109,7 +109,12 @@
             <ul class="list-inline mt-10">
               <li class="list-inline-item">
                 <a class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase"
-                  href="javascript:void(0)">{{ Auth::user()->nick_name }}</a>
+                  href="javascript:void(0)">
+                  @if ((Auth::user())->nick_name ? : 0 )
+                  @else
+                  {{ Auth::user()->nick_name }}
+                  @endif
+                </a>
               </li>
               <li class="list-inline-item">
                 <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
@@ -381,9 +386,9 @@
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
               <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">{{ Auth::user()->name }}
                 {{ Auth::user()->last_name }}
-                <div class="mt-2"><i class="fa fa-building-o"></i>
+                <div class="mt-2">
                   @if (($campusTec) ? $campusTec->SedeTecnico : 0)
-                  {{ $campusTec->SedeTecnico }}
+                  <i class="fa fa-building-o mr-5"></i>{{ $campusTec->SedeTecnico }}
                   @else
                   @endif
                 </div>

@@ -4,6 +4,17 @@
 
 @section('content')
 
+<form action="{{ route('admin.inventory.technicians.index') }}" method="GET">
+  <div class="input-group input-group-lg">
+    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar técnicos..">
+    <div class="input-group-append">
+      <button type="submit" class="btn btn-secondary">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+</form>
+
 <!-- Overview -->
 <div class="content-heading">
   <div class="dropdown float-right">
@@ -19,7 +30,7 @@
 <div class="row">
   @foreach ($users as $user )
   <div class="col-md-6 col-xl-3">
-    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.technicians.show', $user->UserID) }}">
+    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.technicians.show', $user->id) }}">
       <div class="block-content text-center">
         <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
           <i class="si si-user"></i>
@@ -28,12 +39,16 @@
       </div>
       <div class="block-content bg-body-light">
         <p class="font-w600">
-          {{ Str::title($user->NombreCompletoTecnico) }}
+          {{ Str::title($user->name) }}
+          {{ Str::title($user->last_name) }}
         </p>
       </div>
     </a>
   </div>
   @endforeach
+</div>
+<div class="d-flex float-right mb-4">
+  {!! $users->links("pagination::bootstrap-4") !!}
 </div>
 
 {{--<div class="col-md-6 col-xl-3">
@@ -70,3 +85,22 @@
   </div>
 </div>--}}
 @endsection
+
+@push('js')
+<script src="{{ asset('/js/bootstrap3-typeahead.min.js') }}"></script>
+
+{{--  <script>
+  let route = "{{ route('admin.inventory.users.search') }}";
+
+$('#search').typeahead({
+source: function (query, process) {
+return $.get(route, {
+query: query
+}, function (data) {
+return process(data);
+});
+}
+});
+</script>--}}
+
+@endpush

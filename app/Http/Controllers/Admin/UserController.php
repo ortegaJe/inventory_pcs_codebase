@@ -24,43 +24,30 @@ class UserController extends Controller
         //$this->middleware('can:admin.inventory.tecnicos.index')->only('create', 'store');
         $this->middleware('can:admin.inventory.tecnicos.index')->only('edit', 'update');
     }
-    public function index()
+    public function index(Request $request)
     {
-        $countCampus = DB::table('campu_users AS CP')->select('user_id')
-            ->join('users AS U', 'U.id', 'CP.user_id')->count();
+        $data = $request->get('search');
 
-        /*$users = User::all();
-
-        dd($users);*/
-
-        $users = DB::table('users AS U')
-            ->select(
-                'U.id AS UserID',
-                DB::raw("CONCAT(U.name,' ',
-                U.last_name) AS NombreCompletoTecnico"),
-                'U.nick_name AS NombreSesionTecnico',
-                'P.name AS CargoUsuario',
-                'C.name AS SedeTecnico',
-                'U.email AS EmailTecnico',
-                'U.avatar AS ImagenPerfil'
-            )
-            ->join('user_profiles AS UP', 'UP.id', 'U.id')
-            ->join('profiles AS P', 'P.id', 'UP.profile_id')
-            ->join('campu_users AS CP', 'CP.user_id', 'U.id')
-            ->join('campus AS C', 'C.id', 'CP.campu_id')
-            ->where('CP.is_principal', 1)
-            ->where('U.is_active', 1)
-            ->orderBy('U.id', 'ASC')
-            //->leftJoin('model_has_roles AS MR', 'MR.model_id', 'U.id')
-            //->leftJoin('roles AS R', 'R.id', 'MR.role_id')
-            ->get();
+        $users = User::select('users.id', 'users.name', 'users.last_name')
+            ->where('users.is_active', true)
+            ->whereNotIn('users.id', [1])
+            ->searchUser($data)
+            ->userWithCampu();
 
         $data = [
             'users' => $users,
-            'countCampus' => $countCampus,
         ];
 
         return view('admin.users.index')->with($data);
+    }
+
+    public function autoCompleteSearchUser(Request $request)
+    {
+        $queryName = $request->get('search');
+
+        $filterResult = User::where('name', 'LIKE', '%' . $queryName . '%')->get();
+
+        return response()->json($filterResult);
     }
 
     public function create()
@@ -330,7 +317,12 @@ class UserController extends Controller
 
             $userTemp[] = DB::table('users')->where('id', $id)->get();
 
-            $softDeletePc = array('password' => $passwordDisabled, 'deleted_at' => $ts, 'is_active' => false);
+            $softDeletePc = array(
+                'password' => $passwordDisabled,
+                'updated_at' => $ts,
+                'deleted_at' => $ts,
+                'is_active' => false
+            );
             $users = DB::table('users')->where('id', $id)->update($softDeletePc);
 
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($users, true));
