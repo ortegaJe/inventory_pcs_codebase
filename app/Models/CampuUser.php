@@ -14,4 +14,9 @@ class CampuUser extends Model
         'campu_id',
         'is_principal',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -99,7 +99,7 @@
 
 <div class="row">
   @foreach ($campus as $campu )
-  <div class="col-md-6 col-xl-3">
+  <div class="col-md-6 col-xl-4">
     <a class="block block-link-pop text-center"
       href="{{ route('admin.inventory.campus.show', [$campu, '=', trim($campu->slug)]) }}">
       <div class="block-content text-center">
@@ -117,8 +117,8 @@
   </div>
   @endforeach
 </div>
-<div class="d-flex justify-content-center float-right mb-4">
-  {!! $campus->links() !!}
+<div class="d-flex float-right mb-4">
+  {!! $campus->links("pagination::bootstrap-4") !!}
 </div>
 
 @endsection
@@ -155,7 +155,7 @@
 @endif
 
 <script>
-  let route = "{{ route('admin.inventory.campus.buscar') }}";
+  let route = "{{ route('admin.inventory.campus.search') }}";
 
         $('#search').typeahead({
             source: function (query, process) {

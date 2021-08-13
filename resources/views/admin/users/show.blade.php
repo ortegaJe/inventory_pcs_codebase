@@ -40,7 +40,7 @@
 <div class="row">
   @foreach ($dataUsers as $dataUser)
   @if ($dataUser->SedePrincipal == 1)
-  <div class="col-md-6 col-xl-3">
+  <div class="col-md-6 col-xl-4">
     <a class="block block-link-pop text-center" href="{{ route('admin.inventory.campus.show', $dataUser->SedeID) }}">
       <div class="block-content text-center">
         <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
@@ -57,7 +57,7 @@
   </div>
   @continue
   @endif
-  <div class="col-md-6 col-xl-3">
+  <div class="col-md-6 col-xl-4">
     <a class="block block-link-pop text-center" href="{{ route('admin.inventory.campus.show', $dataUser->SedeID) }}">
       <div class="block-content text-center">
         <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
@@ -341,10 +341,10 @@
 <script src="{{ asset('/js/soft.delete.user.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
+
 <script>
-  <script>
+  let root_url_user_index = <?php echo json_encode(route('admin.inventory.technicians.index')) ?>;
   let root_url_user_store = <?php echo json_encode(route('admin.inventory.technicians.store')) ?>;
-let root_url_user_index = <?php echo json_encode(route('admin.inventory.technicians.index')) ?>;
 </script>
 
 <!-- Page JS Helpers (Content Filtering helper) -->
