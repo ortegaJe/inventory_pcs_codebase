@@ -59,19 +59,21 @@ class User extends Authenticatable
     public function scopeSearchUser($query, $data)
     {
         if (trim($data) != "") {
-            return $query->where((DB::raw("CONCAT(name,' ',last_name)")), 'LIKE', "%$data%")
-                ->orWhere('last_name', 'LIKE', "%$data%")
-                ->orWhere('cc', 'LIKE', "%$data%");
+            return $query->where((DB::raw("CONCAT(users.name,' ',users.last_name)")), 'LIKE', "%$data%")
+                ->orWhere((DB::raw("CONCAT(users.name,users.last_name)")), 'LIKE', "%$data%")
+                ->orWhere((DB::raw("CONCAT(users.last_name,' ',users.name)")), 'LIKE', "%$data%")
+                ->orWhere((DB::raw("CONCAT(users.last_name,users.name)")), 'LIKE', "%$data%")
+                ->orWhere('users.last_name', 'LIKE', "%$data%")
+                ->orWhere('users.cc', 'LIKE', "%$data%");
         }
     }
 
-    public function scopeUserWithCampu($query)
+    public function scopeWithPrincipalCampu($query)
     {
         return $query->join('campu_users', 'users.id', '=', 'campu_users.user_id')
             ->join('campus', 'campu_users.campu_id', '=', 'campus.id')
             ->where('campu_users.is_principal', true)
             ->orderBy('users.name', 'asc')
             ->paginate(8);
-        //->get();
     }
 }

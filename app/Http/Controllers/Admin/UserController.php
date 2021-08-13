@@ -32,7 +32,7 @@ class UserController extends Controller
             ->where('users.is_active', true)
             ->whereNotIn('users.id', [1])
             ->searchUser($data)
-            ->userWithCampu();
+            ->withPrincipalCampu();
 
         $data = [
             'users' => $users,
