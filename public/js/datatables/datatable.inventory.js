@@ -132,7 +132,7 @@ $(document).ready(function() {
                 },
                 {
                     data: "FechaCreacion",
-                    orderable: true,
+                    orderable: false,
                     searchable: true
                 },
                 {
