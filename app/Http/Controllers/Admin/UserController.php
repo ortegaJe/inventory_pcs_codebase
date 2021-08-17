@@ -161,6 +161,52 @@ class UserController extends Controller
         return view('admin.users.show')->with($data);
     }
 
+    public function showProfileUser($id)
+    {
+        $profiles = DB::table('profiles')->select('id', 'name')->get();
+
+        $roles = Role::all();
+
+        $principalCampuUser = DB::table('campus as c')
+            ->join('campu_users as cp', 'cp.campu_id', 'c.id')
+            ->join('users as u', 'u.id', 'cp.user_id')
+            ->where('cp.is_principal', 1)
+            ->where('u.id', $id)
+            ->select('c.id as SedeID')
+            ->first();
+
+        $campus = DB::table('campus')->select('id', 'name')->get();
+
+        $dataUsers = DB::table('users as u')
+            ->select(
+                'u.id as UserID',
+                'c.id as SedeID',
+                'p.name as CargoTecnico',
+                'c.name as SedeTecnico',
+                'cp.is_principal as SedePrincipal'
+            )
+            ->join('user_profiles as up', 'up.id', 'u.id')
+            ->join('profiles as p', 'p.id', 'up.profile_id')
+            ->join('campu_users as cp', 'cp.user_id', 'u.id')
+            ->join('campus as c', 'c.id', 'cp.campu_id')
+            ->where('u.id', $id)
+            ->get();
+        //return response()->json($dataUsers);
+
+        $data = [
+            'users' => User::findOrFail($id),
+            'dataUsers' => $dataUsers,
+            'profiles' => $profiles,
+            'roles' => $roles,
+            'campus' => $campus,
+            'principalCampuUser' => $principalCampuUser,
+        ];
+
+        //dd($data);
+
+        return view('user.profiles.show')->with($data);
+    }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);

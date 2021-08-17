@@ -393,7 +393,7 @@
                   @endif
                 </div>
               </h5>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="{{ route('admin.inventory.technicians.profiles', Auth::id()) }}">
                 <i class="si si-user mr-5"></i> Perfil
               </a>
               <!--<div class="dropdown-divider"></div>
