@@ -6,7 +6,7 @@
 
 <form action="{{ route('admin.inventory.technicians.index') }}" method="GET">
   <div class="input-group input-group-lg">
-    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar técnicos..">
+    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar (Cedula, Nombre, Apellido)">
     <div class="input-group-append">
       <button type="submit" class="btn btn-secondary">
         <i class="fa fa-search"></i>
@@ -28,24 +28,39 @@
 <!-- END Overview -->
 
 <div class="row">
-  @foreach ($users as $user )
-  <div class="col-md-6 col-xl-3">
-    <a class="block block-link-pop text-center" href="{{ route('admin.inventory.technicians.show', $user->id) }}">
-      <div class="block-content text-center">
-        <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
-          <i class="si si-user"></i>
+  @if(count($users) <= 0) <!-- Animation Classes -->
+    <div class="col-sm-4 mx-auto">
+      <div class="block block-bordered block-rounded invisible" data-toggle="appear" data-class="animated bounceIn">
+        <div class="block-content block-content-full">
+          <div class="py-30 text-center">
+            <div class="item item-2x item-circle bg-gray text-white mx-auto">
+              <i class="si si-user"></i>
+            </div>
+            <div class="h4 pt-20 mb-0">Usuario No Encontrado</div>
+          </div>
         </div>
-        {{-- <divclass="font-size-smtext-muted">equipos --}}
       </div>
-      <div class="block-content bg-body-light">
-        <p class="font-w600">
-          {{ Str::title($user->name) }}
-          {{ Str::title($user->last_name) }}
-        </p>
-      </div>
-    </a>
-  </div>
-  @endforeach
+    </div>
+    <!-- END Animation Classes -->
+    @else
+    @foreach ($users as $user ) <div class="col-md-6 col-xl-3">
+      <a class="block block-link-pop text-center" href="{{ route('admin.inventory.technicians.show', $user->id) }}">
+        <div class="block-content text-center">
+          <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
+            <i class="si si-user"></i>
+          </div>
+          {{-- <divclass="font-size-smtext-muted">equipos --}}
+        </div>
+        <div class="block-content bg-body-light">
+          <p class="font-w600">
+            {{ Str::title($user->name) }}
+            {{ Str::title($user->last_name) }}
+          </p>
+        </div>
+      </a>
+    </div>
+    @endforeach
+    @endif
 </div>
 <div class="d-flex float-right mb-4">
   {!! $users->links("pagination::bootstrap-4") !!}
@@ -88,6 +103,16 @@
 
 @push('js')
 <script src="{{ asset('/js/bootstrap3-typeahead.min.js') }}"></script>
+
+@if(Session::has('not_found_user'))
+<script>
+  Swal.fire(
+'Upps! Ha ocurrido un error',
+'{!! Session::get('not_found_user') !!}',
+'error'
+)
+</script>
+@endif
 
 {{--  <script>
   let route = "{{ route('admin.inventory.users.search') }}";

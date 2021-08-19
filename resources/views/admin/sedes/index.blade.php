@@ -98,24 +98,40 @@
 <!-- END Overview -->
 
 <div class="row">
-  @foreach ($campus as $campu )
-  <div class="col-md-6 col-xl-4">
-    <a class="block block-link-pop text-center"
-      href="{{ route('admin.inventory.campus.show', [$campu, '=', trim($campu->slug)]) }}">
-      <div class="block-content text-center">
-        <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
-          <i class="fa fa-building-o"></i>
+  @if(count($campus) <= 0) <!-- Animation Classes -->
+    <div class="col-sm-4 mx-auto">
+      <div class="block block-bordered block-rounded invisible" data-toggle="appear" data-class="animated bounceIn">
+        <div class="block-content block-content-full">
+          <div class="py-30 text-center">
+            <div class="item item-2x item-circle bg-gray text-white mx-auto">
+              <i class="si si-user"></i>
+            </div>
+            <div class="h4 pt-20 mb-0">Sede No Encontrada</div>
+          </div>
         </div>
-        {{-- <divclass="font-size-smtext-muted">equipos --}}
       </div>
-      <div class="block-content bg-body-light">
-        <p class="font-w600">
-          {{ Str::upper($campu->name) }}
-        </p>
-      </div>
-    </a>
-  </div>
-  @endforeach
+    </div>
+    <!-- END Animation Classes -->
+    @else
+    @foreach ($campus as $campu )
+    <div class="col-md-6 col-xl-4">
+      <a class="block block-link-pop text-center"
+        href="{{ route('admin.inventory.campus.show', [$campu, '=', trim($campu->slug)]) }}">
+        <div class="block-content text-center">
+          <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
+            <i class="fa fa-building-o"></i>
+          </div>
+          {{-- <divclass="font-size-smtext-muted">equipos --}}
+        </div>
+        <div class="block-content bg-body-light">
+          <p class="font-w600">
+            {{ Str::upper($campu->name) }}
+          </p>
+        </div>
+      </a>
+    </div>
+    @endforeach
+    @endif
 </div>
 <div class="d-flex float-right mb-4">
   {!! $campus->links("pagination::bootstrap-4") !!}

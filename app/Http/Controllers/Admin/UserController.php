@@ -26,17 +26,16 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-        $data = $request->get('search');
+        $searchUsers = $request->get('search');
 
         $users = User::select('users.id', 'users.name', 'users.last_name')
             ->where('users.is_active', true)
             ->whereNotIn('users.id', [1])
-            ->searchUser($data)
+            ->searchUser($searchUsers)
             ->withPrincipalCampu();
 
-        $data = [
-            'users' => $users,
-        ];
+        $data = ['users' => $users,];
+
 
         return view('admin.users.index')->with($data);
     }
