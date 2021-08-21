@@ -23,6 +23,7 @@ class DesktopController extends Controller
     public function __construct()
     {
         $this->generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
+        $this->pc = new Computer();
     }
 
     public function index(Request $request)
@@ -36,14 +37,14 @@ class DesktopController extends Controller
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', 'DE ESCRITORIO')
+                ->where('TipoPc', Computer::EQUIPOS_ESCRITORIOS)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);
             $datatables = DataTables::of($pcs);
             $datatables->editColumn('FechaCreacion', function ($pcs) {
                 return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
-                    ->format('d/m/Y h:i A')    : '';
+                    ->format('d/m/Y') : '';
             });
             $datatables->addColumn('EstadoPC', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
@@ -155,7 +156,7 @@ class DesktopController extends Controller
 
     public function store(Request $request)
     {
-        $pc = new Computer();
+        //$pc = new Computer();
         $statusId = e($request->input('val-select2-status'));
         $isActive = true;
         $userId = Auth::id();
@@ -207,14 +208,15 @@ class DesktopController extends Controller
             ],
             'ip' => 'required|ipv4|unique:computers,ip',
             'mac' => 'required|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
-            'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
+            'pc-domain-name' => 'required',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:computers,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             'pc-name' => 'required|unique:computers,pc_name|max:20|regex:/^[0-9a-zA-Z-]+$/i',
-
-            'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
+            'val-select2-campus' => 'required|numeric',
+            'location' => 'required|nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
+            'val-select2-status-assignment' => 'required_with:custodian-name,filled|numeric',
             'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i',
         ];
 
@@ -243,15 +245,15 @@ class DesktopController extends Controller
             'val-select2-cpu.in' => 'Seleccione un procesador válido en la lista',
             'val-select2-status.required' => 'Seleccione un estado del equipo',
             'val-select2-status.in' => 'Seleccione un estado válido en la lista',
+            'ip.required' => 'Es requirida un dirección IP del equipo',
             'ip.ipv4' => 'Direccion IP no valida',
             'ip.max' => 'Direccion IP no valida',
             'ip.unique' => 'Ya existe un equipo con esta IP registrado',
+            'mac.required' => 'Es requirida un dirección MAC del equipo',
             'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
             'mac.max' => 'Direccion MAC no valida',
             'mac.unique' => 'Ya existe un equipo con esta MAC registrado',
-            'pc-domain-name.required' => 'Un nombre de dominio es requerido',
-            'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
-            'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
+            'pc-domain-name.required' => 'Seleccionar dominio del equipo',
             'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
             'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
             'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
@@ -259,12 +261,15 @@ class DesktopController extends Controller
             'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
             'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
             'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
+            'val-select2-campus.required' => 'Seleccione la sede del equipo',
             'custodian-assignment-date.required_with' => 'El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
             'custodian-assignment-date.date' => 'Este no es un formato de fecha permitido',
             'custodian-assignment-date.max' => 'Solo esta permitido 10 caracteres para la fecha',
             'custodian-name.required_with'  => 'El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
             'custodian-name.max' => 'Solo esta permitido 56 caracteres para la el nombre del custodio',
             'custodian-name.regex' => 'Símbolo(s) no permitido en el campo nombre del custodio',
+            'val-select2-status-assignment' => 'El campo concepto es obligatorio cuando el nombre del custodio está presente o llenado',
+            'location.required' => 'Es requirida la ubicación del equipo',
             'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
             'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
@@ -283,47 +288,56 @@ class DesktopController extends Controller
                     'danger'
                 );
         else :
+            DB::beginTransaction();
+
             DB::insert(
-                "CALL SP_insertPc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //27
+                "CALL SP_insertPc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //31
                 [
-                    $pc->inventory_code_number = $this->generatorID, //27
-                    $pc->inventory_active_code = e($request->input('activo-fijo-pc')),
-                    $pc->brand_id = e($request->input('marca-pc-select2')),
-                    $pc->model = e($request->input('modelo-pc')),
-                    $pc->serial_number = e($request->input('serial-pc')),
-                    $pc->monitor_serial_number = e($request->input('serial-monitor-pc')),
-                    $pc->type_device_id = Computer::DESKTOP_PC_ID, //ID equipo de escritorio
-                    $pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
-                    $pc->slot_two_ram_id = e($request->input('val-select2-ram1')),
-                    $pc->first_storage_id = e($request->input('val-select2-first-storage')),
-                    $pc->second_storage_id = e($request->input('val-select2-second-storage')),
-                    $pc->processor_id = e($request->input('val-select2-cpu')),
-                    $pc->ip = e($request->input('ip')),
-                    $pc->mac = e($request->input('mac')),
-                    $pc->nat = null,
-                    $pc->pc_name = e($request->input('pc-name')),
-                    $pc->anydesk = e($request->input('anydesk')),
-                    $pc->pc_image = null,
-                    $pc->campu_id = e($request->input('val-select2-campus')),
-                    $pc->location = e($request->input('location')),
-                    $pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
-                    $pc->custodian_name = e($request->input('custodian-name')),
-                    $pc->assignment_statu_id = e($request->input('val-select2-status-assignment')),
-                    $pc->observation = e($request->input('observation')),
-                    $pc->rowguid = Uuid::uuid(),
-                    $pc->pc_name_domain = e($request->input('pc-domain-name')),
-                    $pc->created_at = now('America/Bogota')->toDateTimeString(),
-                    $pc->os_id = e($request->input('os-pc-select2')),
+                    $this->pc->inventory_code_number = $this->generatorID, //31
+                    $this->pc->inventory_active_code = e($request->input('activo-fijo-pc')),
+                    $this->pc->brand_id = e($request->input('marca-pc-select2')),
+                    $this->pc->model = e($request->input('modelo-pc')),
+                    $this->pc->serial_number = e($request->input('serial-pc')),
+                    $this->pc->monitor_serial_number = e($request->input('serial-monitor-pc')),
+                    $this->pc->type_device_id = Computer::DESKTOP_PC_ID, //ID equipo de escritorio
+                    $this->pc->slot_one_ram_id = e($request->input('val-select2-ram0')),
+                    $this->pc->slot_two_ram_id = e($request->input('val-select2-ram1')),
+                    $this->pc->first_storage_id = e($request->input('val-select2-first-storage')),
+                    $this->pc->second_storage_id = e($request->input('val-select2-second-storage')),
+                    $this->pc->processor_id = e($request->input('val-select2-cpu')),
+                    $this->pc->ip = e($request->input('ip')),
+                    $this->pc->mac = e($request->input('mac')),
+                    $this->pc->nat = null,
+                    $this->pc->pc_name = e($request->input('pc-name')),
+                    $this->pc->anydesk = e($request->input('anydesk')),
+                    $this->pc->pc_image = null,
+                    $this->pc->campu_id = e($request->input('val-select2-campus')),
+                    $this->pc->location = e($request->input('location')),
+                    $this->pc->custodian_assignment_date = e($request->input('custodian-assignment-date')),
+                    $this->pc->custodian_name = e($request->input('custodian-name')),
+                    $this->pc->assignment_statu_id = e($request->input('val-select2-status-assignment')),
+                    $this->pc->observation = e($request->input('observation')),
+                    $this->pc->rowguid = Uuid::uuid(),
+                    $this->pc->pc_name_domain = e($request->input('pc-domain-name')),
+                    $this->pc->created_at = now('America/Bogota')->toDateTimeString(),
+                    $this->pc->os_id = e($request->input('os-pc-select2')),
 
                     $statusId,
                     $isActive,
                     $userId,
                 ]
             );
+            DB::commit();
             return redirect()->route('user.inventory.desktop.index')
                 ->withErrors($validator)
-                ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $pc->inventory_code_number . '');
+                ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $this->pc->inventory_code_number . '');
         endif;
+        try {
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return back()->with('info_error', '');
+            throw $e;
+        }
     }
 
     public function edit($id)

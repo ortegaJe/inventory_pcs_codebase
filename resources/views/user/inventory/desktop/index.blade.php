@@ -212,6 +212,16 @@
 </script>
 @endif
 
+@if(Session::has('info_error'))
+<script>
+  Swal.fire(
+'Ha Ocurrido Un Error Al Crear El Equipo!',
+'{!! Session::get('info_error') !!}',
+'warning'
+)
+</script>
+@endif
+
 @if(Session::has('pc_updated'))
 <script>
   Swal.fire(

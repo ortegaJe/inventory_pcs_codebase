@@ -26,7 +26,13 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('tecnicos', 'App\Http\Controllers\Admin\UserController')->names('admin.inventory.technicians');
 
-    Route::get('asignar-rol/{id}', 'App\Http\Controllers\Admin\UserController@editRol')->name('admin.inventory.assing-role');
+    Route::get('perfil/{id?}', 'App\Http\Controllers\Admin\UserController@showProfileUser')->name('admin.inventory.technicians.profiles');
+
+    Route::patch('actualizar-contrasenia-usuario/{id}', 'App\Http\Controllers\Admin\UserController@updatePassword')->name('admin.inventory.technicians.update-password');
+
+    Route::patch('actualizar-sede-principal/{id}', 'App\Http\Controllers\Admin\UserController@updateCampu')->name('admin.inventory.technicians.update-campu');
+
+    Route::patch('actualizar-cargo/{id}', 'App\Http\Controllers\Admin\UserController@updateProfile')->name('admin.inventory.technicians.update-profile');
 
     Route::patch('rol-asignado/{id}', 'App\Http\Controllers\Admin\UserController@updateRol')->name('admin.inventory.assingned-role');
 
@@ -34,7 +40,9 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
 
-    Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autocompleteSearch')->name('admin.inventory.campus.buscar');
+    Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autoCompleteSearch')->name('admin.inventory.campus.search');
+
+    Route::get('usuarios-buscar', 'App\Http\Controllers\Admin\UserController@autoCompleteSearchUser')->name('admin.inventory.users.search');
 
     Route::post('asignar-tecnico-sede', 'App\Http\Controllers\Admin\CampuController@assingUserCampu')->name('admin.inventory.assing-user-campu');
 });
@@ -45,7 +53,7 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
     Route::resource('portatiles', 'App\Http\Controllers\User\Inventario\LaptopController')->names('user.inventory.laptop');
 
-    Route::resource('all-in-one', 'App\Http\Controllers\User\Inventario\AllinOneController')->names('user.inventory.allinone');
+    Route::resource('all-in-one', 'App\Http\Controllers\User\Inventario\AllInOneController')->names('user.inventory.allinone');
 
     Route::resource('turneros', 'App\Http\Controllers\User\Inventario\TurneroController')->names('user.inventory.turnero');
 

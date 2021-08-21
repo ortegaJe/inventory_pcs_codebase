@@ -19,14 +19,14 @@ class CampuController extends Controller
 
         $campus = Campu::orderBy('id', 'desc')
             ->name($name)
-            ->simplePaginate(8);
+            ->paginate(6);
 
         return view('admin.sedes.index', compact('campus'));
     }
 
-    public function autocompleteSearch(Request $request)
+    public function autoCompleteSearch(Request $request)
     {
-        $query = $request->get('name');
+        $query = $request->get('search');
 
         $filterResult = Campu::where('name', 'LIKE', '%' . $query . '%')->get();
 
@@ -75,7 +75,6 @@ class CampuController extends Controller
         $request->validate([
             'abreviature' => 'required|unique:campus,abreviature',
             'name' => 'required|unique:campus,name',
-            //'tecnicos' => 'required',
         ]);
 
         $campu->abreviature = e($request->input('abreviature'));
@@ -89,26 +88,6 @@ class CampuController extends Controller
 
         return redirect()->route('admin.inventory.campus.index', $campu)
             ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
-
-        /*DB::beginTransaction();
-
-        try {
-            DB::insert(
-                "CALL SP_createCampuWithUser (?,?,?,?,?,?,?)",
-                [
-
-                    //$campu->user_id = e($request->input('tecnicos')),
-                    now('America/Bogota'),
-                ]
-            );
-            DB::commit();
-            return redirect()->route('admin.inventory.campus.index', $campu)
-                ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
-        } catch (\Throwable $e) {
-            DB::rollback();
-            return back()->with('info_error', 'Upss! se ha producido un error');
-            throw $e;
-        }*/
     }
 
     public function show($id)

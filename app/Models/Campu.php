@@ -30,11 +30,16 @@ class Campu extends Model
     ];
 
     //Query Scope Sedes
-
     public function scopeName($query, $name)
     {
         if (trim($name) != "") {
             return $query->where('name', 'LIKE', "%$name%");
         }
+    }
+
+    //Relacion uno a muchos
+    public function campuUsers()
+    {
+        return $this->hasMany(Profile::class);
     }
 }
