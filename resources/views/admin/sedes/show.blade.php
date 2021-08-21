@@ -14,7 +14,8 @@
                     {{ Str::upper($campus->name) }}
                 </h1>
                 <h2 class="h5 text-black-op">
-                    Inventario de <a class="text-primary-light link-effect" href="javascript:void(0)">
+                    Inventario de <a class="text-primary-light link-effect"
+                        href="{{ route('admin.inventory.coming-soon', $campus) }}">
                         {{ $campusCount ?? '0' }} Equipos
                 </h2>
             </div>
