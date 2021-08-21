@@ -45,6 +45,12 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::get('usuarios-buscar', 'App\Http\Controllers\Admin\UserController@autoCompleteSearchUser')->name('admin.inventory.users.search');
 
     Route::post('asignar-tecnico-sede', 'App\Http\Controllers\Admin\CampuController@assingUserCampu')->name('admin.inventory.assing-user-campu');
+
+    Route::get('maintenance/sede={id?}', 'App\Http\Controllers\Admin\AdminDashboardController@maintenanceView')->name('admin.inventory.maintenance');
+
+    Route::get('coming-soon/{id}', 'App\Http\Controllers\Admin\AdminDashboardController@comingSoonView')->name('admin.inventory.coming-soon');
+
+    Route::get('exports', 'App\Http\Controllers\Admin\AdminDashboardController@exportComputers')->name('admin.inventory.export-computers');
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {
