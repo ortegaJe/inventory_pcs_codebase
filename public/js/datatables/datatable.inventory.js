@@ -52,9 +52,9 @@ $(document).ready(function() {
             "<td>Ubicación: " +
             d.Ubicacion +
             "</td>" +
-            "<td>Número de serial: " +
-            d.Serial +
-            "</td>" +
+            //"<td>Número de serial: " +
+            //d.Serial +
+            //"</td>" +
             "<td></td>" +
             "<td></td>" +
             "</tr>" +
@@ -132,23 +132,19 @@ $(document).ready(function() {
                 },
                 {
                     data: "FechaCreacion",
+                    visible: false,
                     orderable: false,
-                    searchable: true
-                },
-                {
-                    data: "TipoPc",
-                    visible: false,
-                    searcheable: true
-                },
-                {
-                    data: "Marca",
-                    visible: false,
-                    searcheable: true
+                    searchable: false
                 },
                 {
                     data: "Serial",
-                    visible: false,
+                    visible: true,
                     searcheable: true
+                },
+                {
+                    data: "ActivoFijo",
+                    visible: false,
+                    searcheable: false
                 },
                 {
                     data: "Ip",
@@ -170,7 +166,7 @@ $(document).ready(function() {
                 {
                     data: "EstadoPC",
                     searcheable: true
-                },
+                }
             ],
             order: [[1, "desc"]]
         });

@@ -41,10 +41,10 @@ class LaptopController extends Controller
                 ->get();
             //dd($pcs);
             $datatables = DataTables::of($pcs);
-            $datatables->editColumn('FechaCreacion', function ($pcs) {
+            /*$datatables->editColumn('FechaCreacion', function ($pcs) {
                 return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
                     ->format('d/m/Y h:i A')    : '';
-            });
+            });*/
             $datatables->addColumn('EstadoPC', function ($pcs) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs->EstadoPC, true));
 

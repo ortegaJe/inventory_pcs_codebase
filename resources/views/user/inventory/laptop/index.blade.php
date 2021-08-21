@@ -109,7 +109,7 @@
 
 <!-- Add Product -->
 <div class="col-md-6 col-xl-2">
-  <a class="block block-rounded block-link-shadow" data-toggle="modal" data-target="#modal-popout">
+  <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.laptop.create') }}">
     <div class="block-content block-content-full block-sticky-options">
       <div class="block-options">
         <div class="block-options-item">
@@ -153,8 +153,7 @@
               <th></th>
               <th>fecha de creación</th>
               <th>serial</th>
-              <th>marca</th>
-              <th>tipo</th>
+              <th>activo fijo</th>
               <th>ip</th>
               <th>mac</th>
               <th>
@@ -171,8 +170,7 @@
               <th></th>
               <th>FECHA DE CREACIÓN</th>
               <th>SERIAL</th>
-              <th>MARCA</th>
-              <th>TIPO</th>
+              <th>ACTIVO FIJO</th>
               <th>IP</th>
               <th>MAC</th>
               <th>

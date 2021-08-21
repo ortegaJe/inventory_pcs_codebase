@@ -132,8 +132,7 @@
                 <th></th>
                 <th>fecha de creación</th>
                 <th>serial</th>
-                <th>marca</th>
-                <th>tipo</th>
+                <th>activo fijo</th>
                 <th>ip</th>
                 <th>mac</th>
                 <th>
@@ -149,8 +148,7 @@
                 <th></th>
                 <th>FECHA DE CREACIÓN</th>
                 <th>SERIAL</th>
-                <th>MARCA</th>
-                <th>TIPO</th>
+                <th>ACTIVO FIJO</th>
                 <th>IP</th>
                 <th>MAC</th>
                 <th>

@@ -35,10 +35,10 @@ class AdminDashboardController extends Controller
       //dd($pcs);
 
       $datatables = DataTables::of($pcs);
-      $datatables->editColumn('FechaCreacion', function ($pcs) {
+      /*$datatables->editColumn('FechaCreacion', function ($pcs) {
         return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
           ->format('d/m/Y h:i A')    : '';
-      });
+      });*/
 
       $datatables->addColumn('EstadoPC', function ($pcs) {
         return $pcs->EstadoPc;

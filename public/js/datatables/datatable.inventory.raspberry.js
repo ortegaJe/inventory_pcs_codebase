@@ -26,9 +26,9 @@ $(document).ready(function() {
             d.PrimerUnidadAlmacenamiento +
             '<i class="fa fa-hdd-o fa-1x"></i>' +
             "</td>" +
-            "<td>Número de serial: " +
-            d.Serial +
-            "</td>" +
+            //"<td>Número de serial: " +
+            //d.Serial +
+            //"</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Modelo: " +
@@ -129,23 +129,19 @@ $(document).ready(function() {
                 },
                 {
                     data: "FechaCreacion",
+                    visible: false,
                     orderable: false,
-                    searchable: true
-                },
-                {
-                    data: "TipoPc",
-                    visible: false,
-                    searcheable: true
-                },
-                {
-                    data: "Marca",
-                    visible: false,
-                    searcheable: true
+                    searchable: false
                 },
                 {
                     data: "Serial",
-                    visible: false,
+                    visible: true,
                     searcheable: true
+                },
+                {
+                    data: "ActivoFijo",
+                    visible: false,
+                    searcheable: false
                 },
                 {
                     data: "Ip",
