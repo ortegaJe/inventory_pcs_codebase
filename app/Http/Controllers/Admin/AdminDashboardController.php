@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ComputersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Computer;
 use Illuminate\Http\Request;
@@ -9,11 +10,13 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\Campu;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Excel;
 
 class AdminDashboardController extends Controller
 {
@@ -22,6 +25,14 @@ class AdminDashboardController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
+
+  private $excel;
+
+  public function __construct(Excel $excel)
+  {
+    $this->excel = $excel;
+  }
+
   public function index(Request $request)
   {
     $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
@@ -64,6 +75,25 @@ class AdminDashboardController extends Controller
       ];
 
     return view('admin.index')->with($data);
+  }
+
+  public function exportComputers()
+  {
+    return $this->excel->download(new ComputersExport, "computers.xlsx");
+  }
+
+  public function maintenanceView($id)
+  {
+    $campus = Campu::findOrFail($id);
+
+    return view('admin.op_maintenance', compact('campus'));
+  }
+
+  public function comingSoonView($id)
+  {
+    $campus = Campu::findOrFail($id);
+
+    return view('admin.op_coming_soon', compact('campus'));
   }
 
   /**
