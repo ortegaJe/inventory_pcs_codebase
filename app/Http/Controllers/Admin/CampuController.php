@@ -53,20 +53,6 @@ class CampuController extends Controller
         return view('admin.sedes.create');
     }
 
-    public function assingUserCampu(Request $request)
-    {
-        $campuUser = new CampuUser();
-
-        $campuUser->user_id = $request->get('val-select2-lista-tecnicos');
-        $campuUser->campu_id = $request->get('campu-id');
-        $campuUser->is_principal = false;
-        //$campuUser->updated_at = now('America/Bogota');
-
-        $campuUser->save();
-
-
-        return back()->with('info', 'actualizado con exito!');
-    }
 
     public function store(Request $request)
     {
