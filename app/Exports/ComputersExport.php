@@ -19,7 +19,7 @@ class ComputersExport implements FromCollection, ShouldAutoSize
 
     public function collection()
     {
-        $pcs = DB::table('view_all_pcs')->orderByDesc('FechaCreacion')->get();
+        $pcs = DB::table('view_exports_all_pcs')->orderByDesc('FechaCreacion')->get();
 
         return $pcs;
     }

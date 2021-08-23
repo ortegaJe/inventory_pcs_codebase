@@ -50,7 +50,7 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::get('coming-soon/{id}', 'App\Http\Controllers\Admin\AdminDashboardController@comingSoonView')->name('admin.inventory.coming-soon');
 
-    Route::get('exports', 'App\Http\Controllers\Admin\AdminDashboardController@exportComputers')->name('admin.inventory.export-computers');
+    Route::get('exports-all-inventory-computers', 'App\Http\Controllers\Admin\AdminDashboardController@exportComputers')->name('admin.inventory.export-all-computers');
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {

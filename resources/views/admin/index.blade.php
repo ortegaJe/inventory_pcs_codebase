@@ -115,12 +115,13 @@
           Lista<small> | Equipos informaticos</small>
         </h3>
         <div class="block-options">
+          <button type="button" class="btn btn-alt-success" data-toggle="tooltip" data-placement="left"
+            title="Descargar Inventario">
+            <i class="fa fa-file-excel-o"></i>
+          </button>
           <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
             data-action-mode="demo">
             <i class="si si-refresh"></i>
-          </button>
-          <button type="button" class="btn-block-option">
-            <i class="si si-wrench"></i>
           </button>
         </div>
       </div>
