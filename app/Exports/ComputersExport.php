@@ -107,6 +107,7 @@ class ComputersExport implements
                 $event->sheet->getStyle('B2:AA2')
                     ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
                 $event->sheet->getCell('B2')->setValue("INVENTARIO DE EQUIPOS REGISTRADOS VIVA 1A IPS");
+                $event->sheet->getColumnDimension('AB')->setVisible(false);
                 $event->sheet->getStyle('B2:AA2')->applyFromArray([
                     'font' => [
                         'bold' => true,

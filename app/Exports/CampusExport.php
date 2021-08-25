@@ -114,11 +114,11 @@ class CampusExport implements
                 $event->sheet->getStyle('B2:AA2')
                     ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
                 $event->sheet->getCell('B2')->setValue("INVENTARIO DE EQUIPOS REGISTRADOS VIVA 1A IPS");
-                for ($cells = 4; $cells <= 500; $cells++) {
+                /*for ($cells = 4; $cells <= 500; $cells++) {
                     $hashColumn = Hash::make('');
 
                     $event->sheet->getCell('AB' . $cells . '')->setValue($hashColumn);
-                }
+                }*/
                 $event->sheet->getColumnDimension('AB')->setVisible(false);
                 $event->sheet->getStyle('B2:AA2')->applyFromArray([
                     'font' => [
