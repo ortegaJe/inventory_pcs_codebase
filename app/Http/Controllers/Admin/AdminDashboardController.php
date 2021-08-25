@@ -79,7 +79,9 @@ class AdminDashboardController extends Controller
 
   public function exportComputers()
   {
-    return $this->excel->download(new ComputersExport, "computers.xlsx");
+    $rand = Str::upper(Str::random(12));
+
+    return $this->excel->download(new ComputersExport, "export_inventory_computers_" . $rand . ".xlsx");
   }
 
   public function maintenanceView($id)

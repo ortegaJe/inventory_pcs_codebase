@@ -116,7 +116,8 @@
         </h3>
         <div class="block-options">
           <button type="button" class="btn btn-alt-success" data-toggle="tooltip" data-placement="left"
-            title="Descargar Inventario">
+            title="Descargar Inventario"
+            onclick="window.location='{{ route('admin.inventory.export-all-computers') }}'">
             <i class="fa fa-file-excel-o"></i>
           </button>
           <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
