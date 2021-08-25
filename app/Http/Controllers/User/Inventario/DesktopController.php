@@ -309,7 +309,7 @@ class DesktopController extends Controller
                     $this->pc->mac = e($request->input('mac')),
                     $this->pc->nat = null,
                     $this->pc->pc_name = e($request->input('pc-name')),
-                    $this->pc->anydesk = e($request->input('anydesk')),
+                    $this->pc->anydesk = trim(e($request->input('anydesk'))),
                     $this->pc->pc_image = null,
                     $this->pc->campu_id = e($request->input('val-select2-campus')),
                     $this->pc->location = e($request->input('location')),
@@ -531,7 +531,7 @@ class DesktopController extends Controller
                 );
         else :
             DB::update(
-                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
+                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //29
                 [
                     $pc->inventory_active_code = $request->get('activo-fijo-pc'),
                     $pc->brand_id = $request->get('marca-pc-select2'),
@@ -548,7 +548,7 @@ class DesktopController extends Controller
                     $pc->mac = $request->get('mac'),
                     $pc->nat = null,
                     $pc->pc_name = $request->get('pc-name'),
-                    $pc->anydesk = $request->get('anydesk'),
+                    $pc->anydesk = trim($request->get('anydesk')),
                     $pc->pc_image = null,
                     $pc->campu_id = $request->get('val-select2-campus'),
                     $pc->location = $request->get('location'),

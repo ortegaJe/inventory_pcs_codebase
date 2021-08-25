@@ -464,6 +464,7 @@
             webpack is putting everything together at assets/_es6/main/app.js
         -->
   <script src="{{ asset('/js/codebase.app.min.js') }}"></script>
+  <script src="https://kit.fontawesome.com/bb00059a3e.js" crossorigin="anonymous"></script>
 
   <!-- Page JS Plugins -->
   <script src="{{ asset('/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
