@@ -16,20 +16,34 @@ $(document).ready(function() {
             '<span class="badge badge-pill badge-success">' +
             d.Marca +
             "</span>" +
-            "<td>Memoria RAM(ranura 01): " +
+            "<td>" +
+            '<i class="fas fa-memory mr-2"></i>' +
             d.RanuraRamUno +
             "</td>" +
-            "<td>Memoria RAM(ranura 02): " +
+            "<td>" +
+            '<i class="fas fa-memory mr-2"></i>' +
             d.RanuraRamDos +
             "</td>" +
-            "<td>Primer almacenamiento: " +            
+            "<td>" +
+            '<i class="fa fa-hdd mr-2"></i>' +
             d.PrimerUnidadAlmacenamiento +
-            '<i class="fa fa-hdd-o fa-1x"></i>' +
+            "</td>" +
+            "<td>" +
+            '<i class="fa fa-hdd mr-2"></i>' +
+            d.SegundaUnidadAlmacenamiento +
             "</td>" +
             "<td>Número de serial monitor: " +
             d.SerialMonitor +
             "</td>" +
-            "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "</tr>" +
             "<tr>" +
             "<td>Modelo: " +
@@ -46,16 +60,25 @@ $(document).ready(function() {
             " " +
             d.Os +
             "</td>" +
-            "<td>Ubicación: " +
+            "<td>Ubicación en la sede: " +
             d.Ubicacion +
             "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "<td></td>" +
             "<td></td>" +
             "</tr>" +
             "<tr>" +
             "<td>Tipo: " +
             d.TipoPc +
-            "<td>Codigo: " +
+            "<td>Codigo de inventario: " +
             d.CodigoInventario +
             "</td>" +
             "<td>Nombre del equipo: " +
@@ -63,7 +86,16 @@ $(document).ready(function() {
             "</td>" +
             "<td></td>" +
             "<td></td>" +
-            "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "</tr>" +
             "<tr>" +
             "<td>" +
@@ -75,6 +107,16 @@ $(document).ready(function() {
             "<td>Observaciones: " +
             "<p>"+d.Observacion +"</p>"+
             "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
@@ -143,8 +185,8 @@ $(document).ready(function() {
                 },
                 {
                     data: "ActivoFijo",
-                    visible: false,
-                    searcheable: false
+                    visible: true,
+                    searcheable: true
                 },
                 {
                     data: "Ip",

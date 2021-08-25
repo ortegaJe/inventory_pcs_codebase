@@ -25,38 +25,49 @@
     table.dataTable tbody {
         font-size: 14px;
         font-weight: 600;
-        text-align: left;
         cursor: pointer;
-    }
-
-    table.dataTable td:nth-child(6){
         text-align:center;
     }
 
-    table.dataTable td:nth-child(7){
-        max-width: 150px;
+    table.dataTable td:nth-child(6) {
+        text-align:left;
         width: auto;
+    }
+
+    table.dataTable td:nth-child(7) {
         text-align:center;
+        width: auto;
+        max-width: 250px;
     }
 
-    table.dataTable td:nth-child(8){
-        text-align:center;
+    .td-slider tr td:nth-child(1) {
+        width: auto;
+        text-align:left;
     }
 
-    .td-slider tr td:nth-child(1){
-        width: 210px;
-        text-align: justify;
-        text-justify: inter-word;
-        
+    .td-slider tr td:nth-child(2) {
+        width: auto;
+        text-align:left;   
     }
 
-    .td-slider tr td:nth-child(2){
-        width: 290px;
-        
+    .td-slider tr td:nth-child(3) {
+        text-align:left;
+        width: auto;   
+    }
+
+    .td-slider tr td:nth-child(4) {
+        text-align:left;
+        width: auto;
+    }
+
+    .td-slider tr td:nth-child(5) {
+        text-align:left;
+        width: auto;
     }
 
     table.dataTable tfoot {
         font-size: 14px;
+        text-align:center;
     }
 
     [tabindex="-1"]:focus:not(:focus-visible) {
