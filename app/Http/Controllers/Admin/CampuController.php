@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\CampusExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCampuRequest;
 use App\Models\Campu;
@@ -10,9 +11,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Str;
+
 
 class CampuController extends Controller
 {
+    private $excel;
+
+    public function __construct(Excel $excel)
+    {
+        $this->excel = $excel;
+    }
+
     public function index(Request $request)
     {
         $name = $request->get('search');
@@ -31,6 +42,18 @@ class CampuController extends Controller
         $filterResult = Campu::where('name', 'LIKE', '%' . $query . '%')->get();
 
         return response()->json($filterResult);
+    }
+
+    public function exportCampu($campuId, $campuSlug)
+    {
+        $rand = Str::upper(Str::random(12));
+
+        //$exceptColumn = $campuId->except('CampuID');
+
+        return $this->excel->download(
+            new CampusExport($campuId),
+            "export_inventory_" . Str::lower($campuSlug) . "_computers_" . $rand . ".xlsx"
+        );
     }
 
     public function assingUserCampu(Request $request)

@@ -40,6 +40,8 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
 
+    Route::get('exports-campu-inventory-computers-{id}-{slug}', 'App\Http\Controllers\Admin\CampuController@exportCampu')->name('admin.inventory.export-campu-computers');
+
     Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autoCompleteSearch')->name('admin.inventory.campus.search');
 
     Route::get('usuarios-buscar', 'App\Http\Controllers\Admin\UserController@autoCompleteSearchUser')->name('admin.inventory.users.search');
