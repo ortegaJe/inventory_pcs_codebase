@@ -4,6 +4,11 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('/js/plugins/flatpickr/flatpickr.min.css') }}">
+<style>
+  .lower-txt {
+    text-transform: lowercase;
+  }
+</style>
 
 @section('content')
 
@@ -33,7 +38,8 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="firstname" name="firstname">
+              <input type="text" class="form-control lower-txt" id="firstname" name="firstname"
+                onkeyup="return forceLower(this);">
               <label for="firstname">Primer nombre</label>
             </div>
             @if($errors->has('firstname'))
@@ -44,13 +50,13 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="middlename" name="middlename">
+              <input type="text" class="form-control lower-txt" id="middlename" name="middlename">
               <label for="middlename">Segundo nombre</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="lastname" name="lastname">
+              <input type="text" class="form-control lower-txt" id="lastname" name="lastname">
               <label for="lastname">Primer apellido</label>
             </div>
             @if($errors->has('lastname'))
@@ -61,13 +67,13 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="second-lastname" name="second-lastname">
+              <input type="text" class="form-control lower-txt" id="second-lastname" name="second-lastname">
               <label for="second-lastname">Segundo apellido</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="nickname" name="nickname">
+              <input type="text" class="form-control lower-txt" id="nickname" name="nickname">
               <label for="nickname">Nombre de usuario</label>
             </div>
             @if($errors->has('nickname'))
@@ -151,7 +157,7 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="email" class="form-control" id="email" name="email">
+              <input type="email" class="form-control lower-txt" id="email" name="email">
               <label for="email">Email</label>
               <div class="input-group-append">
                 <span class="input-group-text">
@@ -213,4 +219,9 @@
   jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'select2']); });
 </script>
 
+<script>
+  function forceLower(strInput) {
+    strInput.value=strInput.value.toLowerCase();
+  }
+</script>
 @endpush
