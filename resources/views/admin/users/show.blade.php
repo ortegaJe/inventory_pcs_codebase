@@ -2,6 +2,13 @@
 
 @section('title', 'Usuario ' .Str::lower($users->nick_name))
 
+@section('css')
+<style>
+  .lower-txt {
+    text-transform: lowercase;
+  }
+</style>
+
 @section('content')
 <!-- Hero -->
 <div class="bg-gray-lighter">
@@ -194,7 +201,8 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="firstname" name="firstname" value="{{ $users->name }}">
+              <input type="text" class="form-control lower-text" onkeyup="return forceLower(this);" id="firstname"
+                name="firstname" value="{{ $users->name }}">
               <label for="firstname">Primer nombre</label>
             </div>
             @if($errors->has('firstname'))
@@ -205,14 +213,15 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="middlename" name="middlename"
-                value="{{ $users->middle_name }}">
+              <input type="text" class="form-control lower-text" onkeyup="return forceLower(this);" id="middlename"
+                name="middlename" value="{{ $users->middle_name }}">
               <label for="middlename">Segundo nombre</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="lastname" name="lastname" value="{{ $users->last_name }}">
+              <input type="text" class="form-control lower-text" onkeyup="return forceLower(this);" id="lastname"
+                name="lastname" value="{{ $users->last_name }}">
               <label for="lastname">Primer apellido</label>
             </div>
             @if($errors->has('lastname'))
@@ -223,14 +232,15 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="second-lastname" name="second-lastname"
-                value="{{ $users->second_last_name }}">
+              <input type="text" class="form-control lower-text" onkeyup="return forceLower(this);" id="second-lastname"
+                name="second-lastname" value="{{ $users->second_last_name }}">
               <label for="second-lastname">Segundo apellido</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="nickname" name="nickname" value="{{ $users->nick_name }}">
+              <input type="text" class="form-control lower-text" onkeyup="return forceLower(this);" id="nickname"
+                name="nickname" value="{{ $users->nick_name }}">
               <label for="nickname">Nombre de usuario</label>
             </div>
             @if($errors->has('nickname'))
@@ -262,14 +272,14 @@
           <div class="col-6">
             <div class="form-material">
               <input type="text" class="form-control" id="material-disabled-campu" name="material-disabled-campu"
-                value="{{ Str::upper($dataUser->SedeTecnico) }}" disabled="">
+                value="{{ Str::upper($dataUser->SedeTecnico) }}" disabled>
               <label for="material-disabled-campu">Sede Principal</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material">
               <input type="text" class="form-control" id="material-disabled-profile" name="material-disabled-profile"
-                value="{{ Str::upper($dataUser->CargoTecnico) }}" disabled="">
+                value="{{ Str::upper($dataUser->CargoTecnico) }}" disabled>
               <label for="material-disabled-profile">Cargo</label>
             </div>
           </div>
@@ -307,7 +317,8 @@
         <div class="form-group row">
           <div class="col-12">
             <div class="form-material input-group floating">
-              <input type="email" class="form-control" id="email" name="email" value="{{ $users->email }}">
+              <input type="email" class="form-control lower-text" onkeyup="return forceLower(this);" id="email"
+                name="email" value="{{ $users->email }}">
               <label for="email">Email</label>
               <div class="input-group-append">
                 <span class="input-group-text">
@@ -447,4 +458,9 @@
 </script>
 @endif
 
+<script>
+  function forceLower(strInput) {
+    strInput.value=strInput.value.toLowerCase();
+  }
+</script>
 @endpush
