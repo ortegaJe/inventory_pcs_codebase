@@ -93,7 +93,7 @@ class AllInOneController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19, 20])
             ->get();
 
         $processors = DB::table('processors')
@@ -332,7 +332,7 @@ class AllInOneController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19])
+            ->whereIn('id', [1, 3, 4, 7, 9, 11, 13, 15, 17, 19, 20])
             ->get();
 
         $processors = DB::table('processors')

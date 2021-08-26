@@ -67,7 +67,6 @@ class UserController extends Controller
     {
         $request->validate([
             'cc' => 'required|unique:users,cc',
-            'firstname' => 'required|unique:users,name',
             'lastname' => 'required|unique:users,last_name',
             'nickname' => 'required|unique:users,nick_name',
             'birthday' => 'nullable|date',
@@ -213,7 +212,6 @@ class UserController extends Controller
         $this->validate(
             request(),
             ['cc' => ['required', 'unique:users,cc,' . $id]],
-            ['firstname' => ['required', 'unique:users,name,' . $id]],
             ['lastname' => ['required', 'unique:users,last_name,' . $id]],
             ['nickname' => ['required', 'unique:users,nick_name,' . $id]],
             ['email' => ['required', 'email', 'unique:users,email,' . $id]]
@@ -225,7 +223,7 @@ class UserController extends Controller
         DB::update(
             "CALL SP_updateUsers (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [
-                //14
+                //13
                 $user->cc = e($request->get('cc')),
                 $user->name = e($request->get('firstname')),
                 $user->middle_name = e($request->get('middlename')),

@@ -163,7 +163,6 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}">
                     <option value="{{ $ram->id }}" {{ $ram->id == $pcs->slot_one_ram_id ? 'selected' : '' }}>
                       {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}
                     </option>

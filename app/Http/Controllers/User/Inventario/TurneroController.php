@@ -99,6 +99,7 @@ class TurneroController extends Controller
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
             ->where('id', '<>', [6])
+            ->where('id', '<>', [21])
             ->get();
 
         $processors = DB::table('processors')
@@ -340,6 +341,7 @@ class TurneroController extends Controller
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
             ->where('id', '<>', [6])
+            ->where('id', '<>', [21])
             ->get();
 
         $processors = DB::table('processors')

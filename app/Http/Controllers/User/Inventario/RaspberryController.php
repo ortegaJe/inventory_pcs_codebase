@@ -93,7 +93,7 @@ class RaspberryController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 6, 19, 21])
+            ->whereIn('id', [1, 6, 19, 20, 21])
             ->get();
 
         $processors = DB::table('processors')
@@ -323,7 +323,7 @@ class RaspberryController extends Controller
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 6, 19, 21])
+            ->whereIn('id', [1, 6, 19, 20, 21])
             ->get();
 
         $processors = DB::table('processors')

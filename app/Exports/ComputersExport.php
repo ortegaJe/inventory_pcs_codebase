@@ -27,7 +27,7 @@ class ComputersExport implements
      */
     use Exportable;
 
-    private $fileName = "export_inventory_computers.xlsx";
+    //private $fileName = "export_inventory_computers.xlsx";
 
     public function collection()
     {

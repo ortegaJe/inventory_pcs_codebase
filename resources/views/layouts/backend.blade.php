@@ -103,17 +103,13 @@
 
           <!-- Visible only in normal mode -->
           <div class="sidebar-mini-hidden-b text-center">
-            <a class="img-link" href="javascript:void(0)">
+            <a class="img-link" href="{{ route('admin.inventory.technicians.profiles', Auth::id()) }}">
               <img class="img-avatar" src="{{ asset('/media/avatars/avatar15.jpg') }}" alt="">
             </a>
             <ul class="list-inline mt-10">
               <li class="list-inline-item">
                 <a class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase"
-                  href="javascript:void(0)">
-                  @if ((Auth::user())->nick_name ? : 0 )
-                  @else
-                  {{ Auth::user()->nick_name }}
-                  @endif
+                  href="{{ route('admin.inventory.technicians.profiles', Auth::id()) }}">{{ Auth::user()->nick_name }}
                 </a>
               </li>
               <li class="list-inline-item">
