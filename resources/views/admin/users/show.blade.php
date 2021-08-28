@@ -8,6 +8,7 @@
     text-transform: lowercase;
   }
 </style>
+@endsection
 
 @section('content')
 <!-- Hero -->
