@@ -99,6 +99,7 @@ class LaptopController extends Controller
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
             ->where('id', '<>', [32])
+            ->where('id', '<>', [36])
             ->get();
 
         $termTypeLaptopStorageSsd = 'ssd';
@@ -345,6 +346,7 @@ class LaptopController extends Controller
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
             ->where('id', '<>', [32])
+            ->where('id', '<>', [36])
             ->get();
 
         $termTypeLaptopStorageSsd = 'ssd';
