@@ -300,25 +300,20 @@ class UserController extends Controller
             ->first();
 
         if ($foundCampuId === null) {
-            CampuUser::where('user_id', $id, 'is_principal' == true)->first();
-            DB::table('campu_users')->where('user_id', $id)->update($update);
+            CampuUser::where('user_id', $id, 'is_principal' == true)->first(); //encuentra el usuario con sede principal
+            DB::table('campu_users')->where('user_id', $id)->update($update); //actualiza la sede principal en false
 
-            DB::table('campu_users')->insert(
-                ['user_id' => $id, 'campu_id' => $campuId, 'is_principal' => true]
-            );
+            DB::table('campu_users') //inserta un nuevo registro con sede nueva y como sede principal
+                ->insert(['user_id' => $id, 'campu_id' => $campuId, 'is_principal' => true]);
         } else {
-            CampuUser::where('user_id', $id, 'is_principal' == true)->first();
-            DB::table('campu_users')->where('user_id', $id)->update($update);
+            CampuUser::where('user_id', $id, 'is_principal' == true)->first(); //encuentra el usuario con sede principal
+            DB::table('campu_users')->where('user_id', $id)->update($update); //actualiza la sede principal en false
 
-            $updateNewCampu = array('campu_id' => $campuId, 'is_principal' => true);
+            $updateNewCampu = array('campu_id' => $campuId, 'is_principal' => true); //actualiza el registro como sede principal
             DB::table('campu_users')->where('user_id', $id)->where('campu_id', $campuId)->update($updateNewCampu);
         }
 
-        return back()->with('updated_campu_success', '');;
-
-        //$campuUsersTemp[] = DB::table('campu_users')->where('user_id', $id)->get();
-
-        //return response()->json($campuUsersTemp);
+        return back()->with('updated_campu_success', '');
     }
 
     public function updateProfile(Request $request, $id)

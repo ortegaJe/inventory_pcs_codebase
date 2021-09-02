@@ -30,7 +30,7 @@ $(document).ready(function() {
             "</td>" +
             "<td>" +
             '<i class="fa fa-hdd mr-2"></i>' +
-            d.PrimerUnidadAlmacenamiento +
+            d.SegundaUnidadAlmacenamiento +
             "</td>" +
             "<td>Número de serial monitor: " +
             d.SerialMonitor +

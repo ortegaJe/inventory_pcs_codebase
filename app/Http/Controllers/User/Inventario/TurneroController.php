@@ -211,7 +211,7 @@ class TurneroController extends Controller
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
             'val-select2-status-assignment' => 'required_with:custodian-name,filled|numeric',
-            'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i',
+            'observation' => 'nullable|max:255',
         ];
 
         $messages = [
@@ -269,7 +269,6 @@ class TurneroController extends Controller
             'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
             'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
-            'observation.regex' => 'Símbolo(s) no permitido en el campo observación',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -504,7 +503,6 @@ class TurneroController extends Controller
             'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
             'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
-            'observation.regex' => 'Símbolo(s) no permitido en el campo observación',
         ];
 
         $validator = Validator::make($request->all(), $messages);
@@ -570,7 +568,8 @@ class TurneroController extends Controller
             $pcTemp[] = DB::table('computers')->where('id', $id)->get();
             //("SELECT * FROM computers WHERE id = $id", [1]);
             $ts = now('America/Bogota')->toDateTimeString();
-            $softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
+            //$softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
+            $softDeletePc = array('is_active' => false, 'statu_id' => 4);
             $pcs = DB::table('computers')->where('id', $id)->update($softDeletePc);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
 
