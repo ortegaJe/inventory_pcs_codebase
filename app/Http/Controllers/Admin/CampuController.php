@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Str;
 
@@ -56,19 +57,66 @@ class CampuController extends Controller
         );
     }
 
-    public function assingUserCampu(Request $request)
+    public function assingUserCampu(Request $request, $id)
     {
-        $campuUser = new CampuUser();
 
-        $campuUser->user_id = $request->get('val-select2-lista-tecnicos');
-        $campuUser->campu_id = $request->get('campu-id');
-        $campuUser->is_principal = false;
-        //$campuUser->updated_at = now('America/Bogota');
+        $userId = $request->get('val-select2-lista-tecnicos');
 
-        $campuUser->save();
+        //busca sede con usuario en null que concincida en el request $userId
+        $foundCampuId = CampuUser::select('campu_id', 'user_id', 'is_principal')
+            ->where('user_id', null)
+            ->where('campu_id', $id)
+            ->first();
 
+        //actualiza sede con nuevo usuario asignado
+        if ($foundCampuId) {
+            CampuUser::where('campu_id', $id)->first();
 
-        return back()->with('info', 'actualizado con exito!');
+            $update = array('user_id' => $userId, 'is_principal' => false, 'updated_at' => now('America/Bogota'));
+            CampuUser::where('campu_id', $id)->update($update);
+
+            return back()->with('assigned', '');
+        }
+
+        //inserta una nueva sede con usuario asignado
+        CampuUser::insert(['user_id' => $userId, 'campu_id' => $id, 'created_at' => now('America/Bogota')]);
+
+        return back()->with('assigned', '');
+    }
+
+    public function removeUserCampu($id)
+    {
+        $campu = null;
+        $userCampuRemoved = [];
+        $campu = Campu::findOrFail($id);
+        $ts = now('America/Bogota')->toDateTimeString();
+        error_log(__LINE__ . __METHOD__ . ' pc --->' . $id);
+        try {
+
+            $userCampuRemoved[] = DB::table('campus as c')
+                ->select(
+                    'c.id as SedeID',
+                    'c.name as NombreSede',
+                    'u.id as UserID',
+                    DB::raw("CONCAT(UPPER(u.name),' ',UPPER(u.last_name)) as NombreCompletoTecnico")
+                )
+                ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
+                ->leftJoin('users as u', 'u.id', 'cu.user_id')
+                ->where('cu.campu_id', $id)
+                ->get();
+
+            $update = array('user_id' => null, 'is_principal' => false, 'updated_at' => $ts);
+            $campuToRemoved = DB::table('campu_users')->where('campu_id', $id)->update($update);
+
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($campuToRemoved, true));
+        } catch (ModelNotFoundException $e) {
+            // Handle the error.
+        }
+
+        return response()->json([
+            'message' => 'Ya no se encuentra asignado a la sede ' . $campu->name . '',
+            'result' => $userCampuRemoved[0]
+        ]);
     }
 
     public function create()

@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="block-content">
-          <form action="{{ route('admin.inventory.assing-user-campu') }}" method="POST">
+          <form action="{{ route('admin.inventory.assing-user-campu', $campus) }}" method="POST">
             <input type="hidden" name="campu-id" value="{{ $campus->id }}">
             @csrf
             @method('POST')

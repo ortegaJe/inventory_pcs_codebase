@@ -43,7 +43,7 @@
 <!-- END Breadcrumb -->
 
 <!-- Overview -->
-<h2 class="h4 font-w300 mt-50">Asignada a:</h2>
+<h2 class="h4 font-w300 mt-50">Asignado a:</h2>
 <div class="row invisible" data-toggle="appear">
   <!-- Row #1 -->
   <div class="col-md-4">
@@ -60,19 +60,24 @@
               {{ $campuAssignedCount }} Sedes</span>
           </div>
           <div class="pt-20">
+            <a class="btn btn-rounded btn-alt-danger mr-5" id="btn-remove" data-id="{{ $campu->UserID }}" href="#">
+              <i class="fa fa-times mr-5"></i> Retirar
+            </a>
             <a class="btn btn-rounded btn-alt-primary"
               href="{{ route('admin.inventory.technicians.show', $campu->UserID) }}">
               <i class="fa fa-eye mr-5"></i> Ver Perfil
             </a>
           </div>
           @empty
-          <div class="font-size-h4 font-w600">Técnico no asignado</div>
+          <div class="font-size-h4 font-w600" id="box">Técnico no asignado</div>
           <div class="text-muted">
           </div>
           <div class="pt-20">
-            <a class="btn btn-rounded btn-alt-primary" data-toggle="modal" data-target="#modal-popout">
+            <a class="btn btn-rounded btn-alt-primary" href="javascript:void(0)" data-toggle="modal"
+              data-target="#modal-popout">
               Asignar
             </a>
+            <br>
             <br>
           </div>
           @endforelse
@@ -388,8 +393,12 @@
 
 <!-- Page JS Code -->
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
+<script src="{{ asset('/js/remove.user.campu.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
+<script>
+  let root_url_remove_user_campu = <?php echo json_encode(route('admin.inventory.remove-user-campu', trim($campus->id))) ?>;
+</script>
 
 <!-- Page JS Helpers (Content Filtering helper) -->
 <script>
@@ -406,5 +415,16 @@
   });
 });
 </script>
+
+@if(Session::has('assigned'))
+<script>
+  Swal.fire(
+'Usuario Asignado Con Exito!',
+'{!! Session::get('assigned') !!}',
+'success',
+'showCancelButton'
+)
+</script>
+@endif
 
 @endpush
