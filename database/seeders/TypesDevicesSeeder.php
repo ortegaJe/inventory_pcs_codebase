@@ -38,5 +38,10 @@ class TypesDevicesSeeder extends Seeder
             'name' => 'ALL IN ONE',
             'created_at' => now(),
         ]);
+
+        DB::table('type_devices')->insert([
+            'name' => 'TELEFONO IP',
+            'created_at' => now(),
+        ]);
     }
 }

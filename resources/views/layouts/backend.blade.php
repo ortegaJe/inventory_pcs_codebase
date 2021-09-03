@@ -208,7 +208,7 @@
                     {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
                     {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'open' : '' }}
                   {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}">
-                  <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                  <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       {{--  @php $globalPcCount = DB::table('computers')->select('id')
@@ -252,9 +252,14 @@
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'active' : '' }}"
-                        href="{{ route('user.inventory.raspberry.index') }}">Raspberry's</a>
+                        href="{{ route('user.inventory.raspberry.index') }}">Raspberry</a>
                     </li>
                     @endcan
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
+                        href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
+                    </li>
                   </ul>
                 </li>
               </ul>

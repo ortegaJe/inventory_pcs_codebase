@@ -43,5 +43,11 @@ class BrandSeeder extends Seeder
             'description' => NULL,
             'created_at' => now(),
         ]);
+
+        DB::table('brands')->insert([
+            'name' => 'GRANDSTREAM',
+            'description' => 'Grandstream Networks',
+            'created_at' => now(),
+        ]);
     }
 }

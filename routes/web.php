@@ -59,15 +59,17 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
-    Route::resource('de-escritorios', 'App\Http\Controllers\User\Inventario\DesktopController')->names('user.inventory.desktop');
+    Route::resource('de-escritorios', 'App\Http\Controllers\User\Inventory\DesktopController')->names('user.inventory.desktop');
 
-    Route::resource('portatiles', 'App\Http\Controllers\User\Inventario\LaptopController')->names('user.inventory.laptop');
+    Route::resource('portatiles', 'App\Http\Controllers\User\Inventory\LaptopController')->names('user.inventory.laptop');
 
-    Route::resource('all-in-one', 'App\Http\Controllers\User\Inventario\AllInOneController')->names('user.inventory.allinone');
+    Route::resource('all-in-one', 'App\Http\Controllers\User\Inventory\AllInOneController')->names('user.inventory.allinone');
 
-    Route::resource('turneros', 'App\Http\Controllers\User\Inventario\TurneroController')->names('user.inventory.turnero');
+    Route::resource('turneros', 'App\Http\Controllers\User\Inventory\TurneroController')->names('user.inventory.turnero');
 
-    Route::resource('raspberry', 'App\Http\Controllers\User\Inventario\RaspberryController')->names('user.inventory.raspberry');
+    Route::resource('raspberry', 'App\Http\Controllers\User\Inventory\RaspberryController')->names('user.inventory.raspberry');
+
+    Route::resource('telefonos-ip', 'App\Http\Controllers\User\Inventory\PhoneIpController')->names('user.inventory.phones');
 });
 
 Route::get('example-faker', function () {
