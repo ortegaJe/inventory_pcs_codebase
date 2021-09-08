@@ -15,10 +15,9 @@ class CreateDevicesTable extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->string('inventory_code_number', 12)->unique();
             $table->string('batch', 20)->nullable();
+            $table->string('inventory_code_number', 12)->unique();
             $table->string('fixed_asset_number', 15)->nullable();
-            $table->unsignedBigInteger('device_id')->nullable();
             $table->unsignedBigInteger('type_device_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->string('model')->nullable();
@@ -33,6 +32,7 @@ class CreateDevicesTable extends Migration
             $table->string('custodian_name', 56);
             $table->unsignedBigInteger('assignment_statu_id')->nullable();
             $table->text('observation')->nullable();
+            $table->uuid('rowguid')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->softDeletes();

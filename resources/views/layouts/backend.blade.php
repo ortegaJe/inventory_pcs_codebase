@@ -152,7 +152,7 @@
                   <a class="{{ request()->is('admin/dashboard/inventario') ? 'active' : '' }}"
                     href="{{ route('admin.inventory.dash.index') }}">Inventario
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
-                      @php $globalPcCount = DB::table('computers')->select('id')
+                      @php $globalPcCount = DB::table('devices')->select('id')
                       ->where('is_active',[1])
                       ->where('deleted_at', null)
                       ->whereIn('statu_id',[1,2,3,5,6,7,8])

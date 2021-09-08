@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Campu;
 
-class Computer extends Model
+class Device extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -34,5 +34,5 @@ class Computer extends Model
             ->count();
     }
 
-    public $timestamps = false;
+    //public $timestamps = false;
 }

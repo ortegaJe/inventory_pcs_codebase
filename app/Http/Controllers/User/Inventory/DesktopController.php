@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\Device;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -22,22 +23,22 @@ class DesktopController extends Controller
 
     public function __construct()
     {
-        $this->generatorID = Helper::IDGenerator(new Computer, 'inventory_code_number', 8, 'PC');
-        $this->pc = new Computer();
+        $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'PC');
+        $this->pc = new Device();
     }
 
     public function index(Request $request)
     {
-        $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
-        $globalTurneroPcCount = Computer::countPc(2);   //TURNERO
-        $globalLaptopPcCount  = Computer::countPc(3);   //PORTATIL
-        $globalRaspberryPcCount = Computer::countPc(4); //RASPBERRY
-        $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
+        $globalDesktopPcCount = Device::countPc(1);   //DE ESCRITORIO
+        $globalTurneroPcCount = Device::countPc(2);   //TURNERO
+        $globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
+        $globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
+        $globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
 
             $pcs = DB::table('view_all_pcs')
-                ->where('TipoPc', Computer::EQUIPOS_ESCRITORIOS)
+                ->where('TipoPc', Device::EQUIPOS_ESCRITORIOS)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($pcs);
@@ -132,7 +133,7 @@ class DesktopController extends Controller
             ->whereIn('id', [9, 10])
             ->get();
 
-        $domainNames = Computer::DOMAIN_NAME;
+        $domainNames = Device::DOMAIN_NAME;
 
         //$campus = Campu::select('id', 'description')->get();
         //dd($campus);

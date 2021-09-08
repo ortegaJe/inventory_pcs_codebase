@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateComputersTable extends Migration
+class CreateComponentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,23 @@ class CreateComputersTable extends Migration
      */
     public function up()
     {
-        Schema::create('computers', function (Blueprint $table) {
-            $table->id();
+        Schema::create('components', function (Blueprint $table) {
+            //$table->id();
+            $table->unsignedBigInteger('device_id')->nullable();
             $table->string('monitor_serial_number')->nullable();
-            $table->unsignedBigInteger('type_device_id')->nullable();
             $table->unsignedBigInteger('slot_one_ram_id')->nullable();
             $table->unsignedBigInteger('slot_two_ram_id')->nullable();
             $table->unsignedBigInteger('first_storage_id')->nullable();
             $table->unsignedBigInteger('second_storage_id')->nullable();
             $table->unsignedBigInteger('processor_id')->nullable();
-            $table->string('pc_name_domain', 20)->nullable();
+            $table->string('domain_name')->nullable();
             $table->string('anydesk')->nullable();
-            $table->string('pc_name')->nullable()->unique();
-            $table->string('pc_image')->nullable();
-            $table->uuid('rowguid')->nullable();
+            $table->string('device_name')->nullable()->unique();
+            $table->string('device_image')->nullable();
+            $table->boolean('handset')->nullable();
+            $table->boolean('power_adapter')->nullable();
 
-            //$table->foreign('id')->references('device_id')->on('devices')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('device_id')->references('id')->on('devices')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_one_ram_id')->references('id')->on('memory_rams')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_two_ram_id')->references('id')->on('memory_rams')->OnDelete('no action')->OnUpdate('no action');
             $table->foreign('first_storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();

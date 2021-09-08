@@ -16,10 +16,10 @@ class UsersSeeder extends Seeder
     {
         User::create([
             'cc' => rand(1, 111111111),
-            'name' => 'Jefferson',
-            'middle_name' => 'Javier',
-            'last_name' => 'Ortega',
-            'second_last_name' => 'Pacheco',
+            'name' => 'administrador',
+            'middle_name' => '',
+            'last_name' => 'app',
+            'second_last_name' => '',
             'nick_name' => 'ADMIN',
             'birthday' => '1991/08/10',
             'sex' => 'M',
