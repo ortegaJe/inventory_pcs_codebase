@@ -118,6 +118,7 @@ class LaptopController extends Controller
             ->select('id', 'name')
             ->where('id', '<>', [4])
             ->where('id', '<>', [5])
+            ->where('id', '<>', [6])
             ->get();
 
         $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
