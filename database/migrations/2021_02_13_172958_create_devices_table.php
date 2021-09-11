@@ -25,6 +25,10 @@ class CreateDevicesTable extends Migration
             $table->ipAddress('ip', 15)->nullable()->unique();
             $table->macAddress('mac')->nullable()->unique();
             $table->string('nat')->nullable();
+            $table->string('domain_name')->nullable();
+            $table->string('device_name')->nullable()->unique();
+            $table->string('anydesk')->nullable();
+            $table->string('device_image')->nullable();
             $table->unsignedBigInteger('campu_id')->nullable();
             $table->text('location');
             $table->unsignedBigInteger('statu_id')->nullable();

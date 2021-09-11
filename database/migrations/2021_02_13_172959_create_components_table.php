@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rules\Unique;
 
 class CreateComponentsTable extends Migration
 {
@@ -22,10 +23,6 @@ class CreateComponentsTable extends Migration
             $table->unsignedBigInteger('first_storage_id')->nullable();
             $table->unsignedBigInteger('second_storage_id')->nullable();
             $table->unsignedBigInteger('processor_id')->nullable();
-            $table->string('domain_name')->nullable();
-            $table->string('anydesk')->nullable();
-            $table->string('device_name')->nullable()->unique();
-            $table->string('device_image')->nullable();
             $table->boolean('handset')->nullable();
             $table->boolean('power_adapter')->nullable();
 

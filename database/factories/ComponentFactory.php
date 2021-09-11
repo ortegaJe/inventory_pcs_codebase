@@ -32,10 +32,11 @@ class ComponentFactory extends Factory
         $pc_name_chain = 'V1AMAC-' . $str;
 
         /*for ($i = 1; $i <= 100; $i++) {
+            return $i;
         }*/
 
         return [
-            'device_id' => rand(1, 100),
+            'device_id' => rand(1, 50),
             'monitor_serial_number' => Str::random(10),
             'slot_one_ram_id' => 14,
             'slot_two_ram_id' => 1,
@@ -43,10 +44,6 @@ class ComponentFactory extends Factory
             'second_storage_id' => 30,
             'processor_id' => rand(1, 20),
             'os_id' => rand(1, 8),
-            'domain_name' => 'DOMAIN.LOCAL',
-            'anydesk' => rand(1, 145589956),
-            'device_name' => $pc_name_chain,
-            'rowguid' => $this->faker->uuid(),
         ];
     }
 }
