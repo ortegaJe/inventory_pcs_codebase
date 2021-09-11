@@ -137,7 +137,7 @@ class UserController extends Controller
                 'c.name as SedeTecnico',
                 'cp.is_principal as SedePrincipal'
             )
-            ->join('user_profiles as up', 'up.id', 'u.id')
+            ->join('profile_users as up', 'up.id', 'u.id')
             ->join('profiles as p', 'p.id', 'up.profile_id')
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
@@ -183,13 +183,12 @@ class UserController extends Controller
                 'c.name as SedeTecnico',
                 'cp.is_principal as SedePrincipal'
             )
-            ->join('user_profiles as up', 'up.id', 'u.id')
+            ->join('profile_users as up', 'up.id', 'u.id')
             ->join('profiles as p', 'p.id', 'up.profile_id')
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
             ->where('u.id', $id)
             ->get();
-        //return response()->json($dataUsers);
 
         $data = [
             'users' => User::findOrFail($id),

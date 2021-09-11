@@ -150,11 +150,10 @@ class CampuController extends Controller
     public function show($id)
     {
         $campus = Campu::findOrFail($id);
-        $userLists = User::all();
 
         $userLists = User::all();
 
-        $typeDevices = DB::table('computers as pc')
+        $typeDevices = DB::table('devices as pc')
             ->leftJoin('type_devices as td', 'td.id', 'pc.type_device_id')
             ->select(
                 DB::raw("COUNT(pc.type_device_id) AS numberTypeDevice"),
@@ -166,7 +165,7 @@ class CampuController extends Controller
             ->get();
         //dd($typeDevices);
 
-        $campusCount = DB::table('computers')
+        $campusCount = DB::table('devices')
             ->select('campu_id')
             ->where('campu_id', $id)
             ->count();
@@ -196,7 +195,7 @@ class CampuController extends Controller
             )
             ->leftJoin('campu_users AS CU', 'CU.campu_id', 'C.id')
             ->leftJoin('users AS U', 'U.id', 'CU.user_id')
-            ->join('user_profiles AS UP', 'UP.id', 'U.id')
+            ->join('profile_users AS UP', 'UP.id', 'U.id')
             ->join('profiles AS P', 'P.id', 'UP.profile_id')
             ->where('CU.campu_id', $id)
             ->where('U.is_active', 1)
