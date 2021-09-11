@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{{ asset('/js/plugins/flatpickr/flatpickr.min.css') }}">
 
 @section('content')
+
 <div class="row">
   <div class="col-md-12 mx-auto">
     <h2 class="content-heading">Registrar Nuevo Equipo De Escritorio</h2>
@@ -44,30 +45,7 @@
         <div class="block-content block-content-full tab-content" style="min-height: 274px;">
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
-            @if (Session::has('message'))
-            <div data-notify="container"
-              class="col-xs-11 col-sm-4 alert-message alert alert-{{ Session::get('typealert') }} animated fadeIn"
-              role="alert" data-notify-position="top-right"
-              style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; right: 20px; animation-iteration-count: 1;">
-              <button type="button" aria-hidden="true" class="close" data-notify="dismiss"
-                style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button><span data-notify="icon"
-                class="fa fa-times"></span> <span data-notify="title"></span> <span
-                data-notify="message">{{ Session::get('message') }}
-              </span><a href="#" target="_blank" data-notify="url"></a>
-            </div>
-            @endif
-            {{-- @if (Session::has('message'))
-            <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-ban"></i> Upsss!</h5>
-            {{ Session::get('message') }}
-            @if ($errors->any())
-            <ul>
-              @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-            @endif --}}
+
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material">
@@ -515,45 +493,34 @@
     <!-- END Progress Wizard 2 -->
   </div>
 </div>
+
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
-<script src="{{ asset('/js/pages/be_ui_activity.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
-<script>
-  jQuery(function(){ Codebase.helpers('notify'); });
-</script>
 
 <!-- Page JS Code -->
-<script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js ')}}"></script>
 <script src="{{ asset('/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
 
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
-  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });
+  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker','maxlength', 'select2',]); });
 </script>
 
 @if(Session::has('message'))
+@if ($errors->any())
+<ul>@foreach ($errors->all() as $error)</ul>
 <script>
-  Codebase.helpers('notify', {
-    align: 'right', // 'right', 'left', 'center'
-    from: 'top', // 'top', 'bottom'
-    type: 'info', // 'info', 'success', 'warning', 'danger'
-    icon: 'fa fa-info mr-5', // Icon class
-    message: '{!! Session::get('message') !!}'
-});
+  Swal.fire(
+  '{!! Session::get('message') !!}',
+  '{{ $error }}',
+  '{{ Session::get('modal') }}'
+  )
 </script>
+@endforeach
 @endif
-<script>
-  $('.text-danger').slideDown();
-  setTimeout(function(){ $('.text-danger').slideUp(); }, 50000);
-</script>
-
-<script>
-  $('.alert-message').fadeIn();
-  setTimeout(function(){ $('.alert-message').slideUp(); }, 10000);
-</script>
+@endif
 @endpush
+{{-- https://dev.to/jeromew90/how-use-sweetalert2-in-laravel-8-using-composer-jki --}}
+{{-- https://stackoverflow.com/questions/65172778/how-to-use-sweetalert-messages-for-validation-in-laravel-8 --}}
