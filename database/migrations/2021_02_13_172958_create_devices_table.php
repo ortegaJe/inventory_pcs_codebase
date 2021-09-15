@@ -18,7 +18,6 @@ class CreateDevicesTable extends Migration
             $table->string('batch', 20)->nullable();
             $table->string('inventory_code_number', 12)->unique();
             $table->string('fixed_asset_number', 15)->nullable();
-            $table->unsignedBigInteger('type_device_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->string('model')->nullable();
             $table->string('serial_number')->unique();
@@ -45,7 +44,6 @@ class CreateDevicesTable extends Migration
             $table->foreign('campu_id')->references('id')->on('campus')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('assignment_statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('type_device_id')->references('id')->on('type_devices')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete()->cascadeOnUpdate();
         });
     }

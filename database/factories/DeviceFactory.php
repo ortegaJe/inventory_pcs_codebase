@@ -38,7 +38,6 @@ class DeviceFactory extends Factory
             'batch' => null,
             'inventory_code_number' => $inv_code_chain,
             'fixed_asset_number' => rand(10000000, 900000000),
-            'type_device_id' => 1,
             'brand_id' => rand(1, 5),
             'model' => 'EQUIPO-' . Str::random(10),
             'serial_number' => Str::random(10),

@@ -37,6 +37,7 @@ class ComponentFactory extends Factory
 
         return [
             'device_id' => rand(1, 50),
+            'type_device_id' => 1,
             'monitor_serial_number' => Str::random(10),
             'slot_one_ram_id' => 14,
             'slot_two_ram_id' => 1,
