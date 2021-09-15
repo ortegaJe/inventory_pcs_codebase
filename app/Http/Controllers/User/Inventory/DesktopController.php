@@ -29,11 +29,11 @@ class DesktopController extends Controller
 
     public function index(Request $request)
     {
-        $globalDesktopPcCount = Device::countPc(1);   //DE ESCRITORIO
-        $globalTurneroPcCount = Device::countPc(2);   //TURNERO
-        $globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
-        $globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
-        $globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
+        //$globalDesktopPcCount = Device::countPc(1);   //DE ESCRITORIO
+        //$globalTurneroPcCount = Device::countPc(2);   //TURNERO
+        //$globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
+        //$globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
+        //$globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
 
         if ($request->ajax()) {
 
@@ -75,11 +75,11 @@ class DesktopController extends Controller
 
         $data =
             [
-                'globalDesktopPcCount' => $globalDesktopPcCount,
-                'globalTurneroPcCount' => $globalTurneroPcCount,
-                'globalLaptopPcCount' => $globalLaptopPcCount,
-                'globalRaspberryPcCount' => $globalRaspberryPcCount,
-                'globalAllInOnePcCount' => $globalAllInOnePcCount,
+                //'globalDesktopPcCount' => $globalDesktopPcCount,
+                //'globalTurneroPcCount' => $globalTurneroPcCount,
+                //'globalLaptopPcCount' => $globalLaptopPcCount,
+                //'globalRaspberryPcCount' => $globalRaspberryPcCount,
+                //'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
 
         return view('user.inventory.desktop.index')->with($data);
@@ -92,6 +92,7 @@ class DesktopController extends Controller
             ->select('id', 'name')
             ->where('id', '<>', [4])
             ->where('id', '<>', [5])
+            ->where('id', '<>', [7])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')
@@ -178,7 +179,7 @@ class DesktopController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3])
+                Rule::in([1, 2, 3, 6])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'serial-pc' => 'required|unique:devices,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
@@ -555,10 +556,9 @@ class DesktopController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //29
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //28
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
-                    $device->type_device_id = Device::DESKTOP_PC_ID, //ID equipo de escritorio
                     $device->brand_id = $request->get('marca-pc-select2'),
                     $device->model = $request->get('modelo-pc'),
                     $device->serial_number = $request->get('serial-pc'),
