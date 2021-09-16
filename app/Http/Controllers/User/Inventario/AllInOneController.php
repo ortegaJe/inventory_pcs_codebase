@@ -200,8 +200,8 @@ class AllInOneController extends Controller
                 'numeric',
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
-            'ip' => 'required|ipv4|unique:computers,ip',
-            'mac' => 'required|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
+            'ip' => 'nullable|ipv4',
+            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'val-select2-campus' => 'required|numeric',
             'pc-domain-name' => 'required',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',

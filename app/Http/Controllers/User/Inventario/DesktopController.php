@@ -208,8 +208,8 @@ class DesktopController extends Controller
                 'numeric',
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
-            'ip' => 'required|ipv4|unique:computers,ip',
-            'mac' => 'required|unique:computers,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
+            'ip' => 'nullable|ipv4',
+            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'pc-domain-name' => 'required',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:computers,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
@@ -258,7 +258,6 @@ class DesktopController extends Controller
             'pc-domain-name.required' => 'Seleccionar dominio del equipo',
             'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
             'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
-            'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
             'pc-name.required' => 'Es requerido un nombre de equipo',
             'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
             'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
