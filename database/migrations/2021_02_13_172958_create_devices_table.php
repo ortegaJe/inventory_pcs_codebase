@@ -21,8 +21,8 @@ class CreateDevicesTable extends Migration
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->string('model')->nullable();
             $table->string('serial_number')->unique();
-            $table->ipAddress('ip', 15)->nullable()->unique();
-            $table->macAddress('mac')->nullable()->unique();
+            $table->ipAddress('ip', 15)->nullable();
+            $table->macAddress('mac')->nullable();
             $table->string('nat')->nullable();
             $table->string('domain_name')->nullable();
             $table->string('device_name')->nullable()->unique();

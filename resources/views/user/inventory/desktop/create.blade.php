@@ -240,7 +240,7 @@
                     <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-cpu">Precesador</label>
+                  <label for="val-select2-cpu">Procesador</label>
                 </div>
                 @if($errors->has('val-select2-cpu'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>

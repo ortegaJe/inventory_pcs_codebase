@@ -175,6 +175,7 @@ class DesktopController extends Controller
         $userId = Auth::id();
 
         $rules = [
+
             //'marca-pc-select2' => 'not_in:0',
             'marca-pc-select2' => [
                 'required',
@@ -219,8 +220,8 @@ class DesktopController extends Controller
                 'numeric',
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
-            'ip' => 'required|ipv4|unique:devices,ip',
-            'mac' => 'required|unique:devices,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
+            'ip' => 'nullable|ipv4',
+            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'pc-domain-name' => 'required',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:devices,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
@@ -430,7 +431,6 @@ class DesktopController extends Controller
 
     public function update(Request $request, $id)
     {
-        $pcImage = 'lenovo-desktop.png';
         $device = Device::findOrFail($id);
         $statuId = $request->get('val-select2-status');
         $deviceId = $id;
@@ -441,10 +441,10 @@ class DesktopController extends Controller
             //['serial-pc' => ['required', 'max:24', 'unique:Devices,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
             //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:Devices,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
             //['serial-monitor-pc' => ['nullable', 'max:24', 'unique:Devices,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            //['ip' => ['nullable', 'ipv4', 'unique:Devices,ip' . $id]],
+            ['ip' => ['nullable', 'ipv4' . $id]],
             //['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:Devices', 'mac' . $id]],
             //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:Devices,anydesk' . $id]],
-            ['device-name' => ['max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
+            ['pc-name' => ['max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
 
         );
 
@@ -485,7 +485,7 @@ class DesktopController extends Controller
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
-            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+            //'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',

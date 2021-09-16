@@ -288,7 +288,7 @@
                     <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-cpu">Precesador</label>
+                  <label for="val-select2-cpu">Procesador</label>
                 </div>
                 @if($errors->has('val-select2-cpu'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
@@ -499,8 +499,8 @@
                 <div class="form-material">
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
-                    data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                    value="">{{ trim($deviceComponents->observation) }}</textarea>
+                    data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning" value=""
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">{{ $deviceComponents->observation }}</textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>

@@ -215,8 +215,8 @@ class LaptopController extends Controller
                 'numeric',
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
-            'ip' => 'required|ipv4|unique:devices,ip',
-            'mac' => 'required|unique:devices,mac|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
+            'ip' => 'nullable|ipv4',
+            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'pc-domain-name' => 'required',
             'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
             //'anydesk' => 'sometimes|unique:devices,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
@@ -230,7 +230,6 @@ class LaptopController extends Controller
         ];
 
         $messages = [
-            //'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
             'marca-pc-select2.required' => 'Seleccione una marca de computador',
             'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
             'modelo-pc.regex' => 'Símbolo(s) no permitido en el campo modelo',
@@ -355,7 +354,13 @@ class LaptopController extends Controller
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
             ->where('device_id', $id)
             ->first();
-        return response()->json($deviceComponents);
+        //return response()->json($deviceComponents);
+
+        $brands = DB::table('brands')
+            ->select('id', 'name')
+            ->where('id', '<>', [4])
+            ->where('id', '<>', [5])
+            ->get();
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
@@ -385,16 +390,13 @@ class LaptopController extends Controller
             ->orWhere('id', [30])
             ->get();
 
-        $brands = DB::table('brands')
-            ->select('id', 'name')
-            ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
+        $campus = DB::table('campus as c')
+            ->join('campu_users as cu', 'cu.campu_id', 'c.id')
+            ->join('users as u', 'u.id', 'cu.user_id')
+            ->where('cu.user_id', Auth::id())
+            ->distinct('c.name')
+            ->select('c.name', 'c.id')
             ->get();
-
-        $campus = DB::select('SELECT DISTINCT(C.name),C.id FROM campus C
-                                INNER JOIN campu_users CU ON CU.campu_id = C.id
-                                INNER JOIN users U ON U.id = CU.user_id
-                                WHERE U.id=' . Auth::id() . '', [1]);
 
         $status = DB::table('status as S')
             ->where('S.id', '<>', [4])
@@ -429,30 +431,29 @@ class LaptopController extends Controller
 
     public function update(Request $request, $id)
     {
-        $pc = Device::findOrFail($id);
+        $device = Device::findOrFail($id);
         $statuId = $request->get('val-select2-status');
-        $isActive = true;
-        $pcId = $id;
+        $deviceId = $id;
         $userId = Auth::id();
 
-        /*$this->validate(
+        $this->validate(
             request(),
-            ['serial-pc' => ['required', 'max:24', 'unique:Devices,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['activo-fijo-pc' => ['nullable', 'max:15', 'unique:Devices,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['serial-monitor-pc' => ['nullable', 'max:24', 'unique:Devices,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['ip' => ['nullable', 'ipv4', 'unique:Devices,ip' . $id]],
-            ['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:Devices', 'mac' . $id]],
-            ['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:Devices,anydesk' . $id]],
-            ['pc-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:Devices,pc_name',]]
+            //['serial-pc' => ['required', 'max:24', 'unique:Devices,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:Devices,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            //['serial-monitor-pc' => ['nullable', 'max:24', 'unique:Devices,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
+            ['ip' => ['nullable', 'ipv4,' . $id]],
+            //['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:Devices', 'mac' . $id]],
+            //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:Devices,anydesk' . $id]],
+            ['device-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
 
-        );*/
+        );
 
-        /*$rules = [
+        $rules = [
             'marca-pc-select2' => 'not_in:0',
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3])
+                Rule::in([1, 2, 3, 6])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'os-pc-select2' => [
@@ -463,20 +464,20 @@ class LaptopController extends Controller
             'val-select2-ram0' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
             ],
             'val-select2-ram1' => [
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
             ],
             'val-select2-first-storage' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
             ],
             'val-select2-second-storage' => [
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
+                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
             ],
             'val-select2-status' => [
                 'required',
@@ -484,12 +485,12 @@ class LaptopController extends Controller
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
-            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:Devices,pc_name',
+            //'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:devices,device_name',
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
             'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i',
-        ];*/
+        ];
 
         $messages = [
             'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
@@ -540,7 +541,7 @@ class LaptopController extends Controller
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
         ];
 
-        $validator = Validator::make($request->all(), $messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
@@ -552,75 +553,85 @@ class LaptopController extends Controller
                     'danger'
                 );
         else :
-            DB::update(
-                "CALL SP_updatePc (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //23
-                [
-                    $pc->inventory_active_code = $request->get('activo-fijo-pc'),
-                    $pc->brand_id = $request->get('marca-pc-select2'),
-                    $pc->model = $request->get('modelo-pc'),
-                    $pc->serial_number = $request->get('serial-pc'),
-                    $pc->monitor_serial_number = $request->get('serial-monitor-pc'),
-                    $pc->type_device_id = Device::LAPTOP_PC_ID,
-                    $pc->slot_one_ram_id = $request->get('val-select2-ram0'),
-                    $pc->slot_two_ram_id = $request->get('val-select2-ram1'),
-                    $pc->first_storage_id = $request->get('val-select2-first-storage'),
-                    $pc->second_storage_id = $request->get('val-select2-second-storage'),
-                    $pc->processor_id = $request->get('val-select2-cpu'),
-                    $pc->ip = $request->get('ip'),
-                    $pc->mac = $request->get('mac'),
-                    $pc->nat = null,
-                    $pc->pc_name = $request->get('pc-name'),
-                    $pc->anydesk = $request->get('anydesk'),
-                    $pc->pc_image = null,
-                    $pc->campu_id = $request->get('val-select2-campus'),
-                    $pc->location = $request->get('location'),
-                    $pc->custodian_assignment_date = $request->get('custodian-assignment-date'),
-                    $pc->custodian_name = $request->get('custodian-name'),
-                    $pc->assignment_statu_id = e($request->input('val-select2-status-assignment')),
-                    $pc->observation = $request->get('observation'),
-                    $pc->pc_name_domain = $request->get('pc-domain-name'),
-                    $pc->updated_at = now('America/Bogota'),
-                    $pc->os_id = $request->get('os-pc-select2'),
+            DB::beginTransaction();
 
+            DB::update(
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //28
+                [
+                    $device->fixed_asset_number = $request->get('activo-fijo-pc'),
+                    $device->brand_id = $request->get('marca-pc-select2'),
+                    $device->model = $request->get('modelo-pc'),
+                    $device->serial_number = $request->get('serial-pc'),
+                    $device->ip = $request->get('ip'),
+                    $device->mac = $request->get('mac'),
+                    $device->nat = null,
+                    $device->domain_name = $request->get('pc-domain-name'),
+                    $device->device_name = $request->get('pc-name'),
+                    $device->anydesk = trim($request->get('anydesk')),
+                    $device->device_image = null,
+                    $device->campu_id = $request->get('val-select2-campus'),
+                    $device->location = $request->get('location'),
                     $statuId,
-                    $pcId,
+                    $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
+                    $device->custodian_name = $request->get('custodian-name'),
+                    $device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
+                    $device->observation = $request->get('observation'),
+                    $device->updated_at = now('America/Bogota'),
+
+                    $this->monitor_serial_number = null,
+                    $device->slot_one_ram_id = $request->get('val-select2-ram0'),
+                    $device->slot_two_ram_id = $request->get('val-select2-ram1'),
+                    $device->first_storage_id = $request->get('val-select2-first-storage'),
+                    $device->second_storage_id = $request->get('val-select2-second-storage'),
+                    $device->processor_id = $request->get('val-select2-cpu'),
+                    $device->os_id = $request->get('os-pc-select2'),
+
                     $userId,
+                    $deviceId,
                 ]
             );
+            DB::commit();
             return redirect()->route('user.inventory.laptop.index')
                 ->withErrors($validator)
                 ->with('pc_updated', 'Equipo actualizado en el inventario!');
         endif;
+        try {
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return back()->with('info_error', '');
+            throw $e;
+        }
     }
 
     public function destroy($id)
     {
-        $pcs = null;
-        $pcTemp = [];
+        $devices = null;
+        $deviceTemp = [];
         //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
         try {
-            $pcs = Device::findOrFail($id);
-            $pcTemp[] = DB::table('Devices')->where('id', $id)->get();
-            //("SELECT * FROM Devices WHERE id = $id", [1]);
+            $devices = Device::findOrFail($id);
+
+            $deviceTemp[] = DB::table('devices')->where('id', $id)->get();
+
             $ts = now('America/Bogota')->toDateTimeString();
             //$softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
-            $softDeletePc = array('is_active' => false, 'statu_id' => 4);
-            $pcs = DB::table('Devices')->where('id', $id)->update($softDeletePc);
-            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
+            $softDeleteDevice = array('is_active' => false, 'statu_id' => 4);
+            $devices = DB::table('devices')->where('id', $id)->update($softDeleteDevice);
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
 
-            $dateLogDeletePc = array('statu_id' => 4, 'pc_id' => $id, 'date_log' => $ts);
-            $pcs = DB::table('statu_Devices')->where('pc_id', $id)->insert($dateLogDeletePc);
-            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($pcs, true));
+            $deleteStatu = array('statu_id' => 4, 'device_id' => $id, 'date_log' => $ts);
+            $devices = DB::table('statu_devices')->where('device_id', $id)->insert($deleteStatu);
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
 
-            $pcLogDelete = array('pc_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $ts);
-            $pcs = DB::table('Device_log')->where('pc_id', $id)->insert($pcLogDelete);
+            $deviceLogDelete = array('device_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $ts);
+            $devices = DB::table('device_log')->where('device_id', $id)->insert($deviceLogDelete);
         } catch (ModelNotFoundException $e) {
             // Handle the error.
         }
 
         return response()->json([
             'message' => 'Equipo eliminado del inventario exitosamente!',
-            'result' => $pcTemp[0]
+            'result' => $deviceTemp[0]
         ]);
     }
 }

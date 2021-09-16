@@ -59,25 +59,7 @@
             </div>
             @endif
             <div class="form-group row">
-              <div class="col-md-4">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="marca-pc-select2" name="marca-pc-select2"
-                    style="width: 100%;" data-placeholder="Seleccionar fabricante..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                    @empty
-                    <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="marca-pc-select2">Fabricantes</label>
-                </div>
-                @if($errors->has('marca-pc-select2'))
-                <small class="text-danger is-invalid">{{ $errors->first('marca-pc-select2') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
@@ -96,7 +78,7 @@
                 <small class="text-danger is-invalid">{{ $errors->first('os-pc-select2') }}</small>
                 @endif
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc" value="{{ old('modelo-pc') }}"
                     maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -204,7 +186,7 @@
                     <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-cpu">Precesador</label>
+                  <label for="val-select2-cpu">Procesador</label>
                 </div>
                 @if($errors->has('val-select2-cpu'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
@@ -268,22 +250,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
-                    value="{{ old('anydesk') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="ip">Anydesk</label>
-                  <div class="input-group-append">
-                    <label for="anydesk"><img class="img-fluid" width="20px"
-                        src="https://ubuntupit.com/wp-content/uploads/2019/03/AnyDesk-remote.png" alt="anydesk">
-                    </label>
-                  </div>
-                </div>
-                @if($errors->has('anydesk'))
-                <small class="text-danger is-invalid">{{ $errors->first('anydesk') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <div class="form-material">
                     <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
@@ -303,7 +270,7 @@
                   @endif
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
                     value="{{ old('pc-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -408,7 +375,8 @@
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                     data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                    value="{{ old('observation') }}"></textarea>
+                    value="{{ old('observation') }}"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea></textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>
