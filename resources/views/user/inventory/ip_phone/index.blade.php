@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Técnico Dashboard')
+@section('title', 'Telefonos IP')
 
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
@@ -12,7 +12,7 @@
   @include('user.partials.cards')
   <!-- Add Product -->
   <div class="col-md-6 col-xl-2">
-    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
+    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.phones.create') }}">
       <div class="block-content block-content-full block-sticky-options">
         <div class="block-options">
           <div class="block-options-item">
@@ -29,8 +29,6 @@
   </div>
   <!-- END Add Product -->
 </div>
-
-@include('user.partials.modal')
 
 <div class="col-md-14">
   <div class="block block-rounded block-bordered">
@@ -98,7 +96,7 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.pc.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.ipphone.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -134,7 +132,7 @@
 @endif
 
 <script>
-  let root_url_desktop = <?php echo json_encode(route('user.inventory.desktop.index')) ?>;
-  let root_url_desktop_store = <?php echo json_encode(route('user.inventory.desktop.store')) ?>;
+  let root_url_phones = <?php echo json_encode(route('user.inventory.phones.index')) ?>;
+  let root_url_phones_store = <?php echo json_encode(route('user.inventory.phones.store')) ?>;
 </script>
 @endpush

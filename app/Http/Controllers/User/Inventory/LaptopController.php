@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -28,9 +29,9 @@ class LaptopController extends Controller
 
     public function index(Request $request)
     {
-        //$globalDesktopPcCount = Device::countPc(1);   //DE ESCRITORIO
+        $globalDesktopPcCount = TypeDevice::countPc(1, Auth::id());   //DE ESCRITORIO
         //$globalTurneroPcCount = Device::countPc(2);   //TURNERO
-        //$globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
+        $globalLaptopPcCount  = TypeDevice::countPc(3, Auth::id());   //PORTATIL
         //$globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
         //$globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
 
@@ -74,9 +75,9 @@ class LaptopController extends Controller
 
         $data =
             [
-                //'globalDesktopPcCount' => $globalDesktopPcCount,
+                'globalDesktopPcCount' => $globalDesktopPcCount,
                 //'globalTurneroPcCount' => $globalTurneroPcCount,
-                //'globalLaptopPcCount' => $globalLaptopPcCount,
+                'globalLaptopPcCount' => $globalLaptopPcCount,
                 //'globalRaspberryPcCount' => $globalRaspberryPcCount,
                 //'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
@@ -298,11 +299,11 @@ class LaptopController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
+                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
                 [
-                    $this->device->inventory_code_number = $this->generatorID, //30
+                    $this->device->inventory_code_number = $this->generatorID, //32
                     $this->device->fixed_asset_number = e($request->input('activo-fijo-pc')),
-                    $this->device->type_device_id = Device::LAPTOP_PC_ID, //ID equipo de portatil
+                    $this->device->type_device_id = TypeDevice::LAPTOP_PC_ID, //ID equipo de portatil
                     $this->device->brand_id = e($request->input('marca-pc-select2')),
                     $this->device->model = e(Str::upper($request->input('modelo-pc'))),
                     $this->device->serial_number = e(Str::upper($request->input('serial-pc'))),
@@ -330,6 +331,8 @@ class LaptopController extends Controller
                     $second_storage_id,
                     $processor_id,
                     $os_id,
+                    $this->handset = null,
+                    $this->power_adapter = null,
 
                     $userId,
                 ]

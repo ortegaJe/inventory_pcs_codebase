@@ -10,6 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
 use App\Models\Device;
+use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -29,9 +30,9 @@ class TurneroController extends Controller
 
     public function index(Request $request)
     {
-        //$globalDesktopPcCount = Device::countPc(1);   //DE ESCRITORIO
+        $globalDesktopPcCount = TypeDevice::countPc(1, Auth::id());   //DE ESCRITORIO
         //$globalTurneroPcCount = Device::countPc(2);   //TURNERO
-        //$globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
+        $globalLaptopPcCount  = TypeDevice::countPc(3, Auth::id());   //PORTATIL
         //$globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
         //$globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
 
@@ -75,9 +76,9 @@ class TurneroController extends Controller
 
         $data =
             [
-                //'globalDesktopPcCount' => $globalDesktopPcCount,
+                'globalDesktopPcCount' => $globalDesktopPcCount,
                 //'globalTurneroPcCount' => $globalTurneroPcCount,
-                //'globalLaptopPcCount' => $globalLaptopPcCount,
+                'globalLaptopPcCount' => $globalLaptopPcCount,
                 //'globalRaspberryPcCount' => $globalRaspberryPcCount,
                 //'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
@@ -135,7 +136,7 @@ class TurneroController extends Controller
             ->whereIn('id', [9, 10])
             ->get();
 
-            $domainNames = Device::DOMAIN_NAME;
+        $domainNames = Device::DOMAIN_NAME;
 
         $data =
             [
@@ -288,11 +289,11 @@ class TurneroController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
+                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
                 [
-                    $this->device->inventory_code_number = $this->generatorID, //30
+                    $this->device->inventory_code_number = $this->generatorID, //32
                     $this->device->fixed_asset_number = e($request->input('activo-fijo-pc')),
-                    $this->device->type_device_id = Device::TURNERO_PC_ID, //ID equipo de escritorio
+                    $this->device->type_device_id = TypeDevice::TURNERO_PC_ID, //ID equipo de escritorio
                     $this->device->brand_id = e($request->input('marca-pc-select2')),
                     $this->device->model = e(Str::upper($request->input('modelo-pc'))),
                     $this->device->serial_number = e(Str::upper($request->input('serial-pc'))),
@@ -320,7 +321,9 @@ class TurneroController extends Controller
                     $this->second_storage_id = e($request->input('val-select2-second-storage')),
                     $this->processor_id = e($request->input('val-select2-cpu')),
                     $this->os_id = e($request->input('os-pc-select2')),
-            
+                    $this->handset = null,
+                    $this->power_adapter = null,
+
                     $userId,
                 ]
             );
@@ -392,7 +395,7 @@ class TurneroController extends Controller
             ->whereIn('id', [9, 10])
             ->get();
 
-            $domainNames = Device::DOMAIN_NAME;
+        $domainNames = Device::DOMAIN_NAME;
 
         $data =
             [
@@ -521,7 +524,7 @@ class TurneroController extends Controller
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
         ];
 
-        $validator = Validator::make($request->all(), $rules,$messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()

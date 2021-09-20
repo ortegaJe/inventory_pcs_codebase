@@ -17,7 +17,6 @@ class CreateComponentsTable extends Migration
         Schema::create('components', function (Blueprint $table) {
             //$table->id();
             $table->unsignedBigInteger('device_id')->nullable();
-            $table->unsignedBigInteger('type_device_id')->nullable();
             $table->string('monitor_serial_number')->nullable();
             $table->unsignedBigInteger('slot_one_ram_id')->nullable();
             $table->unsignedBigInteger('slot_two_ram_id')->nullable();
@@ -28,7 +27,6 @@ class CreateComponentsTable extends Migration
             $table->boolean('power_adapter')->nullable();
 
             $table->foreign('device_id')->references('id')->on('devices')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('type_device_id')->references('id')->on('type_devices')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_one_ram_id')->references('id')->on('memory_rams')->nullOnDelete()->cascadeOnUpdate();
             $table->foreign('slot_two_ram_id')->references('id')->on('memory_rams')->OnDelete('no action')->OnUpdate('no action');
             $table->foreign('first_storage_id')->references('id')->on('storages')->nullOnDelete()->cascadeOnUpdate();

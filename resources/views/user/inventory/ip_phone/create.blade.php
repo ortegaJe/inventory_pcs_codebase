@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo De Escritorio</h2>
+    <h2 class="content-heading">Registrar Nuevo Telefono IP</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -25,7 +25,7 @@
           <a class="nav-link active" href="#wizard-progress2-step1" data-toggle="tab">1. Equipo</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#wizard-progress2-step2" data-toggle="tab">2. Hardware</a>
+          <a class="nav-link" href="#wizard-progress2-step2" data-toggle="tab">2. Accesorios</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#wizard-progress2-step3" data-toggle="tab">3. Red</a>
@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('user.inventory.desktop.store') }}" method="POST">
+      <form action="{{ route('user.inventory.phones.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -69,7 +69,7 @@
             </ul>
             @endif --}}
             <div class="form-group row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="marca-pc-select2" name="marca-pc-select2"
                     style="width: 100%;" data-placeholder="Seleccionar fabricante..">
@@ -87,7 +87,7 @@
                 <small class="text-danger is-invalid">{{ $errors->first('marca-pc-select2') }}</small>
                 @endif
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc" value="{{ old('modelo-pc') }}"
                     maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -104,7 +104,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc" value="{{ old('serial-pc') }}"
                     maxlength="24" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -119,22 +119,7 @@
                 <small class="text-danger is-invalid">{{ $errors->first('serial-pc') }}</small>
                 @endif
               </div>
-              <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc" maxlength="24"
-                    value="{{ old('serial-monitor-pc') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="serial-monitor-pc">Número Serial de monitor</label>
-                  <div class="input-group-append">
-                    <span class="input-group-text">
-                      <i class="fa fa-fw fa-barcode"></i>
-                    </span>
-                  </div>
-                </div>
-                @if($errors->has('serial-monitor-pc'))
-                <small class="text-danger is-invalid">{{ $errors->first('serial-monitor-pc') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
                     value="{{ old('activo-fijo-pc') }}" maxlength="20"
@@ -155,7 +140,41 @@
           <!-- END Step 1 -->
 
           <!-- Step 2 -->
+          <input type="hidden" name="handset" value="0">
+          <input type="hidden" name="power-adapter" value="0">
           <div class="tab-pane" id="wizard-progress2-step2" role="tabpanel">
+            <div class="form-group row text-center">
+              <div class="col-md-6">
+                <div class="mb-2"><i class="fa fa-phone fa-4x text-muted"></i></div>
+                <label class="css-control css-control-primary css-checkbox" for="handset">
+                  <input type="checkbox" class="css-control-input" id="handset" name="handset" value="1">
+                  <span class="css-control-indicator"></span> Tiene bocina?
+                </label>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-2"><i class="fa fa-plug fa-4x text-muted"></i></div>
+                <label class="css-control css-control-primary css-checkbox" for="power-adapter">
+                  <input type="checkbox" class="css-control-input" id="power-adapter" name="power-adapter" value="1">
+                  <span class="css-control-indicator"></span> tiene adaptador de energia?
+                </label>
+              </div>
+            </div>
+            {{--<div class="col-md-6">
+                <label class="css-control css-control-sm css-control-success css-switch">
+                  <div class="mb-2 text-center"><i class="fa fa-phone fa-4x text-muted"></i></div>
+                  <input type="hidden" name="handset" value="0">
+                  <input type="checkbox" class="css-control-input" id="handset" name="handset" value="1">
+                  <span class="css-control-indicator"></span> Tiene bocina?
+                </label>
+              </div>
+              <div class="col-md-6">
+                <label class="css-control css-control-sm css-control-success css-switch">
+                  <div class="mb-2 text-center"><i class="fa fa-plug fa-4x text-muted"></i></div>
+                  <input type="hidden" name="power-adpater" value="0">
+                  <input type="checkbox" class="css-control-input" id="power-adapter" name="power-adapter" value="1">
+                  <span class="css-control-indicator"></span> Tiene adaptador de corriente?
+                </label>
+              </div>--}}
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material">
@@ -215,22 +234,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
-                    value="{{ old('anydesk') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="ip">Anydesk</label>
-                  <div class="input-group-append">
-                    <label for="anydesk"><img class="img-fluid" width="20px"
-                        src="https://ubuntupit.com/wp-content/uploads/2019/03/AnyDesk-remote.png" alt="anydesk">
-                    </label>
-                  </div>
-                </div>
-                @if($errors->has('anydesk'))
-                <small class="text-danger is-invalid">{{ $errors->first('anydesk') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <div class="form-material">
                     <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
@@ -250,7 +254,7 @@
                   @endif
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
                     value="{{ old('pc-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -411,13 +415,8 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
 <script src="{{ asset('/js/pages/be_ui_activity.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
-<script>
-  jQuery(function(){ Codebase.helpers('notify'); });
-</script>
 
 <!-- Page JS Code -->
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
@@ -429,17 +428,6 @@
   jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });
 </script>
 
-@if(Session::has('message'))
-<script>
-  Codebase.helpers('notify', {
-    align: 'right', // 'right', 'left', 'center'
-    from: 'top', // 'top', 'bottom'
-    type: 'info', // 'info', 'success', 'warning', 'danger'
-    icon: 'fa fa-info mr-5', // Icon class
-    message: '{!! Session::get('message') !!}'
-});
-</script>
-@endif
 <script>
   $('.text-danger').slideDown();
   setTimeout(function(){ $('.text-danger').slideUp(); }, 50000);

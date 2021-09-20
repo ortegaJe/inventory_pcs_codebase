@@ -31,10 +31,9 @@ class DesktopController extends Controller
 
     public function index(Request $request)
     {
-        $globalDesktopPcCount = TypeDevice::countPc(1,Auth::id());   //DE ESCRITORIO
-        return response()->json($globalDesktopPcCount);
+        $globalDesktopPcCount = TypeDevice::countPc(1, Auth::id());   //DE ESCRITORIO
         //$globalTurneroPcCount = Device::countPc(2);   //TURNERO
-        //$globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
+        $globalLaptopPcCount  = TypeDevice::countPc(3, Auth::id());   //PORTATIL
         //$globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
         //$globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
 
@@ -80,7 +79,7 @@ class DesktopController extends Controller
             [
                 'globalDesktopPcCount' => $globalDesktopPcCount,
                 //'globalTurneroPcCount' => $globalTurneroPcCount,
-                //'globalLaptopPcCount' => $globalLaptopPcCount,
+                'globalLaptopPcCount' => $globalLaptopPcCount,
                 //'globalRaspberryPcCount' => $globalRaspberryPcCount,
                 //'globalAllInOnePcCount' => $globalAllInOnePcCount,
             ];
@@ -298,11 +297,11 @@ class DesktopController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
+                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
                 [
-                    $this->device->inventory_code_number = $this->generatorID, //30
+                    $this->device->inventory_code_number = $this->generatorID, //32
                     $this->device->fixed_asset_number = e($request->input('activo-fijo-pc')),
-                    $this->device->type_device_id = Device::DESKTOP_PC_ID, //ID equipo de escritorio
+                    $this->device->type_device_id = TypeDevice::DESKTOP_PC_ID, //ID equipo de escritorio
                     $this->device->brand_id = e($request->input('marca-pc-select2')),
                     $this->device->model = e(Str::upper($request->input('modelo-pc'))),
                     $this->device->serial_number = e(Str::upper($request->input('serial-pc'))),
@@ -330,6 +329,8 @@ class DesktopController extends Controller
                     $this->second_storage_id = e($request->input('val-select2-second-storage')),
                     $this->processor_id = e($request->input('val-select2-cpu')),
                     $this->os_id = e($request->input('os-pc-select2')),
+                    $this->handset = null,
+                    $this->power_adapter = null,
 
                     $userId,
                 ]
@@ -533,7 +534,7 @@ class DesktopController extends Controller
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
         ];
 
-        $validator = Validator::make($request->all(), $rules,$messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
