@@ -193,17 +193,17 @@
                 <div class="col-6">
                     <div class="custom-control custom-radio custom-control-inline mb-5">
                         <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" disabled
-                            @if($users->sex == 'F') checked @endif>
+                            {{$users->sex == 'F' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio1">F</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline mb-5">
                         <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" disabled
-                            @if($users->sex == 'M') checked @endif>
+                        {{$users->sex == 'M' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio2">M</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline mb-5">
                         <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio3" disabled
-                            @if($users->sex == 'O') checked @endif>
+                        {{$users->sex == 'O' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio3">Otro</label>
                     </div>
                 </div>

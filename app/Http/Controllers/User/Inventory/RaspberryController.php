@@ -376,7 +376,7 @@ class RaspberryController extends Controller
         $deviceId = $id;
         $userId = Auth::id();
 
-        $this->validate(
+        /*$this->validate(
             request(),
             // ['serial-pc' => ['required', 'max:24', 'unique:computers,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
             //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:computers,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
@@ -385,7 +385,7 @@ class RaspberryController extends Controller
             //['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:computers', 'mac' . $id]],
             ['pc-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
 
-        );
+        );*/
 
         $rules = [
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',

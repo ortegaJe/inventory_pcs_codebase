@@ -10,7 +10,7 @@
 <!-- Page Content -->
 <div class="content">
   <div class="row gutters-tiny mb-2">
-    {{--  <!-- Total equipos de escritorios -->
+    <!-- Total equipos de escritorios -->
     <div class="col-md-6 col-xl-2">
       <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
         <div class="block-content block-content-full block-sticky-options">
@@ -30,7 +30,7 @@
 </div>
 <!-- END Total equipos de escritorios -->
 
-<!-- All In One -->
+{{--  <!-- All In One -->
 <div class="col-md-6 col-xl-2">
   <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
     <div class="block-content block-content-full block-sticky-options">

@@ -211,16 +211,15 @@
                   <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
-                      {{--  @php $globalPcCount = DB::table('computers')->select('id')
-                                                //->whereIn('statu_id',[1,2,3,5,6,7,8])
-                                                ->where('is_active',[1])
-                                                ->where('deleted_at', null)
-                                                ->count(); @endphp
-                                                {{ $globalPcCount ?? '0' }}--}}
+                      @php $globalDeviceCount = DB::table('view_all_devices')
+                      ->where('TecnicoID', Auth::id())
+                      ->count(); 
+                      @endphp
+                      {{ $globalDeviceCount ?? '0' }}
                     </span>
                   </a>
                   <ul>
-                    <li>
+                  <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.desktop.index') }}">De escritorios

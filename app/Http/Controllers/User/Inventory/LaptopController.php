@@ -436,7 +436,7 @@ class LaptopController extends Controller
         $deviceId = $id;
         $userId = Auth::id();
 
-        $this->validate(
+        /*$this->validate(
             request(),
             //['serial-pc' => ['required', 'max:24', 'unique:Devices,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
             //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:Devices,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
@@ -446,7 +446,7 @@ class LaptopController extends Controller
             //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:Devices,anydesk' . $id]],
             ['device-name' => ['nullable', 'max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
 
-        );
+        );*/
 
         $rules = [
             'marca-pc-select2' => 'not_in:0',
@@ -578,7 +578,7 @@ class LaptopController extends Controller
                     $device->observation = $request->get('observation'),
                     $device->updated_at = now('America/Bogota'),
 
-                    $this->monitor_serial_number = null,
+                    $device->monitor_serial_number = null,
                     $device->slot_one_ram_id = $request->get('val-select2-ram0'),
                     $device->slot_two_ram_id = $request->get('val-select2-ram1'),
                     $device->first_storage_id = $request->get('val-select2-first-storage'),

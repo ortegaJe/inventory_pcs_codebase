@@ -153,16 +153,16 @@ class CampuController extends Controller
 
         $userLists = User::all();
 
-        $typeDevices = DB::table('components as c')
-            ->leftJoin('type_devices as td', 'td.id', 'c.type_device_id')
-            ->leftJoin('devices as d', 'd.id', 'c.device_id')
+        $typeDevices = DB::table('devices as d')
+            ->leftJoin('type_devices as td', 'td.id', 'd.type_device_id')
+            ->leftJoin('components as c', 'c.device_id', 'd.id')
             ->select(
-                DB::raw("COUNT(c.type_device_id) AS numberTypeDevice"),
+                DB::raw("COUNT(d.type_device_id) AS numberTypeDevice"),
                 'td.name as nameTypeDevice',
                 'd.campu_id as SedeId'
             )
             ->where('d.campu_id', $id)
-            ->groupBy('c.type_device_id', 'td.name', 'd.campu_id')
+            ->groupBy('d.type_device_id', 'td.name', 'd.campu_id')
             ->get();
         //return response()->json($typeDevices);
 

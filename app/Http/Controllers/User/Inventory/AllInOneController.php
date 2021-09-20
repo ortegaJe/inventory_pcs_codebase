@@ -425,7 +425,7 @@ class AllInOneController extends Controller
         $deviceId = $id;
         $userId = Auth::id();
 
-        $this->validate(
+        /*$this->validate(
             request(),
             //['serial-pc' => ['required', 'max:24', 'unique:computers,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
             //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:computers,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
@@ -435,7 +435,7 @@ class AllInOneController extends Controller
             //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:computers,anydesk' . $id]],
             ['pc-name' => ['max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
 
-        );
+        );*/
 
         $rules = [
             'marca-pc-select2' => 'not_in:0',

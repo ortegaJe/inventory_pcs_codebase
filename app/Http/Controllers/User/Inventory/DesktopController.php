@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Http\Requests\UpdateFormRequest;
 use App\Models\Component;
 use App\Models\Device;
+use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -29,7 +31,8 @@ class DesktopController extends Controller
 
     public function index(Request $request)
     {
-        //$globalDesktopPcCount = Device::countPc(1);   //DE ESCRITORIO
+        $globalDesktopPcCount = TypeDevice::countPc(1,Auth::id());   //DE ESCRITORIO
+        return response()->json($globalDesktopPcCount);
         //$globalTurneroPcCount = Device::countPc(2);   //TURNERO
         //$globalLaptopPcCount  = Device::countPc(3);   //PORTATIL
         //$globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
@@ -38,7 +41,7 @@ class DesktopController extends Controller
         if ($request->ajax()) {
 
             $devices = DB::table('view_all_devices')
-                ->where('TipoPc', Device::EQUIPOS_ESCRITORIOS)
+                ->where('TipoPc', TypeDevice::EQUIPOS_ESCRITORIOS)
                 ->where('TecnicoID', Auth::id())
                 ->get();
 
@@ -75,7 +78,7 @@ class DesktopController extends Controller
 
         $data =
             [
-                //'globalDesktopPcCount' => $globalDesktopPcCount,
+                'globalDesktopPcCount' => $globalDesktopPcCount,
                 //'globalTurneroPcCount' => $globalTurneroPcCount,
                 //'globalLaptopPcCount' => $globalLaptopPcCount,
                 //'globalRaspberryPcCount' => $globalRaspberryPcCount,
@@ -163,15 +166,6 @@ class DesktopController extends Controller
 
     public function store(Request $request)
     {
-        $monitor_serial_number = e($request->input('serial-monitor-pc'));
-        $slot_one_ram_id = e($request->input('val-select2-ram0'));
-        $slot_two_ram_id = e($request->input('val-select2-ram1'));
-        $first_storage_id = e($request->input('val-select2-first-storage'));
-        $second_storage_id = e($request->input('val-select2-second-storage'));
-        $processor_id = e($request->input('val-select2-cpu'));
-        $os_id = e($request->input('os-pc-select2'));
-
-        $statusId = e($request->input('val-select2-status'));
         $userId = Auth::id();
 
         $rules = [
@@ -321,7 +315,7 @@ class DesktopController extends Controller
                     $this->device->device_image = null,
                     $this->device->campu_id = e($request->input('val-select2-campus')),
                     $this->device->location = e($request->input('location')),
-                    $statusId,
+                    $this->status_id = e($request->input('val-select2-status')),
                     $this->device->custodian_assignment_date = e($request->input('custodian-assignment-date')),
                     $this->device->custodian_name = e($request->input('custodian-name')),
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
@@ -329,13 +323,13 @@ class DesktopController extends Controller
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota')->toDateTimeString(),
 
-                    $monitor_serial_number,
-                    $slot_one_ram_id,
-                    $slot_two_ram_id,
-                    $first_storage_id,
-                    $second_storage_id,
-                    $processor_id,
-                    $os_id,
+                    $this->monitor_serial_number = e($request->input('serial-monitor-pc')),
+                    $this->slot_one_ram_id = e($request->input('val-select2-ram0')),
+                    $this->slot_two_ram_id = e($request->input('val-select2-ram1')),
+                    $this->first_storage_id = e($request->input('val-select2-first-storage')),
+                    $this->second_storage_id = e($request->input('val-select2-second-storage')),
+                    $this->processor_id = e($request->input('val-select2-cpu')),
+                    $this->os_id = e($request->input('os-pc-select2')),
 
                     $userId,
                 ]
@@ -432,21 +426,19 @@ class DesktopController extends Controller
     public function update(Request $request, $id)
     {
         $device = Device::findOrFail($id);
-        $statuId = $request->get('val-select2-status');
         $deviceId = $id;
         $userId = Auth::id();
 
-        $this->validate(
-            request(),
-            //['serial-pc' => ['required', 'max:24', 'unique:Devices,serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            //['activo-fijo-pc' => ['nullable', 'max:15', 'unique:Devices,inventory_active_code', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            //['serial-monitor-pc' => ['nullable', 'max:24', 'unique:Devices,monitor_serial_number', 'regex:/^[0-9a-zA-Z-]+$/i' . $id]],
-            ['ip' => ['nullable', 'ipv4' . $id]],
-            //['mac' => ['nullable|max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'unique:Devices', 'mac' . $id]],
-            //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:Devices,anydesk' . $id]],
-            ['pc-name' => ['max:20', 'regex:/^[0-9a-zA-Z-]+$/i', 'unique:devices,device_name,' . $id]]
+        /*$request->validate([
+            'serial-pc' => 'required', 'regex:/^[0-9a-zA-Z-]+$/i',Rule::unique('devices,serial_number,')->ignore($id),
+            //['activo-fijo-pc' => ['nullable', 'max:15', 'regex:/^[0-9a-zA-Z-]+$/i','unique:devices,inventory_active_code,' . $device]],
+            //['serial-monitor-pc' => ['nullable', 'regex:/^[0-9a-zA-Z-]+$/i','unique:devices,monitor_serial_number,' . $device]],
+            'ip' => 'nullable','ipv4',Rule::unique('devices,ip,')->ignore($id),
+            'mac' => 'nullable','max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', Rule::unique('devices,mac,')->ignore($id),
+            //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:devices,anydesk,' . $id]],
+            'pc-name' => 'required','max:20', 'regex:/^[0-9a-zA-Z-]+$/i', Rule::unique('devices,device_name,')->ignore($id),
 
-        );
+        ]);*/
 
         $rules = [
             'marca-pc-select2' => 'not_in:0',
@@ -485,7 +477,7 @@ class DesktopController extends Controller
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
-            //'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+            //'pc-name' => 'required|max:20|regex:/^[0-9a-zA-Z-]+$/i',
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
@@ -493,7 +485,6 @@ class DesktopController extends Controller
         ];
 
         $messages = [
-            'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
             'marca-pc-select2.required' => 'Seleccione una marca de computador',
             'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
             'modelo-pc.regex' => 'Símbolo(s) no permitido en el campo modelo',
@@ -530,6 +521,7 @@ class DesktopController extends Controller
             'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
             'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
             'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
+            'pc-name.required' => 'Es requerido un nombre de equipo',
             'custodian-assignment-date.required_with' => 'El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
             'custodian-assignment-date.date' => 'Este no es un formato de fecha permitido',
             'custodian-assignment-date.max' => 'Solo esta permitido 10 caracteres para la fecha',
@@ -541,7 +533,7 @@ class DesktopController extends Controller
             'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
         ];
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), $rules,$messages);
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
@@ -571,10 +563,10 @@ class DesktopController extends Controller
                     $device->device_image = null,
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
-                    $statuId,
+                    $device->status_id = $request->get('val-select2-status'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
-                    $device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
+                    $device->assignment_statu_id = $request->get('val-select2-status-assignment'),
                     $device->observation = $request->get('observation'),
                     $device->updated_at = now('America/Bogota'),
 
