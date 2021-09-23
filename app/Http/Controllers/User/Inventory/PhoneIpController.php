@@ -4,11 +4,13 @@ namespace App\Http\Controllers\User\Inventory;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Component;
 use App\Models\Computer;
 use App\Models\Device;
 use Illuminate\Support\Str;
 use App\Models\TypeDevice;
 use Faker\Provider\Uuid;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +26,7 @@ class PhoneIpController extends Controller
     {
         $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'TEL');
         $this->device = new Device();
+        $this->component = new Component();
     }
 
 
@@ -129,6 +132,8 @@ class PhoneIpController extends Controller
     public function store(Request $request)
     {
         $userId = Auth::id();
+
+        //return response()->json($this->component);
 
         $rules = [
 
@@ -236,17 +241,17 @@ class PhoneIpController extends Controller
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota')->toDateTimeString(),
-
-                    $this->monitor_serial_number = null,
-                    $this->slot_one_ram_id = null,
-                    $this->slot_two_ram_id = null,
-                    $this->first_storage_id = null,
-                    $this->second_storage_id = null,
-                    $this->processor_id = null,
-                    $this->os_id = null,
-                    $this->handset = e($request->input('handset')),
-                    $this->power_adapter = e($request->input('power-adapter')),
-
+            
+                    $this->component->monitor_serial_number = null,
+                    $this->component->slot_one_ram_id = null,
+                    $this->component->slot_two_ram_id = null,
+                    $this->component->first_storage_id = null,
+                    $this->component->second_storage_id = null,
+                    $this->component->processor_id = null,
+                    $this->component->os_id = null,
+                    $this->component->handset = $request->has('handset'),
+                    $this->component->power_adapter = $request->has('power-adapter'),
+            
                     $userId,
                 ]
             );
@@ -319,11 +324,185 @@ class PhoneIpController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $device = Device::findOrFail($id);
+        $component = Component::select('device_id')->first();
+        $deviceId = $id;
+        $userId = Auth::id();
+
+        /*$request->validate([
+            'serial-pc' => 'required', 'regex:/^[0-9a-zA-Z-]+$/i',Rule::unique('devices,serial_number,')->ignore($id),
+            //['activo-fijo-pc' => ['nullable', 'max:15', 'regex:/^[0-9a-zA-Z-]+$/i','unique:devices,inventory_active_code,' . $device]],
+            //['serial-monitor-pc' => ['nullable', 'regex:/^[0-9a-zA-Z-]+$/i','unique:devices,monitor_serial_number,' . $device]],
+            'ip' => 'nullable','ipv4',Rule::unique('devices,ip,')->ignore($id),
+            'mac' => 'nullable','max:17', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', Rule::unique('devices,mac,')->ignore($id),
+            //['anydesk' => ['nullable', 'max:24', 'regex:/^[0-9a-zA-Z- @]+$/i', 'unique:devices,anydesk,' . $id]],
+            'pc-name' => 'required','max:20', 'regex:/^[0-9a-zA-Z-]+$/i', Rule::unique('devices,device_name,')->ignore($id),
+
+        ]);*/
+
+        $rules = [
+            'marca-pc-select2' => 'not_in:0',
+            'marca-pc-select2' => [
+                'required',
+                'numeric',
+                Rule::in([1, 2, 3, 6])
+            ],
+            'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
+            'val-select2-status' => [
+                'required',
+                'numeric',
+                Rule::in([1, 2, 3, 5, 6, 7, 8])
+            ],
+            'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
+            //'pc-name' => 'required|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+            'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
+            'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
+            'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
+            'observation' => 'nullable|max:255',
+        ];
+
+        $messages = [
+            'marca-pc-select2.required' => 'Seleccione una marca de computador',
+            'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
+            'modelo-pc.regex' => 'Símbolo(s) no permitido en el campo modelo',
+            'serial-pc.required' => 'Campo serial es requerido',
+            'serial-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
+            'serial-pc.unique' => 'Ya existe un equipo registrado con este serial',
+            'activo-fijo-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
+            'activo-fijo-pc.unique' => 'Símbolo(s) no permitido en el campo activo fijo',
+            'activo-fijo-pc.max' => 'Solo se permite 24 caracteres para el activo fijo',
+            'serial-monitor-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
+            'serial-monitor-pc.unique' => 'Ya existe un monitor registrado con este serial',
+            'os-pc-select2.required' => 'Seleccione un sistema operativo',
+            'os-pc-select2.in' => 'Seleccione un sistema operativo válido en la lista',
+            'val-select2-ram0.required' => 'Seleccione una memoria ram',
+            'val-select2-ram0.in' => 'Seleccione una memoria ram valida en la lista',
+            'val-select2-ram1.in' => 'Seleccione una memoria ram valida en la lista',
+            'val-select2-first-storage.required' => 'Seleccione un disco duro',
+            'val-select2-first-storage.in' => 'Seleccione un disco duro válido en la lista',
+            'val-select2-second-storage.in' => 'Seleccione un disco duro válido en la lista',
+            'val-select2-status.required' => 'Seleccione un estado del equipo',
+            'val-select2-status.in' => 'Seleccione un estado válido en la lista',
+            'ip.ipv4' => 'Direccion IP no valida',
+            'ip.max' => 'Direccion IP no valida',
+            'ip.unique' => 'Ya existe un equipo con esta IP registrado',
+            'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
+            'mac.max' => 'Direccion MAC no valida',
+            'mac.unique' => 'Ya existe un equipo con esta MAC registrado',
+            'pc-domain-name.required' => 'Un nombre de dominio es requerido',
+            'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
+            'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
+            'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
+            'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
+            'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
+            'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
+            'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
+            'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
+            'pc-name.required' => 'Es requerido un nombre de equipo',
+            'custodian-assignment-date.required_with' => 'El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
+            'custodian-assignment-date.date' => 'Este no es un formato de fecha permitido',
+            'custodian-assignment-date.max' => 'Solo esta permitido 10 caracteres para la fecha',
+            'custodian-name.required_with'  => 'El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
+            'custodian-name.max' => 'Solo esta permitido 56 caracteres para la el nombre del custodio',
+            'custodian-name.regex' => 'Símbolo(s) no permitido en el campo nombre del custodio',
+            'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
+            'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
+            'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) :
+            return back()->withErrors($validator)
+                ->withInput()
+                ->with(
+                    'message',
+                    ')-: Campos sin selecionar o con errores'
+                )->with(
+                    'typealert',
+                    'danger'
+                );
+        else :
+            DB::beginTransaction();
+
+            DB::update(
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
+                [
+                    $device->fixed_asset_number = $request->get('activo-fijo-pc'),
+                    $device->brand_id = $request->get('marca-pc-select2'),
+                    $device->model = $request->get('modelo-pc'),
+                    $device->serial_number = $request->get('serial-pc'),
+                    $device->ip = $request->get('ip'),
+                    $device->mac = $request->get('mac'),
+                    $device->nat = null,
+                    $device->domain_name = $request->get('pc-domain-name'),
+                    $device->device_name = $request->get('pc-name'),
+                    $device->anydesk = null,
+                    $device->device_image = null,
+                    $device->campu_id = $request->get('val-select2-campus'),
+                    $device->location = $request->get('location'),
+                    $device->status_id = $request->get('val-select2-status'),
+                    $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
+                    $device->custodian_name = $request->get('custodian-name'),
+                    $device->assignment_statu_id = $request->get('val-select2-status-assignment'),
+                    $device->observation = $request->get('observation'),
+                    $device->updated_at = now('America/Bogota'),
+
+                    $component->monitor_serial_number = null,
+                    $component->slot_one_ram_id = null,
+                    $component->slot_two_ram_id = null,
+                    $component->first_storage_id = null,
+                    $component->second_storage_id = null,
+                    $component->processor_id = null,
+                    $component->os_id = null,
+                    $component->handset = $request->has('handset'),
+                    $component->power_adapter = $request->has('power-adapter'),
+
+                    $userId,
+                    $deviceId,
+                ]
+            );
+            DB::commit();
+            return redirect()->route('user.inventory.phones.index')
+                ->withErrors($validator)
+                ->with('pc_updated', 'Equipo actualizado en el inventario!');
+        endif;
+        try {
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return back()->with('info_error', '');
+            throw $e;
+        }
     }
 
     public function destroy($id)
     {
-        //
+        $devices = null;
+        $deviceTemp = [];
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
+        try {
+            $devices = Device::findOrFail($id);
+
+            $deviceTemp[] = DB::table('devices')->where('id', $id)->get();
+
+            $ts = now('America/Bogota')->toDateTimeString();
+            //$softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
+            $softDeleteDevice = array('is_active' => false, 'statu_id' => 4);
+            $devices = DB::table('devices')->where('id', $id)->update($softDeleteDevice);
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
+
+            $deleteStatu = array('statu_id' => 4, 'device_id' => $id, 'date_log' => $ts);
+            $devices = DB::table('statu_devices')->where('device_id', $id)->insert($deleteStatu);
+            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
+
+            $deviceLogDelete = array('device_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $ts);
+            $devices = DB::table('device_log')->where('device_id', $id)->insert($deviceLogDelete);
+        } catch (ModelNotFoundException $e) {
+            // Handle the error.
+        }
+
+        return response()->json([
+            'message' => 'Equipo eliminado del inventario exitosamente!',
+            'result' => $deviceTemp[0]
+        ]);
     }
 }

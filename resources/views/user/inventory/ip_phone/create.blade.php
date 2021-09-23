@@ -198,7 +198,6 @@
             </div>
           </div>
           <!-- END Step 2 -->
-
           <!-- Step 3 -->
           <div class="tab-pane" id="wizard-progress2-step3" role="tabpanel">
             <div class="form-group row">

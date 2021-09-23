@@ -424,10 +424,10 @@ class DesktopController extends Controller
         return view('user.inventory.desktop.edit')->with($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $device)
     {
-        $device = Device::findOrFail($id);
-        $deviceId = $id;
+        $device = Device::findOrFail($device);
+        $component = Component::select('device_id')->first();
         $userId = Auth::id();
 
         /*$request->validate([
@@ -549,7 +549,7 @@ class DesktopController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //28
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
                     $device->brand_id = $request->get('marca-pc-select2'),
@@ -571,16 +571,18 @@ class DesktopController extends Controller
                     $device->observation = $request->get('observation'),
                     $device->updated_at = now('America/Bogota'),
 
-                    $device->monitor_serial_number = $request->get('serial-monitor-pc'),
-                    $device->slot_one_ram_id = $request->get('val-select2-ram0'),
-                    $device->slot_two_ram_id = $request->get('val-select2-ram1'),
-                    $device->first_storage_id = $request->get('val-select2-first-storage'),
-                    $device->second_storage_id = $request->get('val-select2-second-storage'),
-                    $device->processor_id = $request->get('val-select2-cpu'),
-                    $device->os_id = $request->get('os-pc-select2'),
+                    $component->monitor_serial_number = $request->get('serial-monitor-pc'),
+                    $component->slot_one_ram_id = $request->get('val-select2-ram0'),
+                    $component->slot_two_ram_id = $request->get('val-select2-ram1'),
+                    $component->first_storage_id = $request->get('val-select2-first-storage'),
+                    $component->second_storage_id = $request->get('val-select2-second-storage'),
+                    $component->processor_id = $request->get('val-select2-cpu'),
+                    $component->os_id = $request->get('os-pc-select2'),
+                    $component->handset = null,
+                    $component->power_adapter = null,
 
                     $userId,
-                    $deviceId,
+                    $device,
                 ]
             );
             DB::commit();

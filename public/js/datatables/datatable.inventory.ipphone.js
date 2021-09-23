@@ -12,7 +12,11 @@ $(document).ready(function() {
             '<div class="slider">' +
             '<table class="table-responsive td-slider" style="font-size:13">' +
             "<tr>" +
-            "<td></td>" +
+            "<td>Marca: " +
+            '<span class="badge badge-pill badge-success">' +
+            d.Marca +
+            "</span>" +
+            "</td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +

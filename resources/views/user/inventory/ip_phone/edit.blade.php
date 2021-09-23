@@ -37,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('user.inventory.phones.edit', $deviceComponents->device_id) }}" method="PATCH">
+      <form action="{{ route('user.inventory.phones.update', $deviceComponents->device_id) }}" method="POST">
         @csrf
         @method('PATCH')
         <!-- Steps Content -->
@@ -151,7 +151,7 @@
                 <div class="mb-2"><i class="fa fa-phone fa-4x text-muted"></i></div>
                 <label class="css-control css-control-primary css-checkbox" for="handset">
                   <input type="checkbox" class="css-control-input" id="handset" name="handset"
-                    {{ $deviceComponents->handset == 1 ? 'checked' : '' }}>
+                  {{ $deviceComponents->handset == 1 ? 'checked' : '' }} value="1">
                   <span class="css-control-indicator"></span> Tiene bocina?
                 </label>
               </div>
@@ -159,7 +159,7 @@
                 <div class="mb-2"><i class="fa fa-plug fa-4x text-muted"></i></div>
                 <label class="css-control css-control-primary css-checkbox" for="power-adapter">
                   <input type="checkbox" class="css-control-input" id="power-adapter" name="power-adapter"
-                    {{ $deviceComponents->power_adapter == 1 ? 'checked' : '' }}>
+                  {{ $deviceComponents->power_adapter == 1 ? 'checked' : '' }} value="1">
                   <span class="css-control-indicator"></span> tiene adaptador de energia?
                 </label>
               </div>
@@ -190,7 +190,6 @@
                     @forelse ($status as $statu)
                     <option value="{{ $statu->id }}" {{ $statu->id == $deviceComponents->statu_id ? 'selected' : '' }}>
                       {{ Str::title($statu->name) }}
-                    </option>
                     </option>
                     @empty
                     <option>NO EXISTEN ESTADOS REGISTRADOS</option>
@@ -314,7 +313,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="location" name="location" maxlength="56"
-                    value="{{ old('location') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ $deviceComponents->location }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="location">Ubicación en la sede</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -331,7 +330,8 @@
               <div class="col-md-3">
                 <div class="form-material">
                   <input type="text" class="js-flatpickr form-control" id="custodian-assignment-date"
-                    name="custodian-assignment-date" placeholder="d-m-Y" data-allow-input="true" maxlength="10">
+                    name="custodian-assignment-date" placeholder="d-m-Y" data-allow-input="true" maxlength="10"
+                    value="{{ $deviceComponents->custodian_assignment_date }}">
                   <label for="custodian-assignment-date">Fecha de asignación al custodio</label>
                 </div>
                 @if($errors->has('custodian-assignment-date'))
@@ -341,7 +341,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="custodian-name" name="custodian-name" maxlength="56"
-                    value="{{ old('custodian-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ $deviceComponents->custodian_name }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="custodian-name">Nombres y apellidos del custodio</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -360,7 +360,7 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($statusAssignments as $statuAssignment)
-                    <option value="{{ $statuAssignment->id }}">
+                    <option value="{{ $statuAssignment->id }}" {{ $statuAssignment->id == $deviceComponents->assignment_statu_id ? 'selected' : ''}}>
                       {{ Str::title($statuAssignment->name) }}
                     </option>
                     @empty
@@ -380,8 +380,7 @@
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                     data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                    value="{{ old('observation') }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">{{ $deviceComponents->observation }}</textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>

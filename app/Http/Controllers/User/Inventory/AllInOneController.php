@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\Component;
 use App\Models\Device;
 use App\Models\TypeDevice;
 use Carbon\Carbon;
@@ -421,11 +422,10 @@ class AllInOneController extends Controller
         return view('user.inventory.allinone.edit')->with($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $device)
     {
-        $device = Device::findOrFail($id);
-        $statuId = $request->get('val-select2-status');
-        $deviceId = $id;
+        $device = Device::findOrFail($device);
+        $component = Component::select('device_id')->first();
         $userId = Auth::id();
 
         /*$this->validate(
@@ -548,7 +548,7 @@ class AllInOneController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //28
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
                     $device->brand_id = $request->get('marca-pc-select2'),
@@ -563,23 +563,25 @@ class AllInOneController extends Controller
                     $device->device_image = null,
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
-                    $statuId,
+                    $device->status_id = $request->get('val-select2-status'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
                     $device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $device->observation = $request->get('observation'),
                     $device->updated_at = now('America/Bogota'),
 
-                    $this->monitor_serial_number = null,
-                    $device->slot_one_ram_id = $request->get('val-select2-ram0'),
-                    $device->slot_two_ram_id = $request->get('val-select2-ram1'),
-                    $device->first_storage_id = $request->get('val-select2-first-storage'),
-                    $device->second_storage_id = $request->get('val-select2-second-storage'),
-                    $device->processor_id = $request->get('val-select2-cpu'),
-                    $device->os_id = $request->get('os-pc-select2'),
+                    $component->monitor_serial_number = null,
+                    $component->slot_one_ram_id = $request->get('val-select2-ram0'),
+                    $component->slot_two_ram_id = $request->get('val-select2-ram1'),
+                    $component->first_storage_id = $request->get('val-select2-first-storage'),
+                    $component->second_storage_id = $request->get('val-select2-second-storage'),
+                    $component->processor_id = $request->get('val-select2-cpu'),
+                    $component->os_id = $request->get('os-pc-select2'),
+                    $component->handset = null,
+                    $component->power_adapter = null,
 
                     $userId,
-                    $deviceId,
+                    $device,
                 ]
             );
             DB::commit();
