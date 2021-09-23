@@ -92,7 +92,7 @@ class PhoneIpController extends Controller
     {
         $brands = DB::table('brands')
             ->select('id', 'name')
-            ->whereIn('id', [6])
+            ->whereIn('id', [7])
             ->get();
 
         $campus = DB::table('campus as c')
@@ -284,7 +284,7 @@ class PhoneIpController extends Controller
 
         $brands = DB::table('brands')
             ->select('id', 'name')
-            ->whereIn('id', [6])
+            ->whereIn('id', [7])
             ->get();
 
         $campus = DB::table('campus as c')
