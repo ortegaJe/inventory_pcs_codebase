@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\Component;
 use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
@@ -25,6 +26,7 @@ class LaptopController extends Controller
     {
         $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'PC');
         $this->device = new Device();
+        $this->component = new Component();
     }
 
     public function index(Request $request)
@@ -161,14 +163,6 @@ class LaptopController extends Controller
 
     public function store(Request $request)
     {
-        $slot_one_ram_id = e($request->input('val-select2-ram0'));
-        $slot_two_ram_id = e($request->input('val-select2-ram1'));
-        $first_storage_id = e($request->input('val-select2-first-storage'));
-        $second_storage_id = e($request->input('val-select2-second-storage'));
-        $processor_id = e($request->input('val-select2-cpu'));
-        $os_id = e($request->input('os-pc-select2'));
-
-        $statusId = e($request->input('val-select2-status'));
         $userId = Auth::id();
 
         $rules = [
@@ -316,7 +310,7 @@ class LaptopController extends Controller
                     $this->device->device_image = null,
                     $this->device->campu_id = e($request->input('val-select2-campus')),
                     $this->device->location = e($request->input('location')),
-                    $statusId,
+                    $this->device->statu_id = e($request->input('val-select2-status')),
                     $this->device->custodian_assignment_date = e($request->input('custodian-assignment-date')),
                     $this->device->custodian_name = e($request->input('custodian-name')),
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
@@ -324,15 +318,15 @@ class LaptopController extends Controller
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota')->toDateTimeString(),
 
-                    $this->monitor_serial_number = null,
-                    $slot_one_ram_id,
-                    $slot_two_ram_id,
-                    $first_storage_id,
-                    $second_storage_id,
-                    $processor_id,
-                    $os_id,
-                    $this->handset = null,
-                    $this->power_adapter = null,
+                    $this->component->monitor_serial_number = null,
+                    $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
+                    $this->component->slot_two_ram_id = e($request->input('val-select2-ram1')),
+                    $this->component->first_storage_id = e($request->input('val-select2-first-storage')),
+                    $this->component->second_storage_id = e($request->input('val-select2-second-storage')),
+                    $this->component->processor_id = e($request->input('val-select2-cpu')),
+                    $this->component->os_id = e($request->input('os-pc-select2')),
+                    $this->component->handset = null,
+                    $this->component->power_adapter = null,
 
                     $userId,
                 ]
@@ -352,10 +346,10 @@ class LaptopController extends Controller
 
     public function edit($id)
     {
-        Device::findOrFail($id);
+        $device = Device::findOrFail($id);
 
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
-            ->where('device_id', $id)
+            ->where('device_id', $device->id)
             ->first();
         //return response()->json($deviceComponents);
 
@@ -435,8 +429,7 @@ class LaptopController extends Controller
     public function update(Request $request, $id)
     {
         $device = Device::findOrFail($id);
-        $statuId = $request->get('val-select2-status');
-        $deviceId = $id;
+        $component = Component::select('device_id')->where('device_id', $device->id)->first();
         $userId = Auth::id();
 
         /*$this->validate(
@@ -559,7 +552,7 @@ class LaptopController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //28
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
                     $device->brand_id = $request->get('marca-pc-select2'),
@@ -574,23 +567,25 @@ class LaptopController extends Controller
                     $device->device_image = null,
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
-                    $statuId,
+                    $device->status_id = $request->get('val-select2-status'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
                     $device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $device->observation = $request->get('observation'),
                     $device->updated_at = now('America/Bogota'),
 
-                    $device->monitor_serial_number = null,
-                    $device->slot_one_ram_id = $request->get('val-select2-ram0'),
-                    $device->slot_two_ram_id = $request->get('val-select2-ram1'),
-                    $device->first_storage_id = $request->get('val-select2-first-storage'),
-                    $device->second_storage_id = $request->get('val-select2-second-storage'),
-                    $device->processor_id = $request->get('val-select2-cpu'),
-                    $device->os_id = $request->get('os-pc-select2'),
+                    $component->monitor_serial_number = null,
+                    $component->slot_one_ram_id = $request->get('val-select2-ram0'),
+                    $component->slot_two_ram_id = $request->get('val-select2-ram1'),
+                    $component->first_storage_id = $request->get('val-select2-first-storage'),
+                    $component->second_storage_id = $request->get('val-select2-second-storage'),
+                    $component->processor_id = $request->get('val-select2-cpu'),
+                    $component->os_id = $request->get('os-pc-select2'),
+                    $component->handset = null,
+                    $component->power_adapter = null,
 
                     $userId,
-                    $deviceId,
+                    $device->id,
                 ]
             );
             DB::commit();

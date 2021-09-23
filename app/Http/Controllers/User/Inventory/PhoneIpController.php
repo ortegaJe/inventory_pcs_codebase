@@ -240,7 +240,7 @@ class PhoneIpController extends Controller
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
-                    $this->device->created_at = now('America/Bogota')->toDateTimeString(),
+                    $this->device->created_at = now('America/Bogota'),
             
                     $this->component->monitor_serial_number = null,
                     $this->component->slot_one_ram_id = null,
@@ -275,10 +275,10 @@ class PhoneIpController extends Controller
 
     public function edit($id)
     {
-        Device::findOrFail($id);
+        $device = Device::findOrFail($id);
 
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
-            ->where('device_id', $id)
+            ->where('device_id', $device->id)
             ->first();
         //return response()->json($deviceComponents);
 
@@ -325,8 +325,7 @@ class PhoneIpController extends Controller
     public function update(Request $request, $id)
     {
         $device = Device::findOrFail($id);
-        $component = Component::select('device_id')->first();
-        $deviceId = $id;
+        $component = Component::select('device_id')->where('device_id',$device->id)->first();
         $userId = Auth::id();
 
         /*$request->validate([
@@ -454,11 +453,11 @@ class PhoneIpController extends Controller
                     $component->second_storage_id = null,
                     $component->processor_id = null,
                     $component->os_id = null,
-                    $component->handset = $request->has('handset'),
-                    $component->power_adapter = $request->has('power-adapter'),
+                    $component->handset = $request->get('handset'),
+                    $component->power_adapter = $request->get('power-adapter'),
 
                     $userId,
-                    $deviceId,
+                    $device->id,
                 ]
             );
             DB::commit();

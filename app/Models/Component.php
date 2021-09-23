@@ -9,7 +9,7 @@ class Component extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
+    //public $timestamps = false;
 
     protected $casts = [
         'handset' => 'boolean',

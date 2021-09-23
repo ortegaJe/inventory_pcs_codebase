@@ -27,6 +27,7 @@ class DesktopController extends Controller
     {
         $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'PC');
         $this->device = new Device();
+        $this->component = new Component();
     }
 
     public function index(Request $request)
@@ -320,17 +321,17 @@ class DesktopController extends Controller
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
-                    $this->device->created_at = now('America/Bogota')->toDateTimeString(),
+                    $this->device->created_at = now('America/Bogota'),
 
-                    $this->monitor_serial_number = e($request->input('serial-monitor-pc')),
-                    $this->slot_one_ram_id = e($request->input('val-select2-ram0')),
-                    $this->slot_two_ram_id = e($request->input('val-select2-ram1')),
-                    $this->first_storage_id = e($request->input('val-select2-first-storage')),
-                    $this->second_storage_id = e($request->input('val-select2-second-storage')),
-                    $this->processor_id = e($request->input('val-select2-cpu')),
-                    $this->os_id = e($request->input('os-pc-select2')),
-                    $this->handset = null,
-                    $this->power_adapter = null,
+                    $this->component->monitor_serial_number = e($request->input('serial-monitor-pc')),
+                    $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
+                    $this->component->slot_two_ram_id = e($request->input('val-select2-ram1')),
+                    $this->component->first_storage_id = e($request->input('val-select2-first-storage')),
+                    $this->component->second_storage_id = e($request->input('val-select2-second-storage')),
+                    $this->component->processor_id = e($request->input('val-select2-cpu')),
+                    $this->component->os_id = e($request->input('os-pc-select2')),
+                    $this->component->handset = null,
+                    $this->component->power_adapter = null,
 
                     $userId,
                 ]
@@ -350,10 +351,10 @@ class DesktopController extends Controller
 
     public function edit($id)
     {
-        Device::findOrFail($id);
+        $device = Device::findOrFail($id);
 
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
-            ->where('device_id', $id)
+            ->where('device_id', $device->id)
             ->first();
         //return response()->json($deviceComponents);
 
@@ -424,10 +425,10 @@ class DesktopController extends Controller
         return view('user.inventory.desktop.edit')->with($data);
     }
 
-    public function update(Request $request, $device)
+    public function update(Request $request, $id)
     {
-        $device = Device::findOrFail($device);
-        $component = Component::select('device_id')->first();
+        $device = Device::findOrFail($id);
+        $component = Component::select('device_id')->where('device_id',$device->id)->first();
         $userId = Auth::id();
 
         /*$request->validate([
@@ -582,7 +583,7 @@ class DesktopController extends Controller
                     $component->power_adapter = null,
 
                     $userId,
-                    $device,
+                    $device->id,
                 ]
             );
             DB::commit();

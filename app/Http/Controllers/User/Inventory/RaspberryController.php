@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\Component;
 use App\Models\Device;
 use App\Models\TypeDevice;
 use Carbon\Carbon;
@@ -26,6 +27,7 @@ class RaspberryController extends Controller
     {
         $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'PC');
         $this->device = new Device();
+        $this->component = new Component();
     }
 
     public function index(Request $request)
@@ -39,7 +41,7 @@ class RaspberryController extends Controller
         if ($request->ajax()) {
 
             $devices = DB::table('view_all_devices')
-                ->where('TipoPc', Device::EQUIPOS_RASPBERRY)
+                ->where('TipoPc', TypeDevice::EQUIPOS_RASPBERRY)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($devices);
@@ -273,7 +275,7 @@ class RaspberryController extends Controller
                     $this->device->device_image = null,
                     $this->device->campu_id = e($request->input('val-select2-campus')),
                     $this->device->location = e($request->input('location')),
-                    $this->statusId = e($request->input('val-select2-status')),
+                    $this->device->status->id = e($request->input('val-select2-status')),
                     $this->device->custodian_assignment_date = e($request->input('custodian-assignment-date')),
                     $this->device->custodian_name = e($request->input('custodian-name')),
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
@@ -281,15 +283,15 @@ class RaspberryController extends Controller
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota')->toDateTimeString(),
 
-                    $this->monitor_serial_number = null,
-                    $this->slot_one_ram_id = e($request->input('val-select2-ram0')),
-                    $this->slot_two_ram_id = null,
-                    $this->first_storage_id = e($request->input('val-select2-first-storage')),
-                    $this->second_storage_id = null,
-                    $this->processor_id = e($request->input('val-select2-cpu')),
-                    $this->os_id = e($request->input('os-pc-select2')),
-                    $this->handset = null,
-                    $this->power_adapter = null,
+                    $this->component->monitor_serial_number = null,
+                    $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
+                    $this->component->slot_two_ram_id = null,
+                    $this->component->first_storage_id = e($request->input('val-select2-first-storage')),
+                    $this->component->second_storage_id = null,
+                    $this->component->processor_id = e($request->input('val-select2-cpu')),
+                    $this->component->os_id = e($request->input('os-pc-select2')),
+                    $this->component->handset = null,
+                    $this->component->power_adapter = null,
 
                     $userId,
                 ]
@@ -309,10 +311,10 @@ class RaspberryController extends Controller
 
     public function edit($id)
     {
-        Device::findOrFail($id);
+        $device = Device::findOrFail($id);
 
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
-            ->where('device_id', $id)
+            ->where('device_id', $device->id)
             ->first();
 
         $operatingSystems = DB::table('operating_systems')
@@ -376,7 +378,7 @@ class RaspberryController extends Controller
     public function update(Request $request, $id)
     {
         $device = Device::findOrFail($id);
-        $deviceId = $id;
+        $component = Component::select('device_id')->where('device_id', $device->id)->first();
         $userId = Auth::id();
 
         /*$this->validate(
@@ -484,10 +486,10 @@ class RaspberryController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //28
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
-                    $device->brand_id = DEVICE::RASPBERRY_PI_ID,
+                    $device->brand_id = TypeDevice::RASPBERRY_PI_ID,
                     $device->model = $request->get('modelo-pc'),
                     $device->serial_number = $request->get('serial-pc'),
                     $device->ip = $request->get('ip'),
@@ -506,16 +508,18 @@ class RaspberryController extends Controller
                     $device->observation = $request->get('observation'),
                     $device->updated_at = now('America/Bogota'),
 
-                    $device->monitor_serial_number = null,
-                    $device->slot_one_ram_id = $request->get('val-select2-ram0'),
-                    $device->slot_two_ram_id = null,
-                    $device->first_storage_id = $request->get('val-select2-first-storage'),
-                    $device->second_storage_id = null,
-                    $device->processor_id = e($request->get('val-select2-cpu')),
-                    $device->os_id = $request->get('os-pc-select2'),
+                    $component->monitor_serial_number = null,
+                    $component->slot_one_ram_id = $request->get('val-select2-ram0'),
+                    $component->slot_two_ram_id = null,
+                    $component->first_storage_id = $request->get('val-select2-first-storage'),
+                    $component->second_storage_id = null,
+                    $component->processor_id = e($request->get('val-select2-cpu')),
+                    $component->os_id = $request->get('os-pc-select2'),
+                    $component->handset = null,
+                    $component->power_adapter = null,
 
                     $userId,
-                    $deviceId,
+                    $device->id,
                 ]
             );
             DB::commit();

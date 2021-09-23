@@ -27,6 +27,7 @@ class AllInOneController extends Controller
     {
         $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'PC');
         $this->device = new Device();
+        $this->component = new Component();
     }
 
     public function index(Request $request)
@@ -40,7 +41,7 @@ class AllInOneController extends Controller
         if ($request->ajax()) {
 
             $devices = DB::table('view_all_devices')
-                ->where('TipoPc', Device::EQUIPOS_ALL_IN_ONES)
+                ->where('TipoPc', TypeDevice::EQUIPOS_ALL_IN_ONES)
                 ->where('TecnicoID', Auth::id())
                 ->get();
 
@@ -89,7 +90,6 @@ class AllInOneController extends Controller
 
     public function create()
     {
-
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
@@ -157,15 +157,6 @@ class AllInOneController extends Controller
 
     public function store(Request $request)
     {
-        $monitor_serial_number = e($request->input('serial-monitor-pc'));
-        $slot_one_ram_id = e($request->input('val-select2-ram0'));
-        $slot_two_ram_id = e($request->input('val-select2-ram1'));
-        $first_storage_id = e($request->input('val-select2-first-storage'));
-        $second_storage_id = e($request->input('val-select2-second-storage'));
-        $processor_id = e($request->input('val-select2-cpu'));
-        $os_id = e($request->input('os-pc-select2'));
-
-        $statusId = e($request->input('val-select2-status'));
         $userId = Auth::id();
 
         $rules = [
@@ -314,7 +305,7 @@ class AllInOneController extends Controller
                     $this->device->device_image = null,
                     $this->device->campu_id = e($request->input('val-select2-campus')),
                     $this->device->location = e($request->input('location')),
-                    $statusId,
+                    $this->device->statu_id = e($request->input('val-select2-status')),
                     $this->device->custodian_assignment_date = e($request->input('custodian-assignment-date')),
                     $this->device->custodian_name = e($request->input('custodian-name')),
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
@@ -322,15 +313,15 @@ class AllInOneController extends Controller
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota')->toDateTimeString(),
 
-                    $monitor_serial_number = null,
-                    $slot_one_ram_id,
-                    $slot_two_ram_id,
-                    $first_storage_id,
-                    $second_storage_id,
-                    $processor_id,
-                    $os_id,
-                    $this->handset = null,
-                    $this->power_adapter = null,
+                    $this->component->monitor_serial_number = null,
+                    $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
+                    $this->component->slot_two_ram_id = e($request->input('val-select2-ram1')),
+                    $this->component->first_storage_id = e($request->input('val-select2-first-storage')),
+                    $this->component->second_storage_id = e($request->input('val-select2-second-storage')),
+                    $this->component->processor_id = e($request->input('val-select2-cpu')),
+                    $this->component->os_id = e($request->input('os-pc-select2')),
+                    $this->component->handset = null,
+                    $this->component->power_adapter = null,
 
                     $userId,
                 ]
@@ -350,10 +341,10 @@ class AllInOneController extends Controller
 
     public function edit($id)
     {
-        Device::findOrFail($id);
+       $device = Device::findOrFail($id);
 
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
-            ->where('device_id', $id)
+            ->where('device_id', $device->id)
             ->first();
 
         $brands = DB::table('brands')
@@ -422,10 +413,10 @@ class AllInOneController extends Controller
         return view('user.inventory.allinone.edit')->with($data);
     }
 
-    public function update(Request $request, $device)
+    public function update(Request $request, $id)
     {
-        $device = Device::findOrFail($device);
-        $component = Component::select('device_id')->first();
+        $device = Device::findOrFail($id);
+        $component = Component::select('device_id')->where('device_id', $device->id)->first();
         $userId = Auth::id();
 
         /*$this->validate(
@@ -581,7 +572,7 @@ class AllInOneController extends Controller
                     $component->power_adapter = null,
 
                     $userId,
-                    $device,
+                    $device->id,
                 ]
             );
             DB::commit();
