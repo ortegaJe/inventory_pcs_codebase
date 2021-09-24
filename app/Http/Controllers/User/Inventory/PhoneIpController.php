@@ -141,7 +141,7 @@ class PhoneIpController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 6])
+                Rule::in([7])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'serial-pc' => 'required|unique:devices,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
@@ -241,7 +241,7 @@ class PhoneIpController extends Controller
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota'),
-            
+
                     $this->component->monitor_serial_number = null,
                     $this->component->slot_one_ram_id = null,
                     $this->component->slot_two_ram_id = null,
@@ -251,7 +251,7 @@ class PhoneIpController extends Controller
                     $this->component->os_id = null,
                     $this->component->handset = $request->has('handset'),
                     $this->component->power_adapter = $request->has('power-adapter'),
-            
+
                     $userId,
                 ]
             );
@@ -325,7 +325,7 @@ class PhoneIpController extends Controller
     public function update(Request $request, $id)
     {
         $device = Device::findOrFail($id);
-        $component = Component::select('device_id')->where('device_id',$device->id)->first();
+        $component = Component::select('device_id')->where('device_id', $device->id)->first();
         $userId = Auth::id();
 
         /*$request->validate([
@@ -344,7 +344,7 @@ class PhoneIpController extends Controller
             'marca-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 6])
+                Rule::in([7])
             ],
             'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
             'val-select2-status' => [
