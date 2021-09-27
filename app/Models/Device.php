@@ -10,4 +10,6 @@ use App\Models\Campu;
 class Device extends Model
 {
     use HasFactory, SoftDeletes;
+
+    const DOMAIN_NAME = ['DOMAIN.LOCAL', 'TEMPORALES.LOCAL'];
 }
