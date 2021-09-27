@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     //getComputerData();
 
     $.ajaxSetup({
@@ -6,8 +6,12 @@ $(document).ready(function() {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         }
     });
-
+    
     function format(d) {
+       
+        //let url = '{{ route("admin.inventory.technicians.show", ":id") }}';
+        //url = url.replace(':id', d.TecnicoID);
+        
         return (
             '<div class="slider">' +
             '<table class="table-responsive td-slider" style="font-size:13">' +
@@ -89,7 +93,10 @@ $(document).ready(function() {
             "<td>Observaciones: " +
             "<p>"+d.Observacion +"</p>"+
             "</td>" +
-            "<td></td>" +
+            "<td>" +
+            '<span class="badge badge-primary mb-5"><i class="si si-user mr-5"></i>' + d.NombreTecnico + '</span>' +
+            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>'+d.FechaCreacion +'</span>'+
+            "</td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
