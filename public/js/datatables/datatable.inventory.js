@@ -95,7 +95,7 @@ $(document).ready(function () {
             "</td>" +
             "<td>" +
             '<span class="badge badge-primary mb-5"><i class="si si-user mr-5"></i>' + d.NombreTecnico + '</span>' +
-            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>'+d.FechaCreacion +'</span>'+
+            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>'+d.FechaCreacionUsuario +'</span>'+
             "</td>" +
             "<td></td>" +
             "<td></td>" +
