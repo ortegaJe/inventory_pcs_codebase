@@ -167,18 +167,19 @@
                   <a class="nav-submenu" data-toggle="nav-submenu" href="#">
                     <span class="sidebar-mini-hide">Usuarios</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
-                      {{-- @php $globalPcCount = DB::table('computers')->select('id')
-                                ->whereIn('statu_id',[1,2,3,5,6,7,8])
-                                ->where('is_active',[1])
-                                ->where('deleted_at', null)
-                                ->count(); @endphp
-                                {{ $globalPcCount ?? '0' }} --}}
+                      @php $globalUsersCount = DB::table('users as u')->select('u.id')
+                      ->join('profile_users as pu', 'pu.user_id', 'u.id')
+                      ->where('profile_id','<>', [1])
+                        ->where('u.is_active',[1])
+                        ->where('u.deleted_at', null)
+                        ->count(); @endphp
+                        {{ $globalUsersCount ?? '0' }}
                     </span>
                   </a>
                   <ul>
                     <li>
                       <a class="{{ request()->is('admin/dashboard/inventario/tecnicos') ? 'active' : '' }}"
-                        href="{{ route('admin.inventory.technicians.index') }}">Usuarios
+                        href="{{ route('admin.inventory.technicians.index') }}">Técnicos
                       </a>
                     </li>
                     <li>
@@ -192,7 +193,10 @@
                 <li>
                   <a class="{{ request()->is('admin/dashboard/inventario/sedes') ? 'active' : '' }}"
                     href="{{ route('admin.inventory.campus.index') }}">Sedes
-                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-building-o"></i></span>
+                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-building-o"></i>
+                      @php $globalCampusCount = DB::table('campus')->select('id')->count(); @endphp
+                      {{ $globalCampusCount ?? '0' }}
+                    </span>
                   </a>
                 </li>
                 @endcan
@@ -203,23 +207,25 @@
                     {{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'open' : '' }} ||
                     {{ request()->is('tecnico/dashboard/inventario/turneros') ? 'open' : '' }} ||
                     {{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'open' : '' }} ||
+                    {{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'open' : '' }} ||
                     {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'open' : '' }} ||
                     {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'open' : '' }} ||
                     {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
                     {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'open' : '' }}
-                  {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}">
+                  {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}
+                  {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       @php $globalDeviceCount = DB::table('view_all_devices')
                       ->where('TecnicoID', Auth::id())
-                      ->count(); 
+                      ->count();
                       @endphp
                       {{ $globalDeviceCount ?? '0' }}
                     </span>
                   </a>
                   <ul>
-                  <li>
+                    <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.desktop.index') }}">De escritorios
@@ -253,12 +259,12 @@
                                   {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.raspberry.index') }}">Raspberry</a>
                     </li>
-                    @endcan
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
                     </li>
+                    @endcan
                   </ul>
                 </li>
               </ul>

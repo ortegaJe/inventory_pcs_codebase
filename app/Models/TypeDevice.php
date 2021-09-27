@@ -23,7 +23,16 @@ class TypeDevice extends Model
     const EQUIPOS_ALL_IN_ONES = 'ALL IN ONE';
     const EQUIPOS_TELEFONOS_IP = 'TELEFONO IP';
 
-    public function scopeCountPc($query, $type_id, $user_id)
+    public function scopeCountTypeDevice($query, $type_device_id)
+    {
+        return $query->select('d.type_device_id', 'd.id')
+            ->leftJoin('devices as d', 'd.type_device_id', 'type_devices.id')
+            ->where('d.type_device_id', $type_device_id)
+            ->whereIn('d.statu_id', [1, 2, 3, 5, 6, 7, 8])
+            ->count();
+    }
+
+    public function scopeCountTypeDeviceUser($query, $type_id, $user_id)
     {
         return $query->select('d.type_device_id', 'cu.user_id', 'cu.campu_id')
             ->leftJoin('devices as d', 'd.type_device_id', 'type_devices.id')
@@ -33,6 +42,7 @@ class TypeDevice extends Model
             ->where('d.type_device_id', $type_id)
             ->where('cu.user_id', $user_id)
             //->where('cu.campu_id', $campu_id)
+            ->whereIn('d.statu_id', [1, 2, 3, 5, 6, 7, 8])
             ->where('d.is_active', [1])
             ->where('d.deleted_at', null)
             ->count();

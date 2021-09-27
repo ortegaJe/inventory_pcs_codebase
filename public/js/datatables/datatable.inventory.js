@@ -164,7 +164,6 @@ $(document).ready(function() {
                 {
                     data: "Anydesk",
                     searcheable: true
-                    //visible: false
                 },
                 {
                     data: "Sede",

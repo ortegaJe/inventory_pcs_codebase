@@ -38,7 +38,7 @@ class CampusExport implements
     public function collection()
     {
         //DB::statement(DB::raw('set @rownum=0'));
-        $pcs = DB::table('view_exports_all_pcs')
+        $pcs = DB::table('view_exports_all_devices')
             //->select(DB::raw('@rownum  := @rownum  + 1 AS rownum'))
             ->where('CampuID', $this->campuId)
             ->orderByDesc('FechaCreacion')

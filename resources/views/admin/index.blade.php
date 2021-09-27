@@ -21,7 +21,7 @@
           </div>
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-info" data-toggle="countTo"
-              data-to="{{ $globalDesktopPcCount }}">0
+              data-to="{{ $globalDesktopCount }}">0
             </div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorios</div>
           </div>
@@ -41,7 +41,7 @@
           </div>
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-elegance-light" data-toggle="countTo"
-              data-to="{{ $globalAllInOnePcCount }}">0</div>
+              data-to="{{ $globalAllInOneCount }}">0</div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">all in one</div>
           </div>
         </div>
@@ -59,8 +59,9 @@
             </div>
           </div>
           <div class="py-20 text-center">
-            <div class="font-size-h2 font-w700 mb-0 text-flat" data-toggle="countTo"
-              data-to="{{ $globalLaptopPcCount }}">0</div>
+            <div class="font-size-h2 font-w700 mb-0 text-flat" data-toggle="countTo" data-to="{{ $globalLaptopCount }}">
+              0
+            </div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">portátiles</div>
           </div>
         </div>
@@ -79,7 +80,7 @@
           </div>
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0 text-danger" data-toggle="countTo"
-              data-to="{{ $globalTurneroPcCount }}">0</div>
+              data-to="{{ $globalTurneroCount }}">0</div>
             <div class="font-size-sm font-w600 text-uppercase text-muted">Turneros</div>
           </div>
         </div>
@@ -98,14 +99,34 @@
           </div>
           <div class="py-20 text-center">
             <div class="font-size-h2 font-w700 mb-0" style="color: #c51d4a" data-toggle="countTo"
-              data-to="{{ $globalRaspberryPcCount }}">0
+              data-to="{{ $globalRaspberryCount }}">0
             </div>
-            <div class="font-size-sm font-w600 text-uppercase text-muted">raspberry's</div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">raspberry</div>
           </div>
         </div>
       </a>
     </div>
     <!-- END Raspberry PI -->
+
+    <!-- Telefonos IP -->
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+              <i class="fa fa-phone fa-2x text-warning-light"></i>
+            </div>
+          </div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-0 text-warning" data-toggle="countTo"
+              data-to="{{ $globalIpPhoneCount }}">0
+            </div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Telefonos IP</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!-- END Telefonos IP -->
   </div>
 
   <div class="col-md-14">

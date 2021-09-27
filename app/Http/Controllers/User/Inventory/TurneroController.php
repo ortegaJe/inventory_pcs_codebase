@@ -32,11 +32,12 @@ class TurneroController extends Controller
 
     public function index(Request $request)
     {
-        $globalDesktopPcCount = TypeDevice::countPc(1, Auth::id());   //DE ESCRITORIO
-        //$globalTurneroPcCount = Device::countPc(2);   //TURNERO
-        $globalLaptopPcCount  = TypeDevice::countPc(3, Auth::id());   //PORTATIL
-        //$globalRaspberryPcCount = Device::countPc(4); //RASPBERRY
-        //$globalAllInOnePcCount = Device::countPc(5);  //ALL IN ONE
+        $globalDesktopCount = TypeDevice::countTypeDeviceUser(TypeDevice::DESKTOP_PC_ID, Auth::id());
+        $globalTurneroCount = TypeDevice::countTypeDeviceUser(TypeDevice::TURNERO_PC_ID, Auth::id());
+        $globalLaptopCount  = TypeDevice::countTypeDeviceUser(TypeDevice::LAPTOP_PC_ID, Auth::id());
+        $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
+        $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
+        $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
 
         if ($request->ajax()) {
 
@@ -78,11 +79,12 @@ class TurneroController extends Controller
 
         $data =
             [
-                'globalDesktopPcCount' => $globalDesktopPcCount,
-                //'globalTurneroPcCount' => $globalTurneroPcCount,
-                'globalLaptopPcCount' => $globalLaptopPcCount,
-                //'globalRaspberryPcCount' => $globalRaspberryPcCount,
-                //'globalAllInOnePcCount' => $globalAllInOnePcCount,
+                'globalDesktopCount' => $globalDesktopCount,
+                'globalTurneroCount' => $globalTurneroCount,
+                'globalLaptopCount' => $globalLaptopCount,
+                'globalRaspberryCount' => $globalRaspberryCount,
+                'globalAllInOneCount' => $globalAllInOneCount,
+                'globalIpPhoneCount' => $globalIpPhoneCount,
             ];
 
         return view('user.inventory.turnero.index')->with($data);
