@@ -53,7 +53,7 @@ class CampuController extends Controller
 
         return $this->excel->download(
             new CampusExport($campuId),
-            "export_inventory_" . Str::lower($campuSlug) . "_computers_" . $rand . ".xlsx"
+            "export_inventory_" . Str::lower($campuSlug) . "_devices_" . $rand . ".xlsx"
         );
     }
 
