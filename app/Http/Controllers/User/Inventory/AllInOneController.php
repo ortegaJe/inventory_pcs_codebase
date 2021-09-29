@@ -96,6 +96,7 @@ class AllInOneController extends Controller
             ->select('id', 'name')
             ->where('id', '<>', [4])
             ->where('id', '<>', [5])
+            ->where('id', '<>', [6])
             ->where('id', '<>', [7])
             ->get();
 
@@ -353,6 +354,8 @@ class AllInOneController extends Controller
             ->select('id', 'name')
             ->where('id', '<>', [4])
             ->where('id', '<>', [5])
+            ->where('id', '<>', [6])
+            ->where('id', '<>', [7])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')

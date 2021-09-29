@@ -41,7 +41,7 @@ class LaptopController extends Controller
         if ($request->ajax()) {
 
             $devices = DB::table('view_all_devices')
-                ->where('TipoPc', Device::EQUIPOS_PORTATILES)
+                ->where('TipoPc', TypeDevice::EQUIPOS_PORTATILES)
                 ->where('TecnicoID', Auth::id())
                 ->get();
             //dd($devices);
@@ -95,6 +95,7 @@ class LaptopController extends Controller
             ->select('id', 'name')
             ->where('id', '<>', [4])
             ->where('id', '<>', [5])
+            ->where('id', '<>', [6])
             ->where('id', '<>', [7])
             ->get();
 
@@ -359,6 +360,8 @@ class LaptopController extends Controller
             ->select('id', 'name')
             ->where('id', '<>', [4])
             ->where('id', '<>', [5])
+            ->where('id', '<>', [6])
+            ->where('id', '<>', [7])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')

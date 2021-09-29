@@ -96,6 +96,8 @@ class TurneroController extends Controller
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
+            ->where('id', '<>', [6])
+            ->where('id', '<>', [7])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')
@@ -355,6 +357,8 @@ class TurneroController extends Controller
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
+            ->where('id', '<>', [6])
+            ->where('id', '<>', [7])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')
