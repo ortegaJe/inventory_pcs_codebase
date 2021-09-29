@@ -277,7 +277,7 @@ class RaspberryController extends Controller
                     $this->device->device_image = null,
                     $this->device->campu_id = e($request->input('val-select2-campus')),
                     $this->device->location = e($request->input('location')),
-                    $this->device->status->id = e($request->input('val-select2-status')),
+                    $this->device->statu_id = e($request->input('val-select2-status')),
                     $this->device->custodian_assignment_date = e($request->input('custodian-assignment-date')),
                     $this->device->custodian_name = e($request->input('custodian-name')),
                     $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
