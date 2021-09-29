@@ -94,7 +94,7 @@ class RaspberryController extends Controller
     {
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [7, 8])
+            ->whereIn('id', [7, 8, 10])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
@@ -321,7 +321,7 @@ class RaspberryController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [7, 8])
+            ->whereIn('id', [7, 8, 10])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
