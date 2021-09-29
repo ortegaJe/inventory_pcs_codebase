@@ -159,7 +159,7 @@ class RaspberryController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([7, 8])
+                Rule::in([7, 8, 10])
             ],
             'val-select2-ram0' => [
                 'required',
@@ -399,7 +399,7 @@ class RaspberryController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([7, 8])
+                Rule::in([7, 8, 10])
             ],
             'val-select2-ram0' => [
                 'required',
