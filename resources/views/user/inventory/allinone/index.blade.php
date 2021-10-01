@@ -55,6 +55,8 @@
             <tr>
               <th></th>
               <th>fecha de creación</th>
+              <th>nombre de equipo</th>
+              <th>ubicacion</th>
               <th>serial</th>
               <th>activo fijo</th>
               <th>ip</th>
@@ -72,6 +74,8 @@
             <tr>
               <th></th>
               <th>FECHA DE CREACIÓN</th>
+              <th>nombre de equipo</th>
+              <th>ubicacion</th>
               <th>SERIAL</th>
               <th>ACTIVO FIJO</th>
               <th>IP</th>

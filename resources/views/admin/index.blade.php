@@ -170,6 +170,8 @@
               <tr>
                 <th></th>
                 <th>FECHA DE CREACIÓN</th>
+                <th>nombre de equipo</th>
+                <th>ubicacion</th>
                 <th>SERIAL</th>
                 <th>ACTIVO FIJO</th>
                 <th>IP</th>
