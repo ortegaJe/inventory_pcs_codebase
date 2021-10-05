@@ -15,7 +15,7 @@ class CreateCustodianLogTable extends Migration
     {
         Schema::create('custodian_log', function (Blueprint $table) {
             //$table->id();
-            $table->unsignedBigInteger('pc_id')->nullable();
+            $table->unsignedBigInteger('device_id')->nullable();
             $table->char('custodian_name');
             $table->char('position', 56)->nullable();
             $table->char('location');
@@ -23,7 +23,7 @@ class CreateCustodianLogTable extends Migration
             $table->timestamp('assignment_date')->nullable();
 
             $table->foreign('assignment_statu_id')->references('id')->on('status')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreign('pc_id')->references('id')->on('computers')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreign('device_id')->references('id')->on('devices')->nullOnDelete()->cascadeOnUpdate();
         });
     }
 

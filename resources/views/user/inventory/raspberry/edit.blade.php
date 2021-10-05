@@ -39,7 +39,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('user.inventory.raspberry.update', $pcs->id) }}" method="POST">
+      <form action="{{ route('user.inventory.raspberry.update', $deviceComponents->id) }}" method="POST">
         @csrf
         @method('PATCH')
         <!-- Steps Content -->
@@ -59,33 +59,14 @@
             </div>
             @endif
             <div class="form-group row">
-              <div class="col-md-4">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="marca-pc-select2" name="marca-pc-select2"
-                    style="width: 100%;" data-placeholder="Seleccionar fabricante..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}" {{ $brand->id == $pcs->brand_id ? 'selected' : '' }}>
-                      {{ $brand->name }}</option>
-                    @empty
-                    <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="marca-pc-select2">Fabricantes</label>
-                </div>
-                @if($errors->has('marca-pc-select2'))
-                <small class="text-danger is-invalid">{{ $errors->first('marca-pc-select2') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($operatingSystems as $os)
-                    <option value="{{ $os->id }}" {{ $os->id == $pcs->os_id ? 'selected' : '' }}>
+                    <option value="{{ $os->id }}" {{ $os->id == $deviceComponents->os_id ? 'selected' : '' }}>
                       {{ $os->name }}
                       {{ $os->version }}
                       {{ $os->architecture }}</option>
@@ -99,10 +80,10 @@
                 <small class="text-danger is-invalid">{{ $errors->first('os-pc-select2') }}</small>
                 @endif
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc"
-                    value="{{ trim($pcs->model) }}" maxlength="100"
+                    value="{{ trim($deviceComponents->model) }}" maxlength="100"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="modelo-pc">Modelo</label>
                   <div class="input-group-append">
@@ -120,7 +101,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc"
-                    value="{{ trim($pcs->serial_number) }}" maxlength="24"
+                    value="{{ trim($deviceComponents->serial_number) }}" maxlength="24"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="serial-pc">Numero Serial</label>
                   <div class="input-group-append">
@@ -136,7 +117,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
-                    value="{{ $pcs->inventory_active_code }}" maxlength="15"
+                    value="{{ $deviceComponents->inventory_active_code }}" maxlength="15"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="activo-fijo-pc">Codigo de activo fijo</label>
                   <div class="input-group-append">
@@ -163,7 +144,8 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}" {{ $ram->id == $pcs->slot_one_ram_id ? 'selected' : '' }}>
+                    <option value="{{ $ram->id }}"
+                      {{ $ram->id == $deviceComponents->slot_one_ram_id ? 'selected' : '' }}>
                       {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}
                     </option>
                     @empty
@@ -184,7 +166,8 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}" {{ $storage->id == $pcs->first_storage_id ? 'selected' : '' }}>
+                    <option value="{{ $storage->id }}"
+                      {{ $storage->id == $deviceComponents->first_storage_id ? 'selected' : '' }}>
                       {{ $storage->size }}
                       {{ $storage->storage_unit }}
                       {{ $storage->type }}
@@ -207,7 +190,7 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($processors as $cpu)
-                    <option value="{{ $cpu->id }}" {{ $cpu->id == $pcs->processor_id ? 'selected' : '' }}>
+                    <option value="{{ $cpu->id }}" {{ $cpu->id == $deviceComponents->processor_id ? 'selected' : '' }}>
                       {{ $cpu->brand }}
                       {{ $cpu->generation }}
                       {{ $cpu->velocity }}
@@ -216,7 +199,7 @@
                     <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-cpu">Precesador</label>
+                  <label for="val-select2-cpu">Procesador</label>
                 </div>
                 @if($errors->has('val-select2-cpu'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
@@ -229,7 +212,8 @@
                     <option disabled></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
-                    <option value="{{ $statu->StatusID }}" {{ $statu->StatusID == $pcs->statu_id ? 'selected' : '' }}>
+                    <option value="{{ $statu->StatusID }}"
+                      {{ $statu->StatusID == $deviceComponents->statu_id ? 'selected' : '' }}>
                       {{ Str::title($statu->NameStatus) }}
                     </option>
                     @empty
@@ -251,8 +235,8 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="ip" name="ip" maxlength="16" value="{{ $pcs->ip }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <input type="text" class="form-control" id="ip" name="ip" maxlength="16"
+                    value="{{ $deviceComponents->ip }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="ip">Dirección IP</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -266,8 +250,8 @@
               </div>
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="mac" name="mac" maxlength="17" value="{{ $pcs->mac }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <input type="text" class="form-control" id="mac" name="mac" maxlength="17"
+                    value="{{ $deviceComponents->mac }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="mac">Dirección MAC</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -281,29 +265,14 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
-                    value="{{ $pcs->anydesk }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="ip">Anydesk</label>
-                  <div class="input-group-append">
-                    <label for="anydesk"><img class="img-fluid" width="20px"
-                        src="https://ubuntupit.com/wp-content/uploads/2019/03/AnyDesk-remote.png" alt="anydesk">
-                    </label>
-                  </div>
-                </div>
-                @if($errors->has('anydesk'))
-                <small class="text-danger is-invalid">{{ $errors->first('anydesk') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <div class="form-material">
                     <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
                       style="width: 100%;" data-placeholder="Seleccionar dominio..">
                       <option></option>
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                      <option selected>{{ $pcs->pc_name_domain }}</option>
+                      <option selected>{{ $deviceComponents->domain_name }}</option>
                     </select>
                     <label for="pc-domain-name"><i class="fa fa-sitemap"></i> Dominio</label>
                   </div>
@@ -312,10 +281,11 @@
                   @endif
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
-                    value="{{ $pcs->pc_name }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ $deviceComponents->device_name }}"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="pc-name">Nombre del equipo</label>
                 </div>
                 @if($errors->has('pc-name'))
@@ -338,7 +308,8 @@
                       <option></option>
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                       @forelse ($campus as $campu)
-                      <option value="{{ $campu->id }}" {{ $campu->id == $pcs->campu_id ? 'selected' : '' }}>
+                      <option value="{{ $campu->id }}"
+                        {{ $campu->id == $deviceComponents->campu_id ? 'selected' : '' }}>
                         {{ $campu->name }}
                         @empty
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
@@ -355,7 +326,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="location" name="location" maxlength="56"
-                    value="{{ $pcs->location }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ $deviceComponents->location }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="location">Ubicación en la sede</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -373,7 +344,7 @@
                 <div class="form-material">
                   <input type="text" class="js-flatpickr form-control" id="custodian-assignment-date"
                     name="custodian-assignment-date" placeholder="d-m-Y" data-allow-input="true" maxlength="10"
-                    value="{{ $pcs->custodian_assignment_date }}">
+                    value="{{ $deviceComponents->custodian_assignment_date }}">
                   <label for="custodian-assignment-date">Fecha de asignación al custodio</label>
                 </div>
                 @if($errors->has('custodian-assignment-date'))
@@ -383,7 +354,8 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="custodian-name" name="custodian-name" maxlength="56"
-                    value="{{ $pcs->custodian_name }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ $deviceComponents->custodian_name }}"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="custodian-name">Nombres y apellidos del custodio</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -402,7 +374,7 @@
                     <option disabled></option><!-- Empty value for demostrating material select box -->
                     @forelse ($statusAssignments as $statuAssignment)
                     <option value="{{ $statuAssignment->id }}"
-                      {{ $statuAssignment->id == $pcs->assignment_statu_id ? 'selected' : '' }}>
+                      {{ $statuAssignment->id == $deviceComponents->assignment_statu_id ? 'selected' : '' }}>
                       {{ Str::title($statuAssignment->name) }}
                     </option>
                     @empty
@@ -421,8 +393,8 @@
                 <div class="form-material">
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
-                    data-warning-class="badge badge-primary"
-                    data-limit-reached-class="badge badge-warning">{{ $pcs->observation }}</textarea>
+                    data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">{{ $deviceComponents->observation }}</textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>

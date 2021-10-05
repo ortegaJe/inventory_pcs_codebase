@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
     //getComputerData();
 
     $.ajaxSetup({
@@ -6,12 +6,8 @@ $(document).ready(function () {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         }
     });
-    
+
     function format(d) {
-       
-        //let url = '{{ route("admin.inventory.technicians.show", ":id") }}';
-        //url = url.replace(':id', d.TecnicoID);
-        
         return (
             '<div class="slider">' +
             '<table class="table-responsive td-slider" style="font-size:13">' +
@@ -20,25 +16,18 @@ $(document).ready(function () {
             '<span class="badge badge-pill badge-success">' +
             d.Marca +
             "</span>" +
-            "<td>" +
-            '<i class="fas fa-memory mr-2"></i>' +
-            d.RanuraRamUno +
             "</td>" +
-            "<td>" +
-            '<i class="fas fa-memory mr-2"></i>' +
-            d.RanuraRamDos +
-            "</td>" +
-            "<td>" +
-            '<i class="fa fa-hdd mr-2"></i>' +
-            d.PrimerUnidadAlmacenamiento +
-            "</td>" +
-            "<td>" +
-            '<i class="fa fa-hdd mr-2"></i>' +
-            d.SegundaUnidadAlmacenamiento +
-            "</td>" +
-            "<td>Número de serial monitor: " +
-            d.SerialMonitor +
-            "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "<td></td>" +
             "<td></td>" +
             "</tr>" +
@@ -46,23 +35,18 @@ $(document).ready(function () {
             "<td>Modelo: " +
             d.Modelo +
             "" +
-            "<td>" +
-            '<i class="fa fa-microchip fa-1x"></i>' +
-            " " +
-            d.Cpu +
-            "</td>" +
-            "<td>" +
-            '<img class="img-fluid" width="24px" src="/media/dashboard/datatable/os/'+ d.IconoSistemaOperativo+'" alt="windows">' +
-            "</img>" +
-            " " +
-            d.Os +
-            "</td>" +
+            "<td></td>" +
+            "<td></td>" +
             "<td>Ubicación en la sede: " +
             d.Ubicacion +
             "</td>" +
-            //"<td>Número de serial: " +
-            //d.Serial +
-            //"</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
@@ -82,21 +66,31 @@ $(document).ready(function () {
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<i class="si si-screen-desktop fa-4x text-gray-dark"></i>' +
-            //'<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
+            '<i class="fa fa-phone fa-4x text-gray-dark"></i>' +
             //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
             "<p>"+d.Observacion +"</p>"+
             "</td>" +
-            "<td>" +
-            '<span class="badge badge-primary mb-5"><i class="si si-user mr-5"></i>' + d.NombreTecnico + '</span>' +
-            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>'+d.FechaCreacionUsuario +'</span>'+
-            "</td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
+            "<td></td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
@@ -108,11 +102,21 @@ $(document).ready(function () {
         );
     }
 
+    function getComputerData() {
+        $.ajax({
+            url: root_url,
+            type: "GET",
+            data: {}
+        }).done(function(data) {
+            //alert(data);
+        });
+    }
+
     $(document).ready(function() {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
-            ajax: root_url_dashboard,
+            ajax: root_url_phones,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -183,6 +187,7 @@ $(document).ready(function () {
                 {
                     data: "Anydesk",
                     searcheable: true
+                    //visible: false
                 },
                 {
                     data: "Sede",
@@ -191,9 +196,59 @@ $(document).ready(function () {
                 {
                     data: "EstadoPC",
                     searcheable: true
+                },
+                {
+                    data: "action",
+                    searcheable: false,
+                    orderable: false
                 }
             ],
             order: [[1, "desc"]]
+        });
+
+        $(document).on("click", "#btn-delete", function(e) {
+            //console.log(e);
+            Swal.fire({
+                title: "Estas seguro?",
+                text: "No se podra revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, borrar!",
+                cancelButtonText: "No, cancelar"
+            }).then(result => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    let id = $(this).attr("data-id");
+                    //console.log(id);
+                    $.ajax({
+                        url: root_url_phones_store + "/" + id,
+                        type: "DELETE",
+                        data: {
+                            _token: $('input[name="_token"]').val()
+                        },
+                        success: function(response) {
+                            console.log(
+                                response.result[0]["inventory_code_number"]
+                            );
+                            let msg =
+                                response.result[0]["inventory_code_number"];
+                            Swal.fire(
+                                `Numero de inventario #${msg}`,
+                                response.message,
+                                "success"
+                            );
+                            $("#dt")
+                                .DataTable()
+                                .ajax.reload();
+                            //console.log(id);
+                            //getComputerData();
+                        }
+                    });
+                }
+            });
+            return false;
         });
 
         // Array to track the ids of the details displayed rows

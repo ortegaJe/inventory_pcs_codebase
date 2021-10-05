@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Registrar equipo')
+@section('title', 'Registrar telefono IP')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('/js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
@@ -9,9 +9,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo All In One</h2>
-    {{-- <button type="button" class="js-notify btn btn-sm btn-alt-danger" data-type="danger" data-icon="fa fa-times"
-      data-message="Update failed! :-(">Error</button> --}}
+    <h2 class="content-heading">Registrar Nuevo Telefono IP</h2>
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -27,7 +25,7 @@
           <a class="nav-link active" href="#wizard-progress2-step1" data-toggle="tab">1. Equipo</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#wizard-progress2-step2" data-toggle="tab">2. Hardware</a>
+          <a class="nav-link" href="#wizard-progress2-step2" data-toggle="tab">2. Accesorios</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#wizard-progress2-step3" data-toggle="tab">3. Red</a>
@@ -39,7 +37,7 @@
       <!-- END Step Tabs -->
 
       <!-- Form -->
-      <form action="{{ route('user.inventory.allinone.store') }}" method="POST">
+      <form action="{{ route('user.inventory.phones.store') }}" method="POST">
         @csrf
         @method('POST')
         <!-- Steps Content -->
@@ -58,8 +56,20 @@
               </span><a href="#" target="_blank" data-notify="url"></a>
             </div>
             @endif
+            {{-- @if (Session::has('message'))
+            <div class="alert alert-{{ Session::get('typealert') }} alert-dismissible fade show" style="d-none">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> Upsss!</h5>
+            {{ Session::get('message') }}
+            @if ($errors->any())
+            <ul>
+              @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+            @endif --}}
             <div class="form-group row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="marca-pc-select2" name="marca-pc-select2"
                     style="width: 100%;" data-placeholder="Seleccionar fabricante..">
@@ -77,26 +87,7 @@
                 <small class="text-danger is-invalid">{{ $errors->first('marca-pc-select2') }}</small>
                 @endif
               </div>
-              <div class="col-md-4">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
-                    data-placeholder="Seleccionar sistema operativo..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($operatingSystems as $os)
-                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }}
-                      {{ $os->architecture }}</option>
-                    @empty
-                    <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="os-pc-select2">Sistema Operativo</label>
-                </div>
-                @if($errors->has('os-pc-select2'))
-                <small class="text-danger is-invalid">{{ $errors->first('os-pc-select2') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="modelo-pc" name="modelo-pc" value="{{ old('modelo-pc') }}"
                     maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -131,7 +122,7 @@
               <div class="col-md-6">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
-                    value="{{ old('activo-fijo-pc') }}" maxlength="15"
+                    value="{{ old('activo-fijo-pc') }}" maxlength="20"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
                   <label for="activo-fijo-pc">Codigo de activo fijo</label>
                   <div class="input-group-append">
@@ -149,108 +140,42 @@
           <!-- END Step 1 -->
 
           <!-- Step 2 -->
+          <input type="hidden" name="handset" value="0">
+          <input type="hidden" name="power-adapter" value="0">
           <div class="tab-pane" id="wizard-progress2-step2" role="tabpanel">
-            <div class="form-group row">
-              <div class="col-md-3">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
-                    style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}">
-                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
-                    @empty
-                    <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
-                    @endforelse
-                  </select>
-                  <label for="val-select2-ram0">Memorias RAM</label>
-                </div>
-                @if($errors->has('val-select2-ram0'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram0') }}</small>
-                @endif
+            <div class="form-group row text-center">
+              <div class="col-md-6">
+                <div class="mb-2"><i class="fa fa-phone fa-4x text-muted"></i></div>
+                <label class="css-control css-control-primary css-checkbox" for="handset">
+                  <input type="checkbox" class="css-control-input" id="handset" name="handset" value="1">
+                  <span class="css-control-indicator"></span> Tiene bocina?
+                </label>
               </div>
-              <div class="col-md-3">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-ram1" name="val-select2-ram1"
-                    value="{{ old('val-select2-ram1') }}" style="width: 100%;"
-                    data-placeholder="Seleccionar RAM ranura 2">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}">
-                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
-                    @empty
-                    <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
-                    @endforelse
-                  </select>
-                  <label for="val-select2-ram1">Memorias RAM <small>(Opcional)</small></label>
-                </div>
-                @if($errors->has('val-select2-ram1'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram1') }}</small>
-                @endif
-              </div>
-              <div class="col-md-3">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-first-storage"
-                    name="val-select2-first-storage" style="width: 100%;"
-                    data-placeholder="Seleccionar primer almacenamiento..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
-                      {{ $storage->type }}</option>
-                    @empty
-                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="val-select2-first-storage">Almacenamiento</label>
-                </div>
-                @if($errors->has('val-select2-first-storage'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-first-storage') }}</small>
-                @endif
-              </div>
-              <div class="col-md-3">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-second-storage"
-                    name="val-select2-second-storage" style="width: 100%;"
-                    data-placeholder="Seleccionar segundo almacenamiento..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
-                    @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
-                      {{ $storage->type }}</option>
-                    @empty
-                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="val-select2-second-storage">Almacenamiento
-                    <small>(Opcional)</small></label>
-                </div>
-                @if($errors->has('val-select2-second-storage'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-second-storage') }}</small>
-                @endif
+              <div class="col-md-6">
+                <div class="mb-2"><i class="fa fa-plug fa-4x text-muted"></i></div>
+                <label class="css-control css-control-primary css-checkbox" for="power-adapter">
+                  <input type="checkbox" class="css-control-input" id="power-adapter" name="power-adapter" value="1">
+                  <span class="css-control-indicator"></span> tiene adaptador de energia?
+                </label>
               </div>
             </div>
-            <div class="form-group row">
-              <div class="col-md-6">
-                <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-cpu" name="val-select2-cpu"
-                    style="width: 100%;" data-placeholder="Seleccionar procesador..">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
-                    @forelse ($processors as $cpu)
-                    <option value="{{ $cpu->id }}">{{ $cpu->brand }} {{ $cpu->generation }}
-                      {{ $cpu->velocity }}</option>
-                    @empty
-                    <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
-                    @endforelse
-                  </select>
-                  <label for="val-select2-cpu">Procesador</label>
-                </div>
-                @if($errors->has('val-select2-cpu'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
-                @endif
+            {{--<div class="col-md-6">
+                <label class="css-control css-control-sm css-control-success css-switch">
+                  <div class="mb-2 text-center"><i class="fa fa-phone fa-4x text-muted"></i></div>
+                  <input type="hidden" name="handset" value="0">
+                  <input type="checkbox" class="css-control-input" id="handset" name="handset" value="1">
+                  <span class="css-control-indicator"></span> Tiene bocina?
+                </label>
               </div>
+              <div class="col-md-6">
+                <label class="css-control css-control-sm css-control-success css-switch">
+                  <div class="mb-2 text-center"><i class="fa fa-plug fa-4x text-muted"></i></div>
+                  <input type="hidden" name="power-adpater" value="0">
+                  <input type="checkbox" class="css-control-input" id="power-adapter" name="power-adapter" value="1">
+                  <span class="css-control-indicator"></span> Tiene adaptador de corriente?
+                </label>
+              </div>--}}
+            <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-status" name="val-select2-status"
@@ -261,7 +186,7 @@
                     <option value="{{ $statu->id }}">{{ Str::title($statu->name) }}
                     </option>
                     @empty
-                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    <option>NO EXISTEN ESTADOS REGISTRADOS</option>
                     @endforelse
                   </select>
                   <label for="val-select2-status">Estado del equipo</label>
@@ -273,7 +198,6 @@
             </div>
           </div>
           <!-- END Step 2 -->
-
           <!-- Step 3 -->
           <div class="tab-pane" id="wizard-progress2-step3" role="tabpanel">
             <div class="form-group row">
@@ -309,22 +233,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-md-4">
-                <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="anydesk" name="anydesk" maxlength="24"
-                    value="{{ old('anydesk') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="ip">Anydesk</label>
-                  <div class="input-group-append">
-                    <label for="anydesk"><img class="img-fluid" width="20px"
-                        src="https://ubuntupit.com/wp-content/uploads/2019/03/AnyDesk-remote.png" alt="anydesk">
-                    </label>
-                  </div>
-                </div>
-                @if($errors->has('anydesk'))
-                <small class="text-danger is-invalid">{{ $errors->first('anydesk') }}</small>
-                @endif
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <div class="form-material">
                     <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
@@ -344,7 +253,7 @@
                   @endif
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-material floating">
                   <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
                     value="{{ old('pc-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -354,6 +263,17 @@
                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                 @endif
                 <div class="block-content block-content-full">
+                  {{--  <button type="button" class="btn btn-alt-info ml-2 float-right"
+                      data-toggle="tooltip" data-placement="bottom"
+                      title="Ver abreviados de las sedes">
+                      <i class="fa fa-info-circle"></i>
+                  </button>
+                  <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
+                      title=" Nombre de equipos" data-placement="Right"
+                      data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
+                      <i class="fa fa-info-circle"></i>
+                      Como nombrar equipos?
+                  </button>--}}
                 </div>
               </div>
             </div>
@@ -375,7 +295,8 @@
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del equipo</label>
+                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del
+                      equipo</label>
                   </div>
                   @if($errors->has('val-select2-campus'))
                   <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>
@@ -399,7 +320,7 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group col-md-3">
+              <div class="col-md-3">
                 <div class="form-material">
                   <input type="text" class="js-flatpickr form-control" id="custodian-assignment-date"
                     name="custodian-assignment-date" placeholder="d-m-Y" data-allow-input="true" maxlength="10">
@@ -428,9 +349,11 @@
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-status-assignment"
                     name="val-select2-status-assignment" style="width: 100%;" data-placeholder="Seleccionar concepto..">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
                     @forelse ($statusAssignments as $statuAssignment)
-                    <option value="{{ $statuAssignment->id }}">{{ Str::title($statuAssignment->name) }}
+                    <option value="{{ $statuAssignment->id }}">
+                      {{ Str::title($statuAssignment->name) }}
                     </option>
                     @empty
                     <option>NO EXISTEN ESTADOS REGISTRADOS</option>
@@ -450,7 +373,7 @@
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                     data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
                     value="{{ old('observation') }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea></textarea>
+                    onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>
@@ -491,13 +414,8 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
 <script src="{{ asset('/js/pages/be_ui_activity.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
-<script>
-  jQuery(function(){ Codebase.helpers('notify'); });
-</script>
 
 <!-- Page JS Code -->
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
@@ -509,17 +427,6 @@
   jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs']); });
 </script>
 
-@if(Session::has('message'))
-<script>
-  Codebase.helpers('notify', {
-    align: 'right', // 'right', 'left', 'center'
-    from: 'top', // 'top', 'bottom'
-    type: 'info', // 'info', 'success', 'warning', 'danger'
-    icon: 'fa fa-info mr-5', // Icon class
-    message: '{!! Session::get('message') !!}'
-});
-</script>
-@endif
 <script>
   $('.text-danger').slideDown();
   setTimeout(function(){ $('.text-danger').slideUp(); }, 50000);

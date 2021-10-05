@@ -38,13 +38,13 @@ class CampusExport implements
     public function collection()
     {
         //DB::statement(DB::raw('set @rownum=0'));
-        $pcs = DB::table('view_exports_all_pcs')
+        $devices = DB::table('view_exports_all_devices')
             //->select(DB::raw('@rownum  := @rownum  + 1 AS rownum'))
             ->where('CampuID', $this->campuId)
             ->orderByDesc('FechaCreacion')
             ->get();
 
-        return $pcs;
+        return $devices;
     }
 
     public function headings(): array
@@ -72,9 +72,9 @@ class CampusExport implements
             'NOMBRE EQUIPO',
             'UBICACIÓN',
             'OBSERVACIÓN',
+            'ESTADO',
             'FECHA DE CREACIÓN',
             'FECHA DE ACTUALIZACIÓN',
-            'ESTADO',
             //'CAMPUID',
             //'TECNICOID',
             'REGISTRADO POR',

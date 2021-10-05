@@ -179,6 +179,18 @@ $(document).ready(function() {
                     searchable: false
                 },
                 {
+                    data: "NombreEquipo",
+                    visible: false,
+                    orderable: false,
+                    searchable: true
+                },
+                {
+                    data: "Ubicacion",
+                    visible: false,
+                    orderable: false,
+                    searchable: true
+                },
+                {
                     data: "Serial",
                     visible: true,
                     searcheable: true

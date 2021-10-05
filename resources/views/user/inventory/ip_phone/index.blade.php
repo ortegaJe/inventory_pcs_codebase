@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Técnico Dashboard')
+@section('title', 'Telefonos IP')
 
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
@@ -12,7 +12,7 @@
   @include('user.partials.cards')
   <!-- Add Product -->
   <div class="col-md-6 col-xl-2">
-    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.allinone.create') }}">
+    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.phones.create') }}">
       <div class="block-content block-content-full block-sticky-options">
         <div class="block-options">
           <div class="block-options-item">
@@ -29,8 +29,6 @@
   </div>
   <!-- END Add Product -->
 </div>
-
-@include('user.partials.modal')
 
 <div class="col-md-14">
   <div class="block block-rounded block-bordered">
@@ -102,7 +100,7 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.aio.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.ipphone.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -113,6 +111,16 @@
 'Creado con Exito!',
 '{!! Session::get('pc_created') !!}',
 'success'
+)
+</script>
+@endif
+
+@if(Session::has('info_error'))
+<script>
+  Swal.fire(
+'Ha Ocurrido Un Error Al Crear El Equipo!',
+'{!! Session::get('info_error') !!}',
+'warning'
 )
 </script>
 @endif
@@ -128,7 +136,7 @@
 @endif
 
 <script>
-  let root_url_allinone = <?php echo json_encode(route('user.inventory.allinone.index')) ?>;
-  let root_url_allinone_store = <?php echo json_encode(route('user.inventory.allinone.store')) ?>;
+  let root_url_phones = <?php echo json_encode(route('user.inventory.phones.index')) ?>;
+  let root_url_phones_store = <?php echo json_encode(route('user.inventory.phones.store')) ?>;
 </script>
 @endpush

@@ -476,7 +476,8 @@
                   <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                     maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                     data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                    value="{{ old('observation') }}"></textarea>
+                    value="{{ old('observation') }}"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                   <label for="observation">Observación</label>
                 </div>
               </div>

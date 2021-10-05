@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class ComputersExport implements
+class DevicesExport implements
     FromCollection,
     ShouldAutoSize,
     //ShouldAutoSize,
@@ -32,7 +32,7 @@ class ComputersExport implements
     public function collection()
     {
         //DB::statement(DB::raw('set @rownum=0'));
-        $pcs = DB::table('view_exports_all_pcs')
+        $pcs = DB::table('view_exports_all_devices')
             //->select(DB::raw('@rownum  := @rownum  + 1 AS rownum'))
             ->orderByDesc('FechaCreacion')
             ->get();
@@ -65,9 +65,9 @@ class ComputersExport implements
             'NOMBRE EQUIPO',
             'UBICACIÓN',
             'OBSERVACIÓN',
+            'ESTADO',
             'FECHA DE CREACIÓN',
             'FECHA DE ACTUALIZACIÓN',
-            'ESTADO',
             //'CAMPUID',
             //'TECNICOID',
             'REGISTRADO POR',

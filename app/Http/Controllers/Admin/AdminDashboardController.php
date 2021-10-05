@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\ComputersExport;
+use App\Exports\DevicesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Computer;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
 use App\Models\Campu;
+use App\Models\Device;
+use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
@@ -35,29 +38,26 @@ class AdminDashboardController extends Controller
 
   public function index(Request $request)
   {
-    $globalDesktopPcCount = Computer::countPc(1);   //DE ESCRITORIO
-    $globalTurneroPcCount = Computer::countPc(2);   //TURNERO
-    $globalLaptopPcCount  = Computer::countPc(3);   //PORTATIL
-    $globalRaspberryPcCount = Computer::countPc(4); //RASPBERRY
-    $globalAllInOnePcCount = Computer::countPc(5);  //ALL IN ONE
+    $globalDesktopCount = TypeDevice::countTypeDevice(TypeDevice::DESKTOP_PC_ID);
+    $globalTurneroCount = TypeDevice::countTypeDevice(TypeDevice::TURNERO_PC_ID);
+    $globalLaptopCount  = TypeDevice::countTypeDevice(TypeDevice::LAPTOP_PC_ID);
+    $globalRaspberryCount = TypeDevice::countTypeDevice(TypeDevice::RASPBERRY_PI_ID);
+    $globalAllInOneCount = TypeDevice::countTypeDevice(TypeDevice::ALL_IN_ONE_PC_ID);
+    $globalIpPhoneCount = TypeDevice::countTypeDevice(TypeDevice::IP_PHONE_ID);
 
     if ($request->ajax()) {
-      $pcs = DB::table('view_all_pcs')->orderByDesc('FechaCreacion')->get();
-      //dd($pcs);
+      $devices = DB::table('view_all_devices_admin')
+        ->orderByDesc('FechaCreacion')
+        ->get();
 
-      $datatables = DataTables::of($pcs);
-      /*$datatables->editColumn('FechaCreacion', function ($pcs) {
-        return $pcs->FechaCreacion ? with(new Carbon($pcs->FechaCreacion))
-          ->format('d/m/Y h:i A')    : '';
-      });*/
-
-      $datatables->addColumn('EstadoPC', function ($pcs) {
-        return $pcs->EstadoPc;
+      $datatables = DataTables::of($devices);
+      $datatables->addColumn('EstadoPC', function ($devices) {
+        return $devices->EstadoPc;
       });
 
-      $datatables->editColumn('EstadoPC', function ($pcs) {
-        $status = "<span class='badge badge-pill" . " " . $pcs->ColorEstado . " btn-block'>
-                            $pcs->EstadoPc</span>";
+      $datatables->editColumn('EstadoPC', function ($devices) {
+        $status = "<span class='badge badge-pill" . " " . $devices->ColorEstado . " btn-block'>
+                            $devices->EstadoPc</span>";
         return Str::title($status);
       });
 
@@ -67,11 +67,12 @@ class AdminDashboardController extends Controller
 
     $data =
       [
-        'globalDesktopPcCount' => $globalDesktopPcCount,
-        'globalTurneroPcCount' => $globalTurneroPcCount,
-        'globalLaptopPcCount' => $globalLaptopPcCount,
-        'globalRaspberryPcCount' => $globalRaspberryPcCount,
-        'globalAllInOnePcCount' => $globalAllInOnePcCount,
+        'globalDesktopCount' => $globalDesktopCount,
+        'globalTurneroCount' => $globalTurneroCount,
+        'globalLaptopCount' => $globalLaptopCount,
+        'globalRaspberryCount' => $globalRaspberryCount,
+        'globalAllInOneCount' => $globalAllInOneCount,
+        'globalIpPhoneCount' => $globalIpPhoneCount,
       ];
 
     return view('admin.index')->with($data);
@@ -81,7 +82,7 @@ class AdminDashboardController extends Controller
   {
     $rand = Str::upper(Str::random(12));
 
-    return $this->excel->download(new ComputersExport, "export_inventory_computers_" . $rand . ".xlsx");
+    return $this->excel->download(new DevicesExport, "export_inventory_devices_" . $rand . ".xlsx");
   }
 
   public function maintenanceView($id)
