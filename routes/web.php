@@ -72,6 +72,12 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
     Route::resource('telefonos-ip', 'App\Http\Controllers\User\Inventory\PhoneIpController')->names('user.inventory.phones');
 });
 
+Route::prefix('dashboard/inventario')->group(
+    function () {
+        Route::resource('reportes', 'App\Http\Controllers\Admin\ReportController')->names('inventory.report');
+    }
+);
+
 Route::get('example-faker', function () {
     return view('example');
 });

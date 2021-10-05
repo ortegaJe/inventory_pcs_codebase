@@ -113,13 +113,6 @@
                 </a>
               </li>
               <li class="list-inline-item">
-                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                <a class="link-effect text-dual-primary-dark" data-toggle="layout"
-                  data-action="sidebar_style_inverse_toggle" href="javascript:void(0)">
-                  <i class="si si-drop"></i>
-                </a>
-              </li>
-              <li class="list-inline-item">
                 <a class="link-effect text-dual-primary-dark" href="{{ route('logout') }}" onclick="event.preventDefault();
                     document.getElementById('logout-form-side').submit();">
                   <i class="si si-logout"></i>
@@ -266,6 +259,14 @@
                     </li>
                     @endcan
                   </ul>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <a class="{{ request()->is('dashboard/inventario/reportes') ? 'active' : '' }}"
+                    href="{{ route('inventory.report.index') }}">Reportes
+                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-file-text-o"></i></span>
+                  </a>
                 </li>
               </ul>
             </li>
