@@ -75,11 +75,17 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 Route::prefix('dashboard/inventario/reportes')->group(
     function () {
         Route::get('', 'App\Http\Controllers\Admin\ReportController@getDevice')->name('inventory.report.devices');
+        
         Route::get('formato-de-solicitud-de-baja', 'App\Http\Controllers\Admin\ReportController@reportModule')->name('inventory.report.removes.index');
+        
         Route::get('formato-de-solicitud-de-baja/{device}-{id}/{serial}', 'App\Http\Controllers\Admin\ReportController@reportRemove')->name('inventory.report.removes.create');
+        
         Route::post('guardar-reporte-de-baja', 'App\Http\Controllers\Admin\ReportController@reportRemoveStore')->name('inventory.report.removes.store');
+        
         Route::get('reporte-de-baja-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportRemoveGenerated')->name('inventory.report.removes.generated');
+        
         Route::get('hoja-de-vida/{device}-{id}/{serial}', 'App\Http\Controllers\Admin\ReportController@reportResume')->name('inventory.report.resumes');
+        
         Route::post('guardar-reporte-hoja-de-vida', 'App\Http\Controllers\Admin\ReportController@reportResumeStore')->name('inventory.report.resumes.store');
     }
 );

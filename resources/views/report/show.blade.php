@@ -3,6 +3,11 @@
 @section('title', '')
 
 @section('content')
+<nav class="breadcrumb bg-white push">
+                        <a class="breadcrumb-item" href="{{ route('inventory.report.devices') }}">Reportes</a>
+                        <a class="breadcrumb-item" href="{{ route('inventory.report.removes.index') }}">Formato de solictud de baja</a>
+                        <span class="breadcrumb-item active">Generar reporte</span>
+                    </nav>
 <div class="block-content">
     @include('report.partials.modal_remove')
     <div class="content-heading">
@@ -29,9 +34,10 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px">
-                    @foreach($report_removes as $repo)
+                    @forelse($report_removes as $repo)
                     <tr>
                         <td class="d-none d-sm-table-cell">
+                            {{ $repo->report_code_number }}
                         </td>
                         <td class="d-none d-sm-table-cell">
                             {{ $repo->date_created }}
@@ -50,7 +56,14 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+
+                        <td colspan="4"  class="text-center">
+                        SIN REPORTES AUN SIN REGISTRAR
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
             <!-- END Orders Table -->
