@@ -16,7 +16,7 @@ class CreateDevicesTable extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
             $table->string('batch', 20)->nullable();
-            $table->string('inventory_code_number', 12)->unique();
+            $table->string('inventory_code_number')->unique();
             $table->string('fixed_asset_number', 15)->nullable();
             $table->unsignedBigInteger('type_device_id')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
