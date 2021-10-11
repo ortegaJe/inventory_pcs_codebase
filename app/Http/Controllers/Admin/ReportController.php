@@ -21,7 +21,7 @@ class ReportController extends Controller
 
     public function __construct()
     {
-        $this->generatorID = Helper::IDGenerator(new Report, 'inventory_report', 12, 'REPO');
+        $this->generatorID = Helper::IDGenerator(new Report, 'report_code_number', 12, 'REPO');
         $this->report = new Report();
         $this->report_remove = new ReportRemove();
     }
@@ -31,13 +31,45 @@ class ReportController extends Controller
         return view('report.index');
     }
 
-    public function reportModule()
+    public function reportModule(Request $request)
     {
-        $devices = DB::table('view_all_devices')
-            ->where('TecnicoID', Auth::id())
-            ->get();
+        $user_id = Auth::id();
 
-        return view('report.create', compact('devices'));
+        $serial_number = $request->get('search');
+
+        $devices = Device::leftJoin('status as s', 's.id', 'devices.statu_id')
+        ->leftJoin('statu_devices as sd', 'sd.statu_id', 's.id')
+        ->leftJoin('campus as c', 'c.id', 'devices.campu_id')
+        ->leftJoin('campu_users as cu', 'cu.id', 'devices.campu_id')
+        ->leftJoin('users as u', 'u.id','cu.user_id')
+        ->select(
+            'devices.inventory_code_number',
+            'devices.serial_number',
+            'devices.ip',
+            'devices.mac',
+            'c.name as sede',
+            's.name as estado',
+            's.id as statu_id',
+            'devices.rowguid',
+            'devices.id as device_id'
+        )
+        ->search($serial_number)
+        ->where('u.id', $user_id)
+        ->whereIn('devices.statu_id', [1,2,3,5,6,7,8,9,10])
+        ->where('devices.is_active', true)
+        ->get();
+
+        //return response()->json($devices);
+
+        $search_serial_number = Device::select('serial_number')
+        ->where('is_active', true)
+        ->search($serial_number);
+
+        /*$devices = DB::table('view_all_devices')
+            ->where('TecnicoID', Auth::id())
+            ->get();*/
+
+        return view('report.create', compact('devices','search_serial_number'));
     }
 
     public function reportRemove($device, $id, $serial)
@@ -53,6 +85,7 @@ class ReportController extends Controller
             ->leftJoin('report_removes as rr', 'rr.report_id', 'r.id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
             ->select(
+               'report_code_number',
                 'r.id as repo_id',
                 DB::raw("UPPER(rn.name) repo_name"),
                 'd.serial_number as serial_number',
@@ -88,7 +121,7 @@ class ReportController extends Controller
             ]
         );
 
-        return $pdf->stream('formato-solictud-de-baja-de-equipos');
+        return $pdf->stream('formato-solictud-de-baja-de-equipos.pdf');
     }
 
     public function reportRemoveStore(Request $request)
@@ -118,8 +151,9 @@ class ReportController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertReport (?,?,?,?,?,?,?,?)", //32
+                "CALL SP_insertReport (?,?,?,?,?,?,?,?,?)",
                 [
+                    $this->report->report_code_number = $this->generatorID,
                     $this->report->report_name_id = Report::REPORT_REMOVE_NAME_ID,
                     $this->report->device_id = $device_id,
                     $this->report->user_id = $user_id,

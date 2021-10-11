@@ -6,10 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Campu;
+use Illuminate\Support\Facades\DB;
 
 class Device extends Model
 {
     use HasFactory, SoftDeletes;
 
     const DOMAIN_NAME = ['DOMAIN.LOCAL', 'TEMPORALES.LOCAL'];
+
+    public function scopeSearch($query, $data)
+    {
+        if (trim($data) != "") {
+            return $query->where('serial_number', 'LIKE', "%$data%");
+        }
+    }
 }

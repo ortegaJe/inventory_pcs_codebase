@@ -54,7 +54,6 @@ class UserController extends Controller
         $profiles = DB::table('profiles')->select('id', 'name')->get();
         $campus = DB::table('campus')->select('id', 'name')->get();
 
-
         $data = [
             'profiles' => $profiles,
             'campus' => $campus,
