@@ -225,7 +225,7 @@
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        rowspan=2 height="96" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b>
+        rowspan=2 height="120" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b>
           <font size=2>01</font>
         </b></td>
       <td
@@ -270,58 +270,13 @@
         {{ $repo->Diagnostico }}
       </td>
     </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        rowspan=2 height="96" align="center" valign=middle sdval="2" sdnum="1033;0;00"><b>
-          <font size=2>02</font>
-        </b></td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        align="center" valign=top sdnum="1033;0;000000"><br></td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        align="left" valign=top sdnum="1033;0;000000">
-        <font size=1><br></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        align="left" valign=top>
-        <font size=1><br></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        align="center" valign=top sdnum="1033;0;000000000">
-        <font size=1><br></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        align="left" valign=top bgcolor="#FFFFFF">
-        <font size=1><br></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        rowspan=2 align="center" valign=middle><b>
-          <font size=4><br></font>
-        </b></td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        align="center" valign=middle sdnum="1033;0;00"><b>
-          <font size=1>DIAGN&Oacute;STICO 02</font>
-        </b></td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=4 align="left" valign=top sdnum="1033;0;000000"><br>
-        {{-- DIAGNOSTICO 02 --}}
-      </td>
-    </tr>
+
     <tr>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=7 rowspan=3 height="10" align="left" valign=bottom><b>
           <font size=1>3) OBSERVACIONES</font>
-        </b></td>
+        </b>
+      </td>
     </tr>
     <tr>
     </tr>
@@ -330,7 +285,7 @@
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=7 rowspan=5 height="60" align="left" valign=top><br>
+        colspan=7 rowspan=5 height="80" align="left" valign=top><br>
         {{ $repo->Observacion }}
       </td>
     </tr>
@@ -359,7 +314,7 @@
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=7 height="80" align="center" valign=bottom><b> FIRMA </b></td>
+        colspan=7 height="125" align="center" valign=bottom><b> FIRMA </b></td>
     </tr>
   </table>
   @endforeach

@@ -264,7 +264,7 @@
               <ul>
                 <li>
                   <a class="{{ request()->is('dashboard/inventario/reportes') ? 'active' : '' }}"
-                    href="{{ route('inventory.report.devices') }}">Reportes
+                    href="{{ route('inventory.report.index') }}">Reportes
                     <span class="badge badge-pill bg-gray-darker"><i class="fa fa-file-text-o"></i></span>
                   </a>
                 </li>

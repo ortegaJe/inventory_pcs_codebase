@@ -24,7 +24,7 @@
                     <div class="form-material">
                       <select class="js-select2 form-control" id="val-select2-tec-solutions"
                         name="val-select2-tec-solutions" style="width: 100%;"
-                        data-placeholder="Seleccionar solución técnica.." required>
+                        data-placeholder="Seleccionar solución técnica..">
                         <option></option>
                         <!--  for data-placeholder attribute to work with Select2 plugin -->
                         @forelse ($technician_solutions as $tec_solution)
@@ -49,7 +49,8 @@
                       <textarea class="js-maxlength form-control" id="diagnostic" name="diagnostic" rows="4"
                         maxlength="500" placeholder="Escriba aqui una diagnóstico" data-always-show="true"
                         data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                        onkeyup="javascript:this.value=this.value.toUpperCase();"
+                        value="{{ old('diagnostic') }}"></textarea>
                       <label for="diagnostic">Diagnóstico</label>
                     </div>
                   </div>
@@ -63,7 +64,8 @@
                       <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
                         maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
                         data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                        onkeyup="javascript:this.value=this.value.toUpperCase();"
+                        value="{{ old('observation') }}"></textarea>
                       <label for="observation">Observación</label>
                     </div>
                   </div>
@@ -92,6 +94,14 @@
 
 <script>
   jQuery(function(){ Codebase.helpers(['maxlength', 'select2',]); });
+</script>
+
+<script>
+  $(document).ready(function(){
+    @if($message = Session::get('message'))
+    $('#modal-popin-up-remove').modal('show');
+    @endif
+  })
 </script>
 
 @endpush

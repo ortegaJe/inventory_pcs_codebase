@@ -505,7 +505,7 @@
 
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
-  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker','maxlength', 'select2',]); });
+  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker','maxlength', 'select2']); });
 </script>
 
 @if(Session::has('message'))

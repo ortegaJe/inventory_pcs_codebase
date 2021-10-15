@@ -133,9 +133,11 @@
     @endforeach
     @endif
 </div>
-<div class="d-flex float-right mb-4">
-  {!! $campus->links("pagination::bootstrap-4") !!}
-</div>
+<nav aria-label="Campus navigation">
+  <ul class="pagination justify-content-end">
+    {!! $campus->links("pagination::bootstrap-4") !!}
+  </ul>
+</nav>
 
 @endsection
 

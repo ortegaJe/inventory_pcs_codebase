@@ -74,19 +74,27 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
 Route::prefix('dashboard/inventario/reportes')->group(
     function () {
-        Route::get('', 'App\Http\Controllers\Admin\ReportController@getDevice')->name('inventory.report.devices');
-        
-        Route::get('formato-de-solicitud-de-baja', 'App\Http\Controllers\Admin\ReportController@reportModule')->name('inventory.report.removes.index');
-        
-        Route::get('formato-de-solicitud-de-baja/{device}-{id}/{serial}', 'App\Http\Controllers\Admin\ReportController@reportRemove')->name('inventory.report.removes.create');
-        
-        Route::post('guardar-reporte-de-baja', 'App\Http\Controllers\Admin\ReportController@reportRemoveStore')->name('inventory.report.removes.store');
-        
+        Route::get('', 'App\Http\Controllers\Admin\ReportController@getReport')->name('inventory.report.index');
+
+        Route::get('reporte-de-solicitud-de-baja', 'App\Http\Controllers\Admin\ReportController@indexReportRemove')->name('inventory.report.removes.index');
+
+        Route::get('reporte-de-solicitud-de-baja/{id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportRemove')->name('inventory.report.removes.create');
+
+        Route::post('guardar-reporte-de-baja', 'App\Http\Controllers\Admin\ReportController@storeReportRemove')->name('inventory.report.removes.store');
+
         Route::get('reporte-de-baja-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportRemoveGenerated')->name('inventory.report.removes.generated');
-        
-        Route::get('hoja-de-vida/{device}-{id}/{serial}', 'App\Http\Controllers\Admin\ReportController@reportResume')->name('inventory.report.resumes');
-        
-        Route::post('guardar-reporte-hoja-de-vida', 'App\Http\Controllers\Admin\ReportController@reportResumeStore')->name('inventory.report.resumes.store');
+
+        Route::get('reporte-hoja-de-vida', 'App\Http\Controllers\Admin\ReportController@indexReportResume')->name('inventory.report.resumes.index');
+
+        Route::get('reporte-hoja-de-vida/{id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportResume')->name('inventory.report.resumes.create');
+
+        Route::post('guardar-reporte-hoja-de-vida', 'App\Http\Controllers\Admin\ReportController@storeReportResume')->name('inventory.report.resumes.store');
+
+        Route::get('reporte-de-hoja-de-vida-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportResumeGenerated')->name('inventory.report.resumes.generated');
+
+        Route::post('guardar-reporte-mantenimiento', 'App\Http\Controllers\Admin\ReportController@storeReportMaintenance')->name('inventory.report.maintenance.store');
+
+        //Route::get('reporte-de-mantenimiento-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportMaintenanceGenerated')->name('inventory.report.maintenance.generated');
     }
 );
 
