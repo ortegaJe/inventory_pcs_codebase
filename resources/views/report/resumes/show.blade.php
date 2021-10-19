@@ -55,27 +55,30 @@
               {{ $repo->repo_name }}
             </td>
             <td class="d-none d-sm-table-cell text-center">
-              <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                  href="{{ route('inventory.report.resumes.generated', [$repo->repo_id, "=", $repo->rowguid]) }}"
-                  target="_blank">
-                  <i class="fa fa-print"></i>
-                </a>
-              </div>
-            </td>
-          </tr>
-          @empty
-          <tr>
-            <td colspan="4" class="text-center">
-              REPORTE HOJA DE VIDA AUN SIN REGISTRAR
-            </td>
-          </tr>
-          @endforelse
-        </tbody>
-      </table>
-      <!-- END Orders Table -->
+              {{--<div class="btn-group">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.maintenance.pdf', [$repo->repo_id]) }}" target="_blank">
+              <i class="fa fa-print"></i>
+              </a>
+    </div>--}}
+    <div class="btn-group">
+      <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.resumes.generated', $repo->repo_id) }}" target="_blank">
+        <i class="fa fa-print"></i>
+      </a>
+    </div>
+    </td>
+    </tr>
+    @empty
+    <tr>
+      <td colspan="4" class="text-center">
+        REPORTE HOJA DE VIDA AUN SIN REGISTRAR
+      </td>
+    </tr>
+    @endforelse
+    </tbody>
+    </table>
+    <!-- END Orders Table -->
 
-      <!-- Navigation 
+    <!-- Navigation 
         <nav aria-label="Orders navigation">
             <ul class="pagination justify-content-end">
                 <li class="page-item">
@@ -112,11 +115,11 @@
             </ul>
         </nav>
          END Navigation -->
-    </div>
   </div>
-  <!-- END Orders Table -->
+</div>
+<!-- END Orders Table -->
 
-  <!-- Navigation 
+<!-- Navigation 
             <nav aria-label="Orders navigation">
                 <ul class="pagination justify-content-end">
                     <li class="page-item">
@@ -159,8 +162,7 @@
 @include('report.resumes.partials.modal_maintenance')
 <div class="block-content">
   <div class="content-heading">
-    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
-      data-target="#modal-popin-up-resume">
+    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-popin-up-resume">
       <i class="fa fa-plus text-success mr-5"></i>Generar
     </button>
     Mantenimientos
@@ -199,8 +201,7 @@
             </td>
             <td class="d-none d-sm-table-cell text-center">
               <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                  href="{{ route('inventory.report.resumes.generated', [$repo->repo_id]) }}" target="_blank">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.resumes.generated', [$repo->repo_id]) }}" target="_blank">
                   <i class="fa fa-print"></i>
                 </a>
               </div>
@@ -225,16 +226,19 @@
 
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
-  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker','maxlength', 'select2']); });
+  jQuery(function() {
+    Codebase.helpers(['flatpickr', 'datepicker', 'maxlength', 'select2']);
+  });
 </script>
 
 @if(Session::has('report_created'))
 <script>
   Swal.fire(
-'Creado con Exito!',
-'{!! Session::get('report_created') !!}',
-'success'
-)
+    'Creado con Exito!',
+    '{!! Session::get('
+    report_created ') !!}',
+    'success'
+  )
 </script>
 @endif
 

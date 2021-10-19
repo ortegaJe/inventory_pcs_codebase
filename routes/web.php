@@ -95,6 +95,9 @@ Route::prefix('dashboard/inventario/reportes')->group(
         Route::post('guardar-reporte-mantenimiento', 'App\Http\Controllers\Admin\ReportController@storeReportMaintenance')->name('inventory.report.maintenance.store');
 
         //Route::get('reporte-de-mantenimiento-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportMaintenanceGenerated')->name('inventory.report.maintenance.generated');
+    
+        Route::get('public-file/{id}','App\Http\Controllers\Admin\ReportController@pdfReportMaintenance')->name('inventory.report.maintenance.pdf');
+    
     }
 );
 

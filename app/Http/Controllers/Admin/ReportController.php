@@ -14,6 +14,7 @@ use App\Models\Report;
 use App\Models\ReportResume;
 use Faker\Provider\Uuid;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -354,6 +355,7 @@ class ReportController extends Controller
             ->select(
                 'device_maintenances.report_id as mto_repo_id',
                 'r.id as repo_id',
+                'r.report_code_number',
                 'device_maintenances.maintenance_date as mto_date',
                 'device_maintenances.observation'
             )
@@ -364,7 +366,7 @@ class ReportController extends Controller
         //return response()->json($maintenance_date);
 
         $pdf = PDF::loadView(
-            'report.resumes.pdf',
+            'report.resumes.pdf.cv-pdf',
             [
                 'report' => $report,
                 'mto_count' => $mto_count,
@@ -373,7 +375,11 @@ class ReportController extends Controller
             ]
         );
 
-        return $pdf->download('formato_de_hoja_de_vida_' . $report->report_code_number . '.pdf');
+        $nombre_carpeta = $report->report_code_number;
+
+        Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
+
+        return $pdf->download($report->report_code_number . '.pdf');
     }
 
     public function storeReportMaintenance(Request $request)
@@ -410,5 +416,33 @@ class ReportController extends Controller
                 ->with('report_created', '');
 
         endif;
+    }
+
+    public function pdfReportMaintenance(Request $request, $id)
+    {
+        //$exists = Storage::disk('public')->exists("REPO000000000018.pdf");
+        //return response()->json($exists);
+
+        $report = Report::findOrFail($id);
+        //return response()->json($report);
+
+        $nombre_carpeta = $report->report_code_number;
+        //return response()->json($nombre_carpeta);
+
+        /*if (Storage::disk('public')->exists("/$request->file")) {
+            $path = Storage::disk('public')->path("/$request->file");
+            $content = file_get_contents($path);
+            return response($content)->withHeaders([
+                'Content-Type' => mime_content_type($path)
+            ]);
+        }
+        return redirect('/404');*/
+
+        //dd($report->id);
+        //eturn response()->download('./storage/app/public/' . $report->report_code_number . '.pdf');
+        if (Storage::disk('public')->exists($report->report_code_number . '.pdf')) {
+            return Storage::download('public/' . $report->report_code_number . '.pdf');
+        }
+        return redirect('/404');
     }
 }
