@@ -18,8 +18,8 @@
           <div class="block-content mb-4">
             <div class="block pull-r-l">
               <div class="block-content">
-                <input type="text" name="device-id" value="{{ $device->id }}">
-                <input type="text" name="repo-id" value="{{ $repo->repo_id}}">
+                <input type="hidden" name="device-id" value="{{ $device->id }}">
+                <input type="hidden" name="repo-id" value="{{ $repo->repo_id}}">
                 <div class="form-group row">
                   <div class="col-md-6">
                     <div class="form-material">

@@ -11,6 +11,7 @@ use App\Helpers\Helper;
 use App\Models\Device;
 use App\Models\DeviceMaintenance;
 use App\Models\Report;
+use App\Models\ReportRemove;
 use App\Models\ReportResume;
 use Faker\Provider\Uuid;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -26,6 +27,7 @@ class ReportController extends Controller
     {
         $this->generatorID = Helper::IDGenerator(new Report, 'report_code_number', 12, 'REPO');
         $this->report = new Report();
+        $this->report_remove = new ReportRemove();
         $this->report_resume = new ReportResume();
         $this->report_maintenance = new DeviceMaintenance();
     }
@@ -93,6 +95,7 @@ class ReportController extends Controller
             )
             ->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
+            ->where('r.report_name_id', Report::REPORT_REMOVE_NAME_ID)
             ->orderByDesc('r.created_at')
             ->get();
 
@@ -147,7 +150,7 @@ class ReportController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertReport (?,?,?,?,?,?,?,?,?)",
+                "CALL SP_insertReportRemove (?,?,?,?,?,?,?,?,?)",
                 [
                     $this->report->report_code_number = $this->generatorID,
                     $this->report->report_name_id = Report::REPORT_REMOVE_NAME_ID,
@@ -282,12 +285,15 @@ class ReportController extends Controller
 
         //return response()->json($report_maintenances);
 
+        $mto_count = DeviceMaintenance::where('report_id', $id)->count();
+
         $data = [
             'device' => $device,
             'report_resume_count' => $report_resume_count,
             'report_maintenance_count' => $report_maintenance_count,
             'report_resumes' => $report_resumes,
-            'report_maintenances' => $report_maintenances
+            'report_maintenances' => $report_maintenances,
+            'mto_count' => $mto_count
         ];
 
         return view('report.resumes.show')->with($data);
@@ -375,11 +381,84 @@ class ReportController extends Controller
             ]
         );
 
-        $nombre_carpeta = $report->report_code_number;
+        $tiempo_creacion = now()->toDateString();
+        $nombre_archivo = $report->report_code_number;
+        $extension = '.pdf';
+        $archivo = $nombre_archivo . $extension;
+        $nombre_carpeta = 'pdf/hojas-de-vida/';
 
-        Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
+        Storage::put('public/' . $nombre_carpeta . '/' . $tiempo_creacion . '/' . $archivo, $pdf->output());
+        //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
+        return $pdf->stream($report->report_code_number . '.pdf');
+    }
 
-        return $pdf->download($report->report_code_number . '.pdf');
+    public function reportMaintenanceGenerated($id)
+    {
+        $report = Report::findOrFail($id);
+
+        $generated_report_resume = DB::table('view_report_resumes')
+            ->where('RepoID', $report->id)
+            ->get();
+
+        //return response()->json($generated_report_resume);
+
+        $mto_count = DeviceMaintenance::where('report_id', $report->id)->count();
+
+        //return response()->json($mto_count);
+
+        $mto_date = DeviceMaintenance::select('maintenance_date')->get();
+
+        $first_maintenance_date = DeviceMaintenance::leftJoin('reports as r', 'r.id', 'device_maintenances.report_id')
+            ->select(
+                'device_maintenances.report_id as mto_repo_id',
+                'r.id as repo_id',
+                'r.report_code_number',
+                'device_maintenances.maintenance_date as mto_date',
+                'device_maintenances.observation'
+            )
+            ->where('device_maintenances.report_id', $report->id)
+            ->orderBy('device_maintenances.maintenance_date', 'ASC')
+            ->limit(1)
+            ->first();
+
+        //return response()->json($first_maintenance_date);
+
+        $second_maintenance_date = DeviceMaintenance::leftJoin('reports as r', 'r.id', 'device_maintenances.report_id')
+            ->select(
+                'device_maintenances.report_id as mto_repo_id',
+                'r.id as repo_id',
+                'r.report_code_number',
+                'device_maintenances.maintenance_date as mto_date',
+                'device_maintenances.observation'
+            )
+            ->where('device_maintenances.report_id', $report->id)
+            ->orderBy('device_maintenances.maintenance_date', 'DESC')
+            ->limit(1)
+            ->first();
+
+        //return response()->json($second_maintenance_date);
+
+
+        $pdf = PDF::loadView(
+            'report.resumes.pdf.mto-pdf',
+            [
+                'report' => $report,
+                'mto_count' => $mto_count,
+                'generated_report_resume' => $generated_report_resume,
+                'first_maintenance_date' => $first_maintenance_date,
+                'second_maintenance_date' => $second_maintenance_date
+            ]
+        );
+
+        $tiempo_creacion = now()->toDateString();
+        $nombre_archivo = $report->report_code_number;
+        $extension = '.pdf';
+        $archivo = $nombre_archivo . $extension;
+        $nombre_carpeta = 'pdf/mantenimientos/';
+
+        Storage::put('public/' . $nombre_carpeta . '/' . $tiempo_creacion . '/' . $archivo, $pdf->output());
+        //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
+        return $pdf->stream($report->report_code_number . '.pdf');
     }
 
     public function storeReportMaintenance(Request $request)
@@ -418,7 +497,7 @@ class ReportController extends Controller
         endif;
     }
 
-    public function pdfReportMaintenance(Request $request, $id)
+    public function pdfReportResumes(Request $request, $id)
     {
         //$exists = Storage::disk('public')->exists("REPO000000000018.pdf");
         //return response()->json($exists);
@@ -443,6 +522,6 @@ class ReportController extends Controller
         if (Storage::disk('public')->exists($report->report_code_number . '.pdf')) {
             return Storage::download('public/' . $report->report_code_number . '.pdf');
         }
-        return redirect('/404');
+        return view('admin.op_error_400');
     }
 }

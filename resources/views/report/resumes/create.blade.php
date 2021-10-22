@@ -8,59 +8,59 @@
 
 @section('content')
 <nav class="breadcrumb bg-white push">
-  <a class="breadcrumb-item" href="{{ route('inventory.report.resumes.index') }}">Reportes</a>
+  <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
   <span class="breadcrumb-item active">Reporte de hoja de vida</span>
 </nav>
 <!-- Orders -->
 <div class="content-heading">
   {{--<div class="dropdown float-right">
-        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-drop"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Today
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-drop">
-            <a class="dropdown-item active" href="javascript:void(0)">
-                <i class="fa fa-fw fa-calendar mr-5"></i>Today
-            </a>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-calendar mr-5"></i>This Week
-            </a>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-calendar mr-5"></i>This Month
-            </a>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-calendar mr-5"></i>This Year
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-circle-o mr-5"></i>All Time
-            </a>
-        </div>
+    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-drop" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
+      Today
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-drop">
+      <a class="dropdown-item active" href="javascript:void(0)">
+        <i class="fa fa-fw fa-calendar mr-5"></i>Today
+      </a>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-calendar mr-5"></i>This Week
+      </a>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-calendar mr-5"></i>This Month
+      </a>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-calendar mr-5"></i>This Year
+      </a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-circle-o mr-5"></i>All Time
+      </a>
     </div>
-    <div class="dropdown float-right mr-5">
-        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-filter-drop"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            All
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-filter-drop">
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-spinner fa-spin text-warning mr-5"></i>Pending
-            </a>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-refresh fa-spin text-info mr-5"></i>Processing
-            </a>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-times text-danger mr-5"></i>Canceled
-            </a>
-            <a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-check text-success mr-5"></i>Completed
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item active" href="javascript:void(0)">
-                <i class="fa fa-fw fa-circle-o mr-5"></i>All
-            </a>
-        </div>
-    </div>--}}
+  </div>
+  <div class="dropdown float-right mr-5">
+    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-filter-drop"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      All
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-filter-drop">
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-spinner fa-spin text-warning mr-5"></i>Pending
+      </a>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-refresh fa-spin text-info mr-5"></i>Processing
+      </a>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-times text-danger mr-5"></i>Canceled
+      </a>
+      <a class="dropdown-item" href="javascript:void(0)">
+        <i class="fa fa-fw fa-check text-success mr-5"></i>Completed
+      </a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item active" href="javascript:void(0)">
+        <i class="fa fa-fw fa-circle-o mr-5"></i>All
+      </a>
+    </div>
+  </div>--}}
   Lista De Equipos
 </div>
 <div class="block block-rounded">
@@ -76,8 +76,8 @@
             </button>
           </div>
           <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top"
-            title="Lista de equipos" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i
-              class="fa fa-list"></i></button>
+            title="Actualizar lista" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i
+              class="si si-reload"></i></button>
         </div>
       </div>
     </form>

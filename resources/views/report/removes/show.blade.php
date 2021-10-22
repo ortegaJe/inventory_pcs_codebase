@@ -58,7 +58,6 @@
                     </tr>
                     @empty
                     <tr>
-
                         <td colspan="4" class="text-center">
                             SIN REPORTES AUN SIN REGISTRAR
                         </td>

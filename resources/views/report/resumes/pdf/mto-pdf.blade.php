@@ -450,8 +450,6 @@
         <font face="Arial" size=1 color="#000000">Mantenimiento</font>
       </td>
     </tr>
-    @forelse($maintenance_date as $mto)
-    @if($loop->first)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -461,67 +459,9 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdval="43556" sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
-        </b></td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=3 align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Realiz&oacute;</font>
+          <font face="Arial" size=1>{{ $first_maintenance_date->mto_date }}</font>
+        </b>
       </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=8 align="center" valign=top>
-        <font face="Arial" size=1 color="#000000"></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Aceptaci&oacute;n Administrativo</font>
-      </td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=23 height="10" align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Observaciones</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 rowspan=4 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Firma</font>
-      </td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $mto->observation }}</font>
-      </td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre:</font>
-      </td>
-    </tr>
-    @endif
-    @empty
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 height="10" align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Fecha Realizaci&oacute;n</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 align="center" valign=top sdval="43556" sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1></font>
-        </b></td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=3 align="left" valign=top bgcolor="#F2F2F2">
@@ -568,8 +508,7 @@
         <font face="Arial" size=1 color="#000000">Nombre:</font>
       </td>
     </tr>
-    @endforelse
-    @if(count($mto_count) > 0) @forelse($maintenance_date as $mto) @if($loop->last)
+    @if($mto_count >= 0)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -586,94 +525,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
-        </b></td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=3 align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Realiz&oacute;</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=8 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000"><br></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Aceptaci&oacute;n Administrativo</font>
-      </td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=23 height="10" align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Observaciones</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 rowspan=4 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Firma</font>
-      </td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $mto->observation }}</font>
-      </td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre:</font>
-      </td>
-    </tr>
-    <tr>
-      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
-        valign=top><b>
-          <font face="Arial" size=1 color="#000000">6. Ubicaci&oacute;n Actual</font>
-        </b></td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=9 height="10" align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Usuario Responsable</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=9 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Ubicaci&oacute;n dentro de la Empresa</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Fecha</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=9 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Firma Responsable</font>
-      </td>
-    </tr>
-    @endif
-    @empty
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 height="10" align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Fecha Realizaci&oacute;n</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 align="center" valign=top sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1></font>
+          <font face="Arial" size=1>{{ $second_maintenance_date->mto_date }}</font>
         </b></td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -721,93 +573,9 @@
         <font face="Arial" size=1 color="#000000">Nombre:</font>
       </td>
     </tr>
-    <tr>
-      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
-        valign=top><b>
-          <font face="Arial" size=1 color="#000000">6. Ubicaci&oacute;n Actual</font>
-        </b></td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=9 height="10" align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Usuario Responsable</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=9 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Ubicaci&oacute;n dentro de la Empresa</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Fecha</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=9 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Firma Responsable</font>
-      </td>
-    </tr>
-    @endforelse
     @else
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 height="10" align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Fecha Realizaci&oacute;n</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=6 align="center" valign=top sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
-        </b></td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=3 align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Realiz&oacute;</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=8 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000"><br></font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Aceptaci&oacute;n Administrativo</font>
-      </td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=23 height="10" align="center" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Observaciones</font>
-      </td>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 rowspan=4 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Firma</font>
-      </td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $mto->observation }}</font>
-      </td>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre:</font>
-      </td>
-    </tr>
+    <span>solo tiene un mantenimiento</span>
+    @endif
     <tr>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
         valign=top><b>
@@ -836,7 +604,6 @@
         <font face="Arial" size=1 color="#000000">Firma Responsable</font>
       </td>
     </tr>
-    @endif
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"

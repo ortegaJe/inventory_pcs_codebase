@@ -14,8 +14,9 @@ class CreateDeviceMaintenanceTable extends Migration
     public function up()
     {
         Schema::create('device_maintenances', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('report_id');
-            $table->dateTime('maintenance_date');
+            $table->date('maintenance_date');
             $table->text('observation');
             $table->uuid('rowguid');
 
