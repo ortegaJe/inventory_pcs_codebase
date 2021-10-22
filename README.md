@@ -11,7 +11,7 @@
 
 Plataforma web con PHP Laravel para registro y control de inventarios de equipos informáticos.
 
-- [Simple, fast routing engine](https://github.com/ortegaJe/inventory_pcs_codebase/blob/main/photo1%20(2).jpeg).
+- [Simple, fast routing engine](https://github.com/ortegaJe/inventory_pcs_codebase/blob/main/photo1%20(2).jpeg?raw=true).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
 - Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
 - Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
