@@ -17,7 +17,8 @@ class Device extends Model
     public function scopeSearch($query, $data)
     {
         if (trim($data) != "") {
-            return $query->where('serial_number', 'LIKE', "%$data%");
+            return $query->where('serial_number', 'LIKE', "%$data%")
+                ->where('statu_id', 5);
         }
     }
 }

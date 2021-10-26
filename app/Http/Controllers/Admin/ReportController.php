@@ -61,7 +61,7 @@ class ReportController extends Controller
             )
             ->where('cu.user_id', $user_id)
             ->where('devices.is_active', true)
-            ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8])
+            ->where('devices.statu_id', [5])
             ->search($serial_number)
             ->orderByDesc('devices.created_at')
             ->paginate(10);
@@ -523,5 +523,39 @@ class ReportController extends Controller
             return Storage::download('public/' . $report->report_code_number . '.pdf');
         }
         return view('admin.op_error_400');
+    }
+
+    public function indexReportDelivery(Request $request)
+    {
+        $user_id = Auth::id();
+
+        $serial_number = $request->get('search');
+
+        $devices = Device::leftJoin('campus as c', 'c.id', 'devices.campu_id')
+            ->leftJoin('campu_users as cu', 'cu.campu_id', 'devices.campu_id')
+            ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->leftJoin('status as s', 's.id', 'devices.statu_id')
+            ->select(
+                'devices.inventory_code_number',
+                'devices.serial_number',
+                'devices.ip',
+                'devices.mac',
+                'cu.campu_id',
+                'c.name as sede',
+                's.name as estado',
+                's.id as statu_id',
+                'devices.rowguid',
+                'devices.id as device_id'
+            )
+            ->where('cu.user_id', $user_id)
+            ->where('devices.is_active', true)
+            ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8])
+            ->search($serial_number)
+            ->orderByDesc('devices.created_at')
+            ->paginate(10);
+
+        //return response()->json($devices);
+
+        return view('report.delivery.index', compact('devices'));
     }
 }
