@@ -31,6 +31,6 @@ class CreateReportRemovesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('report_unsubscribes');
+        Schema::dropIfExists('report_removes');
     }
 }

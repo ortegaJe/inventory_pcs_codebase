@@ -1,5 +1,4 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
 <html>
 
 <head>
@@ -55,6 +54,7 @@
   </style>
 
 </head>
+@foreach($generated_report_resume as $repo)
 
 <body>
   <table cellspacing="0" border="0" style="margin-left: 30px">
@@ -110,17 +110,16 @@
         <font face="Arial" size=1 color="#000000">DOCUMENTO CONTROLADO</font>
       </td>
     </tr>
-    @foreach($generated_report_resume as $repo)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 height="10" align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Nombre PC</font>
+        <font face="Arial" size=1 color="#000000">Sede del equipo</font>
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=27 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $repo->NombreEquipo }}</font>
+        <font face="Arial" size=1 color="#000000">{{ $repo->SedeEquipo }}</font>
       </td>
     </tr>
     <tr>
@@ -459,7 +458,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdval="43556" sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $first_maintenance_date->mto_date }}</font>
+          <font face="Arial" size=1></font>
         </b>
       </td>
       <td
@@ -508,7 +507,6 @@
         <font face="Arial" size=1 color="#000000">Nombre:</font>
       </td>
     </tr>
-    @if($mto_count >= 0)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -525,7 +523,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $second_maintenance_date->mto_date }}</font>
+          <font face="Arial" size=1></font>
         </b></td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -573,9 +571,6 @@
         <font face="Arial" size=1 color="#000000">Nombre:</font>
       </td>
     </tr>
-    @else
-    <span>solo tiene un mantenimiento</span>
-    @endif
     <tr>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
         valign=top><b>
@@ -692,7 +687,6 @@
         <font face="Arial" size=1 color="#000000"><br></font>
       </td>
     </tr>
-    @endforeach
     <tr>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
         valign=top><b>
@@ -720,5 +714,6 @@
     </tr>
   </table>
 </body>
+@endforeach
 
 </html>
