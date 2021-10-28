@@ -406,8 +406,8 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
 
         $generated_report_resume = DB::table('view_report_resumes')
-            //->where('RepoID', $report->id)
-            ->where('SedeID', 1)
+            ->where('RepoID', $report->id)
+            //->where('SedeID', 1)
             ->get();
 
         //return response()->json($generated_report_resume);

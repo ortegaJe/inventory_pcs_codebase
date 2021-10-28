@@ -194,9 +194,9 @@
         <font face="Arial" size=1 color="#000000">Modelo CPU</font>
       </td>
       <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+        style="font-size:9px;border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=13 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $repo->DescripcionEquipo }}<br></font>
+        {{ $repo->DescripcionEquipo }}
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -601,9 +601,9 @@
     </tr>
     <tr>
       <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+        style="font-size:9px;border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=9 height="10" align="center" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $repo->NombreCustodio }}</font>
+        {{ $repo->NombreCustodio }}
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
