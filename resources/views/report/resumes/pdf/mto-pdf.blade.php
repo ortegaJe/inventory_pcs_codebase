@@ -582,7 +582,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre:</font>
+        <font face="Arial" size=1 color="#000000">Nombre: MARIA RODRIGUEZ</font>
       </td>
     </tr>
     @endforeach
