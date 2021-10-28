@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
+use App\Models\AdminSignature;
 use App\Models\Device;
 use App\Models\DeviceMaintenance;
 use App\Models\Report;
@@ -333,22 +334,6 @@ class ReportController extends Controller
 
             return back()->withErrors($validator)
                 ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
-
-        /*DB::beginTransaction();
-
-            DB::insert(
-                "CALL SP_insertReportResume (?,?,?,?,?,?)",
-                []
-            );
-            DB::commit();
-            return back()->withErrors($validator)
-                ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
-            try {
-            } catch (\Throwable $e) {
-                DB::rollback();
-                return back()->with('info_error', '');
-                throw $e;
-            }*/
         endif;
     }
 
@@ -407,7 +392,7 @@ class ReportController extends Controller
 
         $generated_report_resume = DB::table('view_report_resumes')
             ->where('RepoID', $report->id)
-            //->where('SedeID', 1)
+            ->where('SedeID', 1)
             ->get();
 
         //return response()->json($generated_report_resume);
@@ -429,7 +414,7 @@ class ReportController extends Controller
             ->where('device_maintenances.report_id', $report->id)
             ->orderBy('device_maintenances.maintenance_date', 'ASC')
             ->limit(1)
-            ->first();
+            ->get();
 
         //return response()->json($first_maintenance_date);
 
@@ -444,10 +429,9 @@ class ReportController extends Controller
             ->where('device_maintenances.report_id', $report->id)
             ->orderBy('device_maintenances.maintenance_date', 'DESC')
             ->limit(1)
-            ->first();
+            ->get();
 
         //return response()->json($second_maintenance_date);
-
 
         $pdf = PDF::loadView(
             'report.resumes.pdf.mto-pdf',
