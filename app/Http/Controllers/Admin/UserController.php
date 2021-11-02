@@ -123,8 +123,9 @@ class UserController extends Controller
             ->join('users as u', 'u.id', 'cp.user_id')
             ->where('cp.is_principal', 1)
             ->where('u.id', $id)
-            ->select('c.id as SedeID')
+            ->select('c.id as SedeID',)
             ->first();
+        //return $principalCampuUser;
 
         $campus = DB::table('campus')->select('id', 'name')->get();
 
@@ -136,13 +137,13 @@ class UserController extends Controller
                 'c.name as SedeTecnico',
                 'cp.is_principal as SedePrincipal'
             )
-            ->join('profile_users as up', 'up.id', 'u.id')
-            ->join('profiles as p', 'p.id', 'up.profile_id')
+            ->join('profile_users as pu', 'pu.user_id', 'u.id')
+            ->join('profiles as p', 'p.id', 'pu.profile_id')
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
             ->where('u.id', $id)
             ->get();
-        //return response()->json($dataUsers);
+        //return ($dataUsers);
 
         $data = [
             'users' => User::findOrFail($id),
@@ -152,8 +153,6 @@ class UserController extends Controller
             'campus' => $campus,
             'principalCampuUser' => $principalCampuUser,
         ];
-
-        //dd($data);
 
         return view('admin.users.show')->with($data);
     }
@@ -321,7 +320,7 @@ class UserController extends Controller
         $profileId = $request->get('val-select2-change-profile');
 
         $update = array('profile_id' => $profileId);
-        $updatedProfile = DB::table('user_profiles')->where('user_id', $id)->update($update);
+        $updatedProfile = DB::table('profile_users')->where('user_id', $id)->update($update);
 
         //$profileUsersTemp[] = DB::table('user_profiles')->where('user_id', $id)->get();
 

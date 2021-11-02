@@ -49,5 +49,7 @@ class UsersSeeder extends Seeder
             'created_at' => now('America/Bogota')->toDateTimeString(),
             'is_active' => 1,
         ])->assignRole('tec_sedes');
+
+        User::factory(99)->create();
     }
 }
