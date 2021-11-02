@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReportRemovesTable extends Migration
+class CreateDeviceMaintenancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateReportRemovesTable extends Migration
      */
     public function up()
     {
-        Schema::create('report_removes', function (Blueprint $table) {
+        Schema::create('device_maintenances', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('report_id');
-            $table->unsignedBigInteger('technician_solution_id')->nullable();
-            $table->text('diagnostic');
+            $table->date('maintenance_date');
             $table->text('observation');
+            $table->uuid('rowguid');
 
             $table->foreign('report_id')->references('id')->on('reports')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('technician_solution_id')->references('id')->on('technician_solutions')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateReportRemovesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('report_removes');
+        Schema::dropIfExists('device_maintenances');
     }
 }

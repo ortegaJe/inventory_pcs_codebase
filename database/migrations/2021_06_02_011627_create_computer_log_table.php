@@ -32,6 +32,6 @@ class CreateComputerLogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('computer_log');
+        Schema::dropIfExists('device_log');
     }
 }

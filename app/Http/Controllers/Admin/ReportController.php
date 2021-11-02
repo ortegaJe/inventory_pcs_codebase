@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
+use App\Models\AdminSignature;
 use App\Models\Device;
 use App\Models\DeviceMaintenance;
 use App\Models\Report;
@@ -179,9 +180,11 @@ class ReportController extends Controller
     public function reportRemoveGenerated($id)
     {
         $report = Report::findOrFail($id);
+        $user_id = Auth::id();
 
         $generated_report_remove = DB::table('view_report_removes')
             ->where('RepoID', $id)
+            ->where('TecnicoID', $user_id)
             ->get();
 
         //return response()->json($generated_report_remove);
@@ -320,37 +323,28 @@ class ReportController extends Controller
                     'error'
                 );
         else :
-            DB::beginTransaction();
+            $this->report->report_code_number = $this->generatorID;
+            $this->report->report_name_id = Report::REPORT_RESUME_NAME_ID;
+            $this->report->device_id = $device_id;
+            $this->report->user_id = $user_id;
+            $this->report->rowguid = Uuid::uuid();
+            $this->report->created_at = now('America/Bogota');
 
-            DB::insert(
-                "CALL SP_insertReportResume (?,?,?,?,?,?)",
-                [
-                    $this->report->report_code_number = $this->generatorID,
-                    $this->report->report_name_id = Report::REPORT_RESUME_NAME_ID,
-                    $this->report->device_id = $device_id,
-                    $this->report->user_id = $user_id,
-                    $this->report->rowguid = Uuid::uuid(),
-                    $this->report->created_at = now('America/Bogota'),
-                ]
-            );
-            DB::commit();
+            $this->report->save();
+
             return back()->withErrors($validator)
                 ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
-            try {
-            } catch (\Throwable $e) {
-                DB::rollback();
-                return back()->with('info_error', '');
-                throw $e;
-            }
         endif;
     }
 
     public function reportResumeGenerated($id)
     {
         $report = Report::findOrFail($id);
+        $user_id = Auth::id();
 
         $generated_report_resume = DB::table('view_report_resumes')
             ->where('RepoID', $report->id)
+            ->where('TecnicoID', $user_id)
             ->get();
 
         //return response()->json($generated_report_resume);
@@ -398,6 +392,7 @@ class ReportController extends Controller
 
         $generated_report_resume = DB::table('view_report_resumes')
             ->where('RepoID', $report->id)
+            ->where('SedeID', 1)
             ->get();
 
         //return response()->json($generated_report_resume);
@@ -419,7 +414,7 @@ class ReportController extends Controller
             ->where('device_maintenances.report_id', $report->id)
             ->orderBy('device_maintenances.maintenance_date', 'ASC')
             ->limit(1)
-            ->first();
+            ->get();
 
         //return response()->json($first_maintenance_date);
 
@@ -434,10 +429,9 @@ class ReportController extends Controller
             ->where('device_maintenances.report_id', $report->id)
             ->orderBy('device_maintenances.maintenance_date', 'DESC')
             ->limit(1)
-            ->first();
+            ->get();
 
         //return response()->json($second_maintenance_date);
-
 
         $pdf = PDF::loadView(
             'report.resumes.pdf.mto-pdf',
@@ -485,9 +479,9 @@ class ReportController extends Controller
         else :
 
             $this->report_maintenance->report_id = $report_id;
-            //$this->report->rowguid = Uuid::uuid();
             $this->report_maintenance->maintenance_date = $maintenance_date;
             $this->report_maintenance->observation = $observation;
+            $this->report_maintenance->rowguid = Uuid::uuid();
 
             $this->report_maintenance->save();
 

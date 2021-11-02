@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Models\AdminSignature;
 use App\Models\Campu;
 use App\Models\Device;
 use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Excel;
@@ -76,6 +78,38 @@ class AdminDashboardController extends Controller
       ];
 
     return view('admin.index')->with($data);
+  }
+
+  public function createAdminSignature()
+  {
+    return view('admin.firmas.create');
+  }
+
+  public function storeAdminSignature(Request $request)
+  {
+    $request->validate([
+      'imagen-firma' => 'required|image|max:1024'
+    ]);
+
+    $file = $request->file('imagen-firma')->store('public');
+
+    $url = Storage::url($file);
+    /*return $file;
+    //obtenemos el nombre del archivo
+    $nombre =  time() . "_" . $file->getClientOriginalName();
+    return $nombre;
+    //indicamos que queremos guardar un nuevo archivo en el disco local
+    Storage::disk('local')->put($nombre,  File::get($file));
+
+    $signature = new AdminSignature();
+    $signature->nombre_archivo = $nombre;
+    $signature->save();*/
+
+    $signature = new AdminSignature();
+    $signature->nombre_archivo = $url;
+    $signature->save();
+
+    return back();
   }
 
   public function exportComputers()

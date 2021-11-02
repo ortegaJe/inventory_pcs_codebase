@@ -55,6 +55,10 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::get('coming-soon/{id}', 'App\Http\Controllers\Admin\AdminDashboardController@comingSoonView')->name('admin.inventory.coming-soon');
 
     Route::get('exports-all-inventory-computers', 'App\Http\Controllers\Admin\AdminDashboardController@exportComputers')->name('admin.inventory.export-all-computers');
+
+    Route::get('firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@createAdminSignature')->name('admin.inventory.admin-signatures.create');
+
+    Route::post('guardar-firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@storeAdminSignature')->name('admin.inventory.admin-signatures.store');
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {

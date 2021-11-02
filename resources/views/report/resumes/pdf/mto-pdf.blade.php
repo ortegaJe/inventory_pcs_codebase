@@ -1,5 +1,4 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
 <html>
 
 <head>
@@ -55,6 +54,7 @@
   </style>
 
 </head>
+@foreach($generated_report_resume as $repo)
 
 <body>
   <table cellspacing="0" border="0" style="margin-left: 30px">
@@ -110,17 +110,16 @@
         <font face="Arial" size=1 color="#000000">DOCUMENTO CONTROLADO</font>
       </td>
     </tr>
-    @foreach($generated_report_resume as $repo)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 height="10" align="left" valign=top bgcolor="#F2F2F2">
-        <font face="Arial" size=1 color="#000000">Nombre PC</font>
+        <font face="Arial" size=1 color="#000000">Sede del equipo</font>
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=27 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $repo->NombreEquipo }}</font>
+        <font face="Arial" size=1 color="#000000">{{ $repo->SedeEquipo }}</font>
       </td>
     </tr>
     <tr>
@@ -195,9 +194,9 @@
         <font face="Arial" size=1 color="#000000">Modelo CPU</font>
       </td>
       <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+        style="font-size:9px;border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=13 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $repo->DescripcionEquipo }}<br></font>
+        {{ $repo->DescripcionEquipo }}
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -450,6 +449,7 @@
         <font face="Arial" size=1 color="#000000">Mantenimiento</font>
       </td>
     </tr>
+    @foreach ($first_maintenance_date as $mto )
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -459,8 +459,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdval="43556" sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $first_maintenance_date->mto_date }}</font>
-        </b>
+          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -469,8 +468,8 @@
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=8 align="center" valign=top>
-        <font face="Arial" size=1 color="#000000"></font>
+        colspan=8 align="left" valign=top>
+        <font face="Arial" size=1 color="#000000">{{ $repo->NombreTecnico }}</font>
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -488,13 +487,18 @@
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 rowspan=4 align="left" valign=top>
         <font face="Arial" size=1 color="#000000">Firma</font>
+        <div>
+          <img src="https://i.ibb.co/ZVyM4TT/firma.jpg" width="125px" style="margin-left: 20px">
+        </div>
       </td>
     </tr>
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000"></font>
+        <font face="Arial" size=1 color="#000000">SE REALIZO SOPLADO DE LAS PARTES INTERNAS (HARDWARE), LIMPIEZA DE
+          PERIFERICOS. SE DEJO EQUIPO
+          FUNCIONANDO.</font>
       </td>
     </tr>
     <tr>
@@ -506,9 +510,10 @@
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 align="left" valign=top>
         <font face="Arial" size=1 color="#000000">Nombre:</font>
+        <font face="Arial" size=1 color="#000000">MARIA RODRIGUEZ</font>
       </td>
     </tr>
-    @if($mto_count >= 0)
+    @endforeach
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -516,6 +521,7 @@
         <font face="Arial" size=1 color="#000000">Mantenimiento</font>
       </td>
     </tr>
+    @foreach($second_maintenance_date as $mto)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -525,7 +531,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $second_maintenance_date->mto_date }}</font>
+          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
         </b></td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -535,7 +541,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=8 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000"><br></font>
+        <font face="Arial" size=1 color="#000000">{{ $repo->NombreTecnico }}</font>
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -553,13 +559,19 @@
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 rowspan=4 align="left" valign=top>
         <font face="Arial" size=1 color="#000000">Firma</font>
+        <div>
+          <img src="https://i.ibb.co/ZVyM4TT/firma.jpg" width="125px" style="margin-left: 20px">
+        </div>
       </td>
     </tr>
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000"></font>
+        <font face="Arial" size=1 color="#000000">SE REALIZO SOPLADO DE LAS PARTES INTERNAS (HARDWARE), LIMPIEZA DE
+          PERIFERICOS.
+          SE DEJO EQUIPO
+          FUNCIONANDO.</font>
       </td>
     </tr>
     <tr>
@@ -570,12 +582,10 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre:</font>
+        <font face="Arial" size=1 color="#000000">Nombre: MARIA RODRIGUEZ</font>
       </td>
     </tr>
-    @else
-    <span>solo tiene un mantenimiento</span>
-    @endif
+    @endforeach
     <tr>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
         valign=top><b>
@@ -606,9 +616,9 @@
     </tr>
     <tr>
       <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+        style="font-size:9px;border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=9 height="10" align="center" valign=top>
-        <font face="Arial" size=1 color="#000000">{{ $repo->NombreCustodio }}</font>
+        {{ $repo->NombreCustodio }}
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -692,7 +702,6 @@
         <font face="Arial" size=1 color="#000000"><br></font>
       </td>
     </tr>
-    @endforeach
     <tr>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
         valign=top><b>
@@ -720,5 +729,6 @@
     </tr>
   </table>
 </body>
+@endforeach
 
 </html>
