@@ -58,29 +58,28 @@
               {{--<div class="btn-group">
                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
                   href="{{ route('inventory.report.maintenance.pdf', [$repo->repo_id]) }}" target="_blank">
-                  <i class="fa fa-print"></i>
-                </a>
-              </div>--}}
-              <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                  href="{{ route('inventory.report.resumes.generated', $repo->repo_id) }}" target="_blank">
-                  <i class="fa fa-print"></i>
-                </a>
-              </div>
-            </td>
-          </tr>
-          @empty
-          <tr>
-            <td colspan="4" class="text-center">
-              REPORTE AUN SIN REGISTRAR
-            </td>
-          </tr>
-          @endforelse
-        </tbody>
-      </table>
-      <!-- END Orders Table -->
+              <i class="fa fa-print"></i>
+              </a>
+    </div>--}}
+    <div class="btn-group">
+      <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.resumes.generated', $repo->repo_id) }}" target="_blank">
+        <i class="fa fa-print"></i>
+      </a>
+    </div>
+    </td>
+    </tr>
+    @empty
+    <tr>
+      <td colspan="4" class="text-center">
+        REPORTE AUN SIN REGISTRAR
+      </td>
+    </tr>
+    @endforelse
+    </tbody>
+    </table>
+    <!-- END Orders Table -->
 
-      <!-- Navigation 
+    <!-- Navigation 
         <nav aria-label="Orders navigation">
             <ul class="pagination justify-content-end">
                 <li class="page-item">
@@ -117,11 +116,11 @@
             </ul>
         </nav>
          END Navigation -->
-    </div>
   </div>
-  <!-- END Orders Table -->
+</div>
+<!-- END Orders Table -->
 
-  <!-- Navigation 
+<!-- Navigation 
             <nav aria-label="Orders navigation">
                 <ul class="pagination justify-content-end">
                     <li class="page-item">
@@ -159,21 +158,11 @@
             </nav>
              END Navigation -->
 </div>
-@if($report_resume_count > 0)
-@include('report.resumes.partials.modal_maintenance')
-<div class="block-content">
+@if($report_resume_count <= 0) @include('report.resumes.partials.modal_maintenance') <div class="block-content">
   <div class="content-heading">
-    @if($mto_count >= 2)
-    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
-      data-target="#modal-popin-up-resume">
+    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-popin-up-resume">
       <i class="fa fa-plus text-success mr-5"></i>Generar
     </button>
-    @else
-    <button type="hidden" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
-      data-target="#modal-popin-up-resume">
-      <i class="fa fa-plus text-success mr-5"></i>Generar
-    </button>
-    @endif
     Mantenimientos
   </div>
   <!-- Device Table -->
@@ -193,7 +182,7 @@
         </thead>
         <tbody style="font-size: 14px">
           @foreach($report_maintenances as $repo)
-          @if($repo->maintenance_date == null && $repo->observation == null)
+          @if($repo->maintenance_date == '' && $repo->observation == '')
           <tr>
             <td colspan="4" class="text-center">
               REPORTE DE MANTENIMIENTO AUN SIN REGISTRAR
@@ -210,8 +199,7 @@
             </td>
             <td class="d-none d-sm-table-cell text-center">
               <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id]) }}" target="_blank">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id]) }}" target="_blank">
                   <i class="fa fa-print"></i>
                 </a>
               </div>
@@ -224,32 +212,32 @@
       <!-- END Orders Table -->
     </div>
   </div>
-</div>
-@endif
-@endsection
+  </div>
+  @endif
+  @endsection
 
-@push('js')
+  @push('js')
 
-<!-- Page JS Code -->
-<script src="{{ asset('/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js ')}}"></script>
-<script src="{{ asset('/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
+  <!-- Page JS Code -->
+  <script src="{{ asset('/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js ')}}"></script>
+  <script src="{{ asset('/js/plugins/flatpickr/flatpickr.min.js') }}"></script>
 
-<!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
-<script>
-  jQuery(function() {
-    Codebase.helpers(['flatpickr', 'datepicker', 'maxlength', 'select2']);
-  });
-</script>
+  <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
+  <script>
+    jQuery(function() {
+      Codebase.helpers(['flatpickr', 'datepicker', 'maxlength', 'select2']);
+    });
+  </script>
 
-@if(Session::has('report_created'))
-<script>
-  Swal.fire(
-    'Reporte creado con Exito!',
-    '{!! Session::get('
-    report_created ') !!}',
-    'success'
-  )
-</script>
-@endif
+  @if(Session::has('report_created'))
+  <script>
+    Swal.fire(
+      'Reporte creado con Exito!',
+      '{!! Session::get('
+      report_created ') !!}',
+      'success'
+    )
+  </script>
+  @endif
 
-@endpush
+  @endpush

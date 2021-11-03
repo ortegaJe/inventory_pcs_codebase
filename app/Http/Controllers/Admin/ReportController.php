@@ -75,7 +75,6 @@ class ReportController extends Controller
     public function createReportRemove($id, $uuid)
     {
         $user_id = Auth::id();
-
         $device = Device::findOrFail($id);
 
         $technician_solutions = DB::table('technician_solutions')
@@ -196,7 +195,15 @@ class ReportController extends Controller
             ]
         );
 
-        return $pdf->stream('formato_de_solicitud_de_baja_' . $report->report_code_number . '.pdf');
+        //$tiempo_creacion = now()->toDateString();
+        $nombre_carpeta = 'pdf/de-baja/';
+        $nombre_archivo = $report->report_code_number;
+        $extension = '.pdf';
+        $archivo = $nombre_archivo . $extension;
+
+        Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+        //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
+        return $pdf->stream($nombre_archivo . $extension);
     }
 
     public function indexReportResume(Request $request)
@@ -236,17 +243,17 @@ class ReportController extends Controller
     public function createReportResume($id, $uuid)
     {
         $user_id = Auth::id();
-
         $device = Device::findOrFail($id);
 
         $report_resume_count = Report::select('device_id')
             ->where('device_id', $device->id)
             ->count();
 
-        $report_maintenance_count = Report::select('device_id')
-            ->where('report_name_id', Report::REPORT_RESUME_NAME_ID)
-            ->where('device_id', $device->id)
+        $mto_count = DeviceMaintenance::select('repo_id')
+            ->where('report_id')
             ->count();
+
+        return $mto_count;
 
         $report_resumes = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
@@ -288,15 +295,11 @@ class ReportController extends Controller
 
         //return response()->json($report_maintenances);
 
-        $mto_count = DeviceMaintenance::where('report_id', $id)->count();
-
         $data = [
             'device' => $device,
             'report_resume_count' => $report_resume_count,
-            'report_maintenance_count' => $report_maintenance_count,
             'report_resumes' => $report_resumes,
             'report_maintenances' => $report_maintenances,
-            'mto_count' => $mto_count
         ];
 
         return view('report.resumes.show')->with($data);
@@ -375,15 +378,54 @@ class ReportController extends Controller
             ]
         );
 
-        $tiempo_creacion = now()->toDateString();
+        //$tiempo_creacion = now()->toDateString();
+        $nombre_carpeta = 'pdf/hojas-de-vida/';
         $nombre_archivo = $report->report_code_number;
         $extension = '.pdf';
         $archivo = $nombre_archivo . $extension;
-        $nombre_carpeta = 'pdf/hojas-de-vida/';
 
-        Storage::put('public/' . $nombre_carpeta . '/' . $tiempo_creacion . '/' . $archivo, $pdf->output());
+        Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
-        return $pdf->stream($report->report_code_number . '.pdf');
+        return $pdf->stream($report->report_code_number . $extension);
+    }
+
+    public function storeReportMaintenance(Request $request)
+    {
+        $report_id = e($request->input('repo-id'));
+        $maintenance_date = e($request->input('maintenance-date'));
+        $observation = e($request->input('observation'));
+
+        $rules = [
+            'maintenance-date' => 'required|date',
+            'observation' => 'required'
+        ];
+
+        $messages = [];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) :
+            return back()->withErrors($validator)
+                ->withInput()
+                ->with(
+                    'message',
+                    'Revisar campos! :-('
+                )->with(
+                    'modal',
+                    'error'
+                );
+        else :
+
+            $this->report_maintenance->report_id = $report_id;
+            $this->report_maintenance->maintenance_date = $maintenance_date;
+            $this->report_maintenance->observation = $observation;
+            //$this->report_maintenance->rowguid = Uuid::uuid();
+
+            $this->report_maintenance->save();
+
+            return back()->withErrors($validator)
+                ->with('report_created', '');
+
+        endif;
     }
 
     public function reportMaintenanceGenerated($id)
@@ -444,51 +486,15 @@ class ReportController extends Controller
             ]
         );
 
-        $tiempo_creacion = now()->toDateString();
-        $nombre_archivo = $report->report_code_number;
+        //$tiempo_creacion = now()->toDateString();
+        $nombre_carpeta = 'pdf/mantenimientos/';
+        $nombre_archivo = 'MTO-' . $report->report_code_number;
         $extension = '.pdf';
         $archivo = $nombre_archivo . $extension;
-        $nombre_carpeta = 'pdf/mantenimientos/';
 
-        Storage::put('public/' . $nombre_carpeta . '/' . $tiempo_creacion . '/' . $archivo, $pdf->output());
+        Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
-        return $pdf->stream($report->report_code_number . '.pdf');
-    }
-
-    public function storeReportMaintenance(Request $request)
-    {
-        $report_id = e($request->input('repo-id'));
-        $maintenance_date = e($request->input('maintenance-date'));
-        $observation = e($request->input('observation'));
-
-        $rules = [];
-
-        $messages = [];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) :
-            return back()->withErrors($validator)
-                ->withInput()
-                ->with(
-                    'message',
-                    'Revisar campos! :-('
-                )->with(
-                    'modal',
-                    'error'
-                );
-        else :
-
-            $this->report_maintenance->report_id = $report_id;
-            $this->report_maintenance->maintenance_date = $maintenance_date;
-            $this->report_maintenance->observation = $observation;
-            $this->report_maintenance->rowguid = Uuid::uuid();
-
-            $this->report_maintenance->save();
-
-            return back()->withErrors($validator)
-                ->with('report_created', '');
-
-        endif;
+        return $pdf->stream($nombre_archivo . $extension);
     }
 
     public function pdfReportResumes(Request $request, $id)
@@ -517,39 +523,5 @@ class ReportController extends Controller
             return Storage::download('public/' . $report->report_code_number . '.pdf');
         }
         return view('admin.op_error_400');
-    }
-
-    public function indexReportDelivery(Request $request)
-    {
-        $user_id = Auth::id();
-
-        $serial_number = $request->get('search');
-
-        $devices = Device::leftJoin('campus as c', 'c.id', 'devices.campu_id')
-            ->leftJoin('campu_users as cu', 'cu.campu_id', 'devices.campu_id')
-            ->leftJoin('users as u', 'u.id', 'cu.user_id')
-            ->leftJoin('status as s', 's.id', 'devices.statu_id')
-            ->select(
-                'devices.inventory_code_number',
-                'devices.serial_number',
-                'devices.ip',
-                'devices.mac',
-                'cu.campu_id',
-                'c.name as sede',
-                's.name as estado',
-                's.id as statu_id',
-                'devices.rowguid',
-                'devices.id as device_id'
-            )
-            ->where('cu.user_id', $user_id)
-            ->where('devices.is_active', true)
-            ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8])
-            ->search($serial_number)
-            ->orderByDesc('devices.created_at')
-            ->paginate(10);
-
-        //return response()->json($devices);
-
-        return view('report.delivery.index', compact('devices'));
     }
 }
