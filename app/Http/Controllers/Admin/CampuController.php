@@ -196,11 +196,13 @@ class CampuController extends Controller
             )
             ->leftJoin('campu_users AS CU', 'CU.campu_id', 'C.id')
             ->leftJoin('users AS U', 'U.id', 'CU.user_id')
-            ->join('profile_users AS UP', 'UP.id', 'U.id')
-            ->join('profiles AS P', 'P.id', 'UP.profile_id')
+            ->join('profile_users AS PU', 'PU.user_id', 'U.id')
+            ->join('profiles AS P', 'P.id', 'PU.profile_id')
             ->where('CU.campu_id', $id)
             ->where('U.is_active', 1)
             ->get();
+
+        //return $campuAssigned;
 
         $data =
             [

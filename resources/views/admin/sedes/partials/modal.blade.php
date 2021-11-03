@@ -16,10 +16,9 @@
             @csrf
             @method('POST')
             <div class="form-group row">
-              <div class="col-8">
+              <div class="col-12">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-lista-tecnicos"
-                    name="val-select2-lista-tecnicos" style="width: 100%;" data-placeholder="Seleccionar cargo..">
+                  <select class="js-select2 form-control" id="val-select2-lista-tecnicos" name="val-select2-lista-tecnicos" style="width: 100%;" data-placeholder="Seleccionar técnico..">
                     <option></option>
                     <!--  for data-placeholder attribute to work with Select2 plugin -->
                     @forelse ($userLists as $user )
@@ -29,7 +28,7 @@
                     <option value=""></option>
                     @endforelse
                   </select>
-                  <label for="val-select2-lista-tecnicos">Cargos de trabajo</label>
+                  <label for="val-select2-lista-tecnicos">Lista de técnicos</label>
                 </div>
                 @if($errors->has('val-select2-lista-tecnicos'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-lista-tecnicos') }}</small>
