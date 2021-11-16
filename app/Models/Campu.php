@@ -42,4 +42,10 @@ class Campu extends Model
     {
         return $this->hasMany(Profile::class);
     }
+
+    //Relacion uno a muchos
+    public function device()
+    {
+        return $this->hasMany(Device::class);
+    }
 }

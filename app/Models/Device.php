@@ -21,4 +21,10 @@ class Device extends Model
                 ->where('statu_id', 5);
         }
     }
+
+    //Relacion uno a muchos inversa
+    public function campu()
+    {
+        return $this->belongsTo(Campu::class);
+    }
 }
