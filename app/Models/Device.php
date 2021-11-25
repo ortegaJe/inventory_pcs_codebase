@@ -14,11 +14,19 @@ class Device extends Model
 
     const DOMAIN_NAME = ['DOMAIN.LOCAL', 'TEMPORALES.LOCAL'];
 
+    public function scopeSearchRemove($query, $data)
+    {
+        if (trim($data) != "") {
+            return $query->where('devices.serial_number', 'LIKE', "%$data%")
+                ->where('devices.statu_id', 5);
+        }
+    }
+
     public function scopeSearch($query, $data)
     {
         if (trim($data) != "") {
-            return $query->where('serial_number', 'LIKE', "%$data%")
-                ->where('statu_id', 5);
+            return $query->where('devices.serial_number', 'LIKE', "%$data%")
+                ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8]);
         }
     }
 }

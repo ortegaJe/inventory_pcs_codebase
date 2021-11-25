@@ -28,8 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('email', 120)->unique();
             $table->string('password');
-            $table->dateTime('created_at')->nullable();
-            $table->dateTime('updated_at')->nullable();
+            $table->timestamps();
             $table->softDeletes();
             $table->dateTime('current_sign_in_at')->nullable();
             $table->dateTime('last_sign_in_at')->nullable();

@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
-use App\Models\AdminSignature;
+use App\Models\ReportDelivery;
 use App\Models\Device;
 use App\Models\DeviceMaintenance;
 use App\Models\Report;
+use App\Models\ReportDeliverie;
 use App\Models\ReportRemove;
 use App\Models\ReportResume;
 use Faker\Provider\Uuid;
@@ -30,6 +31,7 @@ class ReportController extends Controller
         $this->report = new Report();
         $this->report_remove = new ReportRemove();
         $this->report_resume = new ReportResume();
+        $this->report_delivery = new ReportDelivery();
         $this->report_maintenance = new DeviceMaintenance();
     }
 
@@ -63,7 +65,7 @@ class ReportController extends Controller
             ->where('cu.user_id', $user_id)
             ->where('devices.is_active', true)
             ->where('devices.statu_id', [5])
-            ->search($serial_number)
+            ->searchRemove($serial_number)
             ->orderByDesc('devices.created_at')
             ->paginate(10);
 
@@ -253,8 +255,6 @@ class ReportController extends Controller
             ->where('report_id')
             ->count();
 
-        return $mto_count;
-
         $report_resumes = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
@@ -434,7 +434,7 @@ class ReportController extends Controller
 
         $generated_report_resume = DB::table('view_report_resumes')
             ->where('RepoID', $report->id)
-            ->where('SedeID', 1)
+            //->where('SedeID', 1)
             ->get();
 
         //return response()->json($generated_report_resume);
@@ -495,6 +495,162 @@ class ReportController extends Controller
         Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
         return $pdf->stream($nombre_archivo . $extension);
+    }
+
+    public function indexReportDelivery(Request $request)
+    {
+        $user_id = Auth::id();
+        $serial_number = $request->get('search');
+
+        $devices = Device::leftJoin('campus as c', 'c.id', 'devices.campu_id')
+            ->leftJoin('campu_users as cu', 'cu.campu_id', 'devices.campu_id')
+            ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->leftJoin('status as s', 's.id', 'devices.statu_id')
+            ->select(
+                'devices.inventory_code_number',
+                'devices.serial_number',
+                'devices.ip',
+                'devices.mac',
+                'cu.campu_id',
+                'c.name as sede',
+                's.name as estado',
+                's.id as statu_id',
+                'devices.rowguid',
+                'devices.id as device_id'
+            )
+            ->where('cu.user_id', $user_id)
+            ->where('devices.is_active', true)
+            ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8])
+            ->search($serial_number)
+            ->orderByDesc('devices.created_at')
+            ->paginate(10);
+
+        //return response()->json($devices);
+
+        return view('report.delivery.index', compact('devices'));
+    }
+
+    public function createReportDelivery($id, $uuid)
+    {
+        $user_id = Auth::id();
+        $device = Device::findOrFail($id);
+
+        $report_deliverys = DB::table('reports as r')
+            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
+            ->leftJoin('devices as d', 'd.id', 'r.device_id')
+            ->select(
+                'r.report_code_number',
+                'r.id as repo_id',
+                'r.rowguid',
+                DB::raw("UPPER(rn.name) repo_name"),
+                'd.serial_number as serial_number',
+                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
+            )
+            ->where('r.user_id', $user_id)
+            ->where('r.device_id', $device->id)
+            ->where('r.report_name_id', Report::REPORT_DELIVERY_NAME_ID)
+            ->orderByDesc('r.created_at')
+            ->paginate(4);
+
+        //return $report_deliverys;
+
+        $data = [
+            'device' => $device,
+            'report_deliverys' => $report_deliverys,
+        ];
+
+        return view('report.delivery.create')->with($data);
+    }
+
+    public function storeReportDelivery(Request $request)
+    {
+        $user_id = Auth::id();
+        $device_id = $request->device_id;
+
+        /*         try {
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error']);
+        }
+        return response()->json(['message' => 'Success', 'reports' => $this->report, 'report_delivery' => $this->report_delivery]);
+ */
+
+        $rules = [];
+
+        $messages = [];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) :
+            return back()->withErrors($validator)
+                ->withInput()
+                ->with(
+                    'message',
+                    'Revisar campos! :-('
+                )->with(
+                    'modal',
+                    'error'
+                );
+        else :
+            DB::beginTransaction();
+
+            DB::insert(
+                "CALL SP_insertReportDelivery (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //18
+                [
+                    $this->report->report_code_number = $this->generatorID,
+                    $this->report->report_name_id = Report::REPORT_DELIVERY_NAME_ID,
+                    $this->report->device_id = $device_id,
+                    $this->report->user_id = $user_id,
+                    $this->report->rowguid = Uuid::uuid(),
+                    $this->report->created_at = now('America/Bogota'),
+
+                    $this->report_delivery->name = $request->name,
+                    $this->report_delivery->middle_name = $request->middle_name,
+                    $this->report_delivery->last_name = $request->last_name,
+                    $this->report_delivery->second_last_name = $request->second_last_name,
+                    $this->report_delivery->position = $request->position,
+                    $this->report_delivery->has_wifi = $request->has('wifi'),
+                    $this->report_delivery->has_keyboard = $request->has('keyboard'),
+                    $this->report_delivery->has_mouse = $request->has('mouse'),
+                    $this->report_delivery->has_cover = $request->has('cover'),
+                    $this->report_delivery->has_briefcase = $request->has('briefcase'),
+                    $this->report_delivery->has_power_charger = $request->has('power_charger'),
+                    $this->report_delivery->has_padlock = $request->has('padlock'),
+                    $this->report_delivery->serial_keyboard = $request->serial_keyboard,
+                    $this->report_delivery->serial_mouse = $request->serial_mouse,
+                    $this->report_delivery->serial_power_charger = $request->serial_power_charger,
+                    $this->report_delivery->other_accesories = $request->other_accesories,
+                ]
+            );
+            DB::commit();
+            return back()->withErrors($validator)
+                ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
+            try {
+            } catch (\Throwable $e) {
+                DB::rollback();
+                return back()->with('info_error', '');
+                throw $e;
+            }
+        endif;
+    }
+
+    public function reportDeliveryGenerated($id)
+    {
+        $report = Report::findOrFail($id);
+
+        $report_delivery = DB::table('view_report_deliverys')
+            ->where('RepoID', $report->id)
+            ->get();
+
+        //return $report_delivery;
+
+        $pdf = PDF::loadView(
+            'report.delivery.pdf',
+            [
+                'report_delivery' => $report_delivery,
+            ]
+        );
+
+        return $pdf->stream('acta-de-entrega');
     }
 
     public function pdfReportResumes(Request $request, $id)

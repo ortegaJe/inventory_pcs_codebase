@@ -78,7 +78,7 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
 Route::prefix('dashboard/inventario/reportes')->group(
     function () {
-        Route::get('', 'App\Http\Controllers\Admin\ReportController@getReport')->name('inventory.report.index');
+        Route::get('{}', 'App\Http\Controllers\Admin\ReportController@getReport')->name('inventory.report.index');
 
         Route::get('solicitud-de-baja', 'App\Http\Controllers\Admin\ReportController@indexReportRemove')->name('inventory.report.removes.index');
 
@@ -99,6 +99,14 @@ Route::prefix('dashboard/inventario/reportes')->group(
         Route::post('guardar-reporte-mantenimiento', 'App\Http\Controllers\Admin\ReportController@storeReportMaintenance')->name('inventory.report.maintenance.store');
 
         Route::get('mantenimiento-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportMaintenanceGenerated')->name('inventory.report.maintenance.generated');
+
+        Route::get('acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@indexReportDelivery')->name('inventory.report.delivery.index');
+
+        Route::get('reporte-de-acta-de-entrega/{id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportDelivery')->name('inventory.report.delivery.create');
+
+        Route::post('guardar-reporte-de-acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@storeReportDelivery')->name('inventory.report.deliverys.store');
+
+        Route::get('acta-de-entrega-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportDeliveryGenerated')->name('inventory.report.delivery.generated');
 
         Route::get('public-file/{id}', 'App\Http\Controllers\Admin\ReportController@pdfReportResumes')->name('inventory.report.resumes.pdf');
     }

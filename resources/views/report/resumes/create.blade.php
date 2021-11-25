@@ -75,9 +75,7 @@
               <i class="fa fa-search"></i>
             </button>
           </div>
-          <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top"
-            title="Actualizar lista" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i
-              class="si si-reload"></i></button>
+          <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top" title="Actualizar lista" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i class="si si-reload"></i></button>
         </div>
       </div>
     </form>
@@ -100,9 +98,7 @@
       <tbody style="font-size: 14px">
         @if(count($devices) <= 0) <tr>
           <td colspan="7" class="text-center">SERIAL NO ENCONTRADO!
-            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip" data-placement="top"
-              title="Nueva busqueda" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i
-                class="fa fa-search"></i></button>
+            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip" data-placement="top" title="Nueva busqueda" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i class="fa fa-search"></i></button>
           </td>
           </tr>
           @else
@@ -146,8 +142,7 @@
             </td>
             <td class="d-none d-sm-table-cell text-center">
               <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
-                  href="{{ route('inventory.report.resumes.create', [$device->device_id, $device->rowguid]) }}">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte" href="{{ route('inventory.report.resumes.create', [$device->device_id, $device->rowguid]) }}">
                   <i class="fa fa-file-text-o"></i>
                 </a>
               </div>
@@ -213,7 +208,9 @@
 
 <!-- Page JS Helpers (Flatpickr + BS Datepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs plugins) -->
 <script>
-  jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker', 'select2']); });
+  jQuery(function() {
+    Codebase.helpers(['flatpickr', 'datepicker', 'select2']);
+  });
 </script>
 
 @endpush

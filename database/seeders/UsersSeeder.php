@@ -50,6 +50,6 @@ class UsersSeeder extends Seeder
             'is_active' => 1,
         ])->assignRole('tec_sedes');
 
-        User::factory(99)->create();
+        //User::factory(99)->create();
     }
 }
