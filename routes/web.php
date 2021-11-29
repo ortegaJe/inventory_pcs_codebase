@@ -78,7 +78,7 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
 Route::prefix('dashboard/inventario/reportes')->group(
     function () {
-        Route::get('{}', 'App\Http\Controllers\Admin\ReportController@getReport')->name('inventory.report.index');
+        Route::get('', 'App\Http\Controllers\Admin\ReportController@getReport')->name('inventory.report.index');
 
         Route::get('solicitud-de-baja', 'App\Http\Controllers\Admin\ReportController@indexReportRemove')->name('inventory.report.removes.index');
 
