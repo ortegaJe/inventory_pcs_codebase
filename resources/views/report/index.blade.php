@@ -14,7 +14,7 @@
             </div>
             <div class="block-content bg-body-light">
                 <p class="font-w600">
-                    SOLICITUD DE BAJA
+                    DE BAJA
                 </p>
             </div>
         </a>

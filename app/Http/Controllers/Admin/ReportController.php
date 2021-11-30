@@ -35,7 +35,7 @@ class ReportController extends Controller
         $this->report_maintenance = new DeviceMaintenance();
     }
 
-    public function getReport()
+    public function index()
     {
         return view('report.index');
     }
