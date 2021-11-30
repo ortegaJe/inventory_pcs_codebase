@@ -1,12 +1,12 @@
 @extends('layouts.backend')
 
-@section('title', '')
+@section('title', 'Reportes')
 
 @section('content')
 <nav class="breadcrumb bg-white push">
   <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
-  <a class="breadcrumb-item" href="{{ route('inventory.report.delivery.index') }}">Reporte de acta de entrega</a>
-  <span class="breadcrumb-item active">Generar reporte</span>
+  <a class="breadcrumb-item" href="{{ route('inventory.report.delivery.index') }}">Acta de entrega</a>
+  <span class="breadcrumb-item active">Generar</span>
 </nav>
 <div class="block-content">
   @include('report.delivery.partials.modal')
@@ -49,7 +49,7 @@
             <td class="d-none d-sm-table-cell text-center">
               <div class="btn-group">
                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                  href="{{ route('inventory.report.delivery.generated', [$repo->repo_id, "=", $repo->rowguid]) }}"
+                  href="{{ route('inventory.report.delivery.generated', [$repo->repo_id, $repo->rowguid]) }}"
                   target="_blank">
                   <i class="fa fa-print"></i>
                 </a>

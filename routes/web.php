@@ -80,13 +80,13 @@ Route::prefix('dashboard/inventario/reportes')->group(
     function () {
         Route::get('', 'App\Http\Controllers\Admin\ReportController@getReport')->name('inventory.report.index');
 
-        Route::get('solicitud-de-baja', 'App\Http\Controllers\Admin\ReportController@indexReportRemove')->name('inventory.report.removes.index');
+        Route::get('de-baja', 'App\Http\Controllers\Admin\ReportController@indexReportRemove')->name('inventory.report.removes.index');
 
-        Route::get('solicitud-de-baja/{id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportRemove')->name('inventory.report.removes.create');
+        Route::get('de-baja/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportRemove')->name('inventory.report.removes.create');
 
         Route::post('guardar-reporte-de-baja', 'App\Http\Controllers\Admin\ReportController@storeReportRemove')->name('inventory.report.removes.store');
 
-        Route::get('de-baja-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportRemoveGenerated')->name('inventory.report.removes.generated');
+        Route::get('de-baja-generado/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@reportRemoveGenerated')->name('inventory.report.removes.generated');
 
         Route::get('hoja-de-vida', 'App\Http\Controllers\Admin\ReportController@indexReportResume')->name('inventory.report.resumes.index');
 
@@ -102,11 +102,11 @@ Route::prefix('dashboard/inventario/reportes')->group(
 
         Route::get('acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@indexReportDelivery')->name('inventory.report.delivery.index');
 
-        Route::get('reporte-de-acta-de-entrega/{id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportDelivery')->name('inventory.report.delivery.create');
+        Route::get('acta-de-entrega/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportDelivery')->name('inventory.report.delivery.create');
 
         Route::post('guardar-reporte-de-acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@storeReportDelivery')->name('inventory.report.deliverys.store');
 
-        Route::get('acta-de-entrega-generado/{id}', 'App\Http\Controllers\Admin\ReportController@reportDeliveryGenerated')->name('inventory.report.delivery.generated');
+        Route::get('acta-de-entrega-generado/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@reportDeliveryGenerated')->name('inventory.report.delivery.generated');
 
         Route::get('public-file/{id}', 'App\Http\Controllers\Admin\ReportController@pdfReportResumes')->name('inventory.report.resumes.pdf');
     }

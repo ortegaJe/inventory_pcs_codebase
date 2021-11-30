@@ -74,10 +74,10 @@ class ReportController extends Controller
         return view('report.removes.create', compact('devices'));
     }
 
-    public function createReportRemove($id, $uuid)
+    public function createReportRemove($device, $uuid)
     {
         $user_id = Auth::id();
-        $device = Device::findOrFail($id);
+        $device = Device::findOrFail($device);
 
         $technician_solutions = DB::table('technician_solutions')
             ->select('id', 'name')
@@ -178,7 +178,7 @@ class ReportController extends Controller
         endif;
     }
 
-    public function reportRemoveGenerated($id)
+    public function reportRemoveGenerated($id, $uuid)
     {
         $report = Report::findOrFail($id);
         $user_id = Auth::id();
@@ -204,7 +204,6 @@ class ReportController extends Controller
         $archivo = $nombre_archivo . $extension;
 
         Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
-        //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
         return $pdf->stream($nombre_archivo . $extension);
     }
 
@@ -530,10 +529,10 @@ class ReportController extends Controller
         return view('report.delivery.index', compact('devices'));
     }
 
-    public function createReportDelivery($id, $uuid)
+    public function createReportDelivery($device, $uuid)
     {
         $user_id = Auth::id();
-        $device = Device::findOrFail($id);
+        $device = Device::findOrFail($device);
 
         $report_deliverys = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
@@ -575,7 +574,18 @@ class ReportController extends Controller
         return response()->json(['message' => 'Success', 'reports' => $this->report, 'report_delivery' => $this->report_delivery]);
  */
 
-        $rules = [];
+        $rules = [
+            'name' => 'required',
+            'last_name' => 'required',
+            'second_last_name' => 'required',
+            'position' => 'required',
+            'keyboard' => 'required_with:serial_keyboard,filled',
+            'serial_keyboard' => 'required_with:keyboard,filled',
+            'mouse' => 'required_with:serial_mouse',
+            'serial_mouse' => 'required_with:mouse',
+            'power_charger' => 'required_with:serial_power_charger',
+            'serial_power_charger' => 'required_with:power_charger'
+        ];
 
         $messages = [];
 
@@ -636,9 +646,11 @@ class ReportController extends Controller
     public function reportDeliveryGenerated($id)
     {
         $report = Report::findOrFail($id);
+        $user_id = Auth::id();
 
         $report_delivery = DB::table('view_report_deliverys')
             ->where('RepoID', $report->id)
+            ->where('TecnicoID', $user_id)
             ->get();
 
         //return $report_delivery;
@@ -650,7 +662,14 @@ class ReportController extends Controller
             ]
         );
 
-        return $pdf->stream('acta-de-entrega');
+        //$tiempo_creacion = now()->toDateString();
+        $nombre_carpeta = 'pdf/acta-de-entrega/';
+        $nombre_archivo = $report->report_code_number;
+        $extension = '.pdf';
+        $archivo = $nombre_archivo . $extension;
+
+        Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+        return $pdf->stream($nombre_archivo . $extension);
     }
 
     public function pdfReportResumes(Request $request, $id)

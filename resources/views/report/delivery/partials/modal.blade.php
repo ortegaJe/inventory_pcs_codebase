@@ -111,6 +111,15 @@
                       <label class="custom-control-label" for="power_charger">Adaptador</label>
                     </div>
                   </div>
+                  <div>
+                    @if($errors->has('keyboard'))
+                    <small class="text-danger is-invalid">{{ $errors->first('keyboard') }}</small>
+                    @endif
+                    <br />
+                    @if($errors->has('mouse'))
+                    <small class="text-danger is-invalid">{{ $errors->first('mouse') }}</small>
+                    @endif
+                  </div>
                 </div>
                 <div class="form-group row">
                   <div class="col-md-6">
@@ -143,8 +152,8 @@
                         onkeypress="return /[0-9a-zA-Z]/i.test(event.key)">
                       <label for="serial_power_charger">Serial adaptador de corriente</label>
                     </div>
-                    @if($errors->has('position'))
-                    <small class="text-danger is-invalid">{{ $errors->first('position') }}</small>
+                    @if($errors->has('serial_power_charger'))
+                    <small class="text-danger is-invalid">{{ $errors->first('serial_power_charger') }}</small>
                     @endif
                   </div>
                   <div class="col-md-6">

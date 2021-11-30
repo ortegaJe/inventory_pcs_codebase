@@ -71,7 +71,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=2 rowspan=4 height="72" align="center">
-        <font size=1><br><img src="https://viva1a.com.co/wp-content/uploads/2019/03/img-logo-p.png" width=159 height=55
+        <font size=1><br><img src="https://viva1a.com.co/wp-content/uploads/2019/03/img-logo-p.png" width=150 height=50
             hspace=10 vspace=13>
         </font>
       </td>
@@ -204,23 +204,28 @@
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle>
         <b>
           <font size=1>INVENTARIO</font>
-        </b></td>
+        </b>
+      </td>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle>
         <b>
           <font size=1>(Tipo, Marca, Modelo, Color, Etc.)</font>
-        </b></td>
+        </b>
+      </td>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle>
         <b>
           <font size=1>SERIE</font>
-        </b></td>
+        </b>
+      </td>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle>
         <b>
           <font size=1>TITULAR</font>
-        </b></td>
+        </b>
+      </td>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle>
         <b>
           <font size=1>DEPENDENCIA</font>
-        </b></td>
+        </b>
+      </td>
     </tr>
     <tr>
       <td

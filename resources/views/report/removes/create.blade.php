@@ -5,7 +5,7 @@
 @section('content')
 <nav class="breadcrumb bg-white push">
   <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
-  <span class="breadcrumb-item active">Reporte de solictud de baja</span>
+  <span class="breadcrumb-item active">De baja</span>
 </nav>
 <!-- Orders -->
 <div class="content-heading">
@@ -72,8 +72,8 @@
             </button>
           </div>
           <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top"
-            title="Actualizar lista" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i
-              class="si si-reload"></i></button>
+            title="Actualizar lista" onclick="window.location='{{ route('inventory.report.removes.index') }}'">
+            <i class="si si-reload"></i></button>
         </div>
       </div>
     </form>
@@ -153,7 +153,7 @@
           @endif
       </tbody>
     </table>
-    <nav aria-label="Devices navigation">
+    <nav aria-label="menu navigation">
       <ul class="pagination justify-content-end">
         {!! $devices->links("pagination::bootstrap-4") !!}
       </ul>

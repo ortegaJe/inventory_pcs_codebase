@@ -1,12 +1,12 @@
 @extends('layouts.backend')
 
-@section('title', '')
+@section('title', 'Reportes')
 
 @section('content')
 <nav class="breadcrumb bg-white push">
     <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
-    <a class="breadcrumb-item" href="{{ route('inventory.report.removes.index') }}">Formato de solictud de baja</a>
-    <span class="breadcrumb-item active">Generar reporte</span>
+    <a class="breadcrumb-item" href="{{ route('inventory.report.removes.index') }}">De baja</a>
+    <span class="breadcrumb-item active">Generar</span>
 </nav>
 <div class="block-content">
     @include('report.removes.partials.modal_remove')
@@ -49,7 +49,7 @@
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                                    href="{{ route('inventory.report.removes.generated', [$repo->repo_id, "=", $repo->rowguid]) }}"
+                                    href="{{ route('inventory.report.removes.generated', [$repo->repo_id, $repo->rowguid]) }}"
                                     target="_blank">
                                     <i class="fa fa-print"></i>
                                 </a>
@@ -59,7 +59,7 @@
                     @empty
                     <tr>
                         <td colspan="4" class="text-center">
-                            SIN REPORTES AUN SIN REGISTRAR
+                            REPORTES AUN SIN REGISTRAR
                         </td>
                     </tr>
                     @endforelse

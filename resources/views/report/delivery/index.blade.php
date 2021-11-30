@@ -4,12 +4,12 @@
 
 @section('content')
 <nav class="breadcrumb bg-white push">
-    <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
-    <span class="breadcrumb-item active">Reporte de acta de entrega</span>
+  <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
+  <span class="breadcrumb-item active">Acta de entrega</span>
 </nav>
 <!-- Orders -->
 <div class="content-heading">
-    {{--<div class="dropdown float-right">
+  {{--<div class="dropdown float-right">
     <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-drop" data-toggle="dropdown"
       aria-haspopup="true" aria-expanded="false">
       Today
@@ -57,105 +57,110 @@
       </a>
     </div>
   </div>--}}
-    Lista De Equipos
+  Lista De Equipos
 </div>
 <div class="block block-rounded">
-    <div class="block-content bg-body-light">
-        <!-- Search -->
-        <form action="{{ route('inventory.report.delivery.index')}}" method="GET">
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar serial..">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top" title="Actualizar lista" onclick="window.location='{{ route('inventory.report.delivery.index') }}'"><i class="si si-reload"></i></button>
-                </div>
-            </div>
-        </form>
-        <!-- END Search -->
-    </div>
-    <div class="block-content">
-        <!-- Device Table -->
-        <table class="table table-borderless table-striped">
-            <thead>
-                <tr>
-                    <th style="width: 100px;">CODIGO</th>
-                    <th style="width: 100px;">SERIAL</th>
-                    <th class="d-none d-sm-table-cell">IP</th>
-                    <th class="d-none d-sm-table-cell">MAC</th>
-                    <th class="d-none d-sm-table-cell">SEDE</th>
-                    <th class="d-none d-sm-table-cell text-center">ESTADO</th>
-                    <th class="d-none d-sm-table-cell text-center">ACCIONES</th>
-                </tr>
-            </thead>
-            <tbody style="font-size: 14px">
-                @if(count($devices) <= 0) <tr>
-                    <td colspan="7" class="text-center">SERIAL NO ENCONTRADO!
-                        <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip" data-placement="top" title="Nueva busqueda" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i class="fa fa-search"></i></button>
-                    </td>
-                    </tr>
-                    @else
-                    @foreach($devices as $device)
-                    <tr>
-                        <td class="d-none d-sm-table-cell">
-                            {{ $device->inventory_code_number }}
-                        </td>
-                        <td class="d-none d-sm-table-cell">
-                            {{ $device->serial_number }}
-                        </td>
-                        <td class="d-none d-sm-table-cell">
-                            {{ $device->ip }}
-                        </td>
-                        <td class="d-none d-sm-table-cell">
-                            {{ $device->mac }}
-                        </td>
-                        <td class="d-none d-sm-table-cell">
-                            {{ $device->sede }}
-                        </td>
-                        <td class="d-none d-sm-table-cell text-center">
-                            @if($device->statu_id == 1)
-                            <span class="badge badge-success btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 2)
-                            <span class="badge badge-warning btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 3)
-                            <span class="badge badge-info btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 5)
-                            <span class="badge badge-secondary btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 6)
-                            <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 7)
-                            <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 8)
-                            <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 9)
-                            <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-                            @elseif($device->statu_id == 10)
-                            <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-                            @endif
-                        </td>
-                        <td class="d-none d-sm-table-cell text-center">
-                            <div class="btn-group">
-                                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte" href="{{ route('inventory.report.delivery.create', [$device->device_id, $device->rowguid]) }}">
-                                    <i class="fa fa-file-text-o"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                    @endif
-            </tbody>
-        </table>
-        <nav aria-label="Devices navigation">
-            <ul class="pagination justify-content-end">
-                {!! $devices->links("pagination::bootstrap-4") !!}
-            </ul>
-        </nav>
-        <!-- END Orders Table -->
+  <div class="block-content bg-body-light">
+    <!-- Search -->
+    <form action="{{ route('inventory.report.delivery.index')}}" method="GET">
+      <div class="form-group">
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" name="search" placeholder="Buscar serial..">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top"
+            title="Actualizar lista" onclick="window.location='{{ route('inventory.report.delivery.index') }}'"><i
+              class="si si-reload"></i></button>
+        </div>
+      </div>
+    </form>
+    <!-- END Search -->
+  </div>
+  <div class="block-content">
+    <!-- Device Table -->
+    <table class="table table-borderless table-striped">
+      <thead>
+        <tr>
+          <th style="width: 100px;">CODIGO</th>
+          <th style="width: 100px;">SERIAL</th>
+          <th class="d-none d-sm-table-cell">IP</th>
+          <th class="d-none d-sm-table-cell">MAC</th>
+          <th class="d-none d-sm-table-cell">SEDE</th>
+          <th class="d-none d-sm-table-cell text-center">ESTADO</th>
+          <th class="d-none d-sm-table-cell text-center">ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody style="font-size: 14px">
+        @if(count($devices) <= 0) <tr>
+          <td colspan="7" class="text-center">SERIAL NO ENCONTRADO!
+            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip" data-placement="top"
+              title="Nueva busqueda" onclick="window.location='{{ route('inventory.report.removes.index') }}'"><i
+                class="fa fa-search"></i></button>
+          </td>
+          </tr>
+          @else
+          @foreach($devices as $device)
+          <tr>
+            <td class="d-none d-sm-table-cell">
+              {{ $device->inventory_code_number }}
+            </td>
+            <td class="d-none d-sm-table-cell">
+              {{ $device->serial_number }}
+            </td>
+            <td class="d-none d-sm-table-cell">
+              {{ $device->ip }}
+            </td>
+            <td class="d-none d-sm-table-cell">
+              {{ $device->mac }}
+            </td>
+            <td class="d-none d-sm-table-cell">
+              {{ $device->sede }}
+            </td>
+            <td class="d-none d-sm-table-cell text-center">
+              @if($device->statu_id == 1)
+              <span class="badge badge-success btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 2)
+              <span class="badge badge-warning btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 3)
+              <span class="badge badge-info btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 5)
+              <span class="badge badge-secondary btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 6)
+              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 7)
+              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 8)
+              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 9)
+              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
+              @elseif($device->statu_id == 10)
+              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
+              @endif
+            </td>
+            <td class="d-none d-sm-table-cell text-center">
+              <div class="btn-group">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
+                  href="{{ route('inventory.report.delivery.create', [$device->device_id, $device->rowguid]) }}">
+                  <i class="fa fa-file-text-o"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          @endforeach
+          @endif
+      </tbody>
+    </table>
+    <nav aria-label="menu navigation">
+      <ul class="pagination justify-content-end">
+        {!! $devices->links("pagination::bootstrap-4") !!}
+      </ul>
+    </nav>
+    <!-- END Orders Table -->
 
-        <!-- Navigation 
+    <!-- Navigation 
         <nav aria-label="Orders navigation">
             <ul class="pagination justify-content-end">
                 <li class="page-item">
@@ -192,7 +197,7 @@
             </ul>
         </nav>
          END Navigation -->
-    </div>
+  </div>
 </div>
 <!-- END Device -->
 @endsection
