@@ -182,7 +182,7 @@
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-ram1">Memorias RAM <small>(Opcional)</small></label>
+                  <label for="val-select2-ram1">Memorias RAM</label>
                 </div>
                 @if($errors->has('val-select2-ram1'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram1') }}</small>
@@ -220,7 +220,7 @@
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-second-storage">Almacenamiento <small>(Opcional)</small></label>
+                  <label for="val-select2-second-storage">Almacenamiento</label>
                 </div>
                 @if($errors->has('val-select2-second-storage'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-second-storage') }}</small>
@@ -348,16 +348,15 @@
                 <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
                 @endif
                 <div class="block-content block-content-full">
-                  {{--  <button type="button" class="btn btn-alt-info ml-2 float-right"
-                      data-toggle="tooltip" data-placement="bottom"
-                      title="Ver abreviados de las sedes">
-                      <i class="fa fa-info-circle"></i>
+                  {{-- <button type="button" class="btn btn-alt-info ml-2 float-right" data-toggle="tooltip"
+                    data-placement="bottom" title="Ver abreviados de las sedes">
+                    <i class="fa fa-info-circle"></i>
                   </button>
                   <button type="button" class="btn btn-alt-info float-right" data-toggle="popover"
-                      title=" Nombre de equipos" data-placement="Right"
-                      data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
-                      <i class="fa fa-info-circle"></i>
-                      Como nombrar equipos?
+                    title=" Nombre de equipos" data-placement="Right"
+                    data-content="Deberia ser: V1AMAC-CON21 (V1A = VIVA 1A) (MAC = abreviado de la sede) (-CON21 = ubicación del equipo dentro de la sede).">
+                    <i class="fa fa-info-circle"></i>
+                    Como nombrar equipos?
                   </button>--}}
                 </div>
               </div>

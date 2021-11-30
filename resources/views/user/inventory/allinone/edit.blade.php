@@ -53,8 +53,8 @@
               style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; right: 20px; animation-iteration-count: 1;">
               <button type="button" aria-hidden="true" class="close" data-notify="dismiss"
                 style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button><span data-notify="icon"
-                class="fa fa-times"></span> <span data-notify="title"></span> <span
-                data-notify="message">{{ Session::get('message') }}
+                class="fa fa-times"></span> <span data-notify="title"></span> <span data-notify="message">{{
+                Session::get('message') }}
               </span><a href="#" target="_blank" data-notify="url"></a>
             </div>
             @endif
@@ -163,8 +163,8 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}"
-                      {{ $ram->id == $deviceComponents->slot_one_ram_id ? 'selected' : '' }}>
+                    <option value="{{ $ram->id }}" {{ $ram->id == $deviceComponents->slot_one_ram_id ? 'selected' : ''
+                      }}>
                       {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}
                     </option>
                     @empty
@@ -185,15 +185,14 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}"
-                      {{ $ram->id == $deviceComponents->slot_two_ram_id ? 'selected' : '' }}>
+                    <option value="{{ $ram->id }}" {{ $ram->id == $deviceComponents->slot_two_ram_id ? 'selected' : ''
+                      }}>
                       {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}
                     </option>
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-ram1">Memorias RAM <small>(Opcional)</small></label>
                 </div>
                 @if($errors->has('val-select2-ram1'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram1') }}</small>
@@ -207,8 +206,8 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}"
-                      {{ $storage->id == $deviceComponents->first_storage_id ? 'selected' : '' }}>
+                    <option value="{{ $storage->id }}" {{ $storage->id == $deviceComponents->first_storage_id ?
+                      'selected' : '' }}>
                       {{ $storage->size }}
                       {{ $storage->storage_unit }}
                       {{ $storage->type }}
@@ -230,8 +229,8 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}"
-                      {{ $storage->id == $deviceComponents->first_storage_id ? 'selected' : '' }}>
+                    <option value="{{ $storage->id }}" {{ $storage->id == $deviceComponents->first_storage_id ?
+                      'selected' : '' }}>
                       {{ $storage->size }}
                       {{ $storage->storage_unit }}
                       {{ $storage->type }}
@@ -239,8 +238,7 @@
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-second-storage">Almacenamiento
-                    <small>(Opcional)</small></label>
+                  <label for="val-select2-second-storage">Almacenamiento</label>
                 </div>
                 @if($errors->has('val-select2-second-storage'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-second-storage') }}</small>
@@ -277,8 +275,8 @@
                     <option disabled></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
-                    <option value="{{ $statu->StatusID }}"
-                      {{ $statu->StatusID == $deviceComponents->statu_id ? 'selected' : '' }}>
+                    <option value="{{ $statu->StatusID }}" {{ $statu->StatusID == $deviceComponents->statu_id ?
+                      'selected' : '' }}>
                       {{ Str::title($statu->NameStatus) }}
                     </option>
                     @empty
@@ -388,8 +386,8 @@
                       <option></option>
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                       @forelse ($campus as $campu)
-                      <option value="{{ $campu->id }}"
-                        {{ $campu->id == $deviceComponents->campu_id ? 'selected' : '' }}>
+                      <option value="{{ $campu->id }}" {{ $campu->id == $deviceComponents->campu_id ? 'selected' : ''
+                        }}>
                         {{ $campu->name }}
                         @empty
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
@@ -454,8 +452,8 @@
                     <option disabled></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($statusAssignments as $statuAssignment)
-                    <option value="{{ $statuAssignment->id }}"
-                      {{ $statuAssignment->id == $deviceComponents->assignment_statu_id ? 'selected' : '' }}>
+                    <option value="{{ $statuAssignment->id }}" {{ $statuAssignment->id ==
+                      $deviceComponents->assignment_statu_id ? 'selected' : '' }}>
                       {{ Str::title($statuAssignment->name) }}
                     </option>
                     @empty
