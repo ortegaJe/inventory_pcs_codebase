@@ -71,7 +71,7 @@ class ReportController extends Controller
 
         //return response()->json($devices);
 
-        return view('report.removes.create', compact('devices'));
+        return view('report.removes.index', compact('devices'));
     }
 
     public function createReportRemove($device, $uuid)
@@ -559,7 +559,7 @@ class ReportController extends Controller
             'report_deliverys' => $report_deliverys,
         ];
 
-        return view('report.delivery.create')->with($data);
+        return view('report.delivery.show')->with($data);
     }
 
     public function storeReportDelivery(Request $request)
