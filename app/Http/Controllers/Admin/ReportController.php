@@ -204,7 +204,7 @@ class ReportController extends Controller
         $archivo = $nombre_archivo . $extension;
 
         Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
-        return $pdf->stream($nombre_archivo . $extension);
+        return $pdf->download($nombre_archivo . $extension);
     }
 
     public function indexReportResume(Request $request)
