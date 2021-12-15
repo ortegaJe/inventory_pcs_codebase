@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campu;
 use App\Models\CampuUser;
 use App\Models\Computer;
 use App\Models\Profile;
+use App\Models\ProfileUser;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +26,11 @@ class UserController extends Controller
         $this->middleware('can:admin.inventory.tecnicos.index')->only('index');
         //$this->middleware('can:admin.inventory.tecnicos.index')->only('create', 'store');
         $this->middleware('can:admin.inventory.tecnicos.index')->only('edit', 'update');
+        $this->user = new User();
+        $this->campu_user = new CampuUser();
+        $this->profile_user = new ProfileUser();
     }
+
     public function index(Request $request)
     {
         $searchUsers = $request->get('search');
@@ -34,10 +41,7 @@ class UserController extends Controller
             ->searchUser($searchUsers)
             ->withPrincipalCampu();
 
-        $data = ['users' => $users,];
-
-
-        return view('admin.users.index')->with($data);
+        return view('admin.users.index', compact('users'));
     }
 
     public function autoCompleteSearchUser(Request $request)
@@ -54,69 +58,91 @@ class UserController extends Controller
         $profiles = DB::table('profiles')->select('id', 'name')->get();
         $campus = DB::table('campus')->select('id', 'name')->get();
 
-        $data = [
-            'profiles' => $profiles,
-            'campus' => $campus,
-        ];
-
-        return view('admin.users.create')->with($data);
+        return view('admin.users.create', compact('profiles', 'campus'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        /*         $request->validate([
             'cc' => 'required|unique:users,cc',
             'lastname' => 'required|unique:users,last_name',
             'nickname' => 'required|unique:users,nick_name',
             'birthday' => 'nullable|date',
-            'val-select2-campu' => 'required|numeric',
-            'val-select2-profile' => 'required|numeric',
+            'campu' => 'required|numeric',
+            'profile' => 'required|numeric',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required'
-        ]);
+            'password' => 'required',
+            'sign' => 'image'
+        ]); */
 
-        $user = new User();
-        $isActive = true;
-        $profileUser = e($request->input('val-select2-profile'));
-        $campuUser =  e($request->input('val-select2-campu'));
+        $file_sign = $request->file('sign')->store('firma_tecnicos');
+        //$url_file = Storage::url($file_sign);
+        //return $file_sign;
+
+        $profile_user = $request->profile;
+        $campu_user =  $request->campu;
         $is_principal = true;
+
+        /*         try {
+            $this->user->cc = $request->cc;
+            $this->user->name = $request->firstname;
+            $this->user->middle_name = $request->middlename;
+            $this->user->last_name = $request->lastname;
+            $this->user->second_last_name = $request->second_lastname;
+            $this->user->nick_name = $request->nickname;
+            $this->user->birthday = $request->birthday;
+            $this->user->sex = $request->sex;
+            $this->user->phone_number = $request->phone;
+            $this->user->avatar = null;
+            $this->user->sign = $url;
+            $this->user->email = $request->email;
+            $this->user->password = Hash::make($request['password']);
+            $this->user->created_at = now('America/Bogota');
+            $this->profile->profile_id = $profile_user;
+            $this->campu->campu_id = $campu_user;
+            $this->campu->is_principal = $is_principal;
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error' . $e]);
+        }
+        return response()->json([
+            'message' => 'Success',
+            'user' => $this->user,
+            'campu' => $this->campu,
+            'profile' => $this->profile
+        ]); */
 
         DB::insert(
             "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [
-                //16
-                $user->cc = e($request->input('cc')),
-                $user->name = e($request->input('firstname')),
-                $user->middle_name = e($request->input('middlename')),
-                $user->last_name = e($request->input('lastname')),
-                $user->second_last_name = e($request->input('second-lastname')),
-                $user->nick_name = e($request->input('nickname')),
-                $user->birthday = e($request->input('birthday')),
-                $user->sex = e($request->input('sex')),
-                $user->phone_number = e(trim($request->input('phone'))),
-                $user->avatar = null,
-                $user->email = e($request->input('email')),
-                $user->password = Hash::make($request['password']),
-                $user->created_at = now('America/Bogota'),
-                $isActive,
-                $profileUser,
-                $campuUser,
-                $is_principal,
-
+                $this->user->cc = $request->cc,
+                $this->user->name = $request->firstname,
+                $this->user->middle_name = $request->middlename,
+                $this->user->last_name = $request->lastname,
+                $this->user->second_last_name = $request->second_lastname,
+                $this->user->nick_name = $request->nickname,
+                $this->user->birthday = $request->birthday,
+                $this->user->sex = $request->sex,
+                $this->user->phone_number = $request->phone,
+                $this->user->avatar = null,
+                $this->user->sign = $url_file,
+                $this->user->email = $request->email,
+                $this->user->password = Hash::make($request['password']),
+                $this->user->created_at = now('America/Bogota'),
+                $this->profile_user->profile_id = $profile_user,
+                $this->campu_user->campu_id = $campu_user,
+                $this->campu_user->is_principal = $is_principal,
             ]
         );
 
-        //dd($user);
-
         return redirect()->route('admin.inventory.technicians.index')
-            ->with('pc_created', 'Nuevo equipo añadido al inventario!');
+            ->with('user_created', 'Usuario creado con éxito!');
     }
 
     public function show($id)
     {
-        $profiles = DB::table('profiles')->select('id', 'name')->get();
-
         $roles = Role::all();
+        $profiles = DB::table('profiles')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'name')->get();
 
         $principalCampuUser = DB::table('campus as c')
             ->join('campu_users as cp', 'cp.campu_id', 'c.id')
@@ -127,15 +153,14 @@ class UserController extends Controller
             ->first();
         //return $principalCampuUser;
 
-        $campus = DB::table('campus')->select('id', 'name')->get();
-
         $dataUsers = DB::table('users as u')
             ->select(
                 'u.id as UserID',
                 'c.id as SedeID',
                 'p.name as CargoTecnico',
                 'c.name as SedeTecnico',
-                'cp.is_principal as SedePrincipal'
+                'cp.is_principal as SedePrincipal',
+                'u.sign'
             )
             ->join('profile_users as pu', 'pu.user_id', 'u.id')
             ->join('profiles as p', 'p.id', 'pu.profile_id')
@@ -159,9 +184,9 @@ class UserController extends Controller
 
     public function showProfileUser($id)
     {
-        $profiles = DB::table('profiles')->select('id', 'name')->get();
-
         $roles = Role::all();
+        $profiles = DB::table('profiles')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'name')->get();
 
         $principalCampuUser = DB::table('campus as c')
             ->join('campu_users as cp', 'cp.campu_id', 'c.id')
@@ -170,8 +195,6 @@ class UserController extends Controller
             ->where('u.id', $id)
             ->select('c.id as SedeID')
             ->first();
-
-        $campus = DB::table('campus')->select('id', 'name')->get();
 
         $dataUsers = DB::table('users as u')
             ->select(
@@ -220,19 +243,18 @@ class UserController extends Controller
         DB::update(
             "CALL SP_updateUsers (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [
-                //13
-                $user->cc = e($request->get('cc')),
-                $user->name = e($request->get('firstname')),
-                $user->middle_name = e($request->get('middlename')),
-                $user->last_name = e($request->get('lastname')),
-                $user->second_last_name = e($request->get('second-lastname')),
-                $user->nick_name = e($request->get('nickname')),
-                $user->birthday = e($request->get('birthday')),
-                $user->sex = e($request->get('sex')),
-                $user->phone_number = e($request->get('phone')),
-                $user->avatar = null,
-                $user->email = e($request->get('email')),
-                $user->updated_at = now('America/Bogota'),
+                $this->user->cc = e($request->get('cc')),
+                $this->user->name = e($request->get('firstname')),
+                $this->user->middle_name = e($request->get('middlename')),
+                $this->user->last_name = e($request->get('lastname')),
+                $this->user->second_last_name = e($request->get('second-lastname')),
+                $this->user->nick_name = e($request->get('nickname')),
+                $this->user->birthday = e($request->get('birthday')),
+                $this->user->sex = e($request->get('sex')),
+                $this->user->phone_number = e($request->get('phone')),
+                $this->user->avatar = null,
+                $this->user->email = e($request->get('email')),
+                $this->user->updated_at = now('America/Bogota'),
                 $id,
             ]
         );

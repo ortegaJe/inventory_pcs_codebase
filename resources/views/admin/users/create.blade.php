@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="block-content">
-      <form action="{{ route('admin.inventory.technicians.store') }}" method="POST">
+      <form action="{{ route('admin.inventory.technicians.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('POST')
         <div class="form-group row">
@@ -67,8 +67,8 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control lower-txt" id="second-lastname" name="second-lastname">
-              <label for="second-lastname">Segundo apellido</label>
+              <input type="text" class="form-control lower-txt" id="second_lastname" name="second_lastname">
+              <label for="second_lastname">Segundo apellido</label>
             </div>
           </div>
           <div class="col-6">
@@ -102,8 +102,8 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material">
-              <select class="js-select2 form-control" id="val-select2-campu" name="val-select2-campu"
-                style="width: 100%;" data-placeholder="Seleccionar sede..">
+              <select class="js-select2 form-control" id="campu" name="campu" style="width: 100%;"
+                data-placeholder="Seleccionar sede..">
                 <option></option>
                 <!--  for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($campus as $campu)
@@ -112,16 +112,16 @@
                 <option>NO EXISTEN SEDES REGISTRADAS</option>
                 @endforelse
               </select>
-              <label for="val-select2-campu">Sede principal</label>
+              <label for="campu">Sede principal</label>
             </div>
-            @if($errors->has('val-select2-campu'))
-            <small class="text-danger is-invalid">{{ $errors->first('val-select2-campu') }}</small>
+            @if($errors->has('campu'))
+            <small class="text-danger is-invalid">{{ $errors->first('campu') }}</small>
             @endif
           </div>
           <div class="col-6">
             <div class="form-material">
-              <select class="js-select2 form-control" id="val-select2-profile" name="val-select2-profile"
-                style="width: 100%;" data-placeholder="Seleccionar cargo..">
+              <select class="js-select2 form-control" id="profile" name="profile" style="width: 100%;"
+                data-placeholder="Seleccionar cargo..">
                 <option></option>
                 <!--  for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($profiles as $profile)
@@ -130,10 +130,10 @@
                 <option>NO EXISTEN CARGOS REGISTRADOS</option>
                 @endforelse
               </select>
-              <label for="val-select2-profile">Cargos de trabajo</label>
+              <label for="profile">Cargos de trabajo</label>
             </div>
-            @if($errors->has('val-select2-profile'))
-            <small class="text-danger is-invalid">{{ $errors->first('val-select2-profile') }}</small>
+            @if($errors->has('profile'))
+            <small class="text-danger is-invalid">{{ $errors->first('profile') }}</small>
             @endif
           </div>
         </div>
@@ -152,6 +152,12 @@
               <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio3" value="O">
               <label class="custom-control-label" for="example-inline-radio3">Otro</label>
             </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-12" for="sign">Firma</label>
+          <div class="col-6">
+            <input type="file" id="sign" name="sign" accept="image/*">
           </div>
         </div>
         <div class="form-group row">

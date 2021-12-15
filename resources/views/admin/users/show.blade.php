@@ -162,22 +162,22 @@
   </div>
   {{--<div class="col-xl-3">
     <a class="block p-10 block-rounded block-link-shadow" data-id="{{ $users->id }}" id="btn-delete"
-  href="javascript:void(0)">
-  <div class="block-content block-content-full block-sticky-options">
-    <div class="block-options">
-      <div class="block-options-item">
-        <i class="fa fa-archive fa-2x text-danger-light"></i>
+      href="javascript:void(0)">
+      <div class="block-content block-content-full block-sticky-options">
+        <div class="block-options">
+          <div class="block-options-item">
+            <i class="fa fa-archive fa-2x text-danger-light"></i>
+          </div>
+        </div>
+        <div class="py-20 text-center">
+          <div class="font-size-h2 font-w700 mb-0 text-danger">
+            <i class="fa fa-times"></i>
+          </div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">remove user</div>
+        </div>
       </div>
-    </div>
-    <div class="py-20 text-center">
-      <div class="font-size-h2 font-w700 mb-0 text-danger">
-        <i class="fa fa-times"></i>
-      </div>
-      <div class="font-size-sm font-w600 text-uppercase text-muted">remove user</div>
-    </div>
-  </div>
-  </a>
-</div>--}}
+    </a>
+  </div>--}}
 </div>
 <div class="block">
   <div class="block-header block-header-default">
@@ -330,6 +330,10 @@
             @if($errors->has('email'))
             <small class="text-danger is-invalid">{{ $errors->first('email') }}</small>
             @endif
+          </div>
+          <div>
+            Firma
+            <img src="{{ Storage::url($users->sign) }}" alt="">
           </div>
         </div>
         <div class="form-group mt-4">
