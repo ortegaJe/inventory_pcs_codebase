@@ -97,6 +97,10 @@
                         <td style="width: 47.9791%;">{{ $repo->DescripcionEquipo }}</td>
                       </tr>
                       <tr>
+                        <td style="width: 50%;">SEDE DEL EQUIPO</td>
+                        <td style="width: 47.9791%;">{{ $repo->SedeEquipo }}</td>
+                      </tr>
+                      <tr>
                         <td style="width: 50%;">NUMERO DE SERIE</td>
                         <td style="width: 47.9791%;">{{ $repo->NumeroSerial }}</td>
                       </tr>

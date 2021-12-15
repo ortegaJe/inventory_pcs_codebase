@@ -204,7 +204,7 @@ class ReportController extends Controller
         $archivo = $nombre_archivo . $extension;
 
         Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
-        return $pdf->download($nombre_archivo . $extension);
+        return $pdf->stream($nombre_archivo . $extension);
     }
 
     public function indexReportResume(Request $request)
@@ -566,13 +566,6 @@ class ReportController extends Controller
     {
         $user_id = Auth::id();
         $device_id = $request->device_id;
-
-        /*         try {
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error']);
-        }
-        return response()->json(['message' => 'Success', 'reports' => $this->report, 'report_delivery' => $this->report_delivery]);
- */
 
         $rules = [
             'name' => 'required',

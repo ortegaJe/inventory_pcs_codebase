@@ -11,11 +11,12 @@
 <div class="block-content">
     @include('report.removes.partials.modal_remove')
     <div class="content-heading">
-        <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
-            data-target="#modal-popin-up-remove">
+        @if (count($report_removes) <= 0) <button type="button" class="btn btn-sm btn-alt-success float-right"
+            data-toggle="modal" data-target="#modal-popin-up-remove">
             <i class="fa fa-plus text-success mr-5"></i>Generar
-        </button>
-        Reporte de solicitud de baja | Serial del equipo: {{ $device->serial_number }}
+            </button>
+            @endif
+            Reporte de solicitud de baja | Serial del equipo: {{ $device->serial_number }}
     </div>
     <!-- Device Table -->
     <div class="block block-rounded">
@@ -44,7 +45,7 @@
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->repo_name }}
+                            INFORME TÉCNICO {{ $repo->repo_name }}
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">

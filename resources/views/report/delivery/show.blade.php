@@ -44,7 +44,7 @@
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->repo_name }}
+                            {{ $repo->repo_name }} DE EQUIPOS
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
