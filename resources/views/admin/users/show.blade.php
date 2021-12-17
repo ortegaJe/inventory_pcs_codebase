@@ -332,8 +332,10 @@
             @endif
           </div>
           <div>
-            Firma
-            <img src="{{ Storage::url($users->sign) }}" alt="">
+            <label for="">Firma</label>
+            <div>
+              <img width="100px" src="{{ Storage::url($users->sign) }}" alt="">
+            </div>
           </div>
         </div>
         <div class="form-group mt-4">

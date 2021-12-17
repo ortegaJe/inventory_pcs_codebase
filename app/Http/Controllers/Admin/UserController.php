@@ -63,7 +63,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        /*         $request->validate([
+        $request->validate([
             'cc' => 'required|unique:users,cc',
             'lastname' => 'required|unique:users,last_name',
             'nickname' => 'required|unique:users,nick_name',
@@ -73,12 +73,9 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'sign' => 'image'
-        ]); */
+        ]);
 
         $file_sign = $request->file('sign')->store('firma_tecnicos');
-        //$url_file = Storage::url($file_sign);
-        //return $file_sign;
-
         $profile_user = $request->profile;
         $campu_user =  $request->campu;
         $is_principal = true;
@@ -124,7 +121,7 @@ class UserController extends Controller
                 $this->user->sex = $request->sex,
                 $this->user->phone_number = $request->phone,
                 $this->user->avatar = null,
-                $this->user->sign = $url_file,
+                $this->user->sign = $file_sign,
                 $this->user->email = $request->email,
                 $this->user->password = Hash::make($request['password']),
                 $this->user->created_at = now('America/Bogota'),

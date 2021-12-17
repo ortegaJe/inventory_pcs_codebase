@@ -175,7 +175,7 @@
                     <div class="form-material">
                         <input type="text" class="form-control" id="material-disabled-campu"
                             name="material-disabled-campu" value="{{ Str::upper($dataUser->SedeTecnico) }}" readonly>
-                        <label for="material-disabled-campu">Sede Principal</label>
+                        <label for="material-disabled-campu">Sede principal</label>
                     </div>
                 </div>
                 <div class="col-6">
@@ -198,24 +198,24 @@
                     </div>
                     <div class="custom-control custom-radio custom-control-inline mb-5">
                         <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" disabled
-                        {{$users->sex == 'M' ? 'checked' : ''}}>
+                            {{$users->sex == 'M' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio2">M</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline mb-5">
                         <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio3" disabled
-                        {{$users->sex == 'O' ? 'checked' : ''}}>
+                            {{$users->sex == 'O' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio3">Otro</label>
                     </div>
                 </div>
             </div>
             {{--<div class="form-group row">
-                    <div class="col-12">
-                        <div class="form-material">
+                <div class="col-12">
+                    <div class="form-material">
                         <span class="badge badge-pill badge-warning"><i class="si si-badge mr-5"></i>Attention</span>
                         <label for="example-tags3">Roles</label>
-                        </div>
                     </div>
-                </div>--}}
+                </div>
+            </div>--}}
             <div class="form-group row mb-4">
                 <div class="col-12">
                     <div class="form-material input-group floating">
