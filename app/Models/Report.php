@@ -10,6 +10,6 @@ class Report extends Model
     use HasFactory;
 
     const REPORT_REMOVE_NAME_ID = 1;
-    const REPORT_DELIVERY_NAME_ID = 2;
-    const REPORT_RESUME_NAME_ID = 3;
+    const REPORT_RESUME_NAME_ID = 2;
+    const REPORT_DELIVERY_NAME_ID = 3;
 }

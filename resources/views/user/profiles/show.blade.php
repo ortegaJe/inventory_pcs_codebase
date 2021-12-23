@@ -208,6 +208,42 @@
                     </div>
                 </div>
             </div>
+            @if ($users->sign == '')
+            <form action="{{ route('upload.sign.user', $users->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="sign">
+                        <i class="fa fa-pencil text-primary mr-5"></i> Cargar firma
+                    </label>
+                    {{-- <button type="button" onclick="window.location=#" class="btn btn-alt-primary min-width-125"
+                        data-toggle="click-ripple">
+                        <i class="fa fa-upload mr-5"></i>Cargar firma
+                    </button> --}}
+                    <div>
+                        <input type="file" id="sign" name="sign" accept="image/*">
+                        <button type="submit" class="btn btn-circle btn-alt-primary mr-5 mb-5">
+                            <i class="fa fa-upload"></i>
+                        </button>
+                    </div>
+                    @if($errors->has('sign'))
+                    <small class="text-danger is-invalid">{{ $errors->first('sign') }}</small>
+                    @endif
+                </div>
+            </form>
+            @elseif($users->sign != null)
+            @include('user.profiles.partials.modal')
+            <div class="form-group">
+                <button type="button" class="btn btn-alt-success mr-5 mb-5" disabled>
+                    <i class="fa fa-check"></i> Firma cargada
+                </button>
+                <button type="button" class="btn btn-alt-success mr-5 mb-5" data-toggle="modal"
+                    data-target="#modal-sign">
+                    <i class="fa fa-upload"></i>
+                </button>
+            </div>
+            @endif
+
             {{--<div class="form-group row">
                 <div class="col-12">
                     <div class="form-material">
@@ -241,6 +277,36 @@
 @endsection
 
 @push('js')
+
+@if(Session::has('success_upload_sign'))
+<script>
+    Swal.fire(
+'Firma cargada con éxito!',
+'{!! Session::get('success_upload_sign') !!}',
+'success'
+)
+</script>
+@endif
+
+@if(Session::has('fail_upload_sign'))
+<script>
+    Swal.fire(
+'La firma digital debe ser de tipo imagen',
+'{!! Session::get('fail_upload_sign') !!}',
+'error'
+)
+</script>
+@endif
+
+@if(Session::has('empty_upload_sign'))
+<script>
+    Swal.fire(
+'No has seleccionado un archivo imagen para la firma digital',
+'{!! Session::get('empty_upload_sign') !!}',
+'warning'
+)
+</script>
+@endif
 
 <!-- Page JS Code -->
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>

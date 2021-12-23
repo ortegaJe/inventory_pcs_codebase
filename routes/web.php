@@ -74,6 +74,10 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
     Route::resource('raspberry', 'App\Http\Controllers\User\Inventory\RaspberryController')->names('user.inventory.raspberry');
 
     Route::resource('telefonos-ip', 'App\Http\Controllers\User\Inventory\PhoneIpController')->names('user.inventory.phones');
+
+    Route::put('cargar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@uploadUserSign')->name('upload.sign.user');
+
+    //Route::put('actualizar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@updateUserSign')->name('update.sign.user');
 });
 
 Route::prefix('dashboard/inventario/reportes')->group(

@@ -275,7 +275,6 @@
         {{ $repo->Diagnostico }}
       </td>
     </tr>
-
     <tr>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=7 rowspan=3 height="10" align="left" valign=bottom><b>
@@ -290,7 +289,7 @@
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=7 rowspan=5 height="80" align="left" valign=top><br>
+        colspan=7 rowspan=5 height="100" align="left" valign=top><br>
         {{ $repo->Observacion }}
       </td>
     </tr>
@@ -305,21 +304,53 @@
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=7 height="15" align="left" valign=bottom><b>
-          <font size=1>RESPONSABLE DEL INFORME: {{ $repo->NombreTecnico }}</font>
-        </b></td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=7 height="15" align="left" valign=bottom><b>
-          <font size=1>CARGO: {{ $repo->CargoTecnico }}</font>
-        </b></td>
-    </tr>
-    <tr>
-      <td
-        style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-        colspan=7 height="125" align="center" valign=bottom><b> FIRMA </b></td>
+        colspan=7 height="150" align="center" valign=top>
+        <table style="border-collapse: collapse; width: 100%; height: 150px;" border="1">
+          <tbody>
+            <tr style="height: 150px;" align="center">
+              <td style="width: 33.3333%; height: 200px; border-style: hidden;">
+                <div>
+                  <img src="{{ public_path('storage/'.$repo->FirmaTecnico) }}" alt="" width="150" height="50">
+                </div>
+                <div>
+                  {{ $repo->NombreTecnico }}
+                  <div>
+                    {{ $repo->CargoTecnico }}
+                  </div>
+                  <div>
+                    <b>FIRMA</b>
+                  </div>
+              </td>
+              <td style="width: 33.3333%; height: 200px; border-style: hidden;">
+                <div>
+                  <img src="{{ public_path('storage/'.$boss_tic->sign) }}" alt="" width="150" height="50">
+                </div>
+                <div>
+                  {{ $boss_tic->BossTic }}
+                  <div>
+                    JEFE NACIONAL DE SERVICIOS TIC
+                  </div>
+                  <div>
+                    <b>FIRMA</b>
+                  </div>
+              </td>
+              <td style="width: 33.3333%; height: 200px; border-style: hidden;">
+                <div>
+                  <img src="{{ public_path('storage/'.$repo->FirmaAdmin) }}" alt="" width="150" height="50">
+                </div>
+                <div>
+                  {{ $repo->NombreApellidoAdmin }}
+                  <div>
+                    ADMINISTRADOR DE SEDE
+                  </div>
+                  <div>
+                    <b>FIRMA</b>
+                  </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
     </tr>
   </table>
   @endforeach

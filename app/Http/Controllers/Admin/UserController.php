@@ -72,7 +72,7 @@ class UserController extends Controller
             'profile' => 'required|numeric',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
-            'sign' => 'image'
+            //'sign' => 'image'
         ]);
 
         $file_sign = $request->file('sign')->store('firma_tecnicos');
@@ -263,6 +263,33 @@ class UserController extends Controller
             return back()->with('info_error', '');
             throw $e;
         }
+    }
+
+    public function uploadUserSign(Request $request, $id)
+    {
+        $user_id = User::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'sign' => 'image'
+        ]);
+
+        $file_sign = $request->file('sign');
+
+        if (empty($file_sign)) {
+
+            return back()->with('empty_upload_sign', '');
+        } else if ($validator->fails()) {
+
+            return back()->with('fail_upload_sign', '');
+        } else if ($request->hasFile('sign')) {
+
+            $file_sign = $request->file('sign')->store('firma_tecnicos');
+
+            $update = array('sign' => $file_sign);
+            User::where('id', $user_id->id)->update($update);
+        }
+
+        return back()->with('success_upload_sign', '');
     }
 
     public function updatePassword(Request $request, $id)

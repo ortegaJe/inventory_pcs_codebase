@@ -15,6 +15,7 @@ use App\Models\Report;
 use App\Models\ReportDeliverie;
 use App\Models\ReportRemove;
 use App\Models\ReportResume;
+use App\Models\User;
 use Faker\Provider\Uuid;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
@@ -188,12 +189,21 @@ class ReportController extends Controller
             ->where('TecnicoID', $user_id)
             ->get();
 
+        /*         $boss_tic = User::select(DB::raw("UPPER(CONCAT(name,' ',middle_name,' ',last_name,' ',second_last_name)) AS BossTic"), 'sign')
+            ->where('id', 37)
+            ->first(); */
+
+        $boss_tic = User::select(DB::raw("UPPER(CONCAT(name,' ',middle_name,' ',last_name,' ',second_last_name)) AS BossTic"), 'sign')
+            ->where('id', 1)
+            ->first();
+
         //return response()->json($generated_report_remove);
 
         $pdf = PDF::loadView(
             'report.removes.pdf',
             [
-                'generated_report_remove' => $generated_report_remove
+                'generated_report_remove' => $generated_report_remove,
+                'boss_tic' => $boss_tic,
             ]
         );
 
