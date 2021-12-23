@@ -31,7 +31,7 @@ class CreateReportDeliveriesTable extends Migration
             $table->boolean('has_cover')->default(0);
             $table->boolean('has_briefcase')->default(0);
             $table->boolean('has_padlock')->default(0);
-            $table->string('accesories')->nullable();
+            $table->string('other_accesories')->nullable();
 
             $table->foreign('report_id')->references('id')->on('reports')->onDelete('cascade')->onUpdate('cascade');
         });

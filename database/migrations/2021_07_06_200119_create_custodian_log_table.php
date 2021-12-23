@@ -16,9 +16,10 @@ class CreateCustodianLogTable extends Migration
         Schema::create('custodian_log', function (Blueprint $table) {
             //$table->id();
             $table->unsignedBigInteger('device_id')->nullable();
-            $table->char('custodian_name');
-            $table->char('position', 56)->nullable();
-            $table->char('location');
+            $table->string('custodian_name');
+            $table->string('position', 56)->nullable();
+            $table->string('location');
+            $table->string('observation')->nullable();
             $table->unsignedBigInteger('assignment_statu_id')->nullable();
             $table->timestamp('assignment_date')->nullable();
 
