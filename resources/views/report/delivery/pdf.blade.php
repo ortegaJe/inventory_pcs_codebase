@@ -255,10 +255,13 @@
                       </tr>
                     </tbody>
                   </table>
-                  <p>&nbsp;</p>
-                  <table style="width: 98.175%; border-collapse: collapse; margin-left: auto; margin-right: auto;"
-                    valign=bottom>
+                  <table style="width: 98.175%; border-collapse: collapse; margin-left: auto; margin-right: auto;">
                     <tbody style="font-size: 12px;">
+                      <tr>
+                        <td style="width: 63.5915%;">
+                          <img src="{{ public_path('storage/'.$repo->FirmaTecnico) }}" alt="" width="150" height="50">
+                        </td>
+                      </tr>
                       <tr>
                         <td style="width: 63.5915%;">
                           <strong>{{ $repo->NombreTecnico }}</strong>
