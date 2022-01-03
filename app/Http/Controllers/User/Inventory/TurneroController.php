@@ -477,7 +477,7 @@ class TurneroController extends Controller
                 Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
             'pc-domain-name' => 'required|max:20|regex:/^[0-9a-zA-Z-.]+$/i',
-            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:computers,pc_name',
+            //'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i|unique:devices,device_name',
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',

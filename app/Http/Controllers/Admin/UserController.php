@@ -181,17 +181,6 @@ class UserController extends Controller
 
     public function showProfileUser($id)
     {
-        $roles = Role::all();
-        $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'name')->get();
-
-        $principalCampuUser = DB::table('campus as c')
-            ->join('campu_users as cp', 'cp.campu_id', 'c.id')
-            ->join('users as u', 'u.id', 'cp.user_id')
-            ->where('cp.is_principal', 1)
-            ->where('u.id', $id)
-            ->select('c.id as SedeID')
-            ->first();
 
         $dataUsers = DB::table('users as u')
             ->select(
@@ -199,7 +188,10 @@ class UserController extends Controller
                 'c.id as SedeID',
                 'p.name as CargoTecnico',
                 'c.name as SedeTecnico',
-                'cp.is_principal as SedePrincipal'
+                'cp.is_principal as SedePrincipal',
+                'c.abreviature',
+                'c.address',
+                'c.phone'
             )
             ->join('profile_users as up', 'up.id', 'u.id')
             ->join('profiles as p', 'p.id', 'up.profile_id')
@@ -211,10 +203,6 @@ class UserController extends Controller
         $data = [
             'users' => User::findOrFail($id),
             'dataUsers' => $dataUsers,
-            'profiles' => $profiles,
-            'roles' => $roles,
-            'campus' => $campus,
-            'principalCampuUser' => $principalCampuUser,
         ];
 
         //dd($data);
@@ -273,12 +261,8 @@ class UserController extends Controller
             'sign' => 'image'
         ]);
 
-        $file_sign = $request->file('sign');
 
-        if (empty($file_sign)) {
-
-            return back()->with('empty_upload_sign', '');
-        } else if ($validator->fails()) {
+        if ($validator->fails()) {
 
             return back()->with('fail_upload_sign', '');
         } else if ($request->hasFile('sign')) {

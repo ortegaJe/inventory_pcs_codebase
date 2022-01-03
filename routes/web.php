@@ -113,6 +113,15 @@ Route::prefix('dashboard/inventario/reportes')->group(
         Route::get('acta-de-entrega-generado/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@reportDeliveryGenerated')->name('inventory.report.delivery.generated');
 
         Route::get('public-file/{id}', 'App\Http\Controllers\Admin\ReportController@pdfReportResumes')->name('inventory.report.resumes.pdf');
+
+        Route::get('firmas-administradores', 'App\Http\Controllers\Admin\ReportController@indexSign')->name('sign.index');
+
+        Route::get('editar-administrador-sede/{id}-{slug}', 'App\Http\Controllers\Admin\ReportController@editSign')->name('sign.edit');
+
+        Route::put('actualizar-administrador-sede/{id}', 'App\Http\Controllers\Admin\ReportController@updateSign')->name('sign.update');
+
+        //Route::get('firmas', 'App\Http\Controllers\Admin\ReportController@createSignAdmin')->name('sign.index');
+
     }
 );
 

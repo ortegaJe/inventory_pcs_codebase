@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Helper;
+use App\Models\Campu;
 use App\Models\ReportDelivery;
 use App\Models\Device;
 use App\Models\DeviceMaintenance;
@@ -701,5 +702,85 @@ class ReportController extends Controller
             return Storage::download('public/' . $report->report_code_number . '.pdf');
         }
         return view('admin.op_error_400');
+    }
+
+    public function indexSign()
+    {
+        $user_id = User::where('id', Auth::id())->pluck('id');
+
+        $campu_administrators = DB::table('campus as c')
+            ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
+            ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->where('cu.user_id', $user_id)
+            ->select(
+                'cu.campu_id as SedeID',
+                'c.name as NombreSede',
+                'c.abreviature as AbreviadoSede',
+                'c.slug',
+                'c.address as DireccionSede',
+                'c.phone as TelefonoSede',
+                DB::raw("CONCAT(c.admin_name,' ',c.admin_last_name) AS NombreApellidoAdmin"),
+                'c.admin_sign as FirmaAdmin'
+            )->get();
+
+        //return $campu_administrators;
+
+        return view('report.signs.index', compact('campu_administrators'));
+    }
+
+    public function editSign($id, $slug)
+    {
+        $campu_administrators = Campu::findOrFail($id);
+
+        return view('report.signs.edit', compact('campu_administrators'));
+    }
+
+    public function updateSign(Request $request, $id)
+    {
+        $campu_admin_id = Campu::where('id', $id)->pluck('id');
+
+        $request->validate([
+            'admin_name' => 'required',
+            'admin_last_name' => 'required',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'sign' => 'image',
+        ]);
+
+        $address         = $request->get('address');
+        $phone           = $request->get('phone');
+        $admin_name      = $request->get('admin_name');
+        $admin_last_name = $request->get('admin_last_name');
+
+        if ($validator->fails()) {
+
+            return back()->with('fail_upload_sign', '');
+        } else if ($request->hasFile('sign')) {
+
+            /*             $admin_sign = Campu::select('admin_sign')->where('id', $campu_admin_id)->pluck('admin_sign');
+
+            Storage::delete($admin_sign);
+
+            if (Storage::exists('firma_administradores/' . $admin_sign)) {
+                Storage::delete('firma_administradores/' . $admin_sign);
+            } else {
+                dd('File does not exists.');
+            } */
+
+            $file_sign = $request->file('sign')->store('firma_administradores');
+
+            $update = array(
+                'address'         => $address,
+                'phone'           => $phone,
+                'admin_name'      => $admin_name,
+                'admin_last_name' => $admin_last_name,
+                'admin_sign'      => $file_sign
+            );
+
+            Campu::where('id', $campu_admin_id)->update($update);
+        }
+
+        return redirect()->route('sign.index')->with('success_upload_sign', '');
     }
 }
