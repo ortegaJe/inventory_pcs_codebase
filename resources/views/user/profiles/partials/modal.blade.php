@@ -18,12 +18,14 @@
                     <div class="block-content" style="background-color: #f0f2f5">
                         <div class="row">
                             <!-- Row #2 -->
-                            <img src="{{ Storage::url($users->sign) }}" alt="" width="150" height="100">
-
-                            <div class="form-group">
-                                <label for="sign">
-                                    <i class="fa fa-pencil text-primary mr-5"></i> Cargar firma
-                                </label>
+                            <div class="form-row mx-auto">
+                                <img src="{{ Storage::url($users->sign) }}" alt="" style="height:auto;
+                                    max-width:100%;
+                                    border:none;
+                                    display:block;">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="sign"></label>
                                 <div>
                                     <input type="file" id="sign" name="sign" accept="image/*">
                                 </div>

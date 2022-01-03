@@ -42,9 +42,9 @@
 <h2 class="h4 font-w300 mt-50">Asignado a:</h2>
 <div class="row">
     @foreach ($dataUsers as $dataUser)
-    @if ($dataUser->SedePrincipal == 1)
+    @if ($dataUser->SedePrincipal == true)
     <div class="col-md-6 col-xl-4">
-        <a class="block block-link-pop text-center" href="javascript:void(0)">
+        <a class="block block-link-pop text-center">
             <div class="block-content text-center">
                 <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
                     <i class="fa fa-building-o"></i>
@@ -58,10 +58,9 @@
             </div>
         </a>
     </div>
-    @continue
-    @endif
+    @elseif($dataUser->SedePrincipal == false)
     <div class="col-md-6 col-xl-4">
-        <a class="block block-link-pop text-center" href="javascript:void(0)">
+        <a class="block block-link-pop text-center">
             <div class="block-content text-center">
                 <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
                     <i class="fa fa-building-o"></i>
@@ -75,6 +74,7 @@
             </div>
         </a>
     </div>
+    @endif
     @endforeach
 </div>
 <!-- END Overview -->
@@ -310,7 +310,5 @@
 
 <!-- Page JS Code -->
 <script src="{{ asset('/js/pages/be_forms_plugins.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
 
 @endpush

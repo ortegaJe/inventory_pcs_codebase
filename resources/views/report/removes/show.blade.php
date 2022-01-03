@@ -9,7 +9,7 @@
     <span class="breadcrumb-item active">Generar</span>
 </nav>
 <div class="block-content">
-    @include('report.removes.partials.modal_remove')
+    @include('report.removes.partials.modal')
     <div class="content-heading">
         @if (count($report_removes) <= 0) <button type="button" class="btn btn-sm btn-alt-success float-right"
             data-toggle="modal" data-target="#modal-popin-up-remove">

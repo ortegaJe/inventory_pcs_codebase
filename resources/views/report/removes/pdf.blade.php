@@ -322,7 +322,7 @@
                   </div>
               </td>
               <td style="width: 33.3333%; height: 200px; border-style: hidden;">
-                <div>
+                {{-- <div>
                   <img src="{{ public_path('storage/'.$boss_tic->sign) }}" alt="" width="150" height="50">
                 </div>
                 <div>
@@ -332,7 +332,7 @@
                   </div>
                   <div>
                     <b>FIRMA</b>
-                  </div>
+                  </div> --}}
               </td>
               <td style="width: 33.3333%; height: 200px; border-style: hidden;">
                 <div>

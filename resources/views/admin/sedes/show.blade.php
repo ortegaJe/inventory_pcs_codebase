@@ -110,7 +110,6 @@
           <strong>Telefonos:</strong>
           <span class="text-muted">{{ $campus->phone }}</span>
         </p>
-
       </div>
     </div>
   </div>
@@ -174,11 +173,11 @@
               @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
             </div>
           </div>
-          {{--  <div class="col-4 mt-3">
-                        <button type="button" class="btn btn-hero btn-alt-primary btn-block" data-toggle="click-ripple">
-                            <i class="si si-user-follow mr-1"></i> Asignar nuevo técnico
-                        </button>
-                    </div>--}}
+          {{-- <div class="col-4 mt-3">
+            <button type="button" class="btn btn-hero btn-alt-primary btn-block" data-toggle="click-ripple">
+              <i class="si si-user-follow mr-1"></i> Asignar nuevo técnico
+            </button>
+          </div>--}}
         </div>
         <div class="form-group mt-4">
           <button type="submit" class="btn btn-sm btn-alt-success min-width-125"
@@ -216,174 +215,174 @@
 <!-- END Timeouts -->
 
 <!-- Files Filtering -->
-{{--  <h2 class="content-heading">Files <small>Filtering with slower animation</small></h2>
+{{-- <h2 class="content-heading">Files <small>Filtering with slower animation</small></h2>
 
 <!-- Content Filtering (.js-filter class is initialized in Helpers.contentFilter()) -->
 <!-- You can set the animation duration through data-speed="speed_in_ms" -->
 <div class="js-filter" data-speed="400">
-    <div class="p-10 bg-white push">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active" href="#" data-category-link="all">
-                    <i class="fa fa-fw fa-folder-open-o mr-5"></i> All
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-category-link="movies">
-                    <i class="fa fa-fw fa-file-movie-o mr-5"></i> Movies
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-category-link="photos">
-                    <i class="fa fa-fw fa-file-photo-o mr-5"></i> Photos
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-category-link="music">
-                    <i class="fa fa-fw fa-file-audio-o mr-5"></i> Music
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-category-link="books">
-                    <i class="fa fa-fw fa-file-text-o mr-5"></i> Books
-                </a>
-            </li>
-        </ul>
+  <div class="p-10 bg-white push">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" data-category-link="all">
+          <i class="fa fa-fw fa-folder-open-o mr-5"></i> All
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-category-link="movies">
+          <i class="fa fa-fw fa-file-movie-o mr-5"></i> Movies
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-category-link="photos">
+          <i class="fa fa-fw fa-file-photo-o mr-5"></i> Photos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-category-link="music">
+          <i class="fa fa-fw fa-file-audio-o mr-5"></i> Music
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-category-link="books">
+          <i class="fa fa-fw fa-file-text-o mr-5"></i> Books
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-xl-3" data-category="books">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
+            <i class="fa fa-book"></i>
+          </div>
+          <div class="font-size-lg">The Martian.epub</div>
+          <div class="font-size-sm text-muted">~ 7 hrs | 426 pages</div>
+        </div>
+      </a>
     </div>
-    <div class="row">
-        <div class="col-md-6 col-xl-3" data-category="books">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
-                        <i class="fa fa-book"></i>
-                    </div>
-                    <div class="font-size-lg">The Martian.epub</div>
-                    <div class="font-size-sm text-muted">~ 7 hrs | 426 pages</div>
-                </div>
-            </a>
+    <div class="col-md-6 col-xl-3" data-category="photos">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-info-light text-info mx-auto my-20">
+            <i class="fa fa-image"></i>
+          </div>
+          <div class="font-size-lg">DSC00018.jpg</div>
+          <div class="font-size-sm text-muted">12 mp | 3 mb</div>
         </div>
-        <div class="col-md-6 col-xl-3" data-category="photos">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-info-light text-info mx-auto my-20">
-                        <i class="fa fa-image"></i>
-                    </div>
-                    <div class="font-size-lg">DSC00018.jpg</div>
-                    <div class="font-size-sm text-muted">12 mp | 3 mb</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="books">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
-                        <i class="fa fa-book"></i>
-                    </div>
-                    <div class="font-size-lg">Learn HTML.epub</div>
-                    <div class="font-size-sm text-muted">~ 4 hrs | 330 pages</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="music">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-success-light text-success mx-auto my-20">
-                        <i class="fa fa-music"></i>
-                    </div>
-                    <div class="font-size-lg">Intro.mp3</div>
-                    <div class="font-size-sm text-muted">2 min | 384 kbps</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="movies">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-danger-light text-danger mx-auto my-20">
-                        <i class="fa fa-film"></i>
-                    </div>
-                    <div class="font-size-lg">Iron Man 3.mov</div>
-                    <div class="font-size-sm text-muted">124 min | 1080p</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="photos">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-info-light text-info mx-auto my-20">
-                        <i class="fa fa-image"></i>
-                    </div>
-                    <div class="font-size-lg">DSC00100.jpg</div>
-                    <div class="font-size-sm text-muted">32 mp | 12 mb</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="music">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-success-light text-success mx-auto my-20">
-                        <i class="fa fa-music"></i>
-                    </div>
-                    <div class="font-size-lg">Immposible Day.mp3</div>
-                    <div class="font-size-sm text-muted">6 min | 384 kbps</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="movies">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-danger-light text-danger mx-auto my-20">
-                        <i class="fa fa-film"></i>
-                    </div>
-                    <div class="font-size-lg">CA: Civil War.mov</div>
-                    <div class="font-size-sm text-muted">154 min | 1080p</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="movies">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-danger-light text-danger mx-auto my-20">
-                        <i class="fa fa-film"></i>
-                    </div>
-                    <div class="font-size-lg">The Hobbit.mov</div>
-                    <div class="font-size-sm text-muted">180 min | 1080p</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="music">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-success-light text-success mx-auto my-20">
-                        <i class="fa fa-music"></i>
-                    </div>
-                    <div class="font-size-lg">Stranger Things.mp3</div>
-                    <div class="font-size-sm text-muted">5 min | 384 kbps</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="photos">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-info-light text-info mx-auto my-20">
-                        <i class="fa fa-image"></i>
-                    </div>
-                    <div class="font-size-lg">DSC00025.jpg</div>
-                    <div class="font-size-sm text-muted">24 mp | 6 mb</div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 col-xl-3" data-category="books">
-            <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
-                <div class="block-content block-content-full text-center">
-                    <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
-                        <i class="fa fa-book"></i>
-                    </div>
-                    <div class="font-size-lg">Start a business.epub</div>
-                    <div class="font-size-sm text-muted">~ 10 hrs | 590 pages</div>
-                </div>
-            </a>
-        </div>
+      </a>
     </div>
+    <div class="col-md-6 col-xl-3" data-category="books">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
+            <i class="fa fa-book"></i>
+          </div>
+          <div class="font-size-lg">Learn HTML.epub</div>
+          <div class="font-size-sm text-muted">~ 4 hrs | 330 pages</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="music">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-success-light text-success mx-auto my-20">
+            <i class="fa fa-music"></i>
+          </div>
+          <div class="font-size-lg">Intro.mp3</div>
+          <div class="font-size-sm text-muted">2 min | 384 kbps</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="movies">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-danger-light text-danger mx-auto my-20">
+            <i class="fa fa-film"></i>
+          </div>
+          <div class="font-size-lg">Iron Man 3.mov</div>
+          <div class="font-size-sm text-muted">124 min | 1080p</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="photos">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-info-light text-info mx-auto my-20">
+            <i class="fa fa-image"></i>
+          </div>
+          <div class="font-size-lg">DSC00100.jpg</div>
+          <div class="font-size-sm text-muted">32 mp | 12 mb</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="music">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-success-light text-success mx-auto my-20">
+            <i class="fa fa-music"></i>
+          </div>
+          <div class="font-size-lg">Immposible Day.mp3</div>
+          <div class="font-size-sm text-muted">6 min | 384 kbps</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="movies">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-danger-light text-danger mx-auto my-20">
+            <i class="fa fa-film"></i>
+          </div>
+          <div class="font-size-lg">CA: Civil War.mov</div>
+          <div class="font-size-sm text-muted">154 min | 1080p</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="movies">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-danger-light text-danger mx-auto my-20">
+            <i class="fa fa-film"></i>
+          </div>
+          <div class="font-size-lg">The Hobbit.mov</div>
+          <div class="font-size-sm text-muted">180 min | 1080p</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="music">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-success-light text-success mx-auto my-20">
+            <i class="fa fa-music"></i>
+          </div>
+          <div class="font-size-lg">Stranger Things.mp3</div>
+          <div class="font-size-sm text-muted">5 min | 384 kbps</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="photos">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-info-light text-info mx-auto my-20">
+            <i class="fa fa-image"></i>
+          </div>
+          <div class="font-size-lg">DSC00025.jpg</div>
+          <div class="font-size-sm text-muted">24 mp | 6 mb</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-6 col-xl-3" data-category="books">
+      <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+        <div class="block-content block-content-full text-center">
+          <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
+            <i class="fa fa-book"></i>
+          </div>
+          <div class="font-size-lg">Start a business.epub</div>
+          <div class="font-size-sm text-muted">~ 10 hrs | 590 pages</div>
+        </div>
+      </a>
+    </div>
+  </div>
 </div>--}}
 <!-- END Files Filtering -->
 

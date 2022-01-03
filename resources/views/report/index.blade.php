@@ -49,5 +49,19 @@
             </div>
         </a>
     </div>
+    <div class="col-md-6 col-xl-4">
+        <a class="block block-link-pop text-center" href="{{ route('sign.index') }}">
+            <div class="block-content text-center">
+                <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
+                    <i class="fa fa-pencil"></i>
+                </div>
+            </div>
+            <div class="block-content bg-body-light">
+                <p class="font-w600">
+                    FIRMAS
+                </p>
+            </div>
+        </a>
+    </div>
 </div>
 @endsection
