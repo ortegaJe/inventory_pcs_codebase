@@ -767,8 +767,11 @@ class ReportController extends Controller
             } else {
                 dd('File does not exists.');
             } */
+            $admin = Campu::where('id', $campu_admin_id)
+                ->select('slug', DB::raw("CONCAT(admin_name,' ',admin_last_name) AS NombreApellidoAdmin"))
+                ->first();
 
-            $file_sign = $request->file('sign')->store('firma_administradores');
+            $file_sign = $request->file('sign')->store('firma_administradores/' . $admin->slug . '/' . Str::slug($admin->NombreApellidoAdmin));
 
             $update = array(
                 'address'         => $address,

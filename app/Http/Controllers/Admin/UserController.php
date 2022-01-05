@@ -267,7 +267,8 @@ class UserController extends Controller
             return back()->with('fail_upload_sign', '');
         } else if ($request->hasFile('sign')) {
 
-            $file_sign = $request->file('sign')->store('firma_tecnicos');
+            $user = Str::lower(Auth::user()->nick_name);
+            $file_sign = $request->file('sign')->store('firma_tecnicos/' . $user);
 
             $update = array('sign' => $file_sign);
             User::where('id', $user_id->id)->update($update);
