@@ -234,12 +234,9 @@
             @elseif($users->sign != null)
             @include('user.profiles.partials.modal')
             <div class="form-group">
-                <button type="button" class="btn btn-alt-success mr-5 mb-5" disabled>
-                    <i class="fa fa-check"></i> Firma cargada
-                </button>
                 <button type="button" class="btn btn-alt-success mr-5 mb-5" data-toggle="modal"
                     data-target="#modal-sign">
-                    <i class="fa fa-upload"></i>
+                    <i class="fa fa-check"></i> Firma cargada
                 </button>
             </div>
             @endif
