@@ -49,7 +49,12 @@
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                                    href="{{ route('inventory.report.delivery.generated', [$repo->repo_id, $repo->rowguid]) }}"
+                                    @if(Storage::exists('pdf/acta-de-entrega/'.$repo->report_code_number.'.pdf'))
+                                    href="{{ Storage::url('pdf/acta-de-entrega/'.$repo->report_code_number.'.pdf') }}"
+                                    @else
+                                    href="{{ route('inventory.report.delivery.generated', [$repo->repo_id,
+                                    $repo->rowguid]) }}"
+                                    @endif
                                     target="_blank">
                                     <i class="fa fa-print"></i>
                                 </a>
@@ -73,19 +78,19 @@
             </div>
         </div>
     </div>
+</div>
+@endsection
 
-    @endsection
+@push('js')
 
-    @push('js')
-
-    @if(Session::has('report_created'))
-    <script>
-        Swal.fire(
+@if(Session::has('report_created'))
+<script>
+    Swal.fire(
     'Creado con Exito!',
     '{!! Session::get('report_created') !!}',
     'success'
   )
-    </script>
-    @endif
+</script>
+@endif
 
-    @endpush
+@endpush

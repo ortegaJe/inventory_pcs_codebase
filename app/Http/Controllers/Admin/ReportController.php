@@ -652,7 +652,7 @@ class ReportController extends Controller
         $report = Report::findOrFail($id);
         $user_id = Auth::id();
 
-        $report_delivery = DB::table('view_report_deliverys')
+        $report_delivery = DB::table('view_report_deliveries')
             ->where('RepoID', $report->id)
             ->where('TecnicoID', $user_id)
             ->get();
