@@ -18,7 +18,7 @@
                     <div class="block-content" style="background-color: #f0f2f5">
                         <div class="row">
                             <!-- Row #2 -->
-                            <input type="text" name="repo_id" value="{{ $report_delivery_id->id }}">
+                            <input type="hidden" name="repo_id" value="{{ $report_delivery_id->id }}">
                             <div class="form-group mt-2">
                                 <label for="file_upload"></label>
                                 <div>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="modal-footer" style="background-color: #f0f2f5">
                     <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-alt-success"><i class="fa fa-upload"></i> Actualizar</button>
+                    <button type="submit" class="btn btn-alt-success"><i class="fa fa-upload"></i> Cargar</button>
                 </div>
             </div>
         </div>
