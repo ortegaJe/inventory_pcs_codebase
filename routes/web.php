@@ -120,8 +120,7 @@ Route::prefix('dashboard/inventario/reportes')->group(
 
         Route::put('actualizar-administrador-sede/{id}', 'App\Http\Controllers\Admin\ReportController@updateSign')->name('sign.update');
 
-        //Route::get('firmas', 'App\Http\Controllers\Admin\ReportController@createSignAdmin')->name('sign.index');
-
+        Route::post('cargar-acta-de-entrega-firmado', 'App\Http\Controllers\Admin\ReportController@uploadFileReportDeliverySigned')->name('upload.file.delivery');
     }
 );
 

@@ -545,7 +545,27 @@ class ReportController extends Controller
         $user_id = Auth::id();
         $device = Device::findOrFail($device);
 
-        $report_deliverys = DB::table('reports as r')
+        $report_delivery_id_count = Report::leftJoin('devices', 'devices.id', 'reports.device_id')
+            ->leftJoin('report_deliveries', 'report_deliveries.report_id', 'reports.id')
+            ->leftJoin('report_names', 'report_names.id', 'reports.id')
+            ->where('reports.user_id', $user_id)
+            ->where('reports.device_id', $device->id)
+            ->where('reports.report_name_id', Report::REPORT_DELIVERY_NAME_ID)
+            ->select(DB::raw("COUNT(reports.device_id) AS NumberDeviceId"))
+            ->count();
+
+        //CONSULTA EL ULTIMO ID DEL REPORTE DE ACTA DE ENTREGA DEL EQUIPO RELACIONADO
+        $report_delivery_id = Report::leftJoin('devices', 'devices.id', 'reports.device_id')
+            ->leftJoin('report_deliveries', 'report_deliveries.report_id', 'reports.id')
+            ->leftJoin('report_names', 'report_names.id', 'reports.id')
+            ->where('reports.user_id', $user_id)
+            ->where('reports.device_id', $device->id)
+            ->where('reports.report_name_id', Report::REPORT_DELIVERY_NAME_ID)
+            ->select('reports.id', 'reports.device_id')
+            ->orderByDesc('reports.id')
+            ->first();
+
+        $report_deliveries = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
             ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
@@ -553,8 +573,8 @@ class ReportController extends Controller
                 'r.report_code_number',
                 'r.id as repo_id',
                 'r.rowguid',
-                DB::raw("UPPER(rn.name) repo_name"),
                 'd.serial_number as serial_number',
+                DB::raw("UPPER(rn.name) repo_name"),
                 DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
             )
             ->where('r.user_id', $user_id)
@@ -563,11 +583,31 @@ class ReportController extends Controller
             ->orderByDesc('r.created_at')
             ->paginate(4);
 
-        //return $report_deliverys;
+        $file_uploads_report_deliveries = DB::table('file_uploads_report_deliveries as rud')
+            ->leftJoin('reports as r', 'r.id', 'rud.report_id')
+            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
+            ->leftJoin('devices as d', 'd.id', 'r.device_id')
+            ->select(
+                'r.device_id',
+                'r.report_code_number',
+                'rd.report_id as repo_id',
+                DB::raw("UPPER(rn.name) repo_name"),
+                'rud.file_upload',
+                DB::raw("DATE_FORMAT(rud.file_upload_date, '%c/%e/%Y - %r') file_upload_date"),
+            )
+            ->where('r.user_id', $user_id)
+            ->where('r.device_id', $device->id)
+            ->where('r.report_name_id', Report::REPORT_DELIVERY_NAME_ID)
+            ->orderByDesc('rud.file_upload_date')
+            ->paginate(4);
 
         $data = [
             'device' => $device,
-            'report_deliverys' => $report_deliverys,
+            'report_delivery_id' => $report_delivery_id,
+            'report_deliveries' => $report_deliveries,
+            'report_delivery_id_count' => $report_delivery_id_count,
+            'file_uploads_report_deliveries' => $file_uploads_report_deliveries
         ];
 
         return view('report.delivery.show')->with($data);
@@ -674,6 +714,38 @@ class ReportController extends Controller
 
         Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         return $pdf->stream($nombre_archivo . $extension);
+    }
+
+    public function uploadFileReportDeliverySigned(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file_upload' => 'image|max:10240',
+            'file_upload' => 'file|mimes:pdf|max:10240'
+        ]);
+
+        if ($validator->fails()) {
+
+            return back()->with('fail_upload_sign', '');
+        } else if ($request->hasFile('file_upload')) {
+
+            $repo_id = $request->repo_id;
+
+            $repo_code_number = Report::where('id', $repo_id)
+                ->select('id', 'report_code_number')
+                ->first();
+
+            $file_upload = $request->file('file_upload')
+                ->store('de-baja-firmados' . '/' . $repo_code_number->report_code_number);
+
+            DB::table('file_uploads_report_deliveries')
+                ->insert([
+                    'report_id' => $repo_id,
+                    'file_upload' => $file_upload,
+                    'file_upload_date' => now('America/Bogota'),
+                ]);
+        }
+
+        return back()->with('success_upload_sign', '');
     }
 
     public function pdfReportResumes(Request $request, $id)

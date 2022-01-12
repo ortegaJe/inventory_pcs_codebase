@@ -15,7 +15,7 @@
             data-target="#modal-popin-up-delivery">
             <i class="fa fa-plus text-success mr-5"></i>Generar
         </button>
-        Reporte de acta de entrega | Serial del equipo: {{ $device->serial_number }}
+        Reportes Acta De Entrega <small class="d-none d-sm-inline">Serial Equipo: {{ $device->serial_number }}</small>
     </div>
     <!-- Device Table -->
     <div class="block block-rounded">
@@ -34,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px">
-                    @forelse($report_deliverys as $repo)
+                    @forelse($report_deliveries as $repo)
                     <tr>
                         <td class="d-none d-sm-table-cell">
                             {{ $repo->report_code_number }}
@@ -44,7 +44,7 @@
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->repo_name }} DE EQUIPOS
+                            {{ $repo->repo_name }}
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
@@ -64,7 +64,7 @@
                     @empty
                     <tr>
                         <td colspan="4" class="text-center">
-                            SIN REPORTES AUN SIN REGISTRAR
+                            REPORTES AUN SIN REGISTRAR
                         </td>
                     </tr>
                     @endforelse
@@ -73,12 +73,79 @@
             <!-- END Orders Table -->
             <div>
                 <ul class="pagination justify-content-end">
-                    {!! $report_deliverys->links("pagination::bootstrap-4") !!}
+                    {!! $report_deliveries->links("pagination::bootstrap-4") !!}
                 </ul>
             </div>
         </div>
     </div>
 </div>
+@if($report_delivery_id_count > 0)
+<div class="block-content">
+    @include('report.delivery.partials.modal_upload')
+    <div class="content-heading">
+        <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
+            data-target="#modal-upload">
+            <i class="fa fa-upload text-success mr-5"></i>Cargar
+        </button>
+        Cargar Reportes Acta De Entrega
+    </div>
+    <!-- Device Table -->
+    <div class="block block-rounded">
+        <div class="block-content bg-body-light">
+            <br>
+        </div>
+        <div class="block-content">
+            <!-- Device Table -->
+            <table class="table table-borderless table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">CODIGO</th>
+                        <th style="width: 200px;">FECHA</th>
+                        <th class="d-none d-sm-table-cell">REPORTE CARGADO</th>
+                        <th class="d-none d-sm-table-cell text-center">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 14px">
+                    @forelse($file_uploads_report_deliveries as $repo)
+                    <tr>
+                        <td class="d-none d-sm-table-cell">
+                            {{ $repo->report_code_number }}
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            {{ $repo->file_upload_date }}
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            <i class="fa fa-file-pdf-o text-danger mr-5"></i>
+                            {{ $repo->repo_name }} FIRMADO
+                        </td>
+                        <td class="d-none d-sm-table-cell text-center">
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
+                                    href="{{ Storage::url($repo->file_upload) }}" target="_blank">
+                                    <i class="fa fa-print"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            SIN REPORTES CARGADOS
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <!-- END Orders Table -->
+            <div>
+                <ul class="pagination justify-content-end">
+                    {!! $file_uploads_report_deliveries->links("pagination::bootstrap-4") !!}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 @endsection
 
 @push('js')
@@ -90,6 +157,26 @@
     '{!! Session::get('report_created') !!}',
     'success'
   )
+</script>
+@endif
+
+@if(Session::has('success_upload_sign'))
+<script>
+    Swal.fire(
+'Firma cargada con éxito!',
+'{!! Session::get('success_upload_sign') !!}',
+'success'
+)
+</script>
+@endif
+
+@if(Session::has('fail_upload_sign'))
+<script>
+    Swal.fire(
+'Archivo debe ser de tipo imagen(.jpeg, .jpg, .png) o archivo(.pdf)',
+'{!! Session::get('fail_upload_sign') !!}',
+'error'
+)
 </script>
 @endif
 
