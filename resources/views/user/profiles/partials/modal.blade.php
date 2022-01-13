@@ -8,7 +8,7 @@
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-gray-darker">
-                        <h3 class="block-title">Actualizar mi firma</h3>
+                        <h3 class="block-title">Editar Firma</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                 <i class="si si-close"></i>
@@ -18,12 +18,6 @@
                     <div class="block-content" style="background-color: #f0f2f5">
                         <div class="row">
                             <!-- Row #2 -->
-                            <div class="form-row mx-auto">
-                                <img src="{{ Storage::url($users->sign) }}" alt="" style="height:auto;
-                                    max-width:100%;
-                                    border:none;
-                                    display:block;">
-                            </div>
                             <div class="form-group mt-2">
                                 <label for="sign"></label>
                                 <div>
@@ -39,7 +33,7 @@
                 </div>
                 <div class="modal-footer" style="background-color: #f0f2f5">
                     <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-alt-success"><i class="fa fa-upload"></i> Actualizar</button>
+                    <button type="submit" class="btn btn-alt-success"><i class="fa fa-upload"></i> Cargar</button>
                 </div>
             </div>
         </div>

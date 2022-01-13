@@ -213,13 +213,7 @@
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label for="sign">
-                        <i class="fa fa-pencil text-primary mr-5"></i> Cargar firma
-                    </label>
-                    {{-- <button type="button" onclick="window.location=#" class="btn btn-alt-primary min-width-125"
-                        data-toggle="click-ripple">
-                        <i class="fa fa-upload mr-5"></i>Cargar firma
-                    </button> --}}
+                    <label for="sign">Cargar firma</label>
                     <div>
                         <input type="file" id="sign" name="sign" accept="image/*">
                         <button type="submit" class="btn btn-circle btn-alt-primary mr-5 mb-5">
@@ -233,11 +227,21 @@
             </form>
             @elseif($users->sign != null)
             @include('user.profiles.partials.modal')
-            <div class="form-group">
-                <button type="button" class="btn btn-alt-success mr-5 mb-5" data-toggle="modal"
-                    data-target="#modal-sign">
-                    <i class="fa fa-check"></i> Firma cargada
-                </button>
+            <label>Firma:</label>
+            <div class="row gutters-tiny items-push">
+                <div class="col-sm-6 col-xl-4">
+                    <div class="options-container">
+                        <img class="img-fluid options-item" src="{{ Storage::url($users->sign) }}" alt="">
+                        <div class="options-overlay bg-black-op">
+                            <div class="options-overlay-content">
+                                <button type="button" class="btn btn-sm btn-rounded btn-alt-success min-width-75"
+                                    data-toggle="modal" data-target="#modal-sign">
+                                    <i class="fa fa-edit"></i> Editar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             @endif
 
