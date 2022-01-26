@@ -4,7 +4,7 @@
 <head>
 
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-  <title>InventoryPC | Reporte generado</title>
+  <title>InventarioPC | Reporte generado</title>
   <meta name="generator" content="https://conversiontools.io" />
   <meta name="author" content="Ing. Diego Cabrera" />
   <meta name="created" content="2010-12-29T01:40:27" />
@@ -54,7 +54,7 @@
   </style>
 
 </head>
-@foreach($generated_report_resume as $repo)
+@foreach($generated_report_maintenance as $repo)
 
 <body>
   <table cellspacing="0" border="0" style="margin-left: 30px">
@@ -442,6 +442,8 @@
           <font face="Arial" size=1 color="#000000">5. MANTENIMIENTOS PREVENTIVOS</font>
         </b></td>
     </tr>
+    //COMIENZO CAMPOS MTO//
+    //COMIENZO PRIMER MTO//
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -449,7 +451,6 @@
         <font face="Arial" size=1 color="#000000">Mantenimiento</font>
       </td>
     </tr>
-    @foreach ($first_maintenance_date as $mto )
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -459,7 +460,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdval="43556" sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
+          <font face="Arial" size=1>{{ $repo->FechaMto01Realizado }}</font>
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -487,8 +488,9 @@
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 rowspan=4 align="left" valign=top>
         <font face="Arial" size=1 color="#000000">Firma</font>
-        <div>
-          <img src="https://i.ibb.co/ZVyM4TT/firma.jpg" width="125px" style="margin-left: 20px">
+        <div align="center" valign=middle style="margin-top:4px">
+          <img src="{{ public_path('storage/'.$repo->FirmaAdmin) }}" alt="" width="150" height="50"
+            style="margin-top:4px">
         </div>
       </td>
     </tr>
@@ -496,9 +498,7 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">SE REALIZO SOPLADO DE LAS PARTES INTERNAS (HARDWARE), LIMPIEZA DE
-          PERIFERICOS. SE DEJO EQUIPO
-          FUNCIONANDO.</font>
+        <font face="Arial" size=1 color="#000000">{{ $repo->DescripcionMto01 }}</font>
       </td>
     </tr>
     <tr>
@@ -509,11 +509,11 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre:</font>
-        <font face="Arial" size=1 color="#000000">MARIA RODRIGUEZ</font>
+        <font face="Arial" size=1 color="#000000">Nombre: {{ $repo->NombreApellidoAdmin }}</font>
       </td>
     </tr>
-    @endforeach
+    //FIN PRIMER MTO//
+    //COMIENZO SEGUNDO MTO//
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -521,7 +521,6 @@
         <font face="Arial" size=1 color="#000000">Mantenimiento</font>
       </td>
     </tr>
-    @foreach($second_maintenance_date as $mto)
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -531,8 +530,9 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=6 align="center" valign=top sdnum="1033;0;DD/MM/YYYY;@"><b>
-          <font face="Arial" size=1>{{ $mto->mto_date }}</font>
-        </b></td>
+          <font face="Arial" size=1>{{ $repo->FechaMto02Realizado }}</font>
+        </b>
+      </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=3 align="left" valign=top bgcolor="#F2F2F2">
@@ -541,7 +541,10 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=8 align="left" valign=top>
+        @if($repo->FechaMto02Realizado == null)
+        @else
         <font face="Arial" size=1 color="#000000">{{ $repo->NombreTecnico }}</font>
+        @endif
       </td>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -559,19 +562,20 @@
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 rowspan=4 align="left" valign=top>
         <font face="Arial" size=1 color="#000000">Firma</font>
-        <div>
-          <img src="https://i.ibb.co/ZVyM4TT/firma.jpg" width="125px" style="margin-left: 20px">
+        @if($repo->FechaMto02Realizado == null)
+        @else
+        <div align="center" valign=middle style="margin-top:4px">
+          <img src="{{ public_path('storage/'.$repo->FirmaAdmin) }}" alt="" width="150" height="50"
+            style="margin-top:4px">
         </div>
+        @endif
       </td>
     </tr>
     <tr>
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=23 rowspan=4 height="68" align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">SE REALIZO SOPLADO DE LAS PARTES INTERNAS (HARDWARE), LIMPIEZA DE
-          PERIFERICOS.
-          SE DEJO EQUIPO
-          FUNCIONANDO.</font>
+        <font face="Arial" size=1 color="#000000">{{ $repo->DescripcionMto02 }}</font>
       </td>
     </tr>
     <tr>
@@ -582,10 +586,15 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=10 align="left" valign=top>
-        <font face="Arial" size=1 color="#000000">Nombre: MARIA RODRIGUEZ</font>
+        @if($repo->FechaMto02Realizado == null)
+        <font face="Arial" size=1 color="#000000">Nombre:</font>
+        @else
+        <font face="Arial" size=1 color="#000000">Nombre: {{ $repo->NombreApellidoAdmin }}</font>
+        @endif
       </td>
     </tr>
-    @endforeach
+    //FIN SEGUNDO MTO//
+    //FIN CAMPOS MTO//
     <tr>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" colspan=33 height="10" align="left"
         valign=top><b>

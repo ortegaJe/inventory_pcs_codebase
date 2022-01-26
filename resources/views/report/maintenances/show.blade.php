@@ -58,28 +58,29 @@
               {{--<div class="btn-group">
                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
                   href="{{ route('inventory.report.maintenance.pdf', [$repo->repo_id]) }}" target="_blank">
-              <i class="fa fa-print"></i>
-              </a>
-    </div>--}}
-    <div class="btn-group">
-      <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.resumes.generated', $repo->repo_id) }}" target="_blank">
-        <i class="fa fa-print"></i>
-      </a>
-    </div>
-    </td>
-    </tr>
-    @empty
-    <tr>
-      <td colspan="4" class="text-center">
-        REPORTE AUN SIN REGISTRAR
-      </td>
-    </tr>
-    @endforelse
-    </tbody>
-    </table>
-    <!-- END Orders Table -->
+                  <i class="fa fa-print"></i>
+                </a>
+              </div>--}}
+              <div class="btn-group">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
+                  href="{{ route('inventory.report.resumes.generated', $repo->repo_id) }}" target="_blank">
+                  <i class="fa fa-print"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="4" class="text-center">
+              REPORTE AUN SIN REGISTRAR
+            </td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
+      <!-- END Orders Table -->
 
-    <!-- Navigation 
+      <!-- Navigation 
         <nav aria-label="Orders navigation">
             <ul class="pagination justify-content-end">
                 <li class="page-item">
@@ -116,11 +117,11 @@
             </ul>
         </nav>
          END Navigation -->
+    </div>
   </div>
-</div>
-<!-- END Orders Table -->
+  <!-- END Orders Table -->
 
-<!-- Navigation 
+  <!-- Navigation 
             <nav aria-label="Orders navigation">
                 <ul class="pagination justify-content-end">
                     <li class="page-item">
@@ -160,7 +161,8 @@
 </div>
 @if($report_resume_count <= 0) @include('report.resumes.partials.modal_maintenance') <div class="block-content">
   <div class="content-heading">
-    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-popin-up-resume">
+    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
+      data-target="#modal-popin-up-resume">
       <i class="fa fa-plus text-success mr-5"></i>Generar
     </button>
     Mantenimientos
@@ -199,7 +201,8 @@
             </td>
             <td class="d-none d-sm-table-cell text-center">
               <div class="btn-group">
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte" href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id]) }}" target="_blank">
+                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
+                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id]) }}" target="_blank">
                   <i class="fa fa-print"></i>
                 </a>
               </div>

@@ -20,7 +20,7 @@
         </a>
     </div>
     <div class="col-md-6 col-xl-4">
-        <a class="block block-link-pop text-center" href="{{ route('inventory.report.resumes.index') }}">
+        <a class="block block-link-pop text-center" href="{{ route('inventory.report.maintenance.index') }}">
             <div class="block-content text-center">
                 <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
                     <i class="fa fa-file-text-o"></i>
@@ -29,7 +29,7 @@
             </div>
             <div class="block-content bg-body-light">
                 <p class="font-w600">
-                    HOJA DE VIDA
+                    MANTENIMIENTOS
                 </p>
             </div>
         </a>

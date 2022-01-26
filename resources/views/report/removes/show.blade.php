@@ -50,8 +50,8 @@
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                                    @if(Storage::exists('pdf/de-baja/'.$repo->report_code_number.'.pdf'))
-                                    href="{{ Storage::url('pdf/de-baja/'.$repo->report_code_number.'.pdf') }}"
+                                    @if(Storage::exists('pdf/de_baja/'.$repo->report_code_number.'.pdf'))
+                                    href="{{ Storage::url('pdf/de_baja/'.$repo->report_code_number.'.pdf') }}"
                                     @else
                                     href="{{ route('inventory.report.removes.generated', [$repo->repo_id,
                                     $repo->rowguid]) }}"

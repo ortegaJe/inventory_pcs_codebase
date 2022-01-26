@@ -1,44 +1,50 @@
 <!doctype html>
 <html lang="en" class="no-focus">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Codebase - Bootstrap 4 Admin Template &amp; UI Framework</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <meta name="description" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
-        <meta name="author" content="pixelcave">
-        <meta name="robots" content="noindex, nofollow">
+    <title>Codebase - Bootstrap 4 Admin Template &amp; UI Framework</title>
 
-        <!-- Open Graph Meta -->
-        <meta property="og:title" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework">
-        <meta property="og:site_name" content="Codebase">
-        <meta property="og:description" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
+    <meta name="description"
+        content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
 
-        <!-- Icons -->
-        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-        <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
-        <!-- END Icons -->
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework">
+    <meta property="og:site_name" content="Codebase">
+    <meta property="og:description"
+        content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
-        <!-- Stylesheets -->
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    {{--
+    <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    --}}
+    <!-- END Icons -->
 
-        <!-- Fonts and Codebase framework -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
-        <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
+    <!-- Stylesheets -->
 
-        <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
-        <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
-        <!-- END Stylesheets -->
-    </head>
-    <body>
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="{{ asset('/css/codebase.min.css') }}">
 
-        <!-- Page Container -->
-        <!--
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <!-- END Stylesheets -->
+</head>
+
+<body>
+
+    <!-- Page Container -->
+    <!--
             Available classes for #page-container:
 
         GENERIC
@@ -81,34 +87,36 @@
             'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
             'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
         -->
-        <div id="page-container" class="main-content-boxed">
+    <div id="page-container" class="main-content-boxed">
 
-            <!-- Main Container -->
-            <main id="main-container">
+        <!-- Main Container -->
+        <main id="main-container">
 
-                <!-- Page Content -->
-                <div class="hero bg-white">
-                    <div class="hero-inner">
-                        <div class="content content-full">
-                            <div class="py-30 text-center">
-                                <div class="display-3 text-warning">400</div>
-                                <h1 class="h2 font-w700 mt-30 mb-10">Oops.. You just found an error page..</h1>
-                                <h2 class="h3 font-w400 text-muted mb-50">We are sorry but your request contains bad syntax and cannot be fulfilled..</h2>
-                                <a class="btn btn-hero btn-rounded btn-alt-secondary" href="be_pages_error_all.html">
-                                    <i class="fa fa-arrow-left mr-10"></i> Back to all Errors
-                                </a>
-                            </div>
+            <!-- Page Content -->
+            <div class="hero bg-white">
+                <div class="hero-inner">
+                    <div class="content content-full">
+                        <div class="py-30 text-center">
+                            <div class="display-3 text-warning">400</div>
+                            <h1 class="h2 font-w700 mt-30 mb-10">Oops.. You just found an error page..</h1>
+                            <h2 class="h3 font-w400 text-muted mb-50">We are sorry but your request contains bad syntax
+                                and cannot be fulfilled..</h2>
+                            <a class="btn btn-hero btn-rounded btn-alt-secondary"
+                                href="{{ route('inventory.report.index') }}">
+                                <i class="fa fa-arrow-left mr-10"></i> Back to all Errors
+                            </a>
                         </div>
                     </div>
                 </div>
-                <!-- END Page Content -->
+            </div>
+            <!-- END Page Content -->
 
-            </main>
-            <!-- END Main Container -->
-        </div>
-        <!-- END Page Container -->
+        </main>
+        <!-- END Main Container -->
+    </div>
+    <!-- END Page Container -->
 
-        <!--
+    <!--
             Codebase JS Core
 
             Vital libraries and plugins used in all pages. You can choose to not include this file if you would like
@@ -125,14 +133,15 @@
             assets/js/core/jquery.countTo.min.js
             assets/js/core/js.cookie.min.js
         -->
-        <script src="assets/js/codebase.core.min.js"></script>
+    <script src="{{ asset('/js/codebase.core.min.js') }}"></script>
 
-        <!--
+    <!--
             Codebase JS
 
             Custom functionality including Blocks/Layout API as well as other vital and optional helpers
             webpack is putting everything together at assets/_es6/main/app.js
         -->
-        <script src="assets/js/codebase.app.min.js"></script>
-    </body>
+    <script src="{{ asset('/js/codebase.app.min.js') }}"></script>
+</body>
+
 </html>

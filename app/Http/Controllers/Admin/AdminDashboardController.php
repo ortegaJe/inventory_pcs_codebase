@@ -133,6 +133,11 @@ class AdminDashboardController extends Controller
     return view('admin.op_coming_soon', compact('campus'));
   }
 
+  public function errorView()
+  {
+    return view('admin.op_error_400');
+  }
+
   /**
    * Show the form for creating a new resource.
    *

@@ -49,8 +49,8 @@
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                                    @if(Storage::exists('pdf/acta-de-entrega/'.$repo->report_code_number.'.pdf'))
-                                    href="{{ Storage::url('pdf/acta-de-entrega/'.$repo->report_code_number.'.pdf') }}"
+                                    @if(Storage::exists('pdf/acta_de_entrega/'.$repo->report_code_number.'.pdf'))
+                                    href="{{ Storage::url('pdf/acta_de_entrega/'.$repo->report_code_number.'.pdf') }}"
                                     @else
                                     href="{{ route('inventory.report.delivery.generated', [$repo->repo_id,
                                     $repo->rowguid]) }}"

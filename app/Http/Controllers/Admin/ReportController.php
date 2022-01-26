@@ -15,7 +15,7 @@ use App\Models\DeviceMaintenance;
 use App\Models\Report;
 use App\Models\ReportDeliverie;
 use App\Models\ReportRemove;
-use App\Models\ReportResume;
+use App\Models\ReportMaintenance;
 use App\Models\User;
 use Faker\Provider\Uuid;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -32,9 +32,8 @@ class ReportController extends Controller
         $this->generatorID = Helper::IDGenerator(new Report, 'report_code_number', 12, 'REPO');
         $this->report = new Report();
         $this->report_remove = new ReportRemove();
-        $this->report_resume = new ReportResume();
         $this->report_delivery = new ReportDelivery();
-        $this->report_maintenance = new DeviceMaintenance();
+        $this->report_maintenance = new ReportMaintenance();
     }
 
     public function index()
@@ -209,7 +208,7 @@ class ReportController extends Controller
         );
 
         //$tiempo_creacion = now()->toDateString();
-        $nombre_carpeta = 'pdf/de-baja/';
+        $nombre_carpeta = 'pdf/de_baja/';
         $nombre_archivo = $report->report_code_number;
         $extension = '.pdf';
         $archivo = $nombre_archivo . $extension;
@@ -218,7 +217,7 @@ class ReportController extends Controller
         return $pdf->stream($nombre_archivo . $extension);
     }
 
-    public function indexReportResume(Request $request)
+    public function indexReportMaintenance(Request $request)
     {
         $user_id = Auth::id();
 
@@ -226,6 +225,7 @@ class ReportController extends Controller
 
         $devices = Device::leftJoin('campus as c', 'c.id', 'devices.campu_id')
             ->leftJoin('campu_users as cu', 'cu.campu_id', 'devices.campu_id')
+            ->leftJoin('calendar_maintenances as cm', 'cm.campu_id', 'devices.campu_id')
             ->leftJoin('users as u', 'u.id', 'cu.user_id')
             ->leftJoin('status as s', 's.id', 'devices.statu_id')
             ->select(
@@ -238,7 +238,9 @@ class ReportController extends Controller
                 's.name as estado',
                 's.id as statu_id',
                 'devices.rowguid',
-                'devices.id as device_id'
+                'devices.id as device_id',
+                'cm.maintenance_01_month',
+                'cm.maintenance_02_month'
             )
             ->where('cu.user_id', $user_id)
             ->where('devices.is_active', true)
@@ -247,26 +249,17 @@ class ReportController extends Controller
             ->orderByDesc('devices.created_at')
             ->paginate(10);
 
-        //return response()->json($devices);
-
-        return view('report.resumes.create', compact('devices'));
+        return view('report.maintenances.index', compact('devices'));
     }
 
-    public function createReportResume($id, $uuid)
+    public function createReportMaintenance($id, $uuid)
     {
         $user_id = Auth::id();
         $device = Device::findOrFail($id);
 
-        $report_resume_count = Report::select('device_id')
-            ->where('device_id', $device->id)
-            ->count();
-
-        $mto_count = DeviceMaintenance::select('repo_id')
-            ->where('report_id')
-            ->count();
-
-        $report_resumes = DB::table('reports as r')
+        $report_maintenances = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+            ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
             ->select(
                 'r.report_code_number',
@@ -274,53 +267,125 @@ class ReportController extends Controller
                 'r.rowguid',
                 DB::raw("UPPER(rn.name) repo_name"),
                 'd.serial_number as serial_number',
-                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
+                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
+                DB::raw("DATE_FORMAT(rm.maintenance_01_date, '%c') as FechaMto01Realizado"),
+                DB::raw("DATE_FORMAT(rm.maintenance_02_date, '%c') as FechaMto02Realizado"),
+
             )
             ->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
-            ->where('r.report_name_id', Report::REPORT_RESUME_NAME_ID)
+            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
             ->orderByDesc('r.created_at')
+            ->take(1)
             ->get();
 
-        //return response()->json($report_resumes);
+        //return $report_maintenances;
 
-        $report_maintenances = DB::table('reports as r')
-            ->leftJoin('device_maintenances as dm', 'dm.report_id', 'r.id')
-            ->leftJoin('devices as d', 'd.id', 'r.device_id')
+        /*         $count_device_id_on_reports = Device::where('devices.id', $device->id)
+            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+            ->where('cm.maintenance_01_month', now()->isoformat('M'))
+            ->orWhere('cm.maintenance_02_month', now()->isoformat('M'))
+            ->groupBy('DeviceID')
+            ->having(DB::raw("COUNT(*)"), '>=', 1)
+            ->leftJoin('calendar_maintenances as cm', 'cm.campu_id', 'devices.campu_id')
+            ->leftJoin('reports as r', 'r.device_id', 'devices.id')
+            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
             ->select(
-                'r.id as repo_id',
-                'dm.report_id as repo_maintenace_id',
-                'd.serial_number as serial_number',
-                'dm.observation',
-                DB::raw("DATE_FORMAT(dm.maintenance_date, '%c/%e/%Y - %r') maintenance_date")
-                //'r.rowguid'
+                //'cm.id as CalendarMtoID',
+                //'devices.campu_id',
+                'r.device_id as DeviceID',
+                //'r.report_name_id as RpName',
+                //'cm.maintenance_01_month',
+                //'cm.maintenance_02_month',
+                DB::raw("COUNT(*) as CountDeviceID"),
             )
-            //->where('r.id', '=', 'dm.report_id')
-            ->where('r.user_id', $user_id)
-            ->where('r.device_id', $device->id)
-            ->where('r.report_name_id', Report::REPORT_RESUME_NAME_ID)
-            ->latest('dm.maintenance_date')
-            ->limit(1)
-            ->get();
+            ->count();
 
-        //return response()->json($report_maintenances);
+        //return $count_device_id_on_reports; */
+
+        /*         $month_number_mto = Device::where('devices.id', $device->id)
+            ->leftJoin('calendar_maintenances', 'calendar_maintenances.campu_id', 'devices.campu_id')
+            ->where('calendar_maintenances.campu_id', $campu->campuID)
+            ->select(
+                'calendar_maintenances.id as CalendarMtoID',
+                'calendar_maintenances.maintenance_01_month',
+                'calendar_maintenances.maintenance_02_month'
+            )
+            ->first();
+
+        $month_number = now()->isoformat('M');
+        if ($month_number_mto->maintenance_01_month == $month_number) {
+            $report_maintenances = DB::table('reports as r')
+                ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+                ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
+                ->leftJoin('devices as d', 'd.id', 'r.device_id')
+                ->select(
+                    'r.report_code_number',
+                    'r.id as repo_id',
+                    'r.rowguid',
+                    DB::raw("UPPER(rn.name) repo_name"),
+                    'd.serial_number as serial_number',
+                    DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
+                )
+                ->where('r.user_id', $user_id)
+                ->where('r.device_id', $device->id)
+                ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+                ->whereRaw("DATE_FORMAT(r.created_at,'%c') = '{$month_number}'")
+                ->orderByDesc('r.created_at')
+                ->get();
+        } else if ($month_number_mto->maintenance_02_month == $month_number) {
+            $report_maintenances = DB::table('reports as r')
+                ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+                ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
+                ->leftJoin('devices as d', 'd.id', 'r.device_id')
+                ->select(
+                    'r.report_code_number',
+                    'r.id as repo_id',
+                    'r.rowguid',
+                    DB::raw("UPPER(rn.name) repo_name"),
+                    'd.serial_number as serial_number',
+                    DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
+                )
+                ->where('r.user_id', $user_id)
+                ->where('r.device_id', $device->id)
+                ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+                ->whereRaw("DATE_FORMAT(r.created_at,'%c') = '{$month_number}'")
+                ->orderByDesc('r.created_at')
+                ->take(1)
+                ->get();
+        } else {
+            return redirect()->route('inventory.error');
+        } */
 
         $data = [
             'device' => $device,
-            'report_resume_count' => $report_resume_count,
-            'report_resumes' => $report_resumes,
             'report_maintenances' => $report_maintenances,
         ];
 
-        return view('report.resumes.show')->with($data);
+        return view('report.maintenances.create')->with($data);
     }
 
-    public function storeReportResume(Request $request)
+    public function storeReportMaintenance(Request $request)
     {
         $user_id = Auth::id();
-        $device_id = e($request->input('device-id'));
+        $device_id = $request->device_id;
+        $campu_id = $request->campu_id;
+        $observation = $request->observation;
 
-        $rules = [];
+        $found_campu_calendar_mto_id = Device::where('devices.id', $device_id)
+            ->leftJoin('calendar_maintenances', 'calendar_maintenances.campu_id', 'devices.campu_id')
+            ->where('devices.campu_id', $campu_id)
+            ->select(
+                'calendar_maintenances.id as CalendarMtoID',
+                'calendar_maintenances.maintenance_01_month',
+                'calendar_maintenances.maintenance_02_month'
+            )->first();
+
+        $month_number = now()->isoformat('M');
+
+        //return ($found_campu_calendar_mto_id);
+
+        /*         $rules = [];
 
         $messages = [];
 
@@ -335,9 +400,10 @@ class ReportController extends Controller
                     'modal',
                     'error'
                 );
-        else :
+        else : */
+        if ($found_campu_calendar_mto_id->maintenance_01_month == $month_number) {
             $this->report->report_code_number = $this->generatorID;
-            $this->report->report_name_id = Report::REPORT_RESUME_NAME_ID;
+            $this->report->report_name_id = Report::REPORT_MAINTENANCE_NAME_ID;
             $this->report->device_id = $device_id;
             $this->report->user_id = $user_id;
             $this->report->rowguid = Uuid::uuid();
@@ -345,166 +411,81 @@ class ReportController extends Controller
 
             $this->report->save();
 
-            return back()->withErrors($validator)
-                ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
-        endif;
-    }
-
-    public function reportResumeGenerated($id)
-    {
-        $report = Report::findOrFail($id);
-        $user_id = Auth::id();
-
-        $generated_report_resume = DB::table('view_report_resumes')
-            ->where('RepoID', $report->id)
-            ->where('TecnicoID', $user_id)
-            ->get();
-
-        //return response()->json($generated_report_resume);
-
-        $mto_count = DeviceMaintenance::select('report_id')->get();
-
-        $maintenance_date = DeviceMaintenance::leftJoin('reports as r', 'r.id', 'device_maintenances.report_id')
-            ->select(
-                'device_maintenances.report_id as mto_repo_id',
-                'r.id as repo_id',
-                'r.report_code_number',
-                'device_maintenances.maintenance_date as mto_date',
-                'device_maintenances.observation'
-            )
-            ->where('device_maintenances.report_id', $report->id)
-            ->limit(2)
-            ->get();
-
-        //return response()->json($maintenance_date);
-
-        $pdf = PDF::loadView(
-            'report.resumes.pdf.cv-pdf',
-            [
-                'report' => $report,
-                'mto_count' => $mto_count,
-                'generated_report_resume' => $generated_report_resume,
-                'maintenance_date' => $maintenance_date
-            ]
-        );
-
-        //$tiempo_creacion = now()->toDateString();
-        $nombre_carpeta = 'pdf/hojas-de-vida/';
-        $nombre_archivo = $report->report_code_number;
-        $extension = '.pdf';
-        $archivo = $nombre_archivo . $extension;
-
-        Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
-        //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
-        return $pdf->stream($report->report_code_number . $extension);
-    }
-
-    public function storeReportMaintenance(Request $request)
-    {
-        $report_id = e($request->input('repo-id'));
-        $maintenance_date = e($request->input('maintenance-date'));
-        $observation = e($request->input('observation'));
-
-        $rules = [
-            'maintenance-date' => 'required|date',
-            'observation' => 'required'
-        ];
-
-        $messages = [];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) :
-            return back()->withErrors($validator)
-                ->withInput()
-                ->with(
-                    'message',
-                    'Revisar campos! :-('
-                )->with(
-                    'modal',
-                    'error'
-                );
-        else :
-
-            $this->report_maintenance->report_id = $report_id;
-            $this->report_maintenance->maintenance_date = $maintenance_date;
-            $this->report_maintenance->observation = $observation;
-            //$this->report_maintenance->rowguid = Uuid::uuid();
+            $this->report_maintenance->report_id = $this->report->id;
+            $this->report_maintenance->maintenance_01_date = now('America/Bogota');
+            $this->report_maintenance->maintenance_01_observation = $observation;
+            $this->report_maintenance->calendar_maintenance_id = $found_campu_calendar_mto_id->CalendarMtoID;
 
             $this->report_maintenance->save();
+        } elseif ($found_campu_calendar_mto_id->maintenance_02_month == $month_number) {
+            $last_report_mto = Report::where('reports.device_id', $device_id)
+                ->where('user_id', $user_id)
+                ->where('reports.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+                ->orderByDesc('reports.created_at')
+                ->first();
 
-            return back()->withErrors($validator)
-                ->with('report_created', '');
+            $update = array('maintenance_02_date' => now('America/Bogota'), 'maintenance_02_observation' => $observation);
+            DB::table('report_maintenances')
+                ->where('report_id', $last_report_mto->id)
+                ->update($update);
+        } else {
+            return redirect()->route('inventory.error', 404);
+        }
 
-        endif;
+        return back();
+
+        //return response()->json(array('success' => true, $this->report, 'report', 'report_maintenances' =>  $this->report_maintenance, 'last_insert_id' => $this->report_maintenance->report_id), 200);
+
+        /*             return back()->withErrors($validator)
+                ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
+        endif; */
     }
 
-    public function reportMaintenanceGenerated($id)
+    public function reportMaintenanceGenerated($report_id, $uuid)
     {
-        $report = Report::findOrFail($id);
+        $report = Report::findOrFail($report_id);
+        $user_id = Auth::id();
 
-        $generated_report_resume = DB::table('view_report_resumes')
+        $month_mto = DB::table('view_report_maintenances')
             ->where('RepoID', $report->id)
-            //->where('SedeID', 1)
-            ->get();
-
-        //return response()->json($generated_report_resume);
-
-        $mto_count = DeviceMaintenance::where('report_id', $report->id)->count();
-
-        //return response()->json($mto_count);
-
-        $mto_date = DeviceMaintenance::select('maintenance_date')->get();
-
-        $first_maintenance_date = DeviceMaintenance::leftJoin('reports as r', 'r.id', 'device_maintenances.report_id')
+            ->where('TecnicoID', $user_id)
+            ->orderByDesc('FechaCreacionReporte')
             ->select(
-                'device_maintenances.report_id as mto_repo_id',
-                'r.id as repo_id',
-                'r.report_code_number',
-                'device_maintenances.maintenance_date as mto_date',
-                'device_maintenances.observation'
-            )
-            ->where('device_maintenances.report_id', $report->id)
-            ->orderBy('device_maintenances.maintenance_date', 'ASC')
-            ->limit(1)
+                DB::raw("DATE_FORMAT(FechaMto01Realizado, '%c') as FechaMto01Realizado"),
+                DB::raw("DATE_FORMAT(FechaMto02Realizado, '%c') as FechaMto02Realizado"),
+            )->first();
+
+        $generated_report_maintenance = DB::table('view_report_maintenances')
+            ->where('RepoID', $report->id)
+            ->where('TecnicoID', $user_id)
+            ->orderByDesc('FechaCreacionReporte')
             ->get();
-
-        //return response()->json($first_maintenance_date);
-
-        $second_maintenance_date = DeviceMaintenance::leftJoin('reports as r', 'r.id', 'device_maintenances.report_id')
-            ->select(
-                'device_maintenances.report_id as mto_repo_id',
-                'r.id as repo_id',
-                'r.report_code_number',
-                'device_maintenances.maintenance_date as mto_date',
-                'device_maintenances.observation'
-            )
-            ->where('device_maintenances.report_id', $report->id)
-            ->orderBy('device_maintenances.maintenance_date', 'DESC')
-            ->limit(1)
-            ->get();
-
-        //return response()->json($second_maintenance_date);
 
         $pdf = PDF::loadView(
-            'report.resumes.pdf.mto-pdf',
+            'report.maintenances.pdf',
             [
                 'report' => $report,
-                'mto_count' => $mto_count,
-                'generated_report_resume' => $generated_report_resume,
-                'first_maintenance_date' => $first_maintenance_date,
-                'second_maintenance_date' => $second_maintenance_date
+                'generated_report_maintenance' => $generated_report_maintenance,
             ]
         );
 
         //$tiempo_creacion = now()->toDateString();
-        $nombre_carpeta = 'pdf/mantenimientos/';
-        $nombre_archivo = 'MTO-' . $report->report_code_number;
-        $extension = '.pdf';
-        $archivo = $nombre_archivo . $extension;
+        $month_number = now()->isoformat('M');
+        if ($month_mto->FechaMto01Realizado == $month_number) {
+            $nombre_carpeta = 'pdf/mantenimientos/primer_semestre/';
+            $nombre_archivo = $report->report_code_number;
+            $extension = '.pdf';
+            $archivo = $nombre_archivo . $extension;
+            Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+        } elseif ($month_mto->FechaMto02Realizado == $month_number) {
+            $nombre_carpeta = 'pdf/mantenimientos/segundo_semestre/';
+            $nombre_archivo = $report->report_code_number;
+            $extension = '.pdf';
+            $archivo = $nombre_archivo . $extension;
+            Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+        }
 
-        Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
-        //Storage::put('public/' . $report->report_code_number . '.pdf', $pdf->output());
-        return $pdf->stream($nombre_archivo . $extension);
+        return $pdf->stream($report->report_code_number . '.pdf');
     }
 
     public function indexReportDelivery(Request $request)
@@ -707,7 +688,7 @@ class ReportController extends Controller
         );
 
         //$tiempo_creacion = now()->toDateString();
-        $nombre_carpeta = 'pdf/acta-de-entrega/';
+        $nombre_carpeta = 'pdf/acta_de_entrega/';
         $nombre_archivo = $report->report_code_number;
         $extension = '.pdf';
         $archivo = $nombre_archivo . $extension;
@@ -735,7 +716,7 @@ class ReportController extends Controller
                 ->first();
 
             $file_upload = $request->file('file_upload')
-                ->store('de-baja-firmados' . '/' . $repo_code_number->report_code_number);
+                ->store('pdf/de_baja_firmados' . '/' . $repo_code_number->report_code_number);
 
             DB::table('file_uploads_report_deliveries')
                 ->insert([

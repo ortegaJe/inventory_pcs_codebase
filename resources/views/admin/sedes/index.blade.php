@@ -72,28 +72,28 @@
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          {{--  <div class="col-md-4">
+          {{-- <div class="col-md-4">
             <select class="js-select2 form-control" id="tecnicos" name="tecnicos" style="width: 100%;"
               data-placeholder="Asignar técnico..">
               <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
               @forelse ($users as $tecnico)
               <option value="{{ $tecnico->id }}">{{ Str::title($tecnico->name) }} {{ Str::title($tecnico->last_name) }}
-          </option>
-          @empty
-          <option>TECNICOS NO DISPONIBLES</option>
-          @endforelse
-          </select>
-          @error('tecnicos')<small class="text-danger">{{ $message }}</small>@enderror
-        </div>--}}
-        <div class="col-md-2">
-          <button type="submit" class="btn btn-alt-success btn-block" data-toggle="click-ripple">
-            <i class="fa fa-plus mr-1"></i> Crear
-          </button>
+              </option>
+              @empty
+              <option>TECNICOS NO DISPONIBLES</option>
+              @endforelse
+            </select>
+            @error('tecnicos')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>--}}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-alt-success btn-block" data-toggle="click-ripple">
+              <i class="fa fa-plus mr-1"></i> Crear
+            </button>
+          </div>
         </div>
+      </form>
     </div>
-    </form>
   </div>
-</div>
 </div>
 <!-- END Overview -->
 
@@ -133,7 +133,7 @@
     @endforeach
     @endif
 </div>
-<nav aria-label="Campus navigation">
+<nav aria-label="navigation">
   <ul class="pagination justify-content-end">
     {!! $campus->links("pagination::bootstrap-4") !!}
   </ul>
