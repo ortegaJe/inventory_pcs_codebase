@@ -701,7 +701,7 @@ class ReportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file_upload' => 'image|max:10240',
-            'file_upload' => 'file|mimes:pdf|max:10240'
+            'file_upload' => 'file|mimes:pdf,jpg,jpeg,png|max:10240'
         ]);
 
         if ($validator->fails()) {
