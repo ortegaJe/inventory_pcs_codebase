@@ -699,7 +699,14 @@ class ReportController extends Controller
 
     public function uploadFileReportDeliverySigned(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $x = 50;
+        //if ($request->file != "") {
+        $file = $request->file('file_upload');
+        $file_name = time() . '_' . $file->getClientOriginalName();
+        $img = \Image::make($file)->resize(300, 200);
+        $img->save(public_path($file_name), $x);
+        //}
+        /*         $validator = Validator::make($request->all(), [
             'file_upload' => 'image|max:10240',
             'file_upload' => 'file|mimes:pdf|max:10240'
         ]);
@@ -724,7 +731,7 @@ class ReportController extends Controller
                     'file_upload' => $file_upload,
                     'file_upload_date' => now('America/Bogota'),
                 ]);
-        }
+        } */
 
         return back()->with('success_upload_sign', '');
     }
