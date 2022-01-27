@@ -38,13 +38,7 @@ class Campu extends Model
     }
 
     //Relacion uno a muchos
-    public function campuUsers()
-    {
-        return $this->hasMany(Profile::class);
-    }
-
-    //Relacion uno a muchos
-    public function device()
+    public function devices()
     {
         return $this->hasMany(Device::class);
     }

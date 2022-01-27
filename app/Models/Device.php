@@ -27,4 +27,10 @@ class Device extends Model
     {
         return $this->belongsTo(Campu::class);
     }
+
+    //Relacion uno a uno
+    public function component()
+    {
+        return $this->hasOne(Component::class);
+    }
 }

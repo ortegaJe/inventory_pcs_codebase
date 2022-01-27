@@ -15,4 +15,9 @@ class Component extends Model
         'handset' => 'boolean',
         'power_adapter' => 'boolean',
     ];
+
+    public function device()
+    {
+        return $this->belongsTo(Device::class);
+    }
 }
