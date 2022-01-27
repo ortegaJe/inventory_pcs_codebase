@@ -703,7 +703,7 @@ class ReportController extends Controller
         //if ($request->file != "") {
         $file = $request->file('file_upload');
         $file_name = time() . '_' . $file->getClientOriginalName();
-        $img = \Image::make($file)->resize(300, 200);
+        $img = \Image::make($file)->resize(150, 100);
         $img->save(public_path($file_name), $x);
         //}
         /*         $validator = Validator::make($request->all(), [
