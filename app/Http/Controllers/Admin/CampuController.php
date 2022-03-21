@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isNull;
 
 class CampuController extends Controller
 {
@@ -62,24 +63,28 @@ class CampuController extends Controller
 
         $userId = $request->get('val-select2-lista-tecnicos');
 
-        //busca sede con usuario en null que concincida en el request $userId
-        $foundCampuId = CampuUser::select('campu_id', 'user_id', 'is_principal')
-            ->where('user_id', null)
+        //busca sede donde el valor del request coincida con el resultado de la variable $userId
+        $foundCampuId = DB::table('campu_users')->select('campu_id', 'user_id', 'is_principal')
             ->where('campu_id', $id)
             ->first();
 
-        //actualiza sede con nuevo usuario asignado
-        if ($foundCampuId) {
-            CampuUser::where('campu_id', $id)->first();
-
-            $update = array('user_id' => $userId, 'is_principal' => false, 'updated_at' => now('America/Bogota'));
-            CampuUser::where('campu_id', $id)->update($update);
+        if (isset($foundCampuId) === false) {
+            //inserta una nueva sede con usuario asignado
+            DB::table('campu_users')->insert([
+                'user_id'    => $userId,
+                'campu_id'   => $id,
+                'created_at' => now('America/Bogota')
+            ]);
 
             return back()->with('assigned', '');
-        }
-
-        //inserta una nueva sede con usuario asignado
-        CampuUser::insert(['user_id' => $userId, 'campu_id' => $id, 'created_at' => now('America/Bogota')]);
+        } else
+            //actualiza sede con nuevo usuario asignado
+            $update = array(
+                'user_id'      => $userId,
+                'is_principal' => false,
+                'updated_at'   => now('America/Bogota')
+            );
+        DB::table('campu_users')->where('campu_id', $id)->update($update);
 
         return back()->with('assigned', '');
     }
