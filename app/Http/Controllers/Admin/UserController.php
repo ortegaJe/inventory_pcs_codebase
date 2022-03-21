@@ -75,7 +75,7 @@ class UserController extends Controller
             //'sign' => 'image'
         ]);
 
-        $file_sign = $request->file('sign')->store('firma_tecnicos');
+        //$file_sign = $request->file('sign')->store('firma_tecnicos');
         $profile_user = $request->profile;
         $campu_user =  $request->campu;
         $is_principal = true;
@@ -109,7 +109,7 @@ class UserController extends Controller
         ]); */
 
         DB::insert(
-            "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [
                 $this->user->cc = $request->cc,
                 $this->user->name = $request->firstname,
@@ -121,7 +121,7 @@ class UserController extends Controller
                 $this->user->sex = $request->sex,
                 $this->user->phone_number = $request->phone,
                 $this->user->avatar = null,
-                $this->user->sign = $file_sign,
+                //$this->user->sign = $file_sign,
                 $this->user->email = $request->email,
                 $this->user->password = Hash::make($request['password']),
                 $this->user->created_at = now('America/Bogota'),
