@@ -94,11 +94,13 @@ Route::prefix('dashboard/inventario/reportes')->group(
 
         Route::get('mantenimientos', 'App\Http\Controllers\Admin\ReportController@indexReportMaintenance')->name('inventory.report.maintenance.index');
 
-        Route::get('mantenimientos/{id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportMaintenance')->name('inventory.report.maintenance.create');
+        Route::get('descargar-mantenimiento-sede', 'App\Http\Controllers\Admin\ReportController@downloadMtoCampu')->name('inventory.report.download.mto.campu');
+
+        Route::get('mantenimientos/{device_id}-{device_rowguid}', 'App\Http\Controllers\Admin\ReportController@createReportMaintenance')->name('inventory.report.maintenance.create');
 
         Route::post('guardar-reporte-de-mantenimiento', 'App\Http\Controllers\Admin\ReportController@storeReportMaintenance')->name('inventory.report.maintenance.store');
 
-        Route::get('mantenimiento-generado/{report_id}-{uuid}', 'App\Http\Controllers\Admin\ReportController@reportMaintenanceGenerated')->name('inventory.report.maintenance.generated');
+        Route::get('mantenimiento-generado/{report_id?}-{uuid?}', 'App\Http\Controllers\Admin\ReportController@reportMaintenanceGenerated')->name('inventory.report.maintenance.generated');
 
         Route::get('acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@indexReportDelivery')->name('inventory.report.delivery.index');
 

@@ -148,10 +148,10 @@
               <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" value="M">
               <label class="custom-control-label" for="example-inline-radio2">M</label>
             </div>
-            <div class="custom-control custom-radio custom-control-inline mb-5">
+            {{-- <div class="custom-control custom-radio custom-control-inline mb-5">
               <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio3" value="O">
               <label class="custom-control-label" for="example-inline-radio3">Otro</label>
-            </div>
+            </div> --}}
           </div>
         </div>
         <div class="form-group row">

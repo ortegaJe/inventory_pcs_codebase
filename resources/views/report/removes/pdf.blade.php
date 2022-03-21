@@ -7,7 +7,7 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
   <title>InventarioPC | Reporte generado</title>
   <meta name="generator" content="https://conversiontools.io" />
-  <meta name="author" content="juansanc" />
+  <meta name="author" content="Jefferson J. Ortega" />
   <meta name="created" content="2008-01-11T14:36:53" />
   <meta name="changedby" content="Jefferson Javier Ortega Pacheco" />
   <meta name="changed" content="2021-03-17T20:39:46" />

@@ -65,13 +65,10 @@ class ReportController extends Controller
             )
             ->where('cu.user_id', $user_id)
             ->where('devices.is_active', true)
-            ->where('devices.statu_id', [5])
+            ->whereIn('devices.statu_id', [2, 3, 5, 6, 7])
             ->searchRemove($serial_number)
             ->orderByDesc('devices.created_at')
             ->paginate(10);
-
-        //return response()->json($devices);
-
         return view('report.removes.index', compact('devices'));
     }
 
@@ -220,57 +217,143 @@ class ReportController extends Controller
     public function indexReportMaintenance(Request $request)
     {
         $user_id = Auth::id();
-
         $serial_number = $request->get('search');
 
-        $devices = Device::leftJoin('campus as c', 'c.id', 'devices.campu_id')
-            ->leftJoin('campu_users as cu', 'cu.campu_id', 'devices.campu_id')
-            ->leftJoin('calendar_maintenances as cm', 'cm.campu_id', 'devices.campu_id')
-            ->leftJoin('users as u', 'u.id', 'cu.user_id')
-            ->leftJoin('status as s', 's.id', 'devices.statu_id')
+        $devices = Report::rightJoin('report_maintenances as rm', 'rm.report_id', 'reports.id')
+            ->rightJoin('devices as d', 'd.id', 'reports.device_id')
+            ->rightJoin('type_devices as td', 'td.id', 'd.type_device_id')
+            ->rightJoin('campus as c', 'c.id', 'd.campu_id')
+            ->rightJoin('campu_users as cu', 'cu.campu_id', 'd.campu_id')
+            ->rightJoin('calendar_maintenances as cm', 'cm.campu_id', 'd.campu_id')
+            ->rightJoin('users as u', 'u.id', 'cu.user_id')
+            ->rightJoin('status as s', 's.id', 'd.statu_id')
             ->select(
-                'devices.inventory_code_number',
-                'devices.serial_number',
-                'devices.ip',
-                'devices.mac',
+                'd.id as device_id',
+                'd.inventory_code_number',
+                'd.serial_number',
+                'd.ip',
+                DB::raw("REPLACE(d.mac, '-', ':') as mac"),
                 'cu.campu_id',
                 'c.name as sede',
                 's.name as estado',
                 's.id as statu_id',
-                'devices.rowguid',
-                'devices.id as device_id',
-                'cm.maintenance_01_month',
-                'cm.maintenance_02_month'
+                'cm.maintenance_01_month as first_semester_month',
+                'cm.maintenance_02_month as second_semester_month',
+                DB::raw("CASE WHEN rm.report_id IS NULL THEN 0 
+                            ELSE 1 
+                                END AS mto_flag"),
+                DB::raw("CASE WHEN rm.report_id IS NULL THEN 'Pendiente' 
+                            ELSE 'Realizado' 
+                                END AS mto_statu"),
+                DB::raw("MONTHNAME(CONCAT(YEAR(CURRENT_DATE()),'-',cm.maintenance_01_month,'-',DAY(CURRENT_DATE()))) as MesPrimerSemestre"),
+                DB::raw("MONTHNAME(CONCAT(YEAR(CURRENT_DATE()),'-',cm.maintenance_02_month,'-',DAY(CURRENT_DATE()))) as MesSegundoSemestre"),
+                'reports.id as repo_id',
+                'reports.report_code_number',
+                'reports.rowguid as report_rowguid',
+                'd.rowguid as device_rowguid',
             )
             ->where('cu.user_id', $user_id)
-            ->where('devices.is_active', true)
-            ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8])
+            ->where('d.is_active', true)
+            ->whereIn('d.statu_id', [1, 2, 3, 5, 6, 7, 8])
+            ->whereIn('td.id', [1, 2, 3, 5]) // excepcion id de los tipos de dispositivos
             ->search($serial_number)
-            ->orderByDesc('devices.created_at')
+            ->orderByDesc('rm.report_id')
+            //->orderBy('mto_statu')
             ->paginate(10);
 
-        return view('report.maintenances.index', compact('devices'));
+        //return $devices;
+
+        $campu_users = Campu::leftJoin('campu_users as cu', 'cu.campu_id', 'campus.id')
+            ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->leftJoin('devices as d', 'd.campu_id', 'campus.id')
+            ->leftJoin('reports as r', 'r.device_id', 'd.id')
+            ->select(
+                'cu.campu_id',
+                'campus.name',
+            )
+            ->where('cu.user_id', $user_id)
+            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID,)
+            ->distinct('campus.name')
+            ->get();
+
+        //return $campu_users;
+
+        return view('report.maintenances.index', compact('devices', 'campu_users'));
     }
 
-    public function createReportMaintenance($id, $uuid)
+    public function downloadMtoCampu(Request $request)
     {
         $user_id = Auth::id();
-        $device = Device::findOrFail($id);
+        $campu_id = $request->get('campus');
+        //consulta si no existe el id de la sede en la table reportes enviar un modal
+        //con la alerta de que no existen reportes para esa sede
+
+        $request->validate([
+            'campus' => 'required',
+        ]);
+
+        if ($campu_id == 0) {
+            $generated_report_maintenance = DB::table('view_report_maintenances')
+                ->where('RepoNameID', Report::REPORT_MAINTENANCE_NAME_ID)
+                ->where('TecnicoID', $user_id)
+                ->get();
+        } else {
+            $generated_report_maintenance = DB::table('view_report_maintenances')
+                ->where('RepoNameID', Report::REPORT_MAINTENANCE_NAME_ID)
+                ->where('TecnicoID', $user_id)
+                ->where('SedeID', $campu_id)
+                ->get();
+        }
+
+        //return $generated_report_maintenance;
+
+        $pdf = PDF::loadView(
+            'report.maintenances.pdf',
+            [
+                'generated_report_maintenance' => $generated_report_maintenance,
+            ]
+        );
+
+        /*         //$tiempo_creacion = now()->toDateString();
+        $month_number = now()->isoformat('M');
+        if ($month_mto->FechaMto01Realizado == $month_number) {
+            $nombre_carpeta = 'pdf/mantenimientos/primer_semestre/' . Str::slug($month_mto->SedeEquipo) . '/';
+            $nombre_archivo = $report->report_code_number;
+            $extension = '.pdf';
+            $archivo = $nombre_archivo . $extension;
+            Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+        } elseif ($month_mto->FechaMto02Realizado == $month_number) {
+            $nombre_carpeta = 'pdf/mantenimientos/segundo_semestre/';
+            $nombre_archivo = $report->report_code_number;
+            $extension = '.pdf';
+            $archivo = $nombre_archivo . $extension;
+            Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+        } */
+
+        return $pdf->stream(Str::uuid() . ' - ' . time() . '.pdf');
+    }
+
+    public function createReportMaintenance($device_id, $device_rowguid)
+    {
+        $user_id = Auth::id();
+        $device = Device::findOrFail($device_id);
 
         $report_maintenances = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
             ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
+            ->leftJoin('campus as c', 'c.id', 'd.campu_id')
             ->select(
                 'r.report_code_number',
                 'r.id as repo_id',
-                'r.rowguid',
+                'r.rowguid as report_rowguid',
+                'd.rowguid as device_rowguid',
                 DB::raw("UPPER(rn.name) repo_name"),
                 'd.serial_number as serial_number',
-                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
+                'c.name as campu',
+                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') as date_created"),
                 DB::raw("DATE_FORMAT(rm.maintenance_01_date, '%c') as FechaMto01Realizado"),
                 DB::raw("DATE_FORMAT(rm.maintenance_02_date, '%c') as FechaMto02Realizado"),
-
             )
             ->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
@@ -280,82 +363,6 @@ class ReportController extends Controller
             ->get();
 
         //return $report_maintenances;
-
-        /*         $count_device_id_on_reports = Device::where('devices.id', $device->id)
-            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
-            ->where('cm.maintenance_01_month', now()->isoformat('M'))
-            ->orWhere('cm.maintenance_02_month', now()->isoformat('M'))
-            ->groupBy('DeviceID')
-            ->having(DB::raw("COUNT(*)"), '>=', 1)
-            ->leftJoin('calendar_maintenances as cm', 'cm.campu_id', 'devices.campu_id')
-            ->leftJoin('reports as r', 'r.device_id', 'devices.id')
-            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
-            ->select(
-                //'cm.id as CalendarMtoID',
-                //'devices.campu_id',
-                'r.device_id as DeviceID',
-                //'r.report_name_id as RpName',
-                //'cm.maintenance_01_month',
-                //'cm.maintenance_02_month',
-                DB::raw("COUNT(*) as CountDeviceID"),
-            )
-            ->count();
-
-        //return $count_device_id_on_reports; */
-
-        /*         $month_number_mto = Device::where('devices.id', $device->id)
-            ->leftJoin('calendar_maintenances', 'calendar_maintenances.campu_id', 'devices.campu_id')
-            ->where('calendar_maintenances.campu_id', $campu->campuID)
-            ->select(
-                'calendar_maintenances.id as CalendarMtoID',
-                'calendar_maintenances.maintenance_01_month',
-                'calendar_maintenances.maintenance_02_month'
-            )
-            ->first();
-
-        $month_number = now()->isoformat('M');
-        if ($month_number_mto->maintenance_01_month == $month_number) {
-            $report_maintenances = DB::table('reports as r')
-                ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
-                ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
-                ->leftJoin('devices as d', 'd.id', 'r.device_id')
-                ->select(
-                    'r.report_code_number',
-                    'r.id as repo_id',
-                    'r.rowguid',
-                    DB::raw("UPPER(rn.name) repo_name"),
-                    'd.serial_number as serial_number',
-                    DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
-                )
-                ->where('r.user_id', $user_id)
-                ->where('r.device_id', $device->id)
-                ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
-                ->whereRaw("DATE_FORMAT(r.created_at,'%c') = '{$month_number}'")
-                ->orderByDesc('r.created_at')
-                ->get();
-        } else if ($month_number_mto->maintenance_02_month == $month_number) {
-            $report_maintenances = DB::table('reports as r')
-                ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
-                ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
-                ->leftJoin('devices as d', 'd.id', 'r.device_id')
-                ->select(
-                    'r.report_code_number',
-                    'r.id as repo_id',
-                    'r.rowguid',
-                    DB::raw("UPPER(rn.name) repo_name"),
-                    'd.serial_number as serial_number',
-                    DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
-                )
-                ->where('r.user_id', $user_id)
-                ->where('r.device_id', $device->id)
-                ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
-                ->whereRaw("DATE_FORMAT(r.created_at,'%c') = '{$month_number}'")
-                ->orderByDesc('r.created_at')
-                ->take(1)
-                ->get();
-        } else {
-            return redirect()->route('inventory.error');
-        } */
 
         $data = [
             'device' => $device,
@@ -370,12 +377,13 @@ class ReportController extends Controller
         $user_id = Auth::id();
         $device_id = $request->device_id;
         $campu_id = $request->campu_id;
-        $observation = $request->observation;
+        $description = $request->description;
 
         $found_campu_calendar_mto_id = Device::where('devices.id', $device_id)
             ->leftJoin('calendar_maintenances', 'calendar_maintenances.campu_id', 'devices.campu_id')
             ->where('devices.campu_id', $campu_id)
             ->select(
+                'devices.serial_number',
                 'calendar_maintenances.id as CalendarMtoID',
                 'calendar_maintenances.maintenance_01_month',
                 'calendar_maintenances.maintenance_02_month'
@@ -383,9 +391,9 @@ class ReportController extends Controller
 
         $month_number = now()->isoformat('M');
 
-        //return ($found_campu_calendar_mto_id);
-
-        /*         $rules = [];
+        $rules = [
+            'description' => 'required',
+        ];
 
         $messages = [];
 
@@ -400,45 +408,47 @@ class ReportController extends Controller
                     'modal',
                     'error'
                 );
-        else : */
-        if ($found_campu_calendar_mto_id->maintenance_01_month == $month_number) {
-            $this->report->report_code_number = $this->generatorID;
-            $this->report->report_name_id = Report::REPORT_MAINTENANCE_NAME_ID;
-            $this->report->device_id = $device_id;
-            $this->report->user_id = $user_id;
-            $this->report->rowguid = Uuid::uuid();
-            $this->report->created_at = now('America/Bogota');
+        else :
+            if ($found_campu_calendar_mto_id->maintenance_01_month == $month_number) {
+                $this->report->report_code_number = $this->generatorID;
+                $this->report->report_name_id = Report::REPORT_MAINTENANCE_NAME_ID;
+                $this->report->device_id = $device_id;
+                $this->report->user_id = $user_id;
+                $this->report->rowguid = Uuid::uuid();
+                $this->report->created_at = now('America/Bogota');
 
-            $this->report->save();
+                $this->report->save();
 
-            $this->report_maintenance->report_id = $this->report->id;
-            $this->report_maintenance->maintenance_01_date = now('America/Bogota');
-            $this->report_maintenance->maintenance_01_observation = $observation;
-            $this->report_maintenance->calendar_maintenance_id = $found_campu_calendar_mto_id->CalendarMtoID;
+                $this->report_maintenance->report_id = $this->report->id;
+                $this->report_maintenance->maintenance_01_date = now('America/Bogota');
+                $this->report_maintenance->maintenance_01_observation = $description;
+                $this->report_maintenance->calendar_maintenance_id = $found_campu_calendar_mto_id->CalendarMtoID;
 
-            $this->report_maintenance->save();
-        } elseif ($found_campu_calendar_mto_id->maintenance_02_month == $month_number) {
-            $last_report_mto = Report::where('reports.device_id', $device_id)
-                ->where('user_id', $user_id)
-                ->where('reports.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
-                ->orderByDesc('reports.created_at')
-                ->first();
+                $this->report_maintenance->save();
+            } elseif ($found_campu_calendar_mto_id->maintenance_02_month == $month_number) {
+                $last_report_mto = Report::where('reports.device_id', $device_id)
+                    ->where('user_id', $user_id)
+                    ->where('reports.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+                    ->orderByDesc('reports.created_at')
+                    ->first();
 
-            $update = array('maintenance_02_date' => now('America/Bogota'), 'maintenance_02_observation' => $observation);
-            DB::table('report_maintenances')
-                ->where('report_id', $last_report_mto->id)
-                ->update($update);
-        } else {
-            return redirect()->route('inventory.error', 404);
-        }
+                $update = array('maintenance_02_date' => now('America/Bogota'), 'maintenance_02_observation' => $description);
+                DB::table('report_maintenances')
+                    ->where('report_id', $last_report_mto->id)
+                    ->update($update);
+            } else {
+                return redirect()->route('inventory.error', 404);
+            }
 
-        return back();
+            //return response()->json(array('success' => true, $this->report, 'report', 'report_maintenances' =>  $this->report_maintenance, 'last_insert_id' => $this->report_maintenance->report_id), 200);
 
-        //return response()->json(array('success' => true, $this->report, 'report', 'report_maintenances' =>  $this->report_maintenance, 'last_insert_id' => $this->report_maintenance->report_id), 200);
-
-        /*             return back()->withErrors($validator)
-                ->with('report_created', 'Reporte ' . $this->report->report_code_number . '');
-        endif; */
+            return redirect()->route('inventory.report.maintenance.index')->withErrors($validator)
+                ->with(
+                    'report_created',
+                    'Codigo del Reporte: ' . $this->report->report_code_number . '<br>' .
+                        ' Serial del Equipo: ' . $found_campu_calendar_mto_id->serial_number . ''
+                );
+        endif;
     }
 
     public function reportMaintenanceGenerated($report_id, $uuid)
@@ -453,6 +463,7 @@ class ReportController extends Controller
             ->select(
                 DB::raw("DATE_FORMAT(FechaMto01Realizado, '%c') as FechaMto01Realizado"),
                 DB::raw("DATE_FORMAT(FechaMto02Realizado, '%c') as FechaMto02Realizado"),
+                'SedeEquipo',
             )->first();
 
         $generated_report_maintenance = DB::table('view_report_maintenances')
@@ -472,13 +483,13 @@ class ReportController extends Controller
         //$tiempo_creacion = now()->toDateString();
         $month_number = now()->isoformat('M');
         if ($month_mto->FechaMto01Realizado == $month_number) {
-            $nombre_carpeta = 'pdf/mantenimientos/primer_semestre/';
+            $nombre_carpeta = 'pdf/mantenimientos/primer-semestre/' . Str::slug($month_mto->SedeEquipo) . '/';
             $nombre_archivo = $report->report_code_number;
             $extension = '.pdf';
             $archivo = $nombre_archivo . $extension;
             Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         } elseif ($month_mto->FechaMto02Realizado == $month_number) {
-            $nombre_carpeta = 'pdf/mantenimientos/segundo_semestre/';
+            $nombre_carpeta = 'pdf/mantenimientos/segundo-semestre/';
             $nombre_archivo = $report->report_code_number;
             $extension = '.pdf';
             $archivo = $nombre_archivo . $extension;

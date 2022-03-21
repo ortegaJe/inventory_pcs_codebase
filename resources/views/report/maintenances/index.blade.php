@@ -7,6 +7,42 @@
   <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
   <span class="breadcrumb-item active">Mantenimientos</span>
 </nav>
+{{-- <div class="row gutters-tiny">
+  <!-- Row #1 -->
+  <div class="col-md-3 col-xl-2">
+    <a style="cursor:default" class="block" href="javascript:void(0)">
+      <div class="block-content block-content-full">
+        <div class="py-20 text-center">
+          <div class="js-pie-chart pie-chart mb-20" data-percent="45" data-line-width="6" data-size="100"
+            data-bar-color="#9ccc65" data-track-color="#e9e9e9">
+            <span>
+              <img class="img-avatar" src="assets/media/avatars/avatar15.jpg" alt="">
+            </span>
+          </div>
+          <div class="font-size-h3 font-w600">45 Realizados</div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">/100</div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-3 col-xl-2">
+    <a style="cursor:default" class="block" href="javascript:void(0)">
+      <div class="block-content block-content-full">
+        <div class="py-20 text-center">
+          <div class="js-pie-chart pie-chart mb-20" data-percent="75" data-line-width="6" data-size="100"
+            data-bar-color="#ffca28" data-track-color="#e9e9e9">
+            <span>
+              <img class="img-avatar" src="assets/media/avatars/avatar8.jpg" alt="">
+            </span>
+          </div>
+          <div class="font-size-h3 font-w600">64 Pendientes</div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">/36</div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <!-- END Row #1 -->
+</div> --}}
 <!-- Orders -->
 <div class="content-heading">
   {{--<div class="dropdown float-right">
@@ -71,110 +107,109 @@
               <i class="fa fa-search"></i>
             </button>
           </div>
-          <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top"
-            title="Actualizar lista" onclick="window.location='{{ route('inventory.report.maintenance.index') }}'">
-            <i class="si si-reload"></i>
-          </button>
-        </div>
-      </div>
     </form>
-    <!-- END Search -->
+    <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="tooltip" data-placement="top"
+      title="Actualizar lista" onclick="window.location='{{ route('inventory.report.maintenance.index') }}'">
+      <i class="si si-reload"></i>
+    </button>
+    @include('report.maintenances.partials.modal_download_mto')
+    <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="modal" data-target="#modal-download-all"
+      title="">
+      <i class="fa fa-download"></i>
+    </button>
   </div>
-  <div class="block-content">
-    <!-- Device Table -->
-    <table class="table table-borderless table-striped">
-      <thead>
-        <tr>
-          <th style="width: 100px;">CODIGO</th>
-          <th style="width: 100px;">SERIAL</th>
-          <th class="d-none d-sm-table-cell">IP</th>
-          <th class="d-none d-sm-table-cell">MAC</th>
-          <th class="d-none d-sm-table-cell">SEDE</th>
-          <th class="d-none d-sm-table-cell text-center">ESTADO</th>
-          <th class="d-none d-sm-table-cell text-center">ACCIONES</th>
+</div>
+<!-- END Search -->
+</div>
+<div class="block-content">
+  <!-- Device Table -->
+  <table class="table table-borderless table-striped">
+    <thead>
+      <tr>
+        <th style="width: 100px;">CODIGO</th>
+        <th style="width: 100px;">SERIAL</th>
+        <th class="d-none d-sm-table-cell">IP</th>
+        <th class="d-none d-sm-table-cell">MAC</th>
+        <th class="d-none d-sm-table-cell">SEDE</th>
+        <th class="d-none d-sm-table-cell text-center">ESTADO DE MANTENIMIENTO</th>
+        <th class="d-none d-sm-table-cell text-center">ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody style="font-size: 14px">
+      @if(count($devices) <= 0) <tr>
+        <td colspan="7" class="text-center">SERIAL NO ENCONTRADO!
+          <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip" data-placement="top"
+            title="Nueva busqueda" onclick="window.location='{{ route('inventory.report.maintenance.index') }}'">
+            <i class="fa fa-search"></i>
+          </button>
+        </td>
         </tr>
-      </thead>
-      <tbody style="font-size: 14px">
-        @if(count($devices) <= 0) <tr>
-          <td colspan="7" class="text-center">SERIAL NO ENCONTRADO!
-            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip" data-placement="top"
-              title="Nueva busqueda" onclick="window.location='{{ route('inventory.report.maintenance.index') }}'">
-              <i class="fa fa-search"></i>
-            </button>
+        @else
+        @foreach($devices as $device)
+        <tr>
+          <td class="d-none d-sm-table-cell">
+            {{ $device->inventory_code_number }}
           </td>
-          </tr>
-          @else
-          @foreach($devices as $device)
-          <tr>
-            <td class="d-none d-sm-table-cell">
-              {{ $device->inventory_code_number }}
-            </td>
-            <td class="d-none d-sm-table-cell">
-              {{ $device->serial_number }}
-            </td>
-            <td class="d-none d-sm-table-cell">
-              {{ $device->ip }}
-            </td>
-            <td class="d-none d-sm-table-cell">
-              {{ $device->mac }}
-            </td>
-            <td class="d-none d-sm-table-cell">
-              {{ $device->sede }}
-            </td>
-            <td class="d-none d-sm-table-cell text-center">
-              @if($device->statu_id == 1)
-              <span class="badge badge-success btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 2)
-              <span class="badge badge-warning btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 3)
-              <span class="badge badge-info btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 5)
-              <span class="badge badge-secondary btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 6)
-              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 7)
-              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 8)
-              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 9)
-              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
-              @elseif($device->statu_id == 10)
-              <span class="badge badge-primary btn-block">{{ Str::title($device->estado) }}</span>
+          <td class="d-none d-sm-table-cell">
+            {{ $device->serial_number }}
+          </td>
+          <td class="d-none d-sm-table-cell">
+            {{ $device->ip }}
+          </td>
+          <td class="d-none d-sm-table-cell">
+            {{ $device->mac }}
+          </td>
+          <td class="d-none d-sm-table-cell">
+            {{ $device->sede }}
+          </td>
+          <td class="d-none d-sm-table-cell text-center">
+            {{-- <span class="badge badge-success btn-block">
+              {{Str::title(\Carbon\Carbon::parse($device->MesPrimerSemestre)->formatLocalized('%B')) }}
+            </span> --}}
+            @if($device->mto_flag === 0)
+            <span class="badge badge-warning">
+              <i class="fa fa-exclamation-circle"></i>
+              {{ $device->mto_statu }}
+            </span>
+            @elseif($device->mto_flag === 1)
+            <span class="badge badge-success">
+              <i class="fa fa-check"></i>
+              {{ $device->mto_statu }}
+            </span>
+            @endif
+          </td>
+          <td class="d-none d-sm-table-cell text-center">
+            <div class="btn-group">
+              @if($device->first_semester_month == now()->isoformat('M'))
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
+                href="{{ route('inventory.report.maintenance.create', [$device->device_id, $device->device_rowguid]) }}">
+                <i class="fa fa-file-text-o"></i>
+              </a>
+              @elseif($device->second_semester_month == now()->isoformat('M'))
+              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
+                href="{{ route('inventory.report.maintenance.create', [$device->device_id, $device->device_rowguid]) }}">
+                <i class="fa fa-file-text-o"></i>
+              </a>
+              @else
+              <button type="button" class="btn btn-sm btn-alt-secondary" disabled>
+                <i class="fa fa-file-text-o"></i>
+              </button>
               @endif
-            </td>
-            <td class="d-none d-sm-table-cell text-center">
-              <div class="btn-group">
-                @if($device->maintenance_01_month == now()->isoformat('M'))
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
-                  href="{{ route('inventory.report.maintenance.create', [$device->device_id, $device->rowguid]) }}">
-                  <i class="fa fa-file-text-o"></i>
-                </a>
-                @elseif($device->maintenance_02_month == now()->isoformat('M'))
-                <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
-                  href="{{ route('inventory.report.maintenance.create', [$device->device_id, $device->rowguid]) }}">
-                  <i class="fa fa-file-text-o"></i>
-                </a>
-                @else
-                <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="tooltip"
-                  title="Proximo mantenimiento es..." href="#" disabled>
-                  <i class="fa fa-file-text-o"></i>
-                </button>
-                @endif
-              </div>
-            </td>
-          </tr>
-          @endforeach
-          @endif
-      </tbody>
-    </table>
-    <nav aria-label="navigation">
-      <ul class="pagination justify-content-end">
-        {!! $devices->links("pagination::bootstrap-4") !!}
-      </ul>
-    </nav>
-    <!-- END Orders Table -->
+            </div>
+          </td>
+        </tr>
+        @endforeach
+        @endif
+    </tbody>
+  </table>
+  <nav aria-label="navigation">
+    <ul class="pagination justify-content-end">
+      {!! $devices->links("pagination::bootstrap-4") !!}
+    </ul>
+  </nav>
+  <!-- END Orders Table -->
 
-    <!-- Navigation 
+  <!-- Navigation 
         <nav aria-label="Orders navigation">
             <ul class="pagination justify-content-end">
                 <li class="page-item">
@@ -211,11 +246,32 @@
             </ul>
         </nav>
          END Navigation -->
-  </div>
+</div>
 </div>
 <!-- END Device -->
 @endsection
 
 @push('js')
+<!-- Page JS Plugins -->
+<script src="{{ asset('/js/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
 
+<!-- Page JS Code -->
+<script src="{{ asset('/js/pages/be_widgets_stats.min.js') }}"></script>
+
+<!-- Page JS Helpers (Easy Pie Chart Plugin) -->
+<script>
+  jQuery(function(){ Codebase.helpers('easy-pie-chart'); });
+</script>
+
+@if(Session::has('report_created'))
+<script>
+  Swal.fire(
+      'Reporte creado con Exito!',
+      '{!! Session::get('report_created') !!}',
+      'success'
+    )
+</script>
+@endif
 @endpush

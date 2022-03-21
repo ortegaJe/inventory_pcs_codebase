@@ -22,16 +22,16 @@
                 <div class="form-row">
                   <div class="col-md-12">
                     <div class="form-material">
-                      <textarea class="js-maxlength form-control" id="observation" name="observation" rows="3"
-                        maxlength="255" placeholder="Escriba aqui una observación" data-always-show="true"
+                      <textarea class="js-maxlength form-control" id="description" name="description" rows="3"
+                        maxlength="255" placeholder="Escriba aqui el mantenimiento realizado" data-always-show="true"
                         data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-warning"
                         onkeyup="javascript:this.value=this.value.toUpperCase();"
-                        value="{{ old('observation') }}"></textarea>
-                      <label for="observation">Tarea realizada</label>
+                        value="{{ old('description') }}"></textarea>
+                      <label for="description">Descripción del mantenimiento</label>
                     </div>
                   </div>
-                  @if($errors->has('observation'))
-                  <small class="text-danger is-invalid">{{ $errors->first('observation') }}</small>
+                  @if($errors->has('description'))
+                  <small class="text-danger is-invalid">{{ $errors->first('description') }}</small>
                   @endif
                 </div>
               </div>

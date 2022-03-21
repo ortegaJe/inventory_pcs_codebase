@@ -12,9 +12,11 @@
   <div class="content-heading">
     @include('report.maintenances.partials.modal')
     Reporte Mantenimientos <small class="d-none d-sm-inline">Serial Equipo: {{ $device->serial_number }}</small>
-    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-mto">
+    @if(count($report_maintenances) < 1) <button type="button" class="btn btn-sm btn-alt-success float-right"
+      data-toggle="modal" data-target="#modal-mto">
       <i class="fa fa-plus text-success mr-5"></i>Generar
-    </button>
+      </button>
+      @endif
   </div>
   <!-- Device Table -->
   <div class="block block-rounded">
@@ -49,17 +51,17 @@
               <div class="btn-group">
                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
                   @if($repo->FechaMto01Realizado == now()->isoformat('M'))
-                  @if(Storage::exists('pdf/mantenimientos/primer_semestre/'.$repo->report_code_number.'.pdf'))
-                  href="{{ Storage::url('pdf/mantenimientos/primer_semestre/'.$repo->report_code_number.'.pdf') }}"
+                  @if(Storage::exists('pdf/mantenimientos/primer-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf'))
+                  href="{{Storage::url('pdf/mantenimientos/primer-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf')}}"
                   @else
-                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->rowguid]) }}"
+                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->report_rowguid]) }}"
                   @endif
                   @endif
                   @if($repo->FechaMto02Realizado == now()->isoformat('M'))
-                  @if(Storage::exists('pdf/mantenimientos/segundo_semestre/'.$repo->report_code_number.'.pdf'))
-                  href="{{ Storage::url('pdf/mantenimientos/segundo_semestre/'.$repo->report_code_number.'.pdf') }}"
+                  @if(Storage::exists('pdf/mantenimientos/segundo-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf'))
+                  href="{{Storage::url('pdf/mantenimientos/segundo-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf')}}"
                   @else
-                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->rowguid]) }}"
+                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->report_rowguid]) }}"
                   @endif
                   @endif
                   target="_blank">
@@ -91,16 +93,5 @@
       Codebase.helpers(['maxlength']);
     });
 </script>
-
-@if(Session::has('report_created'))
-<script>
-  Swal.fire(
-      'Reporte creado con Exito!',
-      '{!! Session::get('
-      report_created ') !!}',
-      'success'
-    )
-</script>
-@endif
 
 @endpush

@@ -201,11 +201,11 @@
                             {{$users->sex == 'M' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio2">M</label>
                     </div>
-                    <div class="custom-control custom-radio custom-control-inline mb-5">
+                    {{-- <div class="custom-control custom-radio custom-control-inline mb-5">
                         <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio3" disabled
                             {{$users->sex == 'O' ? 'checked' : ''}}>
                         <label class="custom-control-label" for="example-inline-radio3">Otro</label>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             @if ($users->sign == '')
@@ -229,9 +229,10 @@
             @include('user.profiles.partials.modal')
             <label>Firma:</label>
             <div class="row gutters-tiny items-push">
-                <div class="col-sm-6 col-xl-4">
+                <div class="col-sm-2 col-xl-2">
                     <div class="options-container">
-                        <img class="img-fluid options-item" src="{{ Storage::url($users->sign) }}" alt="">
+                        <img class="img-fluid options-item" src="{{ Storage::url($users->sign) }}"
+                            alt="{{ Storage::url($users->sign) }}">
                         <div class="options-overlay bg-black-op">
                             <div class="options-overlay-content">
                                 <button type="button" class="btn btn-sm btn-rounded btn-alt-success min-width-75"
