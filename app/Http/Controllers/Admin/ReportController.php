@@ -330,7 +330,7 @@ class ReportController extends Controller
             Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         } */
 
-        return $pdf->stream(Str::uuid() . ' - ' . time() . '.pdf');
+        return $pdf->download(Str::uuid() . '-' . time() . '.pdf');
     }
 
     public function createReportMaintenance($device_id, $device_rowguid)
