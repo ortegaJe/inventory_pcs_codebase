@@ -94,4 +94,14 @@
     });
 </script>
 
+@if(Session::has('report_created'))
+<script>
+  Swal.fire(
+      'Reporte creado con Exito!',
+      '{!! Session::get('report_created') !!}',
+      'success'
+    )
+</script>
+@endif
+
 @endpush

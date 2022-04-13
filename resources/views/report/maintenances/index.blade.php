@@ -112,11 +112,11 @@
       title="Actualizar lista" onclick="window.location='{{ route('inventory.report.maintenance.index') }}'">
       <i class="si si-reload"></i>
     </button>
-    {{-- @include('report.maintenances.partials.modal_download_mto')
+    @include('report.maintenances.partials.modal_download_mto')
     <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="modal" data-target="#modal-download-all"
       title="">
       <i class="fa fa-download"></i>
-    </button> --}}
+    </button>
   </div>
 </div>
 <!-- END Search -->

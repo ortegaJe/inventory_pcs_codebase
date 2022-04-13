@@ -442,12 +442,8 @@ class ReportController extends Controller
 
             //return response()->json(array('success' => true, $this->report, 'report', 'report_maintenances' =>  $this->report_maintenance, 'last_insert_id' => $this->report_maintenance->report_id), 200);
 
-            return redirect()->route('inventory.report.maintenance.index')->withErrors($validator)
-                ->with(
-                    'report_created',
-                    'Codigo del Reporte: ' . $this->report->report_code_number . '<br>' .
-                        ' Serial del Equipo: ' . $found_campu_calendar_mto_id->serial_number . ''
-                );
+            return back()->withErrors($validator)
+                ->with('report_created', '');
         endif;
     }
 

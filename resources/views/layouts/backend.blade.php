@@ -257,7 +257,6 @@
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
                     </li>
-                    @endcan
                   </ul>
                 </li>
               </ul>
@@ -269,6 +268,7 @@
                   </a>
                 </li>
               </ul>
+              @endcan
             </li>
           </ul>
         </div>
