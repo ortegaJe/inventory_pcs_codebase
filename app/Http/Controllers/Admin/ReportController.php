@@ -330,13 +330,25 @@ class ReportController extends Controller
             Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
         } */
 
-        return $pdf->download(Str::uuid() . '-' . time() . '.pdf');
+        return $pdf->stream(Str::uuid() . '-' . time() . '.pdf');
     }
 
     public function createReportMaintenance($device_id, $device_rowguid)
     {
         $user_id = Auth::id();
         $device = Device::findOrFail($device_id);
+
+        $test = DB::table('reports as r')
+            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+            ->leftJoin('report_maintenances as rm', 'rm.report_id', 'r.id')
+            ->select(
+                DB::raw("DATE_FORMAT(rm.maintenance_01_date, '%c') as FechaMto01Realizado"),
+                DB::raw("DATE_FORMAT(rm.maintenance_02_date, '%c') as FechaMto02Realizado"),
+            )
+            ->where('r.user_id', $user_id)
+            ->where('r.device_id', $device->id)
+            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+            ->first();
 
         $report_maintenances = DB::table('reports as r')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
@@ -367,6 +379,7 @@ class ReportController extends Controller
         $data = [
             'device' => $device,
             'report_maintenances' => $report_maintenances,
+            'test' => $test,
         ];
 
         return view('report.maintenances.create')->with($data);

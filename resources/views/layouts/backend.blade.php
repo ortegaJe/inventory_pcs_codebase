@@ -50,6 +50,7 @@
 </head>
 
 <body>
+  @auth
   <div id="page-loader" class="bg-gd-sea show"></div>
   <div id="page-container"
     class="sidebar-o enable-page-overlay side-scroll page-header-enabled side-trans-enabled sidebar-inverse enable-cookies">
@@ -444,6 +445,7 @@
     <!-- END Main Container -->
   </div>
   <!-- END Page Container -->
+  @endauth
 
   <!--
             Codebase JS Core
