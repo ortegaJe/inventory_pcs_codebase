@@ -1,14 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Usuario ' .Str::lower($users->nick_name))
-
-@section('css')
-<style>
-  .lower-txt {
-    text-transform: lowercase;
-  }
-</style>
-@endsection
+@section('title', 'Técnico ' .$users->nick_name)
 
 @section('content')
 <!-- Hero -->

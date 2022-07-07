@@ -12,6 +12,12 @@
         <i class="fa fa-search"></i>
       </button>
     </div>
+    <div class="input-group-append">
+      <button type="button" class="btn btn-secondary"
+        onclick="window.location='{{ route('admin.inventory.technicians.index') }}'">
+        <i class="si si-reload"></i>
+      </button>
+    </div>
   </div>
 </form>
 
@@ -20,7 +26,7 @@
   <div class="dropdown float-right">
     <button type="button" onclick="window.location='{{ route('admin.inventory.technicians.create') }}'"
       class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple">
-      <i class="si si-user"></i> Nuevo Usuario
+      <i class="si si-user"></i> Nuevo técnico
     </button>
   </div>
   Usuarios <small class="d-none d-sm-inline">Técnicos</small>
@@ -79,7 +85,7 @@
             <a class="dropdown-item" href="javascript:void(0)">
               <i class="fa fa-cog mr-5"></i>Configuraciones
             </a>
-            {{--  <a class="dropdown-item" href="javascript:void(0)">
+            {{-- <a class="dropdown-item" href="javascript:void(0)">
               <i class="fa fa-fw fa-user mr-5"></i>Check out profile
             </a>
             <div class="dropdown-divider"></div>
@@ -114,7 +120,7 @@
 </script>
 @endif
 
-{{--  <script>
+{{-- <script>
   let route = "{{ route('admin.inventory.users.search') }}";
 
 $('#search').typeahead({
@@ -126,6 +132,6 @@ return process(data);
 });
 }
 });
-</script>--}}
+</script> --}}
 
 @endpush

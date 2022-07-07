@@ -48,22 +48,24 @@ class UserController extends Controller
     {
         $queryName = $request->get('search');
 
-        $filterResult = User::where('name', 'LIKE', '%' . $queryName . '%')->get();
+        $filterResult = DB::table('users')->where('cc', 'LIKE', '%' . $queryName . '%')->get();
+
+        //error_log(__LINE__ . __METHOD__ . ' usuario --->' . var_export($filterResult, true));
 
         return response()->json($filterResult);
     }
 
     public function create()
     {
-        $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'name')->get();
+        $profiles = Profile::orderBy('name')->get(['id', 'name']);
+        $campus = Campu::orderBy('abreviature')->get(['id', 'name']);
 
         return view('admin.users.create', compact('profiles', 'campus'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        /*         $request->validate([
             'cc' => 'required|unique:users,cc',
             'lastname' => 'required|unique:users,last_name',
             'nickname' => 'required|unique:users,nick_name',
@@ -73,63 +75,37 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             //'sign' => 'image'
-        ]);
-
-        //$file_sign = $request->file('sign')->store('firma_tecnicos');
-        $profile_user = $request->profile;
-        $campu_user =  $request->campu;
-        $is_principal = true;
-
-        /*         try {
-            $this->user->cc = $request->cc;
-            $this->user->name = $request->firstname;
-            $this->user->middle_name = $request->middlename;
-            $this->user->last_name = $request->lastname;
-            $this->user->second_last_name = $request->second_lastname;
-            $this->user->nick_name = $request->nickname;
-            $this->user->birthday = $request->birthday;
-            $this->user->sex = $request->sex;
-            $this->user->phone_number = $request->phone;
-            $this->user->avatar = null;
-            $this->user->sign = $url;
-            $this->user->email = $request->email;
-            $this->user->password = Hash::make($request['password']);
-            $this->user->created_at = now('America/Bogota');
-            $this->profile->profile_id = $profile_user;
-            $this->campu->campu_id = $campu_user;
-            $this->campu->is_principal = $is_principal;
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error' . $e]);
-        }
-        return response()->json([
-            'message' => 'Success',
-            'user' => $this->user,
-            'campu' => $this->campu,
-            'profile' => $this->profile
         ]); */
 
-        DB::insert(
-            "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [
-                $this->user->cc = $request->cc,
-                $this->user->name = $request->firstname,
-                $this->user->middle_name = $request->middlename,
-                $this->user->last_name = $request->lastname,
-                $this->user->second_last_name = $request->second_lastname,
-                $this->user->nick_name = $request->nickname,
-                $this->user->birthday = $request->birthday,
-                $this->user->sex = $request->sex,
-                $this->user->phone_number = $request->phone,
-                $this->user->avatar = null,
-                //$this->user->sign = $file_sign,
-                $this->user->email = $request->email,
-                $this->user->password = Hash::make($request['password']),
-                $this->user->created_at = now('America/Bogota'),
-                $this->profile_user->profile_id = $profile_user,
-                $this->campu_user->campu_id = $campu_user,
-                $this->campu_user->is_principal = $is_principal,
-            ]
-        );
+        //$file_sign = $request->file('sign')->store('firma_tecnicos');
+        $campu_user =  $request->campu;
+        //$profile_user = $request->profile;
+
+        $user = User::create($request->except('campu', 'profile', 'password2'));
+
+        $q = $user->profile()->sync([1]);
+
+        return $q;
+
+        try {
+            $user = User::create($request->except(['campu', 'password2']));
+
+            /*             $campu = CampuUser::create([
+                'user_id' => $user->id,
+                'campu_id' => $campu_user,
+            ]); */
+
+            $q = $user->profile()->sync($request->profile);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error' . $th]);
+        }
+
+        return response()->json([
+            'message' => 'Success',
+            'new_user' => $user,
+            //'campu' => $campu,
+            'profile' => $q,
+        ]);
 
         return redirect()->route('admin.inventory.technicians.index')
             ->with('user_created', 'Usuario creado con éxito!');

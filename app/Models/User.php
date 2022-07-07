@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -19,18 +20,14 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
+    protected $guarded = [];
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
+        'id',
         'password',
         'remember_token',
     ];
@@ -44,10 +41,55 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    //Relacion uno a muchos
-    public function profiles()
+    public function getNameAttribute()
     {
-        return $this->hasMany(Profile::class);
+        return ucwords($this->attributes['name']);
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower($value);
+    }
+
+    public function setMiddleNameAttribute($value)
+    {
+        $this->attributes['middle_name'] = strtolower($value);
+    }
+
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = strtolower($value);
+    }
+
+    public function setSecondLastNameAttribute($value)
+    {
+        $this->attributes['second_last_name'] = strtolower($value);
+    }
+
+    public function setNickNameAttribute($value)
+    {
+        $this->attributes['nick_name'] = strtolower($value);
+    }
+
+    public function setSexAttribute($value)
+    {
+        $this->attributes['sex'] = strtolower($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
+
+    protected function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = hash::make($password);
+    }
+
+    //Relacion uno a uno
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
     }
 
     //Relacion uno a muchos
@@ -73,7 +115,7 @@ class User extends Authenticatable
         return $query->join('campu_users', 'users.id', '=', 'campu_users.user_id')
             ->join('campus', 'campu_users.campu_id', '=', 'campus.id')
             ->where('campu_users.is_principal', true)
-            ->orderBy('users.name', 'asc')
+            ->orderBy('users.id', 'desc')
             ->paginate(8);
     }
 }

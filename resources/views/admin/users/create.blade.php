@@ -1,14 +1,9 @@
 @extends('layouts.backend')
 
-@section('title', 'Nuevo tecnico')
+@section('title', 'Nuevo técnico')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('/js/plugins/flatpickr/flatpickr.min.css') }}">
-<style>
-  .lower-txt {
-    text-transform: lowercase;
-  }
-</style>
 
 @section('content')
 
@@ -17,7 +12,7 @@
   <div class="block pull-r-l">
     <div class="block-header bg-gray-light">
       <h3 class="block-title">
-        <i class="si si-user fa-2x font-size-default mr-5"></i>Crear Usuario
+        <i class="si si-user fa-2x font-size-default mr-5"></i>Crear técnico
       </h3>
       <div class="block-options">
       </div>
@@ -29,7 +24,7 @@
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="cc" name="cc">
+              <input type="text" class="form-control" id="cc" name="cc" onkeypress="return isNumber(event)">
               <label for="cc">Identificación</label>
             </div>
             @if($errors->has('cc'))
@@ -38,54 +33,59 @@
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control lower-txt" id="firstname" name="firstname"
-                onkeyup="return forceLower(this);">
-              <label for="firstname">Primer nombre</label>
+              <input type="text" class="form-control lower-txt" id="name" name="name"
+                onkeyup="return forceUpper(this);">
+              <label for="name">Primer nombre</label>
             </div>
-            @if($errors->has('firstname'))
-            <small class="text-danger is-invalid">{{ $errors->first('firstname') }}</small>
+            @if($errors->has('name'))
+            <small class="text-danger is-invalid">{{ $errors->first('name') }}</small>
             @endif
           </div>
         </div>
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control lower-txt" id="middlename" name="middlename">
-              <label for="middlename">Segundo nombre</label>
+              <input type="text" class="form-control lower-txt" id="middle_name" name="middle_name"
+                onkeyup="return forceUpper(this);">
+              <label for="middle_name">Segundo nombre</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control lower-txt" id="lastname" name="lastname">
-              <label for="lastname">Primer apellido</label>
+              <input type="text" class="form-control lower-txt" id="last_name" name="last_name"
+                onkeyup="return forceUpper(this);">
+              <label for="last_name">Primer apellido</label>
             </div>
-            @if($errors->has('lastname'))
-            <small class="text-danger is-invalid">{{ $errors->first('lastname') }}</small>
+            @if($errors->has('last_name'))
+            <small class="text-danger is-invalid">{{ $errors->first('last_name') }}</small>
             @endif
           </div>
         </div>
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control lower-txt" id="second_lastname" name="second_lastname">
-              <label for="second_lastname">Segundo apellido</label>
+              <input type="text" class="form-control lower-txt" id="second_last_name" name="second_last_name"
+                onkeyup="return forceUpper(this);">
+              <label for="second_last_name">Segundo apellido</label>
             </div>
           </div>
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control lower-txt" id="nickname" name="nickname">
-              <label for="nickname">Nombre de usuario</label>
+              <input type="text" class="form-control lower-txt" id="nick_name" name="nick_name"
+                onkeyup="return forceUpper(this);" maxlength="12">
+              <label for="nick_name">Nombre de usuario</label>
             </div>
-            @if($errors->has('nickname'))
-            <small class="text-danger is-invalid">{{ $errors->first('nickname') }}</small>
+            @if($errors->has('nick_name'))
+            <small class="text-danger is-invalid">{{ $errors->first('nick_name') }}</small>
             @endif
           </div>
         </div>
         <div class="form-group row">
           <div class="col-6">
             <div class="form-material floating">
-              <input type="text" class="form-control" id="phone" name="phone">
-              <label for="phone">Telefono</label>
+              <input type="text" class="form-control" id="phone_number" name="phone_number"
+                onkeypress="return isNumber(event)" maxlength="10">
+              <label for="phone_number">Telefono</label>
             </div>
           </div>
           <div class="col-6">
@@ -107,7 +107,7 @@
                 <option></option>
                 <!--  for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($campus as $campu)
-                <option value="{{ $campu->id }}">{{ Str::upper($campu->name) }}</option>
+                <option value="{{ $campu->id }}">{{ $campu->name }}</option>
                 @empty
                 <option>NO EXISTEN SEDES REGISTRADAS</option>
                 @endforelse
@@ -121,16 +121,16 @@
           <div class="col-6">
             <div class="form-material">
               <select class="js-select2 form-control" id="profile" name="profile" style="width: 100%;"
-                data-placeholder="Seleccionar cargo..">
+                data-placeholder="Seleccionar perfil..">
                 <option></option>
                 <!--  for data-placeholder attribute to work with Select2 plugin -->
                 @forelse ($profiles as $profile)
-                <option value="{{ $profile->id }}">{{ Str::upper($profile->name) }}</option>
+                <option value="{{ $profile->id }}">{{ $profile->name }}</option>
                 @empty
-                <option>NO EXISTEN CARGOS REGISTRADOS</option>
+                <option>NO EXISTEN PERFIL REGISTRADOS</option>
                 @endforelse
               </select>
-              <label for="profile">Cargos de trabajo</label>
+              <label for="profile">Perfil</label>
             </div>
             @if($errors->has('profile'))
             <small class="text-danger is-invalid">{{ $errors->first('profile') }}</small>
@@ -141,11 +141,11 @@
           <label class="col-12">Genero</label>
           <div class="col-6">
             <div class="custom-control custom-radio custom-control-inline mb-5">
-              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="F">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio1" value="f">
               <label class="custom-control-label" for="example-inline-radio1">F</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline mb-5">
-              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" value="M">
+              <input class="custom-control-input" type="radio" name="sex" id="example-inline-radio2" value="m">
               <label class="custom-control-label" for="example-inline-radio2">M</label>
             </div>
             {{-- <div class="custom-control custom-radio custom-control-inline mb-5">
@@ -180,7 +180,7 @@
           <div class="col-12">
             <div class="form-material input-group floating">
               <input type="password" class="form-control" id="password" name="password">
-              <label for="password">Password</label>
+              <label for="password">Contraseña</label>
               <div class="input-group-append">
                 <span class="input-group-text">
                   <i class="fa fa-asterisk"></i>
@@ -196,7 +196,7 @@
           <div class="col-12">
             <div class="form-material input-group floating">
               <input type="password" class="form-control" id="password2" name="password2">
-              <label for="password2">Confirm Password</label>
+              <label for="password2">Confirmar contraseña</label>
               <div class="input-group-append">
                 <span class="input-group-text">
                   <i class="fa fa-asterisk"></i>
@@ -226,8 +226,19 @@
 </script>
 
 <script>
-  function forceLower(strInput) {
-    strInput.value=strInput.value.toLowerCase();
+  function forceUpper(strInput) {
+    strInput.value=strInput.value.toUpperCase();
   }
+</script>
+
+<script>
+  function isNumber(evt) {
+  evt = (evt) ? evt : window.event;
+  var charCode = (evt.which) ? evt.which : evt.keyCode;
+  if (charCode > 31 && (charCode < 48 || charCode> 57)) {
+    return false;
+    }
+    return true;
+    }
 </script>
 @endpush

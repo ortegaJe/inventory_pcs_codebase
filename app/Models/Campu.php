@@ -29,6 +29,11 @@ class Campu extends Model
         'slug',
     ];
 
+    public function getNameAttribute()
+    {
+        return strtoupper($this->attributes['name']);
+    }
+
     //Query Scope Sedes
     public function scopeName($query, $name)
     {
