@@ -207,7 +207,8 @@
                     {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
                     {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'open' : '' }}
                   {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}
-                  {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'open' : '' }}">
+                  {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'open' : '' }}
+                  {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
@@ -257,6 +258,11 @@
                       <a class="{{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'active' : '' }}"
+                        href="{{ route('user.inventory.garbage.index') }}">Equipos Eliminados</a>
                     </li>
                   </ul>
                 </li>

@@ -75,7 +75,13 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
     Route::resource('telefonos-ip', 'App\Http\Controllers\User\Inventory\PhoneIpController')->names('user.inventory.phones');
 
+    Route::resource('equipos-eliminados', 'App\Http\Controllers\User\Inventory\GarbageController')->names('user.inventory.garbage');
+
     Route::put('cargar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@uploadUserSign')->name('upload.sign.user');
+
+    //Route::get('restaurar-equipo', 'App\Http\Controllers\User\Inventory\GarbageController@indexRestoreDevice')->name('user.inventory.restore.index');
+
+    Route::put('restaurar-equipo/{id?}', 'App\Http\Controllers\User\Inventory\GarbageController@restoreDevice')->name('user.inventory.restore.update');
 
     //Route::put('actualizar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@updateUserSign')->name('update.sign.user');
 });
