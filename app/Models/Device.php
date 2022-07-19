@@ -36,15 +36,15 @@ class Device extends Model
             'devices.id',
             'devices.serial_number',
             'c.name as campu',
-            's.name as status',
+            DB::raw("CASE WHEN devices.is_active=false THEN 'eliminado' END AS is_deleted"),
+            DB::raw("CASE WHEN devices.is_active=false THEN 'badge-danger' END AS color"),
         )
             ->leftJoin('campus as c', 'c.id', 'devices.campu_id')
             ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
             ->leftJoin('users as u', 'u.id', 'cu.user_id')
             ->leftJoin('status as s', 's.id', 'devices.statu_id')
             ->where('u.id', $user_id)
-            ->where('devices.statu_id', 4)
-            ->where('devices.is_active', 0)
+            ->where('devices.is_active', false)
             ->get();
     }
 }

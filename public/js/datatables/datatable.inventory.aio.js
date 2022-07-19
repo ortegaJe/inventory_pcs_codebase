@@ -1,10 +1,10 @@
-$(document).ready(function() {
+$(document).ready(function () {
     //getComputerData();
 
     $.ajaxSetup({
         headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-        }
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
     });
 
     function format(d) {
@@ -50,7 +50,9 @@ $(document).ready(function() {
             d.Cpu +
             "</td>" +
             "<td>" +
-            '<img class="img-fluid" width="24px" src="/media/dashboard/datatable/os/'+ d.IconoSistemaOperativo+'" alt="windows">' +
+            '<img class="img-fluid" width="24px" src="/media/dashboard/datatable/os/' +
+            d.IconoSistemaOperativo +
+            '" alt="windows">' +
             "</img>" +
             " " +
             d.Os +
@@ -93,7 +95,9 @@ $(document).ready(function() {
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
-            "<p>"+d.Observacion +"</p>"+
+            "<p>" +
+            d.Observacion +
+            "</p>" +
             "</td>" +
             "<td></td>" +
             "<td></td>" +
@@ -115,13 +119,13 @@ $(document).ready(function() {
         $.ajax({
             url: root_url,
             type: "GET",
-            data: {}
-        }).done(function(data) {
+            data: {},
+        }).done(function (data) {
             //alert(data);
         });
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
@@ -143,79 +147,78 @@ $(document).ready(function() {
                     first: "First",
                     last: "Last",
                     next: "Siguiente",
-                    previous: "Atras"
+                    previous: "Atras",
                 },
                 error: {
-                    system:
-                        'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>'
-                }
+                    system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                },
             },
             columns: [
                 {
                     class: "details-control",
                     orderable: false,
                     data: null,
-                    defaultContent: ""
+                    defaultContent: "",
                 },
                 {
                     data: "FechaCreacion",
                     visible: false,
                     orderable: false,
-                    searchable: false
+                    searchable: false,
                 },
                 {
                     data: "NombreEquipo",
                     visible: false,
                     orderable: false,
-                    searchable: true
+                    searchable: true,
                 },
                 {
                     data: "Ubicacion",
                     visible: false,
                     orderable: false,
-                    searchable: true
+                    searchable: true,
                 },
                 {
                     data: "Serial",
                     visible: true,
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "ActivoFijo",
                     visible: true,
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Ip",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Mac",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Anydesk",
-                    searcheable: true
+                    searcheable: true,
                     //visible: false
                 },
                 {
                     data: "Sede",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "EstadoPC",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "action",
                     searcheable: false,
-                    orderable: false
-                }
+                    orderable: false,
+                },
             ],
-            order: [[1, "desc"]]
+            order: [[1, "desc"]],
         });
 
-        $(document).on("click", "#btn-delete", function(e) {
+        $(document).on("click", "#btn-delete", function (e) {
             //console.log(e);
             Swal.fire({
                 title: "Estas seguro?",
@@ -225,8 +228,8 @@ $(document).ready(function() {
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Si, borrar!",
-                cancelButtonText: "No, cancelar"
-            }).then(result => {
+                cancelButtonText: "No, cancelar",
+            }).then((result) => {
                 if (result.isConfirmed) {
                     event.preventDefault();
                     let id = $(this).attr("data-id");
@@ -235,9 +238,9 @@ $(document).ready(function() {
                         url: root_url_allinone_store + "/" + id,
                         type: "DELETE",
                         data: {
-                            _token: $('input[name="_token"]').val()
+                            _token: $('input[name="_token"]').val(),
                         },
-                        success: function(response) {
+                        success: function (response) {
                             console.log(
                                 response.result[0]["inventory_code_number"]
                             );
@@ -248,12 +251,13 @@ $(document).ready(function() {
                                 response.message,
                                 "success"
                             );
-                            $("#dt")
+                            $("#dt").DataTable().ajax.reload();
+                            $("#dt-deleted")
                                 .DataTable()
-                                .ajax.reload();
+                                .ajax.reload(null, true);
                             //console.log(id);
                             //getComputerData();
-                        }
+                        },
                     });
                 }
             });
@@ -261,13 +265,13 @@ $(document).ready(function() {
         });
 
         // Array to track the ids of the details displayed rows
-        $("#dt tbody").on("click", "td.details-control", function() {
+        $("#dt tbody").on("click", "td.details-control", function () {
             let tr = $(this).closest("tr");
             let row = dt.row(tr);
 
             if (row.child.isShown()) {
                 // This row is already open - close it
-                $("div.slider", row.child()).slideUp(function() {
+                $("div.slider", row.child()).slideUp(function () {
                     row.child.hide();
                     tr.removeClass("shown");
                 });

@@ -14,49 +14,86 @@ use Illuminate\Support\Str;
 
 class GarbageController extends Controller
 {
-    public function index()
+
+    public function getDevicesList(Request $request)
     {
-
         $deletedDevices = Device::restoreDevice(Auth::id());
-        return $deletedDevices;
+        return DataTables::of($deletedDevices)
+            ->addIndexColumn()
+            ->addColumn('actions', function ($row) {
+                return '<button type="button" class="btn btn-sm btn-secondary" data-id="' . $row['id'] . '" id="restore_device_btn">
+                                        <i class="fa fa-undo"></i>';
+            })
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="device_checkbox" data-id="' . $row['id'] . '"><label></label>';
+            })
+            ->editColumn('is_deleted', function ($row) {
+                return '<span class="badge badge-pill' . ' ' . $row->color . ' ' . 'btn-block">' . $row->is_deleted . '</span>';
+                //return Str::title($status);
+            })
 
-        $data =
-            [
-                'deletedDevices' => $deletedDevices,
-            ];
-
-        return view('user.inventory.desktop.index')->with($data);
+            ->rawColumns(['actions', 'is_deleted', 'checkbox'])
+            ->make(true);
     }
 
-    public function restoreDevice($id)
+    public function retoreDevice(Request $request)
     {
-        $devices = null;
+        $device_id = null;
         $deviceTemp = [];
-        //error_log(__LINE__ . __METHOD__ . ' pc --->' .$id);
-        try {
-            $devices = Device::findOrFail($id);
+        $ts = now('America/Bogota')->toDateTimeString();
 
-            $deviceTemp[] = DB::table('devices')->where('id', $id)->get();
+        $device_id = $request->device_id;
 
-            $ts = now('America/Bogota')->toDateTimeString();
-            //$softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
-            $softDeleteDevice = array('is_active' => true, 'statu_id' => 1);
-            $devices = DB::table('devices')->where('id', $id)->update($softDeleteDevice);
-            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
-            /* 
-            $deleteStatu = array('statu_id' => 4, 'device_id' => $id, 'date_log' => $ts);
-            $devices = DB::table('statu_devices')->where('device_id', $id)->insert($deleteStatu);
-            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
+        $restoreDevice = array('is_active' => true, 'updated_at' => $ts);
+        $query = Device::where('id', $device_id)->update($restoreDevice);
 
-            $deviceLogDelete = array('device_id' => $id, 'user_id' => Auth::id(), 'deleted_at' => $ts);
-            $devices = DB::table('device_log')->where('device_id', $id)->insert($deviceLogDelete); */
-        } catch (ModelNotFoundException $e) {
-            // Handle the error.
+        $deviceTemp[] = Device::where('id', $device_id)->get();
+
+        $deviceLogRestore = array('device_id' => $device_id, 'user_id' => Auth::id(), 'updated_at' => $ts);
+        $query = DB::table('device_log')->where('device_id', $device_id)->insert($deviceLogRestore);
+
+
+        if ($query) {
+            return response()->json([
+                'code' => 1,
+                'msg' => 'Device has been restore',
+                'result' => $deviceTemp[0]
+            ]);
+        } else {
+            return response()->json([
+                'code' => 0,
+                'msg' => 'Something went wrong'
+            ]);
         }
+    }
 
-        return response()->json([
-            'message' => 'Equipo recuperado del inventario exitosamente!',
-            'result' => $deviceTemp[0]
-        ]);
+    public function restoreSelectedDevices(Request $request)
+    {
+        $devices_id = null;
+        $deviceTemp = [];
+        $ts = now('America/Bogota')->toDateTimeString();
+
+        $devices_id = $request->devices_id;
+
+        $restoreDevices = array('is_active' => true, 'updated_at' => $ts);
+        $query = Device::whereIn('id', $devices_id)->update($restoreDevices);
+
+        $deviceTemp[] = Device::whereIn('id', $devices_id)->get();
+
+        //$deviceLogRestore = array('device_id' => $devices_id, 'user_id' => Auth::id(), 'updated_at' => $ts);
+        //$query = DB::table('device_log')->whereIn('device_id', $devices_id)->insert($deviceLogRestore);
+
+        if ($query) {
+            return response()->json([
+                'code' => 1,
+                'msg' => 'Devices has been restore',
+                'result' => $deviceTemp[0]
+            ]);
+        } else {
+            return response()->json([
+                'code' => 0,
+                'msg' => 'Something went wrong'
+            ]);
+        }
     }
 }

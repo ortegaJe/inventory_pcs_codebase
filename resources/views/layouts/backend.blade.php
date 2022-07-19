@@ -19,6 +19,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="">
   <meta property="og:image" content="">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Icons -->
   <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
@@ -259,11 +260,6 @@
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
                     </li>
-                    <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'active' : '' }}"
-                        href="{{ route('user.inventory.garbage.index') }}">Equipos Eliminados</a>
-                    </li>
                   </ul>
                 </li>
               </ul>
@@ -493,6 +489,12 @@
   <script src="{{ asset('/js/pages/be_pages_dashboard.min.js') }}"></script>
   <script src="{{ asset('/js/pages/be_forms_wizard.min.js') }}"></script>
   <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
+  <script src="{{ asset('/js/datatables/datatable.inventory.deleted.js') }}"></script>
+  <script>
+    let root_url_get_list_devices = <?php echo json_encode(route('get.devices.list')) ?>;
+    let root_url_retore_device = <?php echo json_encode(route('restore.device')) ?>;
+    let root_url_restore_selected_devices = <?php echo json_encode(route('restore.selected.devices')) ?>;
+  </script>
 
   <!-- Page JS Helpers (Select2 plugin) -->
   <script>

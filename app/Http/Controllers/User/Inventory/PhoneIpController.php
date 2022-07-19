@@ -487,7 +487,7 @@ class PhoneIpController extends Controller
 
             $ts = now('America/Bogota')->toDateTimeString();
             //$softDeletePc = array('deleted_at' => $ts, 'is_active' => false, 'statu_id' => 4);
-            $softDeleteDevice = array('is_active' => false, 'statu_id' => 4);
+            $softDeleteDevice = array('is_active' => false);
             $devices = DB::table('devices')->where('id', $id)->update($softDeleteDevice);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
 

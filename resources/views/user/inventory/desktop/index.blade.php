@@ -38,8 +38,8 @@
           Equipos informáticos<small> | Lista</small>
         </h3>
         <div class="block-options">
-          <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
-            data-action-mode="demo">
+          <button type="button" id="btn-refresh1" class="btn-block-option" data-toggle="block-option"
+            data-action="state_toggle" data-action-mode="demo">
             <i class="si si-refresh"></i>
           </button>
         </div>
@@ -90,52 +90,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="block block-rounded block-bordered">
-      <div class="block-header block-header-default border-b">
-        <h3 class="block-title">
-          Equipos informáticos<small> | Eliminados</small>
-        </h3>
-        <div class="block-options">
-          <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
-            data-action-mode="demo">
-            <i class="si si-refresh"></i>
-          </button>
-        </div>
-      </div>
-      <div class="block-content block-content-full">
-        <div class="table-responsive">
-          <table id="dt-deleted" class="table table-hover">
-            <thead>
-              <tr>
-                <th></th>
-                <th>serial</th>
-                <th>sede</th>
-                <th>estado</th>
-                <th>acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($deletedDevices as $deletedDevice)
-              <tr>
-                <td></td>
-                <td>{{ $deletedDevice->serial_number }}</td>
-                <td class="text-center">{{ $deletedDevice->campu }}</td>
-                <td><span class="badge badge-pill badge-danger btn-block">
-                    {{ $deletedDevice->status }}</span>
-                </td>
-                <td class="text-center"><button type="button" class="btn btn-sm btn-secondary"
-                    data-id="{{ $deletedDevice->id }}" id="btn-restore">
-                    <i class="fa fa-undo"></i>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+  @include('user.partials.table_deleted')
 </div>
 @endsection
 
@@ -144,6 +99,11 @@
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+<script>
+  let root_url_desktop = <?php echo json_encode(route('user.inventory.desktop.index')) ?>;
+  let root_url_desktop_store = <?php echo json_encode(route('user.inventory.desktop.store')) ?>;  
+</script>
 
 @if(Session::has('pc_created'))
 <script>
@@ -175,56 +135,4 @@
 </script>
 @endif
 
-<script>
-  let root_url_desktop = <?php echo json_encode(route('user.inventory.desktop.index')) ?>;
-  let root_url_desktop_store = <?php echo json_encode(route('user.inventory.desktop.store')) ?>;
-  let root_url_restore = <?php echo json_encode(route('user.inventory.restore.update')) ?>;
-</script>
-
-<script>
-  $(document).ready(function() {
-  
-  $.ajaxSetup({
-  headers: {
-  "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-  }
-  });
-  
-  $(document).on("click", "#btn-restore", function(e) {
-  console.log(e);
-  Swal.fire({
-  title: "Estas seguro?",
-  text: "No se podra revertir esto!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Si, borrar!",
-  cancelButtonText: "No, cancelar"
-  }).then(result => {
-  if (result.isConfirmed) {
-  event.preventDefault();
-  let id = $(this).attr("data-id");
-  //console.log(id);
-  $.ajax({
-  url: root_url_restore + "/" + id,
-  type: "PUT",
-  data: {
-  _token: $('input[name="_token"]').val()
-  },
-      success: function(response) {
-      console.log(response);
-        Swal.fire();
-          let table = $("#dt-restore");
-            window.location.reload();
-              console.log(id);
-      }
-  });
-  }
-  });
-  return false;
-  });
-  
-  });
-</script>
 @endpush
