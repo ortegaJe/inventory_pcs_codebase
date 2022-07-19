@@ -44,14 +44,15 @@ class GarbageController extends Controller
 
         $device_id = $request->device_id;
 
+        $last_status = DB::table('statu_devices')->where('device_id', $device_id)->orderByDesc('date_log')->first();
+
         $restoreDevice = array('is_active' => true, 'updated_at' => $ts);
         $query = Device::where('id', $device_id)->update($restoreDevice);
 
-        $deviceTemp[] = Device::where('id', $device_id)->get();
-
-        $deviceLogRestore = array('device_id' => $device_id, 'user_id' => Auth::id(), 'updated_at' => $ts);
+        $deviceLogRestore = array('device_id' => $last_status->statu_id, 'user_id' => Auth::id(), 'updated_at' => $ts);
         $query = DB::table('device_log')->where('device_id', $device_id)->insert($deviceLogRestore);
 
+        $deviceTemp[] = Device::where('id', $device_id)->get();
 
         if ($query) {
             return response()->json([
@@ -74,6 +75,8 @@ class GarbageController extends Controller
         $ts = now('America/Bogota')->toDateTimeString();
 
         $devices_id = $request->devices_id;
+
+        //$last_status = DB::table('statu_devices')->whereIn('device_id', $devices_id)->orderByDesc('date_log')->first();
 
         $restoreDevices = array('is_active' => true, 'updated_at' => $ts);
         $query = Device::whereIn('id', $devices_id)->update($restoreDevices);

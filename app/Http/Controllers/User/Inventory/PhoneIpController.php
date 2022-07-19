@@ -491,7 +491,9 @@ class PhoneIpController extends Controller
             $devices = DB::table('devices')->where('id', $id)->update($softDeleteDevice);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
 
-            $deleteStatu = array('statu_id' => 4, 'device_id' => $id, 'date_log' => $ts);
+            $statu_id = DB::table('devices')->select('statu_id')->where('id', $id)->first();
+
+            $deleteStatu = array('statu_id' => $statu_id->statu_id, 'device_id' => $id, 'date_log' => $ts);
             $devices = DB::table('statu_devices')->where('device_id', $id)->insert($deleteStatu);
             error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices, true));
 
