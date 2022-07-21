@@ -622,7 +622,7 @@ class ReportController extends Controller
         $rules = [
             'name' => 'required',
             'last_name' => 'required',
-            'second_last_name' => 'required',
+            //'second_last_name' => 'required',
             'position' => 'required',
             'keyboard' => 'required_with:serial_keyboard,filled',
             'serial_keyboard' => 'required_with:keyboard,filled',

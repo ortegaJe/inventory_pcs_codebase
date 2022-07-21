@@ -65,8 +65,7 @@
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
                       <input type="text" class="form-control" id="position" name="position"
-                        value="{{ old('position') }}" maxlength="26"
-                        onkeyup="javascript:this.value=this.value.toUpperCase();">
+                        value="{{ old('position') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                       <label for="position">Cargo del custodio</label>
                     </div>
                     @if($errors->has('position'))
