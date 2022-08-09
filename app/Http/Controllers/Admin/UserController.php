@@ -65,7 +65,7 @@ class UserController extends Controller
     {
         $request->validate([
             'cc' => 'required|unique:users,cc',
-            'lastname' => 'required|unique:users,last_name',
+            'lastname' => 'required',
             'nickname' => 'required|unique:users,nick_name',
             'birthday' => 'nullable|date',
             'campu' => 'required|numeric',
