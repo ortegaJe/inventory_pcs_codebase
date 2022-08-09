@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -61,10 +60,6 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::get('firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@createAdminSignature')->name('admin.inventory.admin-signatures.create');
 
     Route::post('guardar-firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@storeAdminSignature')->name('admin.inventory.admin-signatures.store');
-
-    Route::get('search', [HomeController::class, 'search'])->name('search.serial');
-
-    Route::get('device-detail/{id}', [HomeController::class, 'detailDevice'])->name('device.detail');
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {

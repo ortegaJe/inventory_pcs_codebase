@@ -294,18 +294,6 @@
             <i class="fa fa-navicon"></i>
           </button>
           <!-- END Toggle Sidebar -->
-
-          <!-- Open Search Section -->
-          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-          @if (request()->is('/'))
-          <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout"
-            data-action="header_search_on">
-            <i class="fa fa-search"></i>
-          </button>
-          @else
-          @endif
-          <!-- END Open Search Section -->
-
         </div>
         <!-- END Left Section -->
 
@@ -436,27 +424,6 @@
         <!-- END Right Section -->
       </div>
       <!-- END Header Content -->
-
-      <!-- Header Search -->
-      <div id="page-header-search" class="overlay-header">
-        <div class="content-header content-header-fullrow">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <!-- Close Search Section -->
-              <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-              <button type="button" class="btn btn-secondary px-15" data-toggle="layout"
-                data-action="header_search_off">
-                <i class="fa fa-times"></i>
-              </button>
-              <!-- END Close Search Section -->
-            </div>
-            <input type="text" class="form-control" placeholder="Search or hit ESC.." id="search" name="search">
-            <div class="input-group-append">
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- END Header Search -->
 
       <!-- Header Loader -->
       <!-- Please check out the Activity page under Elements category to see examples of showing/hiding it -->
