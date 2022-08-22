@@ -79,6 +79,7 @@ class HomeController extends Controller
                         data-toggle="modal"
                         data-target="#detail-modal"
                         id="detail-btn"
+                        name="detail-btn"
                         data-id=' . $row->id . '>
                         <i class="fa fa-eye mr-5"></i>
                         Detail
@@ -117,6 +118,20 @@ class HomeController extends Controller
                           WHEN comp.slot_two_ram_id = 20 THEN 'DISPONIBLE'
                         ELSE CONCAT(ram1.size, ' ', ram1.storage_unit, ' ', ram1.type, ' ', ram1.format)
                             END as ram1"),
+            DB::raw("CASE WHEN comp.first_storage_id = 1 THEN 'NO APLICA'
+                          WHEN comp.first_storage_id = 30 THEN 'DISPONIBLE'
+                        ELSE CONCAT(hdd01.size, ' ', hdd01.storage_unit, ' ', hdd01.type)
+                            END as hdd01"),
+            DB::raw("CASE WHEN comp.second_storage_id = 1 THEN 'NO APLICA'
+                          WHEN comp.second_storage_id = 30 THEN 'DISPONIBLE'
+                        ELSE CONCAT(hdd02.size, ' ', hdd02.storage_unit, ' ', hdd02.type)
+                            END as hdd02"),
+            DB::raw("CONCAT(cpu.brand, ' ', cpu.generation) as cpu"),
+            'devices.ip',
+            'devices.mac',
+            'devices.anydesk',
+            'devices.domain_name',
+            's.name as device_statu',
             'c.name as campu',
             DB::raw("CONCAT(u.name, ' ', u.last_name) as tec_full_name"),
         ])
@@ -128,6 +143,10 @@ class HomeController extends Controller
             ->leftJoin('components as comp', 'comp.device_id', 'devices.id')
             ->leftJoin('memory_rams as ram0', 'ram0.id', 'comp.slot_one_ram_id')
             ->leftJoin('memory_rams as ram1', 'ram1.id', 'comp.slot_two_ram_id')
+            ->leftJoin('storages as hdd01', 'hdd01.id', 'comp.first_storage_id')
+            ->leftJoin('storages as hdd02', 'hdd02.id', 'comp.second_storage_id')
+            ->leftJoin('status as s', 's.id', 'devices.statu_id')
+            ->leftJoin('processors as cpu', 'cpu.id', 'comp.processor_id')
             ->where('devices.id', $id)
             ->get();
 
