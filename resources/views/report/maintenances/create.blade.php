@@ -12,11 +12,16 @@
   <div class="content-heading">
     @include('report.maintenances.partials.modal')
     Reporte Mantenimientos <small class="d-none d-sm-inline">Serial Equipo: {{ $device->serial_number }}</small>
-    @if(count($report_maintenances) < 1) <button type="button" class="btn btn-sm btn-alt-success float-right"
+    @if($count_report->count_report_mto > 1) <button type="button" class="btn btn-sm btn-alt-success float-right"
       data-toggle="modal" data-target="#modal-mto">
       <i class="fa fa-plus text-success mr-5"></i>Generar
-      </button>
-      @endif
+    </button>
+    @endif
+    @if($count_report->maintenance_02_date == null && $count_report->semester_second_month_mto == now()->isoformat('M'))
+    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-mto">
+      <i class="fa fa-plus text-success mr-5"></i>Generar
+    </button>
+    @endif
   </div>
   <!-- Device Table -->
   <div class="block block-rounded">
@@ -57,12 +62,15 @@
                   href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->report_rowguid]) }}"
                   @endif
                   @endif
-                  @if($repo->FechaMto02Realizado == now()->isoformat('M'))
+                  @if($repo->maintenance_02_month == now()->isoformat('M') && $repo->maintenance_02_date == null)
+                  @if(Storage::exists('pdf/mantenimientos/primer-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf'))
+                  href="{{Storage::url('pdf/mantenimientos/primer-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf')}}"
+                  @endif
+                  @else
                   @if(Storage::exists('pdf/mantenimientos/segundo-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf'))
                   href="{{Storage::url('pdf/mantenimientos/segundo-semestre/'.Str::slug($repo->campu).'/'.$repo->report_code_number.'.pdf')}}"
-                  @else
-                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->report_rowguid]) }}"
                   @endif
+                  href="{{ route('inventory.report.maintenance.generated', [$repo->repo_id, $repo->report_rowguid]) }}"
                   @endif
                   target="_blank">
                   <i class="fa fa-print"></i>

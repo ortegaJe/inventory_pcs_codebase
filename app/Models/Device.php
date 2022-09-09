@@ -25,8 +25,8 @@ class Device extends Model
     public function scopeSearch($query, $data)
     {
         if (trim($data) != "") {
-            return $query->where('d.serial_number', 'LIKE', "%$data%")
-                ->whereIn('d.statu_id', [1, 2, 3, 5, 6, 7, 8]);
+            return $query->where('devices.serial_number', 'LIKE', "%$data%")
+                ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8]);
         }
     }
 

@@ -187,7 +187,10 @@
               </a>
               @elseif($device->second_semester_month == now()->isoformat('M'))
               <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
-                href="{{ route('inventory.report.maintenance.create', [$device->device_id, $device->device_rowguid]) }}">
+                @if($device->maintenance_01_date == null)
+                id="btn-notify"
+                @endif
+                href="{{route('inventory.report.maintenance.create', [$device->device_id, $device->device_rowguid])}}">
                 <i class="fa fa-file-text-o"></i>
               </a>
               @else
@@ -274,4 +277,17 @@
     )
 </script>
 @endif
+
+<script>
+  $(document).on("click", "#btn-notify", function (e) {
+        Swal.fire(
+          "Mantenimiento del primer semestre no realizado",
+          `Informe al administrador de la aplicacíon.`,
+          "info"
+        );
+          console.log("Mantenimiento del primer semestre no realizado");
+            event.preventDefault();
+      });
+</script>
+
 @endpush
