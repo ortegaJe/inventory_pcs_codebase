@@ -12,16 +12,17 @@
   <div class="content-heading">
     @include('report.maintenances.partials.modal')
     Reporte Mantenimientos <small class="d-none d-sm-inline">Serial Equipo: {{ $device->serial_number }}</small>
-    @if($count_report->count_report_mto > 1) <button type="button" class="btn btn-sm btn-alt-success float-right"
+    @if($count_report->count_report_mto < 1) <button type="button" class="btn btn-sm btn-alt-success float-right"
       data-toggle="modal" data-target="#modal-mto">
       <i class="fa fa-plus text-success mr-5"></i>Generar
-    </button>
-    @endif
-    @if($count_report->maintenance_02_date == null && $count_report->semester_second_month_mto == now()->isoformat('M'))
-    <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-mto">
-      <i class="fa fa-plus text-success mr-5"></i>Generar
-    </button>
-    @endif
+      </button>
+      @endif
+      @if($count_report->maintenance_02_date == null &&
+      $count_report->semester_second_month_mto == now()->isoformat('M'))
+      <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-mto">
+        <i class="fa fa-plus text-success mr-5"></i>Generar
+      </button>
+      @endif
   </div>
   <!-- Device Table -->
   <div class="block block-rounded">

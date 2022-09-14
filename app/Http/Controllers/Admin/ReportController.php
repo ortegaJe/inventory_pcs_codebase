@@ -340,7 +340,7 @@ class ReportController extends Controller
                 'rm.maintenance_02_date'
             )
             ->where('d.id', $device->id)
-            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
+            //->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID)
             ->groupBy(['rn.id', 'd.id', 'r.device_id', 'cm.maintenance_01_month', 'cm.maintenance_02_month', 'maintenance_02_date'])
             ->first();
 
