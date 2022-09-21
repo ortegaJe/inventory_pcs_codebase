@@ -3,15 +3,14 @@ $(document).ready(function () {
 
     $.ajaxSetup({
         headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-        }
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
     });
-    
+
     function format(d) {
-       
         //let url = '{{ route("admin.inventory.technicians.show", ":id") }}';
         //url = url.replace(':id', d.TecnicoID);
-        
+
         return (
             '<div class="slider">' +
             '<table class="table-responsive td-slider" style="font-size:13">' +
@@ -52,7 +51,9 @@ $(document).ready(function () {
             d.Cpu +
             "</td>" +
             "<td>" +
-            '<img class="img-fluid" width="24px" src="/media/dashboard/datatable/os/'+ d.IconoSistemaOperativo+'" alt="windows">' +
+            '<img class="img-fluid" width="24px" src="/media/dashboard/datatable/os/' +
+            d.IconoSistemaOperativo +
+            '" alt="windows">' +
             "</img>" +
             " " +
             d.Os +
@@ -91,13 +92,30 @@ $(document).ready(function () {
             "</img>" +
             "</td>" +
             "<td>Observaciones: " +
-            "<p>"+d.Observacion +"</p>"+
+            "<p>" +
+            d.Observacion +
+            "</p>" +
             "</td>" +
             "<td>" +
-            '<span class="badge badge-primary mb-5"><i class="si si-user mr-5"></i>' + d.NombreTecnico + '</span>' +
-            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>'+d.FechaCreacionUsuario +'</span>'+
+            "<div>Registrado por:</div>" +
+            '<span class="badge badge-primary mb-5"><i class="si si-user mr-5"></i>' +
+            d.NombreTecnico +
+            "</span>" +
+            "<div>Hora del registro:</div>" +
+            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>' +
+            d.FechaCreacionUsuario +
+            "</span>" +
             "</td>" +
-            "<td></td>" +
+            "<td>" +
+            "<div>Asignando a:</div>" +
+            d.NombreCustodio +
+            "<div>Acta de entrega:</div>" +
+            '<a type="button" class="btn btn-alt-danger js-tooltip-enabled" data-toggle="tooltip" data-placement="left" title="" href="http://127.0.0.1:8000/storage/pdf/acta_de_entrega/' +
+            d.report_code_number +
+            '.pdf" data-original-title="Descargar Inventario">' +
+            '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' +
+            "</a>" +
+            "</td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
@@ -108,7 +126,7 @@ $(document).ready(function () {
         );
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
@@ -130,80 +148,79 @@ $(document).ready(function () {
                     first: "First",
                     last: "Last",
                     next: "Siguiente",
-                    previous: "Atras"
+                    previous: "Atras",
                 },
                 error: {
-                    system:
-                        'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>'
-                }
+                    system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
+                },
             },
             columns: [
                 {
                     class: "details-control",
                     orderable: false,
                     data: null,
-                    defaultContent: ""
+                    defaultContent: "",
                 },
                 {
                     data: "FechaCreacion",
                     visible: false,
                     orderable: false,
-                    searchable: false
+                    searchable: false,
                 },
                 {
                     data: "NombreEquipo",
                     visible: false,
                     orderable: false,
-                    searchable: true
+                    searchable: true,
                 },
                 {
                     data: "Ubicacion",
                     visible: false,
                     orderable: false,
-                    searchable: true
+                    searchable: true,
                 },
                 {
                     data: "Serial",
                     visible: true,
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "ActivoFijo",
                     visible: true,
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Ip",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Mac",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Anydesk",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "Sede",
-                    searcheable: true
+                    searcheable: true,
                 },
                 {
                     data: "EstadoPC",
-                    searcheable: true
-                }
+                    searcheable: true,
+                },
             ],
-            order: [[1, "desc"]]
+            order: [[1, "desc"]],
         });
 
         // Array to track the ids of the details displayed rows
-        $("#dt tbody").on("click", "td.details-control", function() {
+        $("#dt tbody").on("click", "td.details-control", function () {
             let tr = $(this).closest("tr");
             let row = dt.row(tr);
 
             if (row.child.isShown()) {
                 // This row is already open - close it
-                $("div.slider", row.child()).slideUp(function() {
+                $("div.slider", row.child()).slideUp(function () {
                     row.child.hide();
                     tr.removeClass("shown");
                 });
