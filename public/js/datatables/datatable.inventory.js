@@ -110,7 +110,7 @@ $(document).ready(function () {
             "<div>Asignando a:</div>" +
             d.NombreCustodio +
             "<div>Acta de entrega:</div>" +
-            '<a type="button" class="btn btn-alt-danger js-tooltip-enabled" data-toggle="tooltip" data-placement="left" title="" href="http://127.0.0.1:8000/storage/pdf/acta_de_entrega/' +
+            '<a type="button" class="btn btn-alt-danger js-tooltip-enabled" data-toggle="tooltip" data-placement="left" title="" href="http://inventory.viva1a.com.co/storage/pdf/acta_de_entrega/' +
             d.report_code_number +
             '.pdf" data-original-title="Descargar Inventario">' +
             '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' +
