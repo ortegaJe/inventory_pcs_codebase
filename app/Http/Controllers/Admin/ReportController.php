@@ -719,153 +719,24 @@ class ReportController extends Controller
         return $pdf->stream($nombre_archivo . $extension);
     }
 
-    public function uploadFileReportDeliverySigned(Request $request)
+    public function uploadFileReportDeliverySigned(Request $req)
     {
-        $x = 50;
-        //if ($request->file != "") {
-        $file = $request->file('file_upload');
-        $file_name = time() . '_' . $file->getClientOriginalName();
-        $img = \Image::make($file)->resize(150, 100);
-        $img->save(public_path($file_name), $x);
-        //}
-        /*         $validator = Validator::make($request->all(), [
-            'file_upload' => 'image|max:10240',
-            'file_upload' => 'file|mimes:pdf|max:10240'
+        //return $request->file_upload;
+
+        $req->validate([
+            'file_upload' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
         ]);
+        //$fileModel = new File;
+        if ($req->file()) {
+            $fileName = time() . '_' . $req->file_upload->getClientOriginalName();
+            $filePath = $req->file('file_upload')->storeAs('uploads', $fileName, 'public');
+            //$fileModel->name = time() . '_' . $req->file->getClientOriginalName();
+            //$fileModel->file_path = '/storage/' . $filePath;
+            return $filePath; //->save();
 
-        if ($validator->fails()) {
-
-            return back()->with('fail_upload_sign', '');
-        } else if ($request->hasFile('file_upload')) {
-
-            $repo_id = $request->repo_id;
-
-            $repo_code_number = Report::where('id', $repo_id)
-                ->select('id', 'report_code_number')
-                ->first();
-
-            $file_upload = $request->file('file_upload')
-                ->store('pdf/de_baja_firmados' . '/' . $repo_code_number->report_code_number);
-
-            DB::table('file_uploads_report_deliveries')
-                ->insert([
-                    'report_id' => $repo_id,
-                    'file_upload' => $file_upload,
-                    'file_upload_date' => now('America/Bogota'),
-                ]);
-        } */
-
-        return back()->with('success_upload_sign', '');
-    }
-
-    public function pdfReportResumes(Request $request, $id)
-    {
-        //$exists = Storage::disk('public')->exists("REPO000000000018.pdf");
-        //return response()->json($exists);
-
-        $report = Report::findOrFail($id);
-        //return response()->json($report);
-
-        $nombre_carpeta = $report->report_code_number;
-        //return response()->json($nombre_carpeta);
-
-        /*if (Storage::disk('public')->exists("/$request->file")) {
-            $path = Storage::disk('public')->path("/$request->file");
-            $content = file_get_contents($path);
-            return response($content)->withHeaders([
-                'Content-Type' => mime_content_type($path)
-            ]);
+            return back()
+                ->with('success', 'File has been uploaded.')
+                ->with('file', $fileName);
         }
-        return redirect('/404');*/
-
-        //dd($report->id);
-        //eturn response()->download('./storage/app/public/' . $report->report_code_number . '.pdf');
-        if (Storage::disk('public')->exists($report->report_code_number . '.pdf')) {
-            return Storage::download('public/' . $report->report_code_number . '.pdf');
-        }
-        return view('admin.op_error_400');
-    }
-
-    public function indexSign()
-    {
-        $user_id = User::where('id', Auth::id())->pluck('id');
-
-        $campu_administrators = DB::table('campus as c')
-            ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
-            ->leftJoin('users as u', 'u.id', 'cu.user_id')
-            ->where('cu.user_id', $user_id)
-            ->select(
-                'cu.campu_id as SedeID',
-                'c.name as NombreSede',
-                'c.abreviature as AbreviadoSede',
-                'c.slug',
-                'c.address as DireccionSede',
-                'c.phone as TelefonoSede',
-                DB::raw("CONCAT(c.admin_name,' ',c.admin_last_name) AS NombreApellidoAdmin"),
-                'c.admin_sign as FirmaAdmin'
-            )->get();
-
-        //return $campu_administrators;
-
-        return view('report.signs.index', compact('campu_administrators'));
-    }
-
-    public function editSign($id, $slug)
-    {
-        $campu_administrators = Campu::findOrFail($id);
-
-        return view('report.signs.edit', compact('campu_administrators'));
-    }
-
-    public function updateSign(Request $request, $id)
-    {
-        $campu_admin_id = Campu::where('id', $id)->pluck('id');
-
-        $request->validate([
-            'admin_name' => 'required',
-            'admin_last_name' => 'required',
-        ]);
-
-        $validator = Validator::make($request->all(), [
-            'sign' => 'image',
-        ]);
-
-        $address         = $request->get('address');
-        $phone           = $request->get('phone');
-        $admin_name      = $request->get('admin_name');
-        $admin_last_name = $request->get('admin_last_name');
-
-        if ($validator->fails()) {
-
-            return back()->with('fail_upload_sign', '');
-        } else if ($request->hasFile('sign')) {
-
-            /*             $admin_sign = Campu::select('admin_sign')->where('id', $campu_admin_id)->pluck('admin_sign');
-
-            Storage::delete($admin_sign);
-
-            if (Storage::exists('firma_administradores/' . $admin_sign)) {
-                Storage::delete('firma_administradores/' . $admin_sign);
-            } else {
-                dd('File does not exists.');
-            } */
-            $admin = Campu::where('id', $campu_admin_id)
-                ->select('slug', DB::raw("CONCAT(admin_name,' ',admin_last_name) AS NombreApellidoAdmin"))
-                ->first();
-
-            $file_sign = $request->file('sign')->store('firma_administradores/' . $admin->slug . '/' . Str::slug($admin->NombreApellidoAdmin));
-
-            $update = array(
-                'address'         => $address,
-                'phone'           => $phone,
-                'admin_name'      => $admin_name,
-                'admin_last_name' => $admin_last_name,
-                'admin_sign'      => $file_sign
-            );
-
-            Campu::where('id', $campu_admin_id)->update($update);
-        }
-
-        return redirect()->route('sign.index')->with('success_upload_sign', '');
     }
 }
