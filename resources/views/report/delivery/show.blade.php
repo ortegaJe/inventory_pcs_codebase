@@ -79,7 +79,7 @@
         </div>
     </div>
 </div>
-@if($report_delivery_id_count > 0)
+{{-- @if($report_delivery_id_count > 0)
 <div class="block-content">
     @include('report.delivery.partials.modal_upload')
     <div class="content-heading">
@@ -145,7 +145,7 @@
         </div>
     </div>
 </div>
-@endif
+@endif --}}
 @endsection
 
 @push('js')
