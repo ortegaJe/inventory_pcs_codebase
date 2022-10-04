@@ -102,7 +102,7 @@ class AllInOneController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [1, 2, 3, 4, 5, 6])
+            ->whereIn('id', [1, 2, 3, 4, 5, 6, 11])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
@@ -360,7 +360,7 @@ class AllInOneController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [1, 2, 3, 4, 5, 6])
+            ->whereIn('id', [1, 2, 3, 4, 5, 6, 11])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
@@ -477,7 +477,7 @@ class AllInOneController extends Controller
             'location' => 'nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
             'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
-            'observation' => 'nullable|max:255|regex:/^[0-9a-zA-Z- ,.;:@¿?!¡]+$/i',
+            'observation' => 'nullable|max:255',
         ];
 
         $messages = [
