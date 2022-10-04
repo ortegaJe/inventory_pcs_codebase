@@ -1,7 +1,7 @@
 <!-- Pop Out Modal -->
-<form action="{{ route('upload.file.delivery') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('upload.file.delivery', $repo->repo_id) }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @method('POST')
+    @method('PUT')
     <div class="modal fade" id="modal-upload" tabindex="-1" role="dialog" aria-labelledby="modal-popout"
         aria-hidden="true">
         <div class="modal-dialog modal-xs modal-dialog-popout" role="document">
@@ -18,7 +18,6 @@
                     <div class="block-content" style="background-color: #f0f2f5">
                         <div class="row">
                             <!-- Row #2 -->
-                            <input type="hidden" name="repo_id" value="{{ $report_delivery_id->id }}">
                             <div class="form-group mt-2">
                                 <label for="file_upload"></label>
                                 <div>

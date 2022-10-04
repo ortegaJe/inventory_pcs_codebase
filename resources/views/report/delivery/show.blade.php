@@ -44,7 +44,7 @@
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->repo_name }}
+                            {{ $repo->report_name }}
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
@@ -73,15 +73,13 @@
             <!-- END Orders Table -->
             <div>
                 <ul class="pagination justify-content-end">
-                    {!! $report_deliveries->links("pagination::bootstrap-4") !!}
-                </ul>
+                    {{-- {!! $report_deliveries->links("pagination::bootstrap-4") !!} --}} </ul>
             </div>
         </div>
     </div>
 </div>
-{{-- @if($report_delivery_id_count > 0)
+
 <div class="block-content">
-    @include('report.delivery.partials.modal_upload')
     <div class="content-heading">
         <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
             data-target="#modal-upload">
@@ -101,27 +99,27 @@
                     <tr>
                         <th style="width: 100px;">CODIGO</th>
                         <th style="width: 200px;">FECHA</th>
-                        <th class="d-none d-sm-table-cell">REPORTE CARGADO</th>
+                        <th class="d-none d-sm-table-cell">REPORTE FIRMADO</th>
                         <th class="d-none d-sm-table-cell text-center">ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px">
-                    @forelse($file_uploads_report_deliveries as $repo)
+                    @forelse($report_deliveries as $repo)
+                    @include('report.delivery.partials.modal_upload')
                     <tr>
                         <td class="d-none d-sm-table-cell">
                             {{ $repo->report_code_number }}
                         </td>
                         <td class="d-none d-sm-table-cell">
-                            {{ $repo->file_upload_date }}
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->repo_name }} FIRMADO
+                            {{ $repo->report_name }}
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                                    href="{{ Storage::url($repo->file_upload) }}" target="_blank">
+                                    href="#" target="_blank">
                                     <i class="fa fa-print"></i>
                                 </a>
                             </div>
@@ -137,15 +135,14 @@
                 </tbody>
             </table>
             <!-- END Orders Table -->
-            <div>
+            {{-- <div>
                 <ul class="pagination justify-content-end">
                     {!! $file_uploads_report_deliveries->links("pagination::bootstrap-4") !!}
                 </ul>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
-@endif --}}
 @endsection
 
 @push('js')

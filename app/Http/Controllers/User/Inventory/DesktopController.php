@@ -102,7 +102,7 @@ class DesktopController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [1, 2, 3, 4, 5, 6])
+            ->whereIn('id', [1, 2, 3, 4, 5, 6, 11])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
@@ -368,7 +368,7 @@ class DesktopController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [1, 2, 3, 4, 5, 6])
+            ->whereIn('id', [1, 2, 3, 4, 5, 6, 11])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
