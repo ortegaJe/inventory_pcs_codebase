@@ -241,12 +241,12 @@
                           {{ $repo->TieneCandado }}
                         </td>
                       </tr>
-                      <tr style="height: 18px;">
+                      {{-- <tr style="height: 18px;">
                         <td colspan="3" style="width: 16.2227%; height: 18px;">WIFI</td>
                         <td colspan="2" style="width: 19.4037%; height: 18px;text-align:center;">
                           {{ $repo->TieneWifi }}
                         </td>
-                      </tr>
+                      </tr> --}}
                       <tr style="height: 18px;">
                         <td colspan="3" style="width: 16.2227%; height: 18px;">Web Cam</td>
                         <td colspan="2" style="width: 19.4037%; height: 18px;text-align:center;">
