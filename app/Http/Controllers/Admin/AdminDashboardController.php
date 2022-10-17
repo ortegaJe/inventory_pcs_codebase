@@ -18,6 +18,7 @@ use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -49,18 +50,13 @@ class AdminDashboardController extends Controller
 
     if ($request->ajax()) {
       $devices = DB::table('view_all_devices_admin')
+        //->where('Sede', '<>', 'VIVA 1A CASA MATRIZ')
         ->orderByDesc('FechaCreacion')
         ->get();
 
       $datatables = DataTables::of($devices);
       $datatables->addColumn('EstadoPC', function ($devices) {
         return $devices->EstadoPc;
-      });
-
-      $datatables->editColumn('EstadoPC', function ($devices) {
-        $status = "<span class='badge badge-pill" . " " . $devices->ColorEstado . " btn-block'>
-                            $devices->EstadoPc</span>";
-        return Str::title($status);
       });
 
       $datatables->rawColumns(['EstadoPC']);
@@ -78,6 +74,38 @@ class AdminDashboardController extends Controller
       ];
 
     return view('admin.index')->with($data);
+  }
+
+  public function getStock(Request $request)
+  {
+    if ($request->ajax()) {
+
+      $devices = DB::table('view_all_devices')
+        ->where('TecnicoID', Auth::id(2))
+        ->where('EstadoPc', 'stock')
+        ->get();
+
+      $datatables = DataTables::of($devices);
+      $datatables->addColumn('EstadoPC', function ($devices) {
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices->EstadoPC, true));
+        return $devices->EstadoPc;
+      });
+
+      $datatables->addColumn('action', function ($devices) {
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices->DeviceID, true));
+        $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
+                            href = '" . route('user.inventory.desktop.edit', $devices->DeviceID) . "'>
+                                <i class='fa fa-pencil'></i>
+                        </a>";
+        $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$devices->DeviceID' id='btn-delete'>
+                                    <i class='fa fa-times'></i>";
+        return $btn;
+      });
+      $datatables->rawColumns(['action', 'EstadoPC']);
+      return $datatables->make(true);
+    }
+
+    return view('user.inventory.stock.index');
   }
 
   public function createAdminSignature()

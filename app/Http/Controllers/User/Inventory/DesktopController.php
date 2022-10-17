@@ -38,6 +38,7 @@ class DesktopController extends Controller
         $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
         $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
         $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
+        $deviceType = Device::select('tp.name as type_name')->join('type_devices as tp', 'tp.id', 'devices.type_device_id')->where('devices.type_device_id', TypeDevice::DESKTOP_PC_ID)->first();
 
         if ($request->ajax()) {
 
@@ -47,30 +48,19 @@ class DesktopController extends Controller
                 ->get();
 
             $datatables = DataTables::of($devices);
-            /*$datatables->editColumn('FechaCreacion', function ($devices) {
-                return $devices->FechaCreacion ? with(new Carbon($devices->FechaCreacion))
-                    ->format('d/m/Y') : '';
-            });*/
             $datatables->addColumn('EstadoPC', function ($devices) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices->EstadoPC, true));
-
                 return $devices->EstadoPc;
-            });
-
-            $datatables->editColumn('EstadoPC', function ($devices) {
-                $status = "<span class='badge badge-pill" . " " . $devices->ColorEstado . " btn-block'>
-                            $devices->EstadoPc</span>";
-                return Str::title($status);
             });
 
             $datatables->addColumn('action', function ($devices) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices->DeviceID, true));
                 $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
-                   href = '" . route('user.inventory.desktop.edit', $devices->DeviceID) . "'>
-                  <i class='fa fa-pencil'></i>
-                </a>";
+                            href = '" . route('user.inventory.desktop.edit', $devices->DeviceID) . "'>
+                                <i class='fa fa-pencil'></i>
+                        </a>";
                 $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$devices->DeviceID' id='btn-delete'>
-                                        <i class='fa fa-times'></i>";
+                                    <i class='fa fa-times'></i>";
                 return $btn;
             });
             $datatables->rawColumns(['action', 'EstadoPC']);
@@ -79,6 +69,7 @@ class DesktopController extends Controller
 
         $data =
             [
+                'deviceType' => $deviceType,
                 'globalDesktopCount' => $globalDesktopCount,
                 'globalTurneroCount' => $globalTurneroCount,
                 'globalLaptopCount' => $globalLaptopCount,
@@ -135,6 +126,7 @@ class DesktopController extends Controller
             ->where('id', '<>', [4])
             ->where('id', '<>', [9])
             ->where('id', '<>', [10])
+            ->where('id', '<>', [11])
             ->get();
 
         $statusAssignments = DB::table('status')
@@ -143,12 +135,6 @@ class DesktopController extends Controller
             ->get();
 
         $domainNames = Device::DOMAIN_NAME;
-
-        //$campus = Campu::select('id', 'description')->get();
-        //dd($campus);
-        //$campu = Campu::select('id', 'description')->where('id','MAC')->get();
-        /*$slug = Str::slug('VIVA 1A IPS MACARENA', '-');
-        dd($slug);*/
 
         $data =
             [
@@ -185,7 +171,7 @@ class DesktopController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'val-select2-ram0' => [
                 'required',
@@ -300,7 +286,7 @@ class DesktopController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
+                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
                 [
                     $this->device->inventory_code_number = $this->generatorID, //32
                     $this->device->fixed_asset_number = e($request->input('activo-fijo-pc')),
@@ -324,6 +310,7 @@ class DesktopController extends Controller
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota'),
+                    $this->device->is_stock = $request->has('stock'),
 
                     $this->component->monitor_serial_number = e($request->input('serial-monitor-pc')),
                     $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
@@ -358,7 +345,6 @@ class DesktopController extends Controller
         $deviceComponents = Device::join('components', 'components.device_id', 'devices.id')
             ->where('device_id', $device->id)
             ->first();
-        //return response()->json($deviceComponents);
 
         $brands = DB::table('brands')
             ->select('id', 'name')
@@ -400,8 +386,16 @@ class DesktopController extends Controller
             ->where('S.id', '<>', [4])
             ->where('S.id', '<>', [9])
             ->where('S.id', '<>', [10])
+            ->where('S.id', '<>', [11])
             ->select('S.id as StatusID', 'S.name as NameStatus')
             ->get();
+
+        $statuStock = Device::where('devices.id', $device->id)
+            ->select(
+                'devices.id',
+                DB::raw("CASE WHEN devices.is_stock = true THEN 1 ELSE 0 END as is_stock")
+            )
+            ->first();
 
         $statusAssignments = DB::table('status')
             ->select('id', 'name')
@@ -420,6 +414,7 @@ class DesktopController extends Controller
                 'processors' => $processors,
                 'campus' => $campus,
                 'status' => $status,
+                'statuStock' => $statuStock,
                 'domainNames' => $domainNames,
                 'statusAssignments' => $statusAssignments,
             ];
@@ -455,7 +450,7 @@ class DesktopController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'val-select2-ram0' => [
                 'required',
@@ -552,7 +547,7 @@ class DesktopController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
                     $device->brand_id = $request->get('marca-pc-select2'),
@@ -568,6 +563,7 @@ class DesktopController extends Controller
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
                     $device->status_id = $request->get('val-select2-status'),
+                    $device->is_stock = $request->has('stock'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
                     $device->assignment_statu_id = $request->get('val-select2-status-assignment'),

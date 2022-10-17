@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +62,8 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::get('firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@createAdminSignature')->name('admin.inventory.admin-signatures.create');
 
     Route::post('guardar-firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@storeAdminSignature')->name('admin.inventory.admin-signatures.store');
+
+    Route::get('stock', [AdminDashboardController::class, 'getStock'])->name('get.stock');
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {
