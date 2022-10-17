@@ -119,6 +119,11 @@ $(document).ready(function () {
         let dt = $("#dt").DataTable({
             processing: true,
             serverSide: true,
+            pageLength: 10,
+            aLengthMenu: [
+                [5, 10, 25, 50, -1],
+                [5, 10, 25, 50, "Todos"],
+            ],
             ajax: root_url_desktop,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
@@ -143,6 +148,60 @@ $(document).ready(function () {
                     system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
                 },
             },
+            initComplete: function () {
+                this.api()
+                    .columns([9, 10])
+                    .every(function () {
+                        let column = this;
+                        let select = $(
+                            '<select class="form-control"><option id="result0" value=""></option></select>'
+                        )
+                            .appendTo($(column.footer()).empty())
+                            .on("change", function () {
+                                let val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(
+                                        val ? "^" + val + "$" : "",
+                                        true,
+                                        false
+                                    )
+                                    .draw();
+                            });
+
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append(
+                                    `<option id="result" value="${d}">${d}</option>`
+                                );
+                            });
+
+                        console.log(document.getElementById("result"));
+                    });
+            },
+            columnDefs: [
+                {
+                    render: function (data, type, row) {
+                        if (type === "display") {
+                            return `<span class="badge badge-pill ${row.ColorEstado} btn-block">
+                                        ${row.EstadoPc}
+                                    </span>`;
+                        }
+
+                        return data;
+                    },
+                    targets: 10,
+                },
+                {
+                    visible: false,
+                    targets: [],
+                },
+            ],
             columns: [
                 {
                     class: "details-control",
@@ -212,12 +271,12 @@ $(document).ready(function () {
             //console.log(e);
             Swal.fire({
                 title: "Estas seguro?",
-                text: "No se podra revertir esto!",
+                text: "Se eliminara de la lista este equipo y sera enviado a la lista de eliminados!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Si, borrar!",
+                confirmButtonText: "Si, eliminar!",
                 cancelButtonText: "No, cancelar",
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -245,8 +304,6 @@ $(document).ready(function () {
                             $("#dt-deleted")
                                 .DataTable()
                                 .ajax.reload(null, true);
-                            //console.log(id);
-                            //getComputerData();
                         },
                     });
                 }

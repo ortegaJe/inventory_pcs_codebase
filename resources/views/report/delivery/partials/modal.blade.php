@@ -158,7 +158,7 @@
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
                       <input type="text" class="form-control" id="other_accesories" name="other_accesories"
-                        value="{{ old('other_accesories') }}" onkeyup="javascript:this.value=this.value.toUpperCase();""
+                        value="{{ old('other_accesories') }}" onkeyup="javascript:this.value=this.value.toUpperCase();"
                         onkeypress=" return /[0-9a-zA-Z ]/i.test(event.key)">
                       <label for="other_accesories">Otros accesorios</label>
                     </div>

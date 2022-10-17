@@ -101,7 +101,8 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-pc" name="serial-pc" value="{{ old('serial-pc') }}"
-                    maxlength="24" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    maxlength="24" onkeyup="javascript:this.value=this.value.toUpperCase();"
+                    onkeypress=" return /[0-9a-zA-Z ]/i.test(event.key)">
                   <label for="serial-pc">Numero Serial</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -116,7 +117,8 @@
               <div class="col-md-4">
                 <div class="form-material floating input-group">
                   <input type="text" class="form-control" id="serial-monitor-pc" name="serial-monitor-pc" maxlength="24"
-                    value="{{ old('serial-monitor-pc') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    value="{{ old('serial-monitor-pc') }}" onkeyup="javascript:this.value=this.value.toUpperCase();"
+                    onkeypress=" return /[0-9a-zA-Z ]/i.test(event.key)">
                   <label for="serial-monitor-pc">Número Serial de monitor</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
@@ -265,6 +267,16 @@
                 @endif
               </div>
             </div>
+            @if (Auth::id() == 2)
+            <div class="form-group row">
+              <div class="col-md-3">
+                <label class="css-control css-control-primary css-switch css-switch-square">
+                  <input type="checkbox" class="css-control-input" id="stock" name="stock">
+                  <span class="css-control-indicator"></span> EN STOCK
+                </label>
+              </div>
+            </div>
+            @endif
           </div>
           <!-- END Step 2 -->
 

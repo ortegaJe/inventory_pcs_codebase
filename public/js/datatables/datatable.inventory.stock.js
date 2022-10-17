@@ -8,9 +8,6 @@ $(document).ready(function () {
     });
 
     function format(d) {
-        //let url = '{{ route("admin.inventory.technicians.show", ":id") }}';
-        //url = url.replace(':id', d.TecnicoID);
-
         return (
             '<div class="slider">' +
             '<table class="table-responsive td-slider" style="font-size:13">' +
@@ -97,25 +94,12 @@ $(document).ready(function () {
             "</p>" +
             "</td>" +
             "<td>" +
-            "<div>Registrado por:</div>" +
-            '<span class="badge badge-primary mb-5"><i class="si si-user mr-5"></i>' +
-            d.NombreTecnico +
-            "</span>" +
-            "<div>Hora del registro:</div>" +
-            '<span class="badge badge-primary"><i class="si si-clock mr-5"></i>' +
-            d.FechaCreacionUsuario +
-            "</span>" +
+            "Estado del equipo: " +
+            `<span class='badge badge-pill ${d.ColorEstado2}'>` +
+            d.EstadoPc2 +
+            `</span>` +
             "</td>" +
-            "<td>" +
-            "<div>Asignando a:</div>" +
-            d.NombreCustodio +
-            "<div>Acta de entrega:</div>" +
-            '<a type="button" class="btn btn-alt-danger js-tooltip-enabled" data-toggle="tooltip" data-placement="left" title="" target="_blanck" href="http://inventory.viva1a.com.co/storage/pdf/acta_de_entrega/' +
-            d.report_code_number +
-            '.pdf" data-original-title="Descargar Inventario">' +
-            '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' +
-            "</a>" +
-            "</td>" +
+            "<td></td>" +
             "<td></td>" +
             "<td></td>" +
             "<td></td>" +
@@ -124,6 +108,16 @@ $(document).ready(function () {
             "</table>" +
             "</div>"
         );
+    }
+
+    function getComputerData() {
+        $.ajax({
+            url: root_url,
+            type: "GET",
+            data: {},
+        }).done(function (data) {
+            //alert(data);
+        });
     }
 
     $(document).ready(function () {
@@ -135,7 +129,7 @@ $(document).ready(function () {
                 [5, 10, 25, 50, -1],
                 [5, 10, 25, 50, "Todos"],
             ],
-            ajax: root_url_dashboard,
+            ajax: root_url_stock,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -161,7 +155,7 @@ $(document).ready(function () {
             },
             initComplete: function () {
                 this.api()
-                    .columns([10])
+                    .columns([9])
                     .every(function () {
                         let column = this;
                         let select = $(
@@ -207,7 +201,10 @@ $(document).ready(function () {
                         return data;
                     },
                     targets: 10,
-                    visible: true,
+                },
+                {
+                    visible: false,
+                    targets: [],
                 },
             ],
             columns: [
@@ -256,6 +253,7 @@ $(document).ready(function () {
                 {
                     data: "Anydesk",
                     searcheable: true,
+                    //visible: false
                 },
                 {
                     data: "Sede",
@@ -265,8 +263,57 @@ $(document).ready(function () {
                     data: "EstadoPC",
                     searcheable: true,
                 },
+                {
+                    data: "action",
+                    searcheable: false,
+                    orderable: false,
+                },
             ],
             order: [[1, "desc"]],
+        });
+
+        $(document).on("click", "#btn-delete", function (e) {
+            //console.log(e);
+            Swal.fire({
+                title: "Estas seguro?",
+                text: "Se eliminara de la lista este equipo y sera enviado a la lista de eliminados!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, eliminar!",
+                cancelButtonText: "No, cancelar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    let id = $(this).attr("data-id");
+                    //console.log(id);
+                    $.ajax({
+                        url: root_url_desktop_store + "/" + id,
+                        type: "DELETE",
+                        data: {
+                            _token: $('input[name="_token"]').val(),
+                        },
+                        success: function (response) {
+                            console.log(
+                                response.result[0]["inventory_code_number"]
+                            );
+                            let msg =
+                                response.result[0]["inventory_code_number"];
+                            Swal.fire(
+                                `Numero de inventario #${msg}`,
+                                response.message,
+                                "success"
+                            );
+                            $("#dt").DataTable().ajax.reload(null, true);
+                            $("#dt-deleted")
+                                .DataTable()
+                                .ajax.reload(null, true);
+                        },
+                    });
+                }
+            });
+            return false;
         });
 
         // Array to track the ids of the details displayed rows

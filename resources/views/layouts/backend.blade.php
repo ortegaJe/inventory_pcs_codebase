@@ -265,6 +265,21 @@
               </ul>
               <ul>
                 <li>
+                  <a class="{{ request()->is('dashboard/inventario/stock') ? 'active' : '' }}"
+                    href="{{ route('get.stock') }}">Stock
+                    <span class="badge badge-pill bg-gray-darker"><i class="fa fa-cubes"></i>
+                      @php $globalDeviceCount = DB::table('view_all_devices')
+                      ->where('TecnicoID', Auth::id())
+                      ->where('EstadoPc', 'stock')
+                      ->count();
+                      @endphp
+                      {{ $globalDeviceCount ?? '0' }}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+              <ul>
+                <li>
                   <a class="{{ request()->is('dashboard/inventario/reportes') ? 'active' : '' }}"
                     href="{{ route('inventory.report.index') }}">Reportes
                     <span class="badge badge-pill bg-gray-darker"><i class="fa fa-file-text-o"></i></span>
