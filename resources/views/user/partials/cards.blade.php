@@ -115,4 +115,5 @@
       </div>
     </a>
   </div>
-  <!-- END Telefonos IP -->
+</div>
+<!-- END Telefonos IP -->

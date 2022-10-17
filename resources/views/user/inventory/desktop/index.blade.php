@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Técnico Dashboard')
+@section('title', 'Equipos ' .Str::title($deviceType->type_name))
 
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
@@ -10,24 +10,26 @@
 <!-- Page Content -->
 @include('user.partials.cards')
 <!-- Add Product -->
-<div class="col-md-6 col-xl-2">
-  <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
-    <div class="block-content block-content-full block-sticky-options">
-      <div class="block-options">
-        <div class="block-options-item">
+<div class="row gutters-tiny mb-2">
+  <div class="col-md-6 col-xl-2">
+    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
+      <div class="block-content block-content-full block-sticky-options">
+        <div class="block-options">
+          <div class="block-options-item">
+          </div>
+        </div>
+        <div class="py-20 text-center">
+          <div class="font-size-h2 font-w700 mb-3 text-success">
+            <i class="fa fa-plus"></i>
+          </div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
         </div>
       </div>
-      <div class="py-20 text-center">
-        <div class="font-size-h2 font-w700 mb-3 text-success">
-          <i class="fa fa-plus"></i>
-        </div>
-        <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
-      </div>
-    </div>
-  </a>
+    </a>
+  </div>
 </div>
-<!-- END Add Product -->
-@include('user.partials.modal')
+<!-- End Add Product -->
+<!-- Partial Table -->
 <div class="col-md-14">
   <div class="block block-rounded block-bordered">
     <div class="block-header block-header-default border-b">
@@ -87,7 +89,9 @@
     </div>
   </div>
 </div>
+<!-- End Partial Table -->
 @include('user.partials.table_deleted')
+<!-- End Page Content -->
 @endsection
 
 @push('js')
@@ -98,37 +102,36 @@
 
 <script>
   let root_url_desktop = <?php echo json_encode(route('user.inventory.desktop.index')) ?>;
-  let root_url_desktop_store = <?php echo json_encode(route('user.inventory.desktop.store')) ?>;  
+  let root_url_desktop_store = <?php echo json_encode(route('user.inventory.desktop.store')) ?>;    
 </script>
 
 @if(Session::has('pc_created'))
 <script>
   Swal.fire(
-'Creado con Exito!',
-'{!! Session::get('pc_created') !!}',
-'success'
-)
+            'Creado con Exito!',
+            '{!! Session::get('pc_created') !!}',
+            'success'
+            )
 </script>
 @endif
 
 @if(Session::has('info_error'))
 <script>
   Swal.fire(
-'Ha Ocurrido Un Error Al Crear El Equipo!',
-'{!! Session::get('info_error') !!}',
-'warning'
-)
+            'Ha Ocurrido Un Error Al Crear El Equipo!',
+            '{!! Session::get('info_error') !!}',
+            'warning'
+            )
 </script>
 @endif
 
 @if(Session::has('pc_updated'))
 <script>
   Swal.fire(
-'Actualizado con Exito!',
-'{!! Session::get('pc_updated') !!}',
-'success'
-)
+            'Actualizado con Exito!',
+            '{!! Session::get('pc_updated') !!}',
+            'success'
+            )
 </script>
 @endif
-
 @endpush

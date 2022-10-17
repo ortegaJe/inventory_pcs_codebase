@@ -11,27 +11,28 @@
 <div class="content">
   @include('user.partials.cards')
   <!-- Add Product -->
-  <div class="col-md-6 col-xl-2">
-    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.laptop.create') }}">
-      <div class="block-content block-content-full block-sticky-options">
-        <div class="block-options">
-          <div class="block-options-item">
+  <div class="row gutters-tiny mb-2">
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.laptop.create') }}">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+            </div>
+          </div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-3 text-success">
+              <i class="fa fa-plus"></i>
+            </div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
           </div>
         </div>
-        <div class="py-20 text-center">
-          <div class="font-size-h2 font-w700 mb-3 text-success">
-            <i class="fa fa-plus"></i>
-          </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
-        </div>
-      </div>
-    </a>
-    <!-- END Add Product -->
+      </a>
+    </div>
   </div>
-
+  <!-- End Add Product -->
   @include('user.partials.modal')
-
-  <div class="col-md-14">
+  <!-- Partial Table -->
+  <div class="col-md-12">
     <div class="block block-rounded block-bordered">
       <div class="block-header block-header-default border-b">
         <h3 class="block-title">
@@ -41,9 +42,6 @@
           <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
             data-action-mode="demo">
             <i class="si si-refresh"></i>
-          </button>
-          <button type="button" class="btn-block-option">
-            <i class="si si-wrench"></i>
           </button>
         </div>
       </div>
@@ -93,41 +91,39 @@
       </div>
     </div>
   </div>
+  <!-- End Partial Table -->
   @include('user.partials.table_deleted')
-  <!-- END Coins -->
-</div>
-<!-- End Page Content -->
+  <!-- End Page Content -->
+  @endsection
 
-@endsection
+  @push('js')
+  <script src="{{ asset('/js/datatables/datatable.inventory.laptop.js') }}"></script>
+  <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
+  <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-@push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.laptop.js') }}"></script>
-<script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+  <script>
+    let root_url_laptop = <?php echo json_encode(route('user.inventory.laptop.index')) ?>;
+  let root_url_laptop_store = <?php echo json_encode(route('user.inventory.laptop.store')) ?>;
+  </script>
 
-@if(Session::has('pc_created'))
-<script>
-  Swal.fire(
+  @if(Session::has('pc_created'))
+  <script>
+    Swal.fire(
 'Creado con Exito!',
 '{!! Session::get('pc_created') !!}',
 'success'
 )
-</script>
-@endif
+  </script>
+  @endif
 
-@if(Session::has('pc_updated'))
-<script>
-  Swal.fire(
+  @if(Session::has('pc_updated'))
+  <script>
+    Swal.fire(
 'Actualizado con Exito!',
 '{!! Session::get('pc_updated') !!}',
 'success'
 )
-</script>
-@endif
-
-<script>
-  let root_url_laptop = <?php echo json_encode(route('user.inventory.laptop.index')) ?>;
-  let root_url_laptop_store = <?php echo json_encode(route('user.inventory.laptop.store')) ?>;
-</script>
-@endpush
+  </script>
+  @endif
+  @endpush
