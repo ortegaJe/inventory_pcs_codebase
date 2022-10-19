@@ -38,6 +38,7 @@ class AllInOneController extends Controller
         $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
         $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
         $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
+        $deviceType = Device::select('tp.name as type_name')->join('type_devices as tp', 'tp.id', 'devices.type_device_id')->where('devices.type_device_id', TypeDevice::ALL_IN_ONE_PC_ID)->first();
 
         if ($request->ajax()) {
 
@@ -79,6 +80,7 @@ class AllInOneController extends Controller
 
         $data =
             [
+                'deviceType' => $deviceType,
                 'globalDesktopCount' => $globalDesktopCount,
                 'globalTurneroCount' => $globalTurneroCount,
                 'globalLaptopCount' => $globalLaptopCount,
@@ -395,6 +397,13 @@ class AllInOneController extends Controller
             ->select('S.id as StatusID', 'S.name as NameStatus')
             ->get();
 
+        $statuStock = Device::where('devices.id', $device->id)
+            ->select(
+                'devices.id',
+                DB::raw("CASE WHEN devices.is_stock = true THEN 1 ELSE 0 END as is_stock")
+            )
+            ->first();
+
         $statusAssignments = DB::table('status')
             ->select('id', 'name')
             ->whereIn('id', [9, 10])
@@ -412,6 +421,7 @@ class AllInOneController extends Controller
                 'processors' => $processors,
                 'campus' => $campus,
                 'status' => $status,
+                'statuStock' => $statuStock,
                 'domainNames' => $domainNames,
                 'statusAssignments' => $statusAssignments
             ];
