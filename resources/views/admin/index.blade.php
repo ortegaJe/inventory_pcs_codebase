@@ -126,7 +126,6 @@
   </div>
   <!-- END Telefonos IP -->
 </div>
-
 <div class="col-md-14">
   <div class="block block-rounded block-bordered">
     <div class="block-header block-header-default border-b">
