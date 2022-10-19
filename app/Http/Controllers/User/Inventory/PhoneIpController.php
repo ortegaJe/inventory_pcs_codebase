@@ -219,7 +219,7 @@ class PhoneIpController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
+                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
                 [
                     $this->device->inventory_code_number = $this->generatorID, //30
                     $this->device->fixed_asset_number = e($request->input('activo-fijo-pc')),
@@ -243,6 +243,7 @@ class PhoneIpController extends Controller
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota'),
+                    $this->device->is_stock = $request->has('stock'),
 
                     $this->component->monitor_serial_number = null,
                     $this->component->slot_one_ram_id = null,
@@ -426,7 +427,7 @@ class PhoneIpController extends Controller
             DB::beginTransaction();
 
             DB::update(
-                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
+                "CALL SP_updateDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //30
                 [
                     $device->fixed_asset_number = $request->get('activo-fijo-pc'),
                     $device->brand_id = $request->get('marca-pc-select2'),
@@ -442,6 +443,7 @@ class PhoneIpController extends Controller
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
                     $device->status_id = $request->get('val-select2-status'),
+                    $device->is_stock = $request->has('stock'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
                     $device->assignment_statu_id = $request->get('val-select2-status-assignment'),
