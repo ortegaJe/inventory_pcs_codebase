@@ -320,6 +320,7 @@ class LaptopController extends Controller
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota')->toDateTimeString(),
+                    $this->device->is_stock = $request->has('stock'),
 
                     $this->component->monitor_serial_number = null,
                     $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
@@ -573,6 +574,7 @@ class LaptopController extends Controller
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
                     $device->status_id = $request->get('val-select2-status'),
+                    $this->device->is_stock = $request->has('stock'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
                     $device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
