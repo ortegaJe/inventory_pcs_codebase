@@ -270,6 +270,16 @@
                 @endif
               </div>
             </div>
+            @if (Auth::id() == 2)
+            <div class="form-group row">
+              <div class="col-md-3">
+                <label class="css-control css-control-primary css-switch css-switch-square">
+                  <input type="checkbox" class="css-control-input" id="stock" name="stock">
+                  <span class="css-control-indicator"></span> EN STOCK
+                </label>
+              </div>
+            </div>
+            @endif
           </div>
           <!-- END Step 2 -->
 
