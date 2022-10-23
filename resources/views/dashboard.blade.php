@@ -2,6 +2,10 @@
 
 @section('title', 'Dashboard')
 
+@section('css')
+<link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
+
 @section('content')
 {{--<div class="block block-rounded">
 	<div class="block-content block-content-full bg-pattern"
@@ -27,45 +31,44 @@
 		</div>
 	</div>
 </div>--}}
+@hasrole('super_admin|admin_view')
 <div class="col-xl-6">
 	<div class="block">
 		<div class="block-content block-content-full text-center bg-primary">
 			<div class="p-20 mb-10">
-				<i class="fa fa-3x fa-youtube-play text-white-op"></i>
+				<i class="fa fa-3x fa-building text-white-op"></i>
 			</div>
 			<p class="font-size-lg font-w600 text-white mb-0">
-				Best TV Shows
+				Sedes con menos de 5 equipos registrados
 			</p>
 			<p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
-				Top 5
 			</p>
 		</div>
 		<div class="block-content block-content-full">
-			<table class="table table-borderless table-striped table-hover mb-0">
-				<tbody>
+			<table id="dt" class="table table-hover" style="width:100%">
+				<thead>
 					<tr>
-						<td class="text-center" style="font-size: 14px">01</td>
-						<td>
-							<i class="fa fa-trophy fa-1x text-warning"></i>
-						</td>
-						<td>
-							<strong>Alberto Cortes</strong>
-						</td>
-						<td>
-							<strong style="width: 60px;">VIVA 1A IPS MACARENA</strong>
-						</td>
-						<td class="text-center" style="width: 40px;">
-							<strong class="text-success">95</strong>
-						</td>
+						<th><i class="si si-user fa-2x"></i></th>
+						<th><i class="si si-screen-smartphone fa-2x"></i></th>
+						<th><i class="fa fa-building-o fa-2x"></i></th>
+						<th><i class="si si-screen-desktop fa-2x"></i></th>
 					</tr>
-				</tbody>
+				</thead>
 			</table>
-		</div>
-		<div class="block-content block-content-full text-center bg-body-light">
-			<a class="btn btn-alt-secondary" href="javascript:void(0)">
-				<i class="fa fa-eye mr-5"></i> Show all..
-			</a>
 		</div>
 	</div>
 </div>
+@endhasrole
 @endsection
+
+@push('js')
+<script src="{{ asset('/js/datatables/datatable.inventory.campus.less.devices.js') }}"></script>
+<script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+<script>
+	let root_url = <?php echo json_encode(route('get.campus.fewer.devices')) ?>;
+	let root_url_show = <?php echo json_encode(route('admin.inventory.technicians.store')) ?>;
+</script>
+@endpush

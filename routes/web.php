@@ -27,6 +27,8 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
 
+    Route::get('sedes-con-menos-equipos', [AdminDashboardController::class, 'getCampusFewerDevices'])->name('get.campus.fewer.devices');
+
     Route::resource('tecnicos', 'App\Http\Controllers\Admin\UserController')->names('admin.inventory.technicians');
 
     Route::get('perfil/{id?}', 'App\Http\Controllers\Admin\UserController@showProfileUser')->name('admin.inventory.technicians.profiles');

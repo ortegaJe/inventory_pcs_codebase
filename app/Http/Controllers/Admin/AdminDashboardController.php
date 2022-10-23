@@ -76,6 +76,50 @@ class AdminDashboardController extends Controller
     return view('admin.index')->with($data);
   }
 
+  public function getCampusFewerDevices(Request $request)
+  {
+    if ($request->ajax()) {
+      $campus = DB::table('campus as c')
+        ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
+        ->leftJoin('users as u', 'u.id', 'cu.user_id')
+        ->leftJoin('devices as d', 'd.campu_id', 'c.id')
+        ->select(
+          DB::raw("CASE WHEN u.id IS NULL THEN
+                          'Sin técnico asignado'
+                              ELSE CONCAT(u.name, ' ', u.last_name) 
+                                END AS nombre_tecnico"),
+          DB::raw("CASE WHEN u.phone_number IS NULL THEN
+                          ' '
+                              ELSE u.phone_number 
+                                END AS telefono"),
+          'c.id as sede_id',
+          'u.id as user_id',
+          'c.name as nombre_sede',
+          DB::raw("COUNT(d.campu_id) AS numero_equipos"),
+          DB::raw("CASE WHEN COUNT(d.campu_id) = 0 THEN 'badge-danger'
+                          WHEN COUNT(d.campu_id) <= 4 THEN 'badge-warning'    
+                            ELSE 'badge-success' 
+                              END AS color"),
+        )
+        ->groupByRaw('c.id, c.name, u.id, u.name, u.last_name, u.phone_number')
+        ->havingRaw('numero_equipos <= 4')
+        ->orderByRaw('numero_equipos')
+        ->get();
+
+      $datatables = DataTables::of($campus);
+      $datatables->addColumn('nombre_tecnico', function ($campus) {
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($campus->EstadoPC, true));
+        return $campus->nombre_tecnico;
+      });
+      $datatables->addColumn('numero_equipos', function ($campus) {
+        //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($campus->EstadoPC, true));
+        return $campus->numero_equipos;
+      });
+      $datatables->rawColumns(['nombre_tecnico', 'numero_equipos']);
+      return $datatables->make(true);
+    }
+  }
+
   public function getStock(Request $request)
   {
     if ($request->ajax()) {
