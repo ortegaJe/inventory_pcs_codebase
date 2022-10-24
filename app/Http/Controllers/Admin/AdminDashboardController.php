@@ -102,7 +102,7 @@ class AdminDashboardController extends Controller
                               END AS color"),
         )
         ->groupByRaw('c.id, c.name, u.id, u.name, u.last_name, u.phone_number')
-        ->havingRaw('numero_equipos <= 4')
+        //->havingRaw('numero_equipos <= 4')
         ->orderByRaw('numero_equipos')
         ->get();
 

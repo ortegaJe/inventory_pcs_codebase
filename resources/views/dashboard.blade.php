@@ -39,7 +39,7 @@
 				<i class="fa fa-3x fa-building text-white-op"></i>
 			</div>
 			<p class="font-size-lg font-w600 text-white mb-0">
-				Sedes con menos de 5 equipos registrados
+				Numero de equipos por sede registrados
 			</p>
 			<p class="font-size-sm text-uppercase font-w600 text-white-op mb-0">
 			</p>
