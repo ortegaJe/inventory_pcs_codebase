@@ -13,7 +13,7 @@
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <table class="table table-hover" id="dt-deleted">
+                <table id="dt-deleted" class="table table-hover" style="width:100%">
                     <p>
                         <button type="button" class="btn btn-sm btn-noborder btn-primary d-none" id="deleteAllBtn"
                             data-toggle="click-ripple">

@@ -1,12 +1,17 @@
 @extends('layouts.backend')
 
 @section('title', 'Equipos ' .Str::title($deviceType->type_name))
+<<<<<<< HEAD
+=======
+
+>>>>>>> stock_devices
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
 
 @section('content')
 <!-- Page Content -->
+<<<<<<< HEAD
 @include('user.partials.cards')
 <!-- Add Product -->
 <div class="row gutters-tiny mb-2">
@@ -15,17 +20,30 @@
       <div class="block-content block-content-full block-sticky-options">
         <div class="block-options">
           <div class="block-options-item">
+=======
+<div class="col-md-12">
+  @include('user.partials.cards')
+  <!-- Add Product -->
+  <div class="row gutters-tiny mb-2">
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.allinone.create') }}">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+            </div>
+          </div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-3 text-success">
+              <i class="fa fa-plus"></i>
+            </div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
+>>>>>>> stock_devices
           </div>
         </div>
-        <div class="py-20 text-center">
-          <div class="font-size-h2 font-w700 mb-3 text-success">
-            <i class="fa fa-plus"></i>
-          </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
-        </div>
-      </div>
-    </a>
+      </a>
+    </div>
   </div>
+<<<<<<< HEAD
 </div>
 <!-- END Add Product -->
 <!-- Partial Table -->
@@ -34,6 +52,14 @@
     <div class="block-header block-header-default border-b">
       <h3 class="block-title">
         Equipos informáticos<small> | Lista</small>
+=======
+  <!-- END Add Product -->
+  <!-- Partial Table -->
+  <div class="block block-rounded block-bordered">
+    <div class="block-header block-header-default border-b">
+      <h3 class="block-title">
+        Lista<small> | Equipos informaticos</small>
+>>>>>>> stock_devices
       </h3>
       <div class="block-options">
         <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle"
@@ -90,12 +116,16 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 </div>
 <!-- End Partial Table -->
 @include('user.partials.table_deleted')
+=======
+>>>>>>> stock_devices
 </div>
+<!-- End Partial Table -->
+@include('user.partials.table_deleted')
 <!-- End Page Content -->
-
 @endsection
 
 @push('js')

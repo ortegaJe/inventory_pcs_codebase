@@ -178,7 +178,7 @@ class AllInOneController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'val-select2-ram0' => [
                 'required',
@@ -413,6 +413,7 @@ class AllInOneController extends Controller
 
         $data =
             [
+                'statuStock' => $statuStock,
                 'deviceComponents' => $deviceComponents,
                 'operatingSystems' => $operatingSystems,
                 'memoryRams' => $memoryRams,
@@ -458,7 +459,7 @@ class AllInOneController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'val-select2-ram0' => [
                 'required',

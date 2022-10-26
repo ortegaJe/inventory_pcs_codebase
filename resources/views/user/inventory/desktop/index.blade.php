@@ -8,29 +8,29 @@
 
 @section('content')
 <!-- Page Content -->
-@include('user.partials.cards')
-<!-- Add Product -->
-<div class="row gutters-tiny mb-2">
-  <div class="col-md-6 col-xl-2">
-    <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
-      <div class="block-content block-content-full block-sticky-options">
-        <div class="block-options">
-          <div class="block-options-item">
+<div class="col-md-12">
+  @include('user.partials.cards')
+  <!-- Add Product -->
+  <div class="row gutters-tiny mb-2">
+    <div class="col-md-6 col-xl-2">
+      <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
+        <div class="block-content block-content-full block-sticky-options">
+          <div class="block-options">
+            <div class="block-options-item">
+            </div>
+          </div>
+          <div class="py-20 text-center">
+            <div class="font-size-h2 font-w700 mb-3 text-success">
+              <i class="fa fa-plus"></i>
+            </div>
+            <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
           </div>
         </div>
-        <div class="py-20 text-center">
-          <div class="font-size-h2 font-w700 mb-3 text-success">
-            <i class="fa fa-plus"></i>
-          </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">Nuevo equipo</div>
-        </div>
-      </div>
-    </a>
+      </a>
+    </div>
   </div>
-</div>
-<!-- End Add Product -->
-<!-- Partial Table -->
-<div class="col-md-14">
+  <!-- End Add Product -->
+  <!-- Partial Table -->
   <div class="block block-rounded block-bordered">
     <div class="block-header block-header-default border-b">
       <h3 class="block-title">

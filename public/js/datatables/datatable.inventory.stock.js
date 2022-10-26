@@ -153,7 +153,7 @@ $(document).ready(function () {
                     system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
                 },
             },
-            initComplete: function () {
+            /*             initComplete: function () {
                 this.api()
                     .columns([9])
                     .every(function () {
@@ -188,7 +188,7 @@ $(document).ready(function () {
 
                         console.log(document.getElementById("result"));
                     });
-            },
+            }, */
             columnDefs: [
                 {
                     render: function (data, type, row) {
@@ -253,7 +253,7 @@ $(document).ready(function () {
                 {
                     data: "Anydesk",
                     searcheable: true,
-                    //visible: false
+                    visible: false,
                 },
                 {
                     data: "Sede",
