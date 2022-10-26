@@ -38,6 +38,7 @@ class PhoneIpController extends Controller
         $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
         $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
         $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
+        $deviceType = Device::select('tp.name as type_name')->join('type_devices as tp', 'tp.id', 'devices.type_device_id')->where('devices.type_device_id', TypeDevice::IP_PHONE_ID)->first();
 
         if ($request->ajax()) {
 
@@ -79,6 +80,7 @@ class PhoneIpController extends Controller
 
         $data =
             [
+                'deviceType' => $deviceType,
                 'globalDesktopCount' => $globalDesktopCount,
                 'globalTurneroCount' => $globalTurneroCount,
                 'globalLaptopCount' => $globalLaptopCount,
@@ -156,7 +158,7 @@ class PhoneIpController extends Controller
             'ip' => 'nullable|ipv4',
             'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
             'pc-domain-name' => 'required',
-            'pc-name' => 'required|unique:devices,device_name|max:20|regex:/^[0-9a-zA-Z-]+$/i',
+            'pc-name' => 'nullable|max:20|regex:/^[0-9a-zA-Z-]+$/i',
             'val-select2-campus' => 'required|numeric',
             'location' => 'required|nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
             'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
@@ -310,10 +312,18 @@ class PhoneIpController extends Controller
             ->whereIn('id', [9, 10])
             ->get();
 
+        $statuStock = Device::where('devices.id', $device->id)
+            ->select(
+                'devices.id',
+                DB::raw("CASE WHEN devices.is_stock = true THEN 1 ELSE 0 END as is_stock")
+            )
+            ->first();
+
         $domainNames = Device::DOMAIN_NAME;
 
         $data =
             [
+                'statuStock' => $statuStock,
                 'deviceComponents' => $deviceComponents,
                 'brands' => $brands,
                 'campus' => $campus,

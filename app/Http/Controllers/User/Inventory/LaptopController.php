@@ -37,6 +37,7 @@ class LaptopController extends Controller
         $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
         $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
         $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
+        $deviceType = Device::select('tp.name as type_name')->join('type_devices as tp', 'tp.id', 'devices.type_device_id')->where('devices.type_device_id', TypeDevice::LAPTOP_PC_ID)->first();
 
         if ($request->ajax()) {
 
@@ -46,13 +47,8 @@ class LaptopController extends Controller
                 ->get();
             //dd($devices);
             $datatables = DataTables::of($devices);
-            /*$datatables->editColumn('FechaCreacion', function ($devices) {
-                return $devices->FechaCreacion ? with(new Carbon($devices->FechaCreacion))
-                    ->format('d/m/Y h:i A')    : '';
-            });*/
             $datatables->addColumn('EstadoPC', function ($devices) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices->EstadoPC, true));
-
                 return $devices->EstadoPc;
             });
 
@@ -78,6 +74,7 @@ class LaptopController extends Controller
 
         $data =
             [
+                'deviceType' => $deviceType,
                 'globalDesktopCount' => $globalDesktopCount,
                 'globalTurneroCount' => $globalTurneroCount,
                 'globalLaptopCount' => $globalLaptopCount,
@@ -182,7 +179,7 @@ class LaptopController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'val-select2-ram0' => [
                 'required',
@@ -413,10 +410,18 @@ class LaptopController extends Controller
             ->whereIn('id', [9, 10])
             ->get();
 
+        $statuStock = Device::where('devices.id', $device->id)
+            ->select(
+                'devices.id',
+                DB::raw("CASE WHEN devices.is_stock = true THEN 1 ELSE 0 END as is_stock")
+            )
+            ->first();
+
         $domainNames = Device::DOMAIN_NAME;
 
         $data =
             [
+                'statuStock' => $statuStock,
                 'deviceComponents' => $deviceComponents,
                 'operatingSystems' => $operatingSystems,
                 'memoryRams' => $memoryRams,
@@ -461,7 +466,7 @@ class LaptopController extends Controller
             'os-pc-select2' => [
                 'required',
                 'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6])
+                Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'val-select2-ram0' => [
                 'required',
@@ -574,7 +579,7 @@ class LaptopController extends Controller
                     $device->campu_id = $request->get('val-select2-campus'),
                     $device->location = $request->get('location'),
                     $device->status_id = $request->get('val-select2-status'),
-                    $this->device->is_stock = $request->has('stock'),
+                    $device->is_stock = $request->has('stock'),
                     $device->custodian_assignment_date = $request->get('custodian-assignment-date'),
                     $device->custodian_name = $request->get('custodian-name'),
                     $device->assignment_statu_id = e($request->input('val-select2-status-assignment')),

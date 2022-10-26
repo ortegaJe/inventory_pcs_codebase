@@ -260,9 +260,11 @@
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
                     </li>
+                    @endcan
                   </ul>
                 </li>
               </ul>
+              @can('get.stock')
               <ul>
                 <li>
                   <a class="{{ request()->is('dashboard/inventario/stock') ? 'active' : '' }}"
@@ -278,6 +280,8 @@
                   </a>
                 </li>
               </ul>
+              @endcan
+              @can('inventory.report.index')
               <ul>
                 <li>
                   <a class="{{ request()->is('dashboard/inventario/reportes') ? 'active' : '' }}"

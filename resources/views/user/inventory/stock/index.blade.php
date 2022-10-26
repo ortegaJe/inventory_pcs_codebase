@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section('title', 'Equipos Stock')
+@section('title', 'Equipos en Stock')
 
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">

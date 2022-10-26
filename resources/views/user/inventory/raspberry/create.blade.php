@@ -53,8 +53,8 @@
               style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; right: 20px; animation-iteration-count: 1;">
               <button type="button" aria-hidden="true" class="close" data-notify="dismiss"
                 style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button><span data-notify="icon"
-                class="fa fa-times"></span> <span data-notify="title"></span> <span
-                data-notify="message">{{ Session::get('message') }}
+                class="fa fa-times"></span> <span data-notify="title"></span> <span data-notify="message">{{
+                Session::get('message') }}
               </span><a href="#" target="_blank" data-notify="url"></a>
             </div>
             @endif
@@ -212,6 +212,16 @@
                 @endif
               </div>
             </div>
+            @if (Auth::id() == 2)
+            <div class="form-group row">
+              <div class="col-md-3">
+                <label class="css-control css-control-primary css-switch css-switch-square">
+                  <input type="checkbox" class="css-control-input" id="stock" name="stock">
+                  <span class="css-control-indicator"></span> EN STOCK
+                </label>
+              </div>
+            </div>
+            @endif
           </div>
           <!-- END Step 2 -->
 
