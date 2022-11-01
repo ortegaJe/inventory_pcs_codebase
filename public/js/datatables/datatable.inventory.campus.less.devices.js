@@ -40,7 +40,7 @@ $(document).ready(function () {
                     system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
                 },
             },
-             columnDefs: [
+            columnDefs: [
                 {
                     render: function (data, type, row) {
                         if (type === "display") {
@@ -53,10 +53,13 @@ $(document).ready(function () {
                     },
                     targets: 3,
                     visible: true,
-                 },
-                 {
+                },
+                {
                     render: function (data, type, row) {
-                         if (type === "display") {
+                        if (row.user_id === null) {
+                            return `<span class="disabled">${row.nombre_tecnico}</span>`;
+                        }
+                        if (type === "display") {
                             return `<a href ="${root_url_show}/${row.user_id}">${row.nombre_tecnico}</a>`;
                         }
 
@@ -64,7 +67,7 @@ $(document).ready(function () {
                     },
                     targets: 0,
                     visible: true,
-                 },
+                },
             ],
             columns: [
                 {
@@ -75,7 +78,7 @@ $(document).ready(function () {
                 },
                 {
                     data: "telefono",
-                    visible: true,
+                    visible: false,
                     searchable: true,
                     orderable: false,
                 },

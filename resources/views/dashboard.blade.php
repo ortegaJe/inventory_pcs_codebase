@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('css')
-<link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
+<link href="{{ asset('/css/datatables/datatable.inventory.campus.less.devices.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
 
 @section('content')
