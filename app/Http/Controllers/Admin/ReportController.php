@@ -219,6 +219,21 @@ class ReportController extends Controller
         $user_id = Auth::id();
         $serial_number = $request->get('search');
 
+        $campu_users = Campu::leftJoin('campu_users as cu', 'cu.campu_id', 'campus.id')
+            ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->leftJoin('devices as d', 'd.campu_id', 'campus.id')
+            ->leftJoin('reports as r', 'r.device_id', 'd.id')
+            ->select(
+                'cu.campu_id',
+                'campus.name',
+            )
+            ->where('cu.user_id', $user_id)
+            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID,)
+            ->distinct('campus.name')
+            ->get();
+
+        //return $campu_users;
+
         $devices = Report::rightJoin('report_maintenances as rm', 'rm.report_id', 'reports.id')
             ->rightJoin('devices as d', 'd.id', 'reports.device_id')
             ->rightJoin('type_devices as td', 'td.id', 'd.type_device_id')
@@ -263,7 +278,7 @@ class ReportController extends Controller
 
         //return $devices;
 
-        return view('report.maintenances.index', compact('devices'));
+        return view('report.maintenances.index', compact('devices', 'campu_users'));
     }
 
     public function downloadMtoCampu(Request $request)
