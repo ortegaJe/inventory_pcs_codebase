@@ -80,6 +80,7 @@
 </div>
 
 <div class="block-content">
+    @include('report.delivery.partials.modal_upload')
     <div class="content-heading">
         <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal"
             data-target="#modal-upload">
@@ -105,7 +106,6 @@
                 </thead>
                 <tbody style="font-size: 14px">
                     @forelse($report_deliveries as $repo)
-                    @include('report.delivery.partials.modal_upload')
                     <tr>
                         <td class="d-none d-sm-table-cell">
                             {{ $repo->report_code_number }}
@@ -119,7 +119,7 @@
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Imprimir Reporte"
-                                    href="#" target="_blank">
+                                    href="{{ Storage::url($repo->file_path) }}" target="_blank">
                                     <i class="fa fa-print"></i>
                                 </a>
                             </div>

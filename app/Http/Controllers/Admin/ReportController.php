@@ -22,6 +22,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Faker\Factory as Faker;
 
 class ReportController extends Controller
 {
@@ -587,6 +588,7 @@ class ReportController extends Controller
             ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
+            ->leftJoin('campus as c', 'c.id', 'd.campu_id')
             ->select(
                 DB::raw("COUNT(rd.report_id) as count_report"),
                 DB::raw("CASE WHEN rn.name='acta de entrega' THEN UPPER(rn.name)
@@ -594,17 +596,18 @@ class ReportController extends Controller
                                 END AS report_name"),
                 'r.report_code_number',
                 'r.id as repo_id',
-                'r.rowguid',
                 'd.id as id_device',
                 'd.serial_number as serial_number',
                 DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
+                'r.rowguid',
+                'c.name as campu',
                 'rd.file_name',
                 'rd.file_path'
             )
             ->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
             ->whereRaw('rn.name = "acta de entrega"')
-            ->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'file_name', 'file_path')
+            ->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path')
             ->orderByDesc('r.created_at')
             ->get();
 
@@ -721,42 +724,43 @@ class ReportController extends Controller
         return $pdf->stream($nombre_archivo . $extension);
     }
 
-    public function uploadFileReportDeliverySigned($report_id)
+    public function uploadFileReportDeliverySigned(Request $req, $report_id)
     {
-        //return $request->file_upload;
+        $repo_id = Report::findOrFail($report_id);
 
-        $q1 = Report::findOrFail($report_id);
+        $fake = Faker::create();
 
-        return $q1;
+        $uuid = $fake->uuid();
 
-        $q = Report::pluck('id');
+        return $uuid;
 
-        return $q;
+        $repo = Report::select(
+            'reports.id as repo_id',
+            'reports.report_code_number',
+            'c.name as campu',
+            'reports.rowguid'
+        )
+            ->leftJoin('devices as d', 'd.id', 'reports.device_id')
+            ->leftJoin('campus as c', 'c.id', 'd.campu_id')
+            ->where('reports.id', $repo_id->id)
+            ->first();
 
-        $repo_code_number = Report::where('id', $q)
-            ->select('id', 'report_code_number')
-            ->get();
-
-        return $repo_code_number;
-
-        DB::table('file_uploads_report_deliveries')
-            ->insert([
-                'report_id' => $repo_id,
-                'file_upload' => $file_upload,
-                'file_upload_date' => now('America/Bogota'),
-            ]);
+        //return $repo;
 
         $req->validate([
-            'file_upload' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
+            'file_upload' => 'required|mimes:jpg,png,pdf|max:2048'
         ]);
-        //$fileModel = new File;
-        if ($req->file()) {
-            $fileName = time() . '_' . $req->file_upload->getClientOriginalName();
-            $filePath = $req->file('file_upload')->storeAs('uploads', $fileName, 'public');
 
-            //$fileModel->name = time() . '_' . $req->file->getClientOriginalName();
-            //$fileModel->file_path = '/storage/' . $filePath;
-            return $filePath; //->save();
+        if ($req->file()) {
+            $campu_slug = Str::slug($repo->campu);
+            $fileName = $req->file_upload->getClientOriginalName();
+            return $fileName;
+            $filePath = $req->file('file_upload')->storeAs('pdf/acta_de_entrega_firmados/' . $campu_slug . '/' . $repo->rowguid . '', $fileName, 'public');
+
+            $update = array('file_name' => $fileName, 'file_path' => $filePath);
+            DB::table('report_deliveries')
+                ->where('report_id', $repo->repo_id)
+                ->update($update);
 
             return back()
                 ->with('success', 'File has been uploaded.')
