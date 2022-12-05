@@ -79,6 +79,7 @@
     </div>
 </div>
 
+@if ($report_deliveries->count_report > 0)
 <div class="block-content">
     @include('report.delivery.partials.modal_upload')
     <div class="content-heading">
@@ -105,12 +106,13 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px">
-                    @forelse($report_deliveries as $repo)
+                    @forelse($file_upload_reports as $repo)
                     <tr>
                         <td class="d-none d-sm-table-cell">
                             {{ $repo->report_code_number }}
                         </td>
                         <td class="d-none d-sm-table-cell">
+                            {{ $repo->upload_date }}
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
@@ -143,6 +145,8 @@
         </div>
     </div>
 </div>
+@endif
+
 @endsection
 
 @push('js')

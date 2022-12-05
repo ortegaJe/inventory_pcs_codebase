@@ -601,21 +601,50 @@ class ReportController extends Controller
                 DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
                 'r.rowguid',
                 'c.name as campu',
-                'rd.file_name',
-                'rd.file_path'
             )
-            ->where('r.user_id', $user_id)
-            ->where('r.device_id', $device->id)
-            ->whereRaw('rn.name = "acta de entrega"')
+            //->where('r.user_id', $user_id)
+            //->where('r.device_id', $device->id)
+            //->whereRaw('rn.name = "acta de entrega"')
             ->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path')
             ->orderByDesc('r.created_at')
             ->get();
 
-        //return $report_deliveries;
+        return $report_deliveries;
+
+        $file_upload_reports = DB::table('reports as r')
+            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
+            ->leftJoin('file_upload_reports as fpu', 'fpu.report_id', 'r.id')
+            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+            ->leftJoin('devices as d', 'd.id', 'r.device_id')
+            ->leftJoin('campus as c', 'c.id', 'd.campu_id')
+            ->select(
+                DB::raw("COUNT(rd.report_id) as count_report"),
+                DB::raw("CASE WHEN rn.name='acta de entrega' THEN UPPER(rn.name)
+                            ELSE rn.name
+                                END AS report_name"),
+                'r.report_code_number',
+                'r.id as repo_id',
+                'd.id as id_device',
+                'd.serial_number as serial_number',
+                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
+                'c.name as campu',
+                'fpu.file_name',
+                'fpu.file_path',
+                DB::raw("DATE_FORMAT(fpu.upload_date, '%c/%e/%Y - %r') upload_date"),
+            )
+            ->where('r.user_id', $user_id)
+            ->where('r.device_id', $device->id)
+            ->whereRaw('rn.name = "acta de entrega"')
+            ->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path', 'upload_date')
+            ->orderByDesc('r.created_at')
+            ->get();
+
+        //return $file_upload_reports;
 
         $data = [
             'device' => $device,
             'report_deliveries' => $report_deliveries,
+            'file_upload_reports' => $file_upload_reports,
         ];
 
         return view('report.delivery.show')->with($data);
@@ -730,10 +759,6 @@ class ReportController extends Controller
 
         $fake = Faker::create();
 
-        $uuid = $fake->uuid();
-
-        return $uuid;
-
         $repo = Report::select(
             'reports.id as repo_id',
             'reports.report_code_number',
@@ -753,14 +778,12 @@ class ReportController extends Controller
 
         if ($req->file()) {
             $campu_slug = Str::slug($repo->campu);
-            $fileName = $req->file_upload->getClientOriginalName();
-            return $fileName;
-            $filePath = $req->file('file_upload')->storeAs('pdf/acta_de_entrega_firmados/' . $campu_slug . '/' . $repo->rowguid . '', $fileName, 'public');
+            $FileExt = $req->file_upload->getClientOriginalExtension();
+            $fileName = $fake->uuid($req->file_upload->getClientOriginalName());
+            $filePath = $req->file('file_upload')->storeAs('pdf/acta_de_entrega_firmados/' . $campu_slug, $fileName . '.' . $FileExt, 'public');
 
-            $update = array('file_name' => $fileName, 'file_path' => $filePath);
-            DB::table('report_deliveries')
-                ->where('report_id', $repo->repo_id)
-                ->update($update);
+            $data = array('report_id' => $repo->repo_id, 'file_name' => $fileName . '.' . $FileExt, 'file_path' => $filePath, 'upload_date' => now());
+            DB::table('file_upload_reports')->insert($data);
 
             return back()
                 ->with('success', 'File has been uploaded.')

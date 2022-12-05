@@ -1,7 +1,7 @@
 <!-- Pop Out Modal -->
 <form action="{{ route('upload.file.delivery', $repo->repo_id) }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @method('PUT')
+    @method('POST')
     <div class="modal fade" id="modal-upload" tabindex="-1" role="dialog" aria-labelledby="modal-popout"
         aria-hidden="true">
         <div class="modal-dialog modal-xs modal-dialog-popout" role="document">
