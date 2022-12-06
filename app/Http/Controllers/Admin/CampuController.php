@@ -41,7 +41,7 @@ class CampuController extends Controller
     {
         $query = $request->get('search');
 
-        $filterResult = Campu::where('name', 'LIKE', '%' . $query . '%')->get();
+        $filterResult = Campu::where('name', 'LIKE', '%' . $query . '%')->where('is_active', true)->get();
 
         return response()->json($filterResult);
     }

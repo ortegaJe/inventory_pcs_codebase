@@ -56,7 +56,7 @@ class UserController extends Controller
     public function create()
     {
         $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'name')->where('is_active', true)->get();
 
         return view('admin.users.create', compact('profiles', 'campus'));
     }
@@ -139,7 +139,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'name')->get();
+        $campus = DB::table('campus')->select('id', 'name')->where('is_active', true)->get();
 
         $principalCampuUser = DB::table('campus as c')
             ->join('campu_users as cp', 'cp.campu_id', 'c.id')

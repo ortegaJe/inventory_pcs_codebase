@@ -148,10 +148,11 @@
                     href="{{ route('admin.inventory.dash.index') }}">Inventario
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
                       @php $globalPcCount = DB::table('devices')->select('id')
-                      ->where('is_active',[1])
+                      ->where('is_active', true)
                       ->where('deleted_at', null)
                       ->whereIn('statu_id',[1,2,3,5,6,7,8])
-                      ->count(); @endphp
+                      ->count();
+                      @endphp
                       {{ $globalPcCount ?? '0' }}
                     </span>
                   </a>
@@ -164,10 +165,11 @@
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
                       @php $globalUsersCount = DB::table('users as u')->select('u.id')
                       ->join('profile_users as pu', 'pu.user_id', 'u.id')
-                      ->where('profile_id','<>', [1])
-                        ->where('u.is_active',[1])
+                      ->where('profile_id','<>', true)
+                        ->where('u.is_active', true)
                         ->where('u.deleted_at', null)
-                        ->count(); @endphp
+                        ->count();
+                        @endphp
                         {{ $globalUsersCount ?? '0' }}
                     </span>
                   </a>
@@ -189,7 +191,9 @@
                   <a class="{{ request()->is('admin/dashboard/inventario/sedes') ? 'active' : '' }}"
                     href="{{ route('admin.inventory.campus.index') }}">Sedes
                     <span class="badge badge-pill bg-gray-darker"><i class="fa fa-building-o"></i>
-                      @php $globalCampusCount = DB::table('campus')->select('id')->count(); @endphp
+                      @php
+                      $globalCampusCount = DB::table('campus')->select('id')->where('is_active', true)->count();
+                      @endphp
                       {{ $globalCampusCount ?? '0' }}
                     </span>
                   </a>

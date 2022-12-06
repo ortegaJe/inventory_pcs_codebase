@@ -33,7 +33,7 @@ class Campu extends Model
     public function scopeName($query, $name)
     {
         if (trim($name) != "") {
-            return $query->where('name', 'LIKE', "%$name%");
+            return $query->where('name', 'LIKE', "%$name%")->where('is_active', true);
         }
     }
 
