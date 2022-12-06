@@ -44,7 +44,7 @@
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->report_name }}
+                            {{ $repo->report_name }} - {{ $repo->custodian_name }}
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
@@ -78,8 +78,7 @@
         </div>
     </div>
 </div>
-
-@if ($report_deliveries->count_report > 0)
+@if(count($report_deliveries) > 0)
 <div class="block-content">
     @include('report.delivery.partials.modal_upload')
     <div class="content-heading">
@@ -116,7 +115,7 @@
                         </td>
                         <td class="d-none d-sm-table-cell">
                             <i class="fa fa-file-pdf-o text-danger mr-5"></i>
-                            {{ $repo->report_name }}
+                            {{ $repo->report_name }} - {{ $repo->custodian_name }}
                         </td>
                         <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
@@ -156,6 +155,16 @@
     Swal.fire(
     'Creado con Exito!',
     '{!! Session::get('report_created') !!}',
+    'success'
+  )
+</script>
+@endif
+
+@if(Session::has('upload_success'))
+<script>
+    Swal.fire(
+    'File has been uploaded.',
+    '{!! Session::get('upload_success') !!}',
     'success'
   )
 </script>

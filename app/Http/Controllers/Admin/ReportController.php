@@ -564,26 +564,6 @@ class ReportController extends Controller
         $user_id = Auth::id();
         $device = Device::findOrFail($device_id);
 
-        /*         $report_deliveries = DB::table('reports as r')
-            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
-            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
-            ->leftJoin('devices as d', 'd.id', 'r.device_id')
-            ->select(
-                'r.report_code_number',
-                'r.id as repo_id',
-                'r.rowguid',
-                'd.serial_number as serial_number',
-                DB::raw("UPPER(rn.name) repo_name"),
-                DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created")
-            )
-            ->where('r.user_id', $user_id)
-            ->where('r.device_id', $device->id)
-            ->where('r.report_name_id', Report::REPORT_DELIVERY_NAME_ID)
-            ->orderByDesc('r.created_at')
-            ->paginate(4); */
-
-        //return $report_deliveries;
-
         $report_deliveries = DB::table('reports as r')
             ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
@@ -594,6 +574,7 @@ class ReportController extends Controller
                 DB::raw("CASE WHEN rn.name='acta de entrega' THEN UPPER(rn.name)
                             ELSE rn.name
                                 END AS report_name"),
+                DB::raw("UPPER(CONCAT(rd.name, ' ', rd.last_name)) as custodian_name"),
                 'r.report_code_number',
                 'r.id as repo_id',
                 'd.id as id_device',
@@ -603,40 +584,39 @@ class ReportController extends Controller
                 'c.name as campu',
             )
             //->where('r.user_id', $user_id)
-            //->where('r.device_id', $device->id)
-            //->whereRaw('rn.name = "acta de entrega"')
-            ->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path')
+            ->where('r.device_id', $device->id)
+            ->whereRaw('rn.name = "acta de entrega"')
+            ->groupBy('id_device', 'report_name', 'rd.name', 'rd.last_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path')
             ->orderByDesc('r.created_at')
             ->get();
 
-        return $report_deliveries;
+        //return $report_deliveries;
 
-        $file_upload_reports = DB::table('reports as r')
-            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
-            ->leftJoin('file_upload_reports as fpu', 'fpu.report_id', 'r.id')
-            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+        $file_upload_reports = DB::table('file_upload_reports as fpu')
+            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'fpu.report_id')
+            ->leftJoin('reports as r', 'r.id', 'rd.report_id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
-            ->leftJoin('campus as c', 'c.id', 'd.campu_id')
+            ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
             ->select(
-                DB::raw("COUNT(rd.report_id) as count_report"),
+                //DB::raw("COUNT(rd.report_id) as count_report"),
                 DB::raw("CASE WHEN rn.name='acta de entrega' THEN UPPER(rn.name)
                             ELSE rn.name
                                 END AS report_name"),
+                DB::raw("UPPER(CONCAT(rd.name, ' ', rd.last_name)) as custodian_name"),
                 'r.report_code_number',
                 'r.id as repo_id',
                 'd.id as id_device',
                 'd.serial_number as serial_number',
                 DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
-                'c.name as campu',
                 'fpu.file_name',
                 'fpu.file_path',
                 DB::raw("DATE_FORMAT(fpu.upload_date, '%c/%e/%Y - %r') upload_date"),
             )
-            ->where('r.user_id', $user_id)
+            //->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
-            ->whereRaw('rn.name = "acta de entrega"')
-            ->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path', 'upload_date')
-            ->orderByDesc('r.created_at')
+            //->whereRaw('rn.name = "acta de entrega"')
+            //->groupBy('id_device', 'report_name', 'report_code_number', 'repo_id', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path', 'upload_date')
+            ->orderByDesc('fpu.upload_date')
             ->get();
 
         //return $file_upload_reports;
@@ -767,7 +747,8 @@ class ReportController extends Controller
         )
             ->leftJoin('devices as d', 'd.id', 'reports.device_id')
             ->leftJoin('campus as c', 'c.id', 'd.campu_id')
-            ->where('reports.id', $repo_id->id)
+            //->where('reports.id', $repo_id->id)
+            ->orderByDesc('repo_id')
             ->first();
 
         //return $repo;
@@ -782,11 +763,11 @@ class ReportController extends Controller
             $fileName = $fake->uuid($req->file_upload->getClientOriginalName());
             $filePath = $req->file('file_upload')->storeAs('pdf/acta_de_entrega_firmados/' . $campu_slug, $fileName . '.' . $FileExt, 'public');
 
-            $data = array('report_id' => $repo->repo_id, 'file_name' => $fileName . '.' . $FileExt, 'file_path' => $filePath, 'upload_date' => now());
+            $data = array('report_id' => $repo->repo_id, 'file_name' => $fileName . '.' . $FileExt, 'file_path' => $filePath, 'upload_date' => now('America/Bogota'));
             DB::table('file_upload_reports')->insert($data);
 
             return back()
-                ->with('success', 'File has been uploaded.')
+                ->with('upload_success', '')
                 ->with('file', $fileName);
         }
     }
