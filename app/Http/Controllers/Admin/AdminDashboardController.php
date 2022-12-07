@@ -101,6 +101,7 @@ class AdminDashboardController extends Controller
                             ELSE 'badge-success' 
                               END AS color"),
         )
+        ->where('c.is_active', true)
         ->groupByRaw('c.id, c.name, u.id, u.name, u.last_name, u.phone_number')
         //->havingRaw('numero_equipos <= 4')
         ->orderByRaw('numero_equipos')
@@ -109,7 +110,7 @@ class AdminDashboardController extends Controller
       $datatables = DataTables::of($campus);
       $datatables->addColumn('nombre_tecnico', function ($campus) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($campus->EstadoPC, true));
-        return $campus->nombre_tecnico;
+        return Str::title($campus->nombre_tecnico);
       });
       $datatables->addColumn('numero_equipos', function ($campus) {
         //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($campus->EstadoPC, true));
