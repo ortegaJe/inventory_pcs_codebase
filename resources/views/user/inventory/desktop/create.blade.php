@@ -53,9 +53,15 @@
                     style="width: 100%;" data-placeholder="Seleccionar fabricante..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}" {{ old('marca-pc-select2', $brand->id) ? 'selected' : '' }}>
+                    @if(old('marca-pc-select2') == $brand->id)
+                    <option value="{{ $brand->id }}" selected>
                       {{ $brand->name }}
                     </option>
+                    @else
+                    <option value="{{ $brand->id }}">
+                      {{ $brand->name }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
                     @endforelse
