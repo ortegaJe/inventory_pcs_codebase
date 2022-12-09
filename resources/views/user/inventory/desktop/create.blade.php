@@ -78,7 +78,12 @@
                     data-placeholder="Seleccionar sistema operativo..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($operatingSystems as $os)
+                    @if(old('os-pc-select2') == $os->id)
+                    <option value="{{ $os->id }}" selected>{{ $os->name }} {{ $os->version }} {{ $os->architecture }}
+                    </option>
+                    @else
                     <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
+                    @endif
                     @empty
                     <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
