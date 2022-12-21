@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    //getComputerData();
-
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -103,16 +101,6 @@ $(document).ready(function () {
             "</table>" +
             "</div>"
         );
-    }
-
-    function getComputerData() {
-        $.ajax({
-            url: root_url,
-            type: "GET",
-            data: {},
-        }).done(function (data) {
-            //alert(data);
-        });
     }
 
     $(document).ready(function () {
