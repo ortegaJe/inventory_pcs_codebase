@@ -154,6 +154,8 @@ class DesktopController extends Controller
 
     public function store(Request $request)
     {
+        //https://www.mindtwo.de/guidelines/coding/laravel
+
         $userId = Auth::id();
 
         $q = array( //$this->generatorID;
@@ -208,10 +210,10 @@ class DesktopController extends Controller
             'is_stock' => $request->has('stock'),
         ]);
 
-        $last_id = Device::latest()->first('id');
+        $lastId = Device::latest()->pluck('id')->first();
 
         $component = Component::insert([
-            'device_id' => $last_id,
+            'device_id' => $lastId,
             'os_id' => $request->os,
             'monitor_serial_number' => $request->monitor,
             'slot_one_ram_id' => $request->ram0,
