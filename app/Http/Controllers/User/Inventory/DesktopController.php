@@ -156,6 +156,12 @@ class DesktopController extends Controller
     {
         //https://www.mindtwo.de/guidelines/coding/laravel
 
+        $device = new Device;
+
+        $q = $device->component()->create($request->all());
+
+        return $q;
+
         $userId = Auth::id();
 
         $q = array( //$this->generatorID;
