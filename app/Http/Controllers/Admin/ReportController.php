@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Hash;
 
 class ReportController extends Controller
 {
@@ -529,7 +530,7 @@ class ReportController extends Controller
     public function indexReportDelivery(Request $request)
     {
         $user_id = Auth::id();
-        $serial_number = $request->get('search');
+        $serialNumber = $request->get('search');
 
         $devices = Device::leftJoin('campus as c', 'c.id', 'devices.campu_id')
             ->leftJoin('campu_users as cu', 'cu.campu_id', 'devices.campu_id')
@@ -550,7 +551,7 @@ class ReportController extends Controller
             ->where('cu.user_id', $user_id)
             ->where('devices.is_active', true)
             ->whereIn('devices.statu_id', [1, 2, 3, 5, 6, 7, 8])
-            ->search($serial_number)
+            ->search($serialNumber)
             ->orderByDesc('devices.created_at')
             ->paginate(10);
 
@@ -559,14 +560,18 @@ class ReportController extends Controller
         return view('report.delivery.index', compact('devices'));
     }
 
-    public function createReportDelivery($device_id, $uuid)
+    public function createReportDelivery($device_id, $rowguid)
     {
         $user_id = Auth::id();
+
         $device = Device::findOrFail($device_id);
 
-        $report_deliveries = DB::table('reports as r')
+        //return $device;
+
+        $reportDeliveries = DB::table('reports as r')
             ->leftJoin('report_deliveries as rd', 'rd.report_id', 'r.id')
             ->leftJoin('report_names as rn', 'rn.id', 'r.report_name_id')
+            //->leftJoin('file_upload_reports as fpu', 'fpu.report_id', 'r.id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
             ->leftJoin('campus as c', 'c.id', 'd.campu_id')
             ->select(
@@ -582,17 +587,21 @@ class ReportController extends Controller
                 DB::raw("DATE_FORMAT(r.created_at, '%c/%e/%Y - %r') date_created"),
                 'r.rowguid',
                 'c.name as campu',
+                'c.slug as campu_slug',
+                'rd.is_borrowed',
+                //'fpu.file_name',
+                //'fpu.file_path'
             )
             //->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
             ->whereRaw('rn.name = "acta de entrega"')
-            ->groupBy('id_device', 'report_name', 'rd.name', 'rd.last_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'file_name', 'file_path')
+            ->groupBy('id_device', 'report_name', 'rd.name', 'rd.last_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'campu_slug', 'rd.is_borrowed', 'file_name', 'file_path')
             ->orderByDesc('r.created_at')
             ->get();
 
-        //return $report_deliveries;
+        //return $reportDeliveries;
 
-        $file_upload_reports = DB::table('file_upload_reports as fpu')
+        $fileUploadReports = DB::table('file_upload_reports as fpu')
             ->leftJoin('report_deliveries as rd', 'rd.report_id', 'fpu.report_id')
             ->leftJoin('reports as r', 'r.id', 'rd.report_id')
             ->leftJoin('devices as d', 'd.id', 'r.device_id')
@@ -619,12 +628,12 @@ class ReportController extends Controller
             ->orderByDesc('fpu.upload_date')
             ->get();
 
-        //return $file_upload_reports;
+        //return $fileUploadReports;
 
         $data = [
             'device' => $device,
-            'report_deliveries' => $report_deliveries,
-            'file_upload_reports' => $file_upload_reports,
+            'reportDeliveries' => $reportDeliveries,
+            'fileUploadReports' => $fileUploadReports,
         ];
 
         return view('report.delivery.show')->with($data);
@@ -665,7 +674,7 @@ class ReportController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertReportDelivery (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //18
+                "CALL SP_insertReportDelivery (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //19
                 [
                     $this->report->report_code_number = $this->generatorID,
                     $this->report->report_name_id = Report::REPORT_DELIVERY_NAME_ID,
@@ -679,6 +688,7 @@ class ReportController extends Controller
                     $this->report_delivery->last_name = $request->last_name,
                     $this->report_delivery->second_last_name = $request->second_last_name,
                     $this->report_delivery->position = $request->position,
+                    $this->report_delivery->is_borrowed = $request->has('is_borrowed'),
                     $this->report_delivery->has_wifi = $request->has('wifi'),
                     $this->report_delivery->has_keyboard = $request->has('keyboard'),
                     $this->report_delivery->has_mouse = $request->has('mouse'),
@@ -707,48 +717,62 @@ class ReportController extends Controller
     public function reportDeliveryGenerated($id, $uuid)
     {
         $report = Report::findOrFail($id);
-        $user_id = Auth::id();
 
-        $report_delivery = DB::table('view_report_deliveries')
+        $campu = Report::leftJoin('devices as d', 'd.id', 'reports.device_id')
+            ->leftJoin('campus as c', 'c.id', 'd.campu_id')
+            ->select('c.slug')
+            ->findOrFail($id);
+
+        $userId = Auth::id();
+
+        $reportDelivery = DB::table('view_report_deliveries')
             ->where('RepoID', $report->id)
-            ->where('TecnicoID', $user_id)
+            ->where('TecnicoID', $userId)
             ->get();
 
-        //return $report_delivery;
+        //return $reportDelivery;
 
         $pdf = PDF::loadView(
             'report.delivery.pdf',
             [
-                'report_delivery' => $report_delivery,
+                'reportDelivery' => $reportDelivery,
             ]
         );
 
         //$tiempo_creacion = now()->toDateString();
-        $nombre_carpeta = 'pdf/acta_de_entrega/';
+        $nombre_carpeta = 'pdf/acta_de_entrega/' . $campu->slug . '/';
+        //$nombre_archivo = Hash::make($report->report_code_number);
         $nombre_archivo = $report->report_code_number;
         $extension = '.pdf';
         $archivo = $nombre_archivo . $extension;
 
+        //$data = array('report_id' => $report->id, 'file_name' => $nombre_archivo . '.pdf', 'file_path' => $nombre_carpeta, 'upload_date' => now('America/Bogota'));
+        //DB::table('file_upload_reports')->insert($data);
+
         Storage::put($nombre_carpeta . '/' . $archivo, $pdf->output());
+
         return $pdf->stream($nombre_archivo . $extension);
     }
 
     public function uploadFileReportDeliverySigned(Request $req, $report_id)
     {
         $repo_id = Report::findOrFail($report_id);
-
-        $fake = Faker::create();
-
         $repo = Report::select(
             'reports.id as repo_id',
             'reports.report_code_number',
+            'd.serial_number',
             'c.name as campu',
             'reports.rowguid'
         )
+            ->leftJoin('report_deliveries as rd', 'rd.report_id', 'reports.id')
+            ->leftJoin('file_upload_reports as fur', 'fur.report_id', 'rd.report_id')
             ->leftJoin('devices as d', 'd.id', 'reports.device_id')
             ->leftJoin('campus as c', 'c.id', 'd.campu_id')
+            ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
+            ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->where('cu.user_id', Auth::id())
             //->where('reports.id', $repo_id->id)
-            ->orderByDesc('repo_id')
+            ->orderByDesc('reports.report_code_number')
             ->first();
 
         //return $repo;
@@ -759,11 +783,12 @@ class ReportController extends Controller
 
         if ($req->file()) {
             $campu_slug = Str::slug($repo->campu);
-            $FileExt = $req->file_upload->getClientOriginalExtension();
-            $fileName = $fake->uuid($req->file_upload->getClientOriginalName());
-            $filePath = $req->file('file_upload')->storeAs('pdf/acta_de_entrega_firmados/' . $campu_slug, $fileName . '.' . $FileExt, 'public');
+            //$FileExt = $req->file_upload->getClientOriginalExtension();
+            $fileName = $req->file_upload->hashName();
+            //$fileName = $fake->uuid($req->file_upload->getClientOriginalName());
+            $filePath = $req->file('file_upload')->storeAs('pdf/acta_de_entrega_firmados/' . $campu_slug, $fileName, 'public');
 
-            $data = array('report_id' => $repo->repo_id, 'file_name' => $fileName . '.' . $FileExt, 'file_path' => $filePath, 'upload_date' => now('America/Bogota'));
+            $data = array('report_id' => $repo->repo_id, 'file_name' => $fileName, 'file_path' => $filePath, 'upload_date' => now('America/Bogota'));
             DB::table('file_upload_reports')->insert($data);
 
             return back()

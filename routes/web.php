@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -23,9 +24,13 @@ Auth::routes();
 
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
 
+//Route::get('/equipos-en-prestamo', [HomeController::class, 'getBorrowedDeviceList'])->name('get_borrowed_list');
+
 Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('/', 'App\Http\Controllers\Admin\AdminDashboardController')->names('admin.inventory.dash');
+
+    Route::get('equipos-en-prestamo', [AdminDashboardController::class, 'getBorrowedDeviceList'])->name('get_borrowed_list');
 
     Route::get('sedes-con-menos-equipos', [AdminDashboardController::class, 'getCampusFewerDevices'])->name('get.campus.fewer.devices');
 
@@ -117,11 +122,11 @@ Route::prefix('dashboard/inventario/reportes')->group(
 
         Route::get('acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@indexReportDelivery')->name('inventory.report.delivery.index');
 
-        Route::get('acta-de-entrega/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@createReportDelivery')->name('inventory.report.delivery.create');
+        Route::get('acta-de-entrega/{device_id}/{rowguid}', 'App\Http\Controllers\Admin\ReportController@createReportDelivery')->name('report.delivery.create');
 
         Route::post('guardar-reporte-de-acta-de-entrega', 'App\Http\Controllers\Admin\ReportController@storeReportDelivery')->name('inventory.report.deliverys.store');
 
-        Route::get('acta-de-entrega-generado/{device}-{uuid}', 'App\Http\Controllers\Admin\ReportController@reportDeliveryGenerated')->name('inventory.report.delivery.generated');
+        Route::get('acta-de-entrega-generado/{device}/{uuid}', 'App\Http\Controllers\Admin\ReportController@reportDeliveryGenerated')->name('report.delivery.generated');
 
         Route::post('cargar-acta-de-entrega-firmado/{report_id}', 'App\Http\Controllers\Admin\ReportController@uploadFileReportDeliverySigned')->name('upload.file.delivery');
 

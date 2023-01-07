@@ -2,13 +2,13 @@
 <form action="{{ route('inventory.report.deliverys.store') }}" method="POST">
   @csrf
   @method('POST')
-  <div class="modal fade" id="modal-popin-up-delivery" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
+  <div class="modal fade" id="return-device" tabindex="-1" role="dialog" aria-labelledby="modal-popin"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-popin" role="document">
       <div class="modal-content">
         <div class="block block-themed block-transparent mb-0">
           <div class="block-header bg-primary-dark">
-            <h3 class="block-title">REPORTE DE SOLICITUD DE ACTA DE ENTREGA</h3>
+            <h3 class="block-title">RETORNO DE EQUIPO</h3>
             <div class="block-options">
               <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                 <i class="si si-close"></i>
@@ -22,8 +22,8 @@
                 <div class="form-group row">
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
-                      <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"
-                        maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                      <input type="text" class="form-control" id="name" name="name" value="" maxlength="100"
+                        onkeyup="javascript:this.value=this.value.toUpperCase();">
                       <label for="name">Nombre del custodio</label>
                     </div>
                     @if($errors->has('name'))
@@ -32,8 +32,8 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
-                      <input type="text" class="form-control" id="middle_name" name="middle_name"
-                        value="{{ old('middle_name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                      <input type="text" class="form-control" id="middle_name" name="middle_name" value=""
+                        onkeyup="javascript:this.value=this.value.toUpperCase();">
                       <label for="middle_name">Segundo Nombre del custodio</label>
                     </div>
                     @if($errors->has('middle_name'))
@@ -44,8 +44,8 @@
                 <div class="form-group row">
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
-                      <input type="text" class="form-control" id="last_name" name="last_name"
-                        value="{{ old('last_name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                      <input type="text" class="form-control" id="last_name" name="last_name" value=""
+                        onkeyup="javascript:this.value=this.value.toUpperCase();">
                       <label for="last_name">Apellido del custodio</label>
                     </div>
                     @if($errors->has('last_name'))
@@ -54,8 +54,8 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
-                      <input type="text" class="form-control" id="second_last_name" name="second_last_name"
-                        value="{{ old('second_last_name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                      <input type="text" class="form-control" id="second_last_name" name="second_last_name" value=""
+                        onkeyup="javascript:this.value=this.value.toUpperCase();">
                       <label for="second_last_name">Segundo Apellido del custodio</label>
                     </div>
                     @if($errors->has('second_last_name'))
@@ -64,13 +64,21 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-material floating input-group">
-                      <input type="text" class="form-control" id="position" name="position"
-                        value="{{ old('position') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                      <input type="text" class="form-control" id="position" name="position" value=""
+                        onkeyup="javascript:this.value=this.value.toUpperCase();">
                       <label for="position">Cargo del custodio</label>
                     </div>
                     @if($errors->has('position'))
                     <small class="text-danger is-invalid">{{ $errors->first('position') }}</small>
                     @endif
+                  </div>
+                </div>
+                <div class="form-group row mt-4">
+                  <div class="col-md-3">
+                    <label class="css-control css-control-primary css-switch css-switch-square disabled">
+                      <input type="checkbox" class="css-control-input" id="is_borrowed" name="is_borrowed">
+                      <span class="css-control-indicator"></span> EN PRESTAMO
+                    </label>
                   </div>
                 </div>
                 <div class="form-group row text-center">
@@ -163,6 +171,31 @@
                     @endif
                   </div>
                 </div>
+                <div class="form-group row">
+                  <div class="col-12">
+                    <div class="form-material floating">
+                      <textarea class="form-control" id="material-textarea-small2" name="material-textarea-small2"
+                        rows="3"></textarea>
+                      <label for="material-textarea-small2">Observacíon</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-material floating input-group">
+                      <input type="text" class="form-control" id="delivery_date" name="delivery_date" value="" disabled>
+                      <label for="delivery_date">Fecha de entrega</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-material">
+                      <input type="text" class="js-flatpickr form-control" id="return_date" name="return_date"
+                        placeholder="d-m-Y" data-allow-input="true" maxlength="10">
+                      <label for="return_date">Fecha de retorno</label>
+                    </div>
+                    @if($errors->has('return_date'))
+                    <small class="text-danger is-invalid">{{ $errors->first('return_date') }}</small>
+                    @endif
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -178,21 +211,3 @@
   </div>
 </form>
 <!-- END Pop In Modal -->
-
-@push('js')
-
-<script>
-  jQuery(function() {
-    Codebase.helpers(['select2']);
-  });
-</script>
-
-<script>
-  $(document).ready(function() {
-    @if($message = Session::get('message'))
-    $('#modal-popin-up-delivery').modal('show');
-    @endif
-  });
-</script>
-
-@endpush
