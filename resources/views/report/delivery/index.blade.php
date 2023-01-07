@@ -143,7 +143,7 @@
             <td class="d-none d-sm-table-cell text-center">
               <div class="btn-group">
                 <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
-                  href="{{ route('inventory.report.delivery.create', [$device->device_id, $device->rowguid]) }}">
+                  href="{{ route('report.delivery.create', [$device->device_id, $device->rowguid]) }}">
                   <i class="fa fa-file-text-o"></i>
                 </a>
               </div>

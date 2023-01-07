@@ -40,7 +40,7 @@
                 <td style="width: 13.7412%; height: 10px; text-align: center;"><strong>Fecha:
                     25-01-2018</strong></td> --}}
               </tr>
-              @foreach($report_delivery as $repo)
+              @foreach($reportDelivery as $repo)
               <tr>
                 <td style="width: 91.8364%;" colspan="3">
                   <p style="text-align: center;"><strong>Acta de Entrega de Equipos
@@ -101,11 +101,11 @@
                         <td style="width: 47.9791%;">{{ $repo->SedeEquipo }}</td>
                       </tr>
                       <tr>
-                        <td style="width: 50%;">NUMERO DE SERIE</td>
+                        <td style="width: 50%;">NÚMERO DE SERIE</td>
                         <td style="width: 47.9791%;">{{ $repo->NumeroSerial }}</td>
                       </tr>
                       <tr>
-                        <td style="width: 50%;">NUMERO DE INVENTARIO</td>
+                        <td style="width: 50%;">NÚMERO DE INVENTARIO</td>
                         <td style="width: 47.9791%;">{{ $repo->ActivoFijo }}</td>
                       </tr>
                     </tbody>
