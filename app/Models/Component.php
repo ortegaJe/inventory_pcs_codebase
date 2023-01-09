@@ -9,10 +9,17 @@ class Component extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //public $timestamps = false;
 
     protected $casts = [
         'handset' => 'boolean',
         'power_adapter' => 'boolean',
     ];
+
+    public function Device()
+    {
+        return $this->belongsTo(Device::class);
+    }
 }

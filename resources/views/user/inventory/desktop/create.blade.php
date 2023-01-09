@@ -57,11 +57,11 @@
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="brand" name="brand" style="width: 100%;"
+                  <select class="js-select2 form-control" id="brand_id" name="brand_id" style="width: 100%;"
                     data-placeholder="Seleccionar fabricante..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
-                    @if(old('brand') == $brand->id)
+                    @if(old('brand_id') == $brand->id)
                     <option value="{{ $brand->id }}" selected>
                       {{ $brand->name }}
                     </option>
@@ -74,7 +74,7 @@
                     <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="brand">Fabricantes</label>
+                  <label for="brand_id">Fabricantes</label>
                 </div>
               </div>
               <div class="col-md-4">
@@ -113,10 +113,10 @@
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="serial" name="serial" value="{{ old('serial') }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                  <input type="text" class="form-control" id="serial_number" name="serial_number"
+                    value="{{ old('serial_number') }}" onkeyup="javascript:this.value=this.value.toUpperCase();"
                     onkeypress="return /[0-9a-zA-Z]/i.test(event.key)">
-                  <label for="serial">Número Serial</label>
+                  <label for="serial_number">Número Serial</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>

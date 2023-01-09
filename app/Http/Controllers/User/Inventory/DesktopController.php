@@ -156,11 +156,11 @@ class DesktopController extends Controller
     {
         //https://www.mindtwo.de/guidelines/coding/laravel
 
-        $device = new Device;
+        //$device = new Device;
 
-        $q = $device->component()->create($request->all());
+        //$q = $device->create($request->all());
 
-        return $q;
+        //return $q;
 
         $userId = Auth::id();
 
@@ -266,7 +266,7 @@ class DesktopController extends Controller
             ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $this->device->inventory_code_number . '');
  */
 
-        /*         $rules = [
+                $rules = [
 
             //'marca-pc-select2' => 'not_in:0',
             'marca-pc-select2' => [
@@ -442,7 +442,7 @@ class DesktopController extends Controller
         return redirect()->route('user.inventory.desktop.index')
             ->withErrors($validator)
             ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $this->device->inventory_code_number . '');
- */
+ 
     }
 
     public function edit($id)

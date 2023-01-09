@@ -12,6 +12,8 @@ class Device extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
+
     const DOMAIN_NAME = ['DOMAIN.LOCAL', 'TEMPORALES.LOCAL'];
 
     public function scopeSearchRemove($query, $data)
@@ -46,5 +48,10 @@ class Device extends Model
             ->where('u.id', $user_id)
             ->where('devices.is_active', false)
             ->get();
+    }
+
+    public function Component()
+    {
+        return $this->hasOne(Component::class);
     }
 }
