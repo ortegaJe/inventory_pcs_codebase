@@ -59,7 +59,8 @@
                 <div class="form-material">
                   <select class="js-select2 form-control" id="brand_id" name="brand_id" style="width: 100%;"
                     data-placeholder="Seleccionar fabricante..">
-                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
+                    <option disabled selected></option>
+                    <!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
                     @if(old('brand_id') == $brand->id)
                     <option value="{{ $brand->id }}" selected>
@@ -79,11 +80,11 @@
               </div>
               <div class="col-md-4">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="os" name="os" style="width: 100%;"
+                  <select class="js-select2 form-control" id="os_id" name="os_id" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($operatingSystems as $os)
-                    @if(old('os') == $os->id)
+                    @if(old('os_id') == $os->id)
                     <option value="{{ $os->id }}" selected>{{ $os->name }} {{ $os->version }} {{ $os->architecture }}
                     </option>
                     @else
@@ -93,7 +94,7 @@
                     <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="os">Sistema Operativo</label>
+                  <label for="os_id">Sistema Operativo</label>
                 </div>
               </div>
               <div class="col-md-4">
@@ -126,10 +127,10 @@
               </div>
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="monitor" name="monitor" value="{{ old('monitor') }}"
-                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                  <input type="text" class="form-control" id="monitor_serial_number" name="monitor_serial_number"
+                    value="{{ old('monitor_serial_number') }}" onkeyup="javascript:this.value=this.value.toUpperCase();"
                     onkeypress="return /[0-9a-zA-Z]/i.test(event.key)">
-                  <label for="monitor">Número Serial de monitor</label>
+                  <label for="monitor_serial_number">Número Serial de monitor</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>
@@ -139,12 +140,12 @@
               </div>
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="activo_fijo" name="activo_fijo"
-                    value="{{ old('activo_fijo') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="activo_fijo">Codigo de activo fijo</label>
+                  <input type="text" class="form-control" id="fixed_asset_number" name="fixed_asset_number"
+                    value="{{ old('fixed_asset_number') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="fixed_asset_number">Codigo de activo fijo</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
-                      {{-- <iclass="fafa-fwfa-barcode"></i> --}}
+                      <i class="fa fa-fwfa-barcode"></i>
                     </span>
                   </div>
                 </div>
@@ -158,11 +159,11 @@
             <div class="form-group row">
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="ram0" name="ram0" style="width: 100%;"
-                    data-placeholder="Seleccionar RAM ranura 1">
+                  <select class="js-select2 form-control" id="slot_one_ram_id" name="slot_one_ram_id"
+                    style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    @if(old('ram0') == $ram->id)
+                    @if(old('slot_one_ram_id') == $ram->id)
                     <option value="{{ $ram->id }}" selected> {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}
                       {{ $ram->format }}
                     </option>
@@ -175,17 +176,17 @@
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="ram0">Memorias RAM</label>
+                  <label for="slot_one_ram_id">Memorias RAM</label>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="$request->ram1" name="$request->ram1"
-                    value="{{ old('$request->ram1') }}" style="width: 100%;"
+                  <select class="js-select2 form-control" id="slot_two_ram_id" name="slot_two_ram_id"
+                    value="{{ old('slot_two_ram_id') }}" style="width: 100%;"
                     data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    @if(old('$request->ram1') == $ram->id)
+                    @if(old('slot_two_ram_id') == $ram->id)
                     <option value="{{ $ram->id }}" selected> {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}
                       {{ $ram->format }}
                     </option>
@@ -198,16 +199,16 @@
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="$request->ram1">Memorias RAM</label>
+                  <label for="slot_two_ram_id">Memorias RAM</label>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="hdd0" name="hdd0" style="width: 100%;"
-                    data-placeholder="Seleccionar primer almacenamiento..">
+                  <select class="js-select2 form-control" id="first_storage_id" name="first_storage_id"
+                    style="width: 100%;" data-placeholder="Seleccionar primer almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
-                    @if(old('hdd0') == $storage->id)
+                    @if(old('first_storage_id') == $storage->id)
                     <option value="{{ $storage->id }}" selected>{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}
                     </option>
@@ -220,16 +221,16 @@
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="hdd0">Almacenamiento</label>
+                  <label for="first_storage_id">Almacenamiento</label>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="hdd1" name="hdd1" style="width: 100%;"
-                    data-placeholder="Seleccionar segundo almacenamiento..">
+                  <select class="js-select2 form-control" id="second_storage_id" name="second_storage_id"
+                    style="width: 100%;" data-placeholder="Seleccionar segundo almacenamiento..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
-                    @if(old('hdd1') == $storage->id)
+                    @if(old('second_storage_id') == $storage->id)
                     <option value="{{ $storage->id }}" selected>{{ $storage->size }} {{ $storage->storage_unit }}
                       {{ $storage->type }}
                     </option>
@@ -242,18 +243,18 @@
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="hdd1">Almacenamiento</label>
+                  <label for="second_storage_id">Almacenamiento</label>
                 </div>
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="processor" name="processor" style="width: 100%;"
+                  <select class="js-select2 form-control" id="processor_id" name="processor_id" style="width: 100%;"
                     data-placeholder="Seleccionar procesador..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($processors as $cpu)
-                    @if(old('processor') == $cpu->id)
+                    @if(old('processor_id') == $cpu->id)
                     <option value="{{ $cpu->id }}" selected>{{ $cpu->brand }} {{ $cpu->generation }}
                       {{ $cpu->velocity }}
                     </option>
@@ -266,7 +267,7 @@
                     <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="processor">Procesador</label>
+                  <label for="processor_id">Procesador</label>
                 </div>
               </div>
               <div class="col-md-6">
@@ -428,9 +429,10 @@
             <div class="form-row">
               <div class="col-md-3">
                 <div class="form-material">
-                  <input type="text" class="js-flatpickr form-control" id="custodian_date" name="custodian_date"
-                    value="{{ old('custodian_date') }}" placeholder="d-m-Y" data-allow-input="true" maxlength="10">
-                  <label for="custodian_date">Fecha de asignación al custodio</label>
+                  <input type="text" class="js-flatpickr form-control" id="custodian_assignment_date"
+                    name="custodian_assignment_date" value="{{ old('custodian_assignment_date') }}" placeholder="d-m-Y"
+                    data-allow-input="true" maxlength="10">
+                  <label for="custodian_assignment_date">Fecha de asignación al custodio</label>
                 </div>
               </div>
               <div class="col-md-6">
@@ -448,11 +450,11 @@
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="statu_assignment" name="statu_assignment"
+                  <select class="js-select2 form-control" id="assignment_statu_id" name="assignment_statu_id"
                     style="width: 100%;" data-placeholder="Seleccionar concepto..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($statusAssignments as $statuAssignment)
-                    @if(old('statu_assignment') == $statuAssignment->id)
+                    @if(old('assignment_statu_id') == $statuAssignment->id)
                     <option value="{{ $statuAssignment->id }}" selected>
                       {{ Str::title($statuAssignment->name) }}
                     </option> @else
@@ -463,7 +465,7 @@
                     <option>NO EXISTEN ESTADOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="statu_assignment">Concepto</label>
+                  <label for="assignment_statu_id">Concepto</label>
                 </div>
               </div>
             </div>
@@ -524,7 +526,7 @@
   jQuery(function(){ Codebase.helpers(['flatpickr', 'datepicker','maxlength', 'select2']); });
 </script>
 
-@if(Session::has('message'))
+{{-- @if(Session::has('message'))
 <script>
   Swal.fire(
   '{!! Session::get('message') !!}',
@@ -541,8 +543,7 @@
   '{{ Session::get('modal') }}'
   )
 </script>
-@endif
-
+@endif --}}
 @endpush
 {{-- https://dev.to/jeromew90/how-use-sweetalert2-in-laravel-8-using-composer-jki --}}
 {{-- https://stackoverflow.com/questions/65172778/how-to-use-sweetalert-messages-for-validation-in-laravel-8 --}}
