@@ -29,12 +29,12 @@
     </div>
     <button type="button" class="btn btn-sm btn-alt-primary min-width-125" data-toggle="click-ripple"
       onclick="Codebase.blocks('#cb-add-server', 'open');">
-      <i class="fa fa-building-o mr-1"></i> Agregar sede
+      <i class="fa fa-building-o mr-1"></i> Nueva sede
     </button>
   </div>
   <div id="cb-add-server" class="block bg-body-light animated fadeIn d-none">
     <div class="block-header">
-      <h3 class="block-title">Nueva sede</h3>
+      <h3 class="block-title">Agregar nueva sede</h3>
       <div class="block-options">
         <button type="button" class="btn-sm btn-block-option" data-toggle="block-option" data-action="close">
           <i class="si si-close"></i>
@@ -52,22 +52,22 @@
               data-post-text=" letters" onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('abreviature')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          <div class="col-md-5">
+          <div class="col-md-3">
             <input type="text" class="form-control" id="name" name="name" placeholder="Nombre de la sede"
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('name')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          <div class="col-md-5">
+          {{-- <div class="col-md-5">
             <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug sede" readonly
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
-          </div>
+          </div> --}}
           <div class="col-md-3">
             <input type="text" class="form-control" id="address" name="address" placeholder="Dirección"
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('address')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <input type="text" class="form-control" id="phone" name="phone" placeholder="Telefono"
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
@@ -87,7 +87,7 @@
           </div>--}}
           <div class="col-md-2">
             <button type="submit" class="btn btn-alt-success btn-block" data-toggle="click-ripple">
-              <i class="fa fa-plus mr-1"></i> Crear
+              <i class="fa fa-save mr-1"></i> Guardar
             </button>
           </div>
         </div>
@@ -124,8 +124,11 @@
           {{-- <divclass="font-size-smtext-muted">equipos --}}
         </div>
         <div class="block-content bg-body-light">
-          <p class="font-w600">
+          <p class="font-w600 font-size-xs">
             {{ Str::upper($campu->name) }}
+            @if($campu->new_campu == 'Nuevo')
+            <span class="badge badge-pill badge-primary">{{ $campu->new_campu }}</span>
+            @endif
           </p>
         </div>
       </a>

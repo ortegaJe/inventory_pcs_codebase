@@ -180,6 +180,11 @@
                       </a>
                     </li>
                     <li>
+                      <a class="{{ request()->is('admin/dashboard/inventario/historial-tecnicos') ? 'active' : '' }}"
+                        href="{{ route('technicians.history') }}">Historial de Técnicos
+                      </a>
+                    </li>
+                    <li>
                       <a class="{{ request()->is('admin/dashboard/inventario/roles') ? 'active' : '' }}"
                         href="{{ route('admin.inventory.roles.index') }}">Roles & Permisos
                       </a>

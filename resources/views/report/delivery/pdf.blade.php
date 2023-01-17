@@ -18,8 +18,8 @@
               <tr style="height: 10px;">
                 <td style="width: 21.0318%; height: 20px;" rowspan="2" align="middle" valign="top">
                   <p style="text-align: center;"><img style="display: block; margin: auto;"
-                      src="https://viva1a.com.co/wp-content/uploads/2019/03/img-logo-p.png" alt="" width="150"
-                      height="50" hspace="2" vspace="13" /></p>
+                      src="https://viva1a.com.co/wp-content/uploads/2023/01/cropped-LogoViva1A-IPS-VARIACION-min.png"
+                      alt="" width="150" height="50" hspace="2" vspace="13" /></p>
                 </td>
                 <td style="width: 57.0634%; height: 10px;">
                   <p style="text-align: center;"><strong>Centro Tecnolog&iacute;a Inteligencia

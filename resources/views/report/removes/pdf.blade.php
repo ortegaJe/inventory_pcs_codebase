@@ -71,8 +71,9 @@
       <td
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=2 rowspan=4 height="72" align="center">
-        <font size=1><br><img src="https://viva1a.com.co/wp-content/uploads/2019/03/img-logo-p.png" width=150 height=50
-            hspace=10 vspace=13>
+        <font size=1><br><img
+            src="https://viva1a.com.co/wp-content/uploads/2023/01/cropped-LogoViva1A-IPS-VARIACION-min.png" width=150
+            height=50 hspace=10 vspace=13>
         </font>
       </td>
       <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"

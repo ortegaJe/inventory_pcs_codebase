@@ -43,18 +43,21 @@
     </div>
     <!-- END Animation Classes -->
     @else
-    @foreach ($users as $user ) <div class="col-md-6 col-xl-3">
+    @foreach ($users as $user )
+    <div class="col-md-6 col-xl-3">
       <a class="block block-link-pop text-center" href="{{ route('admin.inventory.technicians.show', $user->id) }}">
         <div class="block-content text-center">
           <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
             <i class="si si-user"></i>
           </div>
-          {{-- <divclass="font-size-smtext-muted">equipos --}}
         </div>
         <div class="block-content bg-body-light">
           <p class="font-w600">
             {{ Str::title($user->name) }}
             {{ Str::title($user->last_name) }}
+            @if($user->new_user == 'Nuevo')
+            <span class="badge badge-pill badge-primary">{{ $user->new_user }}</span>
+            @endif
           </p>
         </div>
       </a>
@@ -79,7 +82,7 @@
             <a class="dropdown-item" href="javascript:void(0)">
               <i class="fa fa-cog mr-5"></i>Configuraciones
             </a>
-            {{--  <a class="dropdown-item" href="javascript:void(0)">
+            {{-- <a class="dropdown-item" href="javascript:void(0)">
               <i class="fa fa-fw fa-user mr-5"></i>Check out profile
             </a>
             <div class="dropdown-divider"></div>
@@ -114,7 +117,7 @@
 </script>
 @endif
 
-{{--  <script>
+{{-- <script>
   let route = "{{ route('admin.inventory.users.search') }}";
 
 $('#search').typeahead({
