@@ -588,14 +588,14 @@ class ReportController extends Controller
                 'r.rowguid',
                 'c.name as campu',
                 'c.slug as campu_slug',
-                'rd.is_borrowed',
+                //'rd.is_borrowed',
                 //'fpu.file_name',
                 //'fpu.file_path'
             )
             //->where('r.user_id', $user_id)
             ->where('r.device_id', $device->id)
             ->whereRaw('rn.name = "acta de entrega"')
-            ->groupBy('id_device', 'report_name', 'rd.name', 'rd.last_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'campu_slug', 'rd.is_borrowed', 'file_name', 'file_path')
+            ->groupBy('id_device', 'report_name', 'rd.name', 'rd.last_name', 'report_code_number', 'repo_id', 'rowguid', 'serial_number', 'date_created', 'campu', 'campu_slug', 'file_name', 'file_path')
             ->orderByDesc('r.created_at')
             ->get();
 
@@ -674,7 +674,7 @@ class ReportController extends Controller
             DB::beginTransaction();
 
             DB::insert(
-                "CALL SP_insertReportDelivery (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //19
+                "CALL SP_insertReportDelivery (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //18
                 [
                     $this->report->report_code_number = $this->generatorID,
                     $this->report->report_name_id = Report::REPORT_DELIVERY_NAME_ID,
@@ -688,7 +688,7 @@ class ReportController extends Controller
                     $this->report_delivery->last_name = $request->last_name,
                     $this->report_delivery->second_last_name = $request->second_last_name,
                     $this->report_delivery->position = $request->position,
-                    $this->report_delivery->is_borrowed = $request->has('is_borrowed'),
+                    //$this->report_delivery->is_borrowed = $request->has('is_borrowed'),
                     $this->report_delivery->has_wifi = $request->has('wifi'),
                     $this->report_delivery->has_keyboard = $request->has('keyboard'),
                     $this->report_delivery->has_mouse = $request->has('mouse'),
