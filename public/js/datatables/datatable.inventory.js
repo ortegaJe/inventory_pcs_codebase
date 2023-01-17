@@ -112,7 +112,7 @@ $(document).ready(function () {
             "<div>Acta de entrega:</div>" +
             '<a type="button" class="btn btn-alt-danger js-tooltip-enabled" data-toggle="tooltip" data-placement="left" title="" target="_blanck" href="http://inventory.viva1a.com.co/storage/' +
             d.file_path +
-            '.pdf" data-original-title="Descargar Inventario">' +
+            '" data-original-title="Descargar Inventario">' +
             '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>' +
             "</a>" +
             "</td>" +
