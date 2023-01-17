@@ -69,8 +69,8 @@
         style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
         colspan=8 rowspan=4 height="69" align="center" valign=middle>
         <font face="Arial" size=1 color="#000000"><br><img
-            src="https://viva1a.com.co/wp-content/uploads/2019/03/img-logo-p.png" width=155 height=48 hspace=9
-            vspace=12>
+            src="https://viva1a.com.co/wp-content/uploads/2023/01/cropped-LogoViva1A-IPS-VARIACION-min.png" width=155
+            height=48 hspace=9 vspace=12>
         </font>
       </td>
       <td

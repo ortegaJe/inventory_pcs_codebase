@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -35,13 +36,82 @@ class UserController extends Controller
     {
         $searchUsers = $request->get('search');
 
-        $users = User::select('users.id', 'users.name', 'users.last_name')
-            ->where('users.is_active', true)
-            ->whereNotIn('users.id', [1])
+        $users = User::select(
+            'users.id',
+            'users.name',
+            'users.last_name',
+            DB::raw("DATEDIFF(NOW(), users.created_at) as days"),
+            DB::raw("CONCAT(CASE WHEN users.created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() THEN 'Nuevo' ELSE 'Antiguo' end) as new_user")
+        )
             ->searchUser($searchUsers)
             ->withPrincipalCampu();
 
         return view('admin.users.index', compact('users'));
+    }
+
+    public function getAllUsers(Request $request)
+    {
+        if ($request->ajax()) {
+            $users = User::select(
+                'users.id as user_id',
+                'campus.id as campu_id',
+                'd.name as department',
+                'd.town',
+                'campus.name as campu',
+                DB::raw("CONCAT(users.name, ' ', users.last_name) as user_name"),
+                DB::raw("DATEDIFF(NOW(), users.created_at) as days"),
+                DB::raw("CONCAT(CASE WHEN users.created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() THEN 'Nuevo' ELSE 'Antiguo' end) as new_user"),
+                DB::raw("CASE WHEN users.is_active = 1 THEN 'Activo' WHEN users.is_active = 0 THEN 'Retirado' END AS status"),
+                DB::raw("CASE WHEN users.is_active = 1 THEN 'badge-success' WHEN users.is_active = 0 THEN 'badge-danger' END AS color")
+            )
+                ->leftJoin('campu_users', 'users.id', 'campu_users.user_id')
+                ->leftJoin('campus', 'campu_users.campu_id', 'campus.id')
+                ->leftJoin('department_campu as dc', 'dc.campu_id', 'campus.id')
+                ->leftJoin('departments as d', 'd.id', 'dc.department_id')
+                ->where('campu_users.is_principal', 1)
+                ->where('users.is_active', 1)
+                ->whereNotIn('users.id', [1])
+                ->orderByDesc('users.created_at');
+
+            $datatables = DataTables::of($users);
+
+            return $datatables->make(true);
+        }
+
+        return view('admin.users.history-user');
+    }
+
+    public function historyUser($user_id)
+    {
+        //$userId = User::findOrFail($user_id);
+
+        $users = User::select([
+            'users.id as user_id',
+            'campus.id as campu_id',
+            'd.name as department',
+            'd.town',
+            'campus.name as campu',
+            DB::raw("CONCAT(users.name, ' ', users.last_name) as user_name"),
+            DB::raw("DATEDIFF(NOW(), users.created_at) as days"),
+            DB::raw("CONCAT(CASE WHEN users.created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() THEN 'Nuevo' ELSE 'Antiguo' end) as new_user"),
+            DB::raw("CASE WHEN users.is_active = 1 THEN 'Activo' WHEN users.is_active = 0 THEN 'Retirado' END AS status"),
+            DB::raw("CASE WHEN users.is_active = 1 THEN 'badge-success' WHEN users.is_active = 0 THEN 'badge-danger' END AS color"),
+            DB::raw("CASE WHEN cu.is_principal = 1 THEN 'principal' WHEN cu.is_principal = 0 THEN 'secondary' END AS principal_campu")
+        ])
+            ->leftJoin('campu_users as cu', 'cu.user_id', 'users.id')
+            ->leftJoin('campus', 'cu.campu_id', 'campus.id')
+            ->leftJoin('department_campu as dc', 'dc.campu_id', 'campus.id')
+            ->leftJoin('departments as d', 'd.id', 'dc.department_id')
+            //->where('cu.is_principal', 1)
+            ->where('users.is_active', 1)
+            ->where('users.id', $user_id)
+            //->whereNotIn('users.id', [1])
+            //->orderByDesc('cu.is_principal')
+            ->get();
+
+        return $users;
+
+        //return json_encode($users, JSON_PRETTY_PRINT);
     }
 
     public function autoCompleteSearchUser(Request $request)

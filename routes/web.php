@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +35,10 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::get('sedes-con-menos-equipos', [AdminDashboardController::class, 'getCampusFewerDevices'])->name('get.campus.fewer.devices');
 
     Route::resource('tecnicos', 'App\Http\Controllers\Admin\UserController')->names('admin.inventory.technicians');
+
+    Route::get('historial-tecnicos', [UserController::class, 'getAllUsers'])->name('technicians.history');
+
+    Route::get('historial-cambios/{user_id}', [UserController::class, 'historyUser'])->name('technicians.history_changes');
 
     Route::get('perfil/{id?}', 'App\Http\Controllers\Admin\UserController@showProfileUser')->name('admin.inventory.technicians.profiles');
 

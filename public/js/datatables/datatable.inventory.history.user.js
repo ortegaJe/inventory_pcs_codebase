@@ -6,7 +6,7 @@ $(document).ready(function () {
     });
 
     function format(d) {
-        return (
+/*         return (
             '<div class="slider">' +
             '<table class="table-responsive td-slider" style="font-size:13">' +
             "<tr>" +
@@ -100,7 +100,7 @@ $(document).ready(function () {
             "</tr>" +
             "</table>" +
             "</div>"
-        );
+        ); */
     }
 
     $(document).ready(function () {
@@ -112,7 +112,7 @@ $(document).ready(function () {
                 [5, 10, 25, 50, -1],
                 [5, 10, 25, 50, "Todos"],
             ],
-            ajax: root_url_desktop,
+            ajax: root_url_user_history,
             language: {
                 lengthMenu: "Mostrar _MENU_ registros",
                 zeroRecords: "No se encontraron resultados",
@@ -136,60 +136,6 @@ $(document).ready(function () {
                     system: 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\">Más información&lt;\\/a&gt;).</a>',
                 },
             },
-            /*             initComplete: function () {
-                this.api()
-                    .columns([9, 10])
-                    .every(function () {
-                        let column = this;
-                        let select = $(
-                            '<select class="form-control"><option id="result0" value=""></option></select>'
-                        )
-                            .appendTo($(column.footer()).empty())
-                            .on("change", function () {
-                                let val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search(
-                                        val ? "^" + val + "$" : "",
-                                        true,
-                                        false
-                                    )
-                                    .draw();
-                            });
-
-                        column
-                            .data()
-                            .unique()
-                            .sort()
-                            .each(function (d, j) {
-                                select.append(
-                                    `<option id="result" value="${d}">${d}</option>`
-                                );
-                            });
-
-                        console.log(document.getElementById("result"));
-                    });
-            }, */
-            columnDefs: [
-                {
-                    render: function (data, type, row) {
-                        if (type === "display") {
-                            return `<span class="badge badge-pill ${row.ColorEstado} btn-block">
-                                        ${row.EstadoPc}
-                                    </span>`;
-                        }
-
-                        return data;
-                    },
-                    targets: 10,
-                },
-                {
-                    visible: false,
-                    targets: [],
-                },
-            ],
             columns: [
                 {
                     class: "details-control",
@@ -198,61 +144,140 @@ $(document).ready(function () {
                     defaultContent: "",
                 },
                 {
-                    data: "FechaCreacion",
-                    visible: false,
-                    orderable: false,
-                    searchable: false,
-                },
-                {
-                    data: "NombreEquipo",
-                    visible: false,
-                    orderable: false,
+                    data: "user_name",
+                    visible: true,
+                    orderable: true,
                     searchable: true,
                 },
                 {
-                    data: "Ubicacion",
-                    visible: false,
-                    orderable: false,
+                    data: "user_name",
+                    visible: true,
+                    orderable: true,
                     searchable: true,
                 },
                 {
-                    data: "Serial",
+                    data: "campu",
                     visible: true,
-                    searcheable: true,
+                    orderable: true,
+                    searchable: true,
                 },
                 {
-                    data: "ActivoFijo",
+                    data: "department",
                     visible: true,
-                    searcheable: true,
-                },
-                {
-                    data: "Ip",
-                    searcheable: true,
-                },
-                {
-                    data: "Mac",
-                    searcheable: true,
-                },
-                {
-                    data: "Anydesk",
-                    searcheable: true,
-                    //visible: false
-                },
-                {
-                    data: "Sede",
-                    searcheable: true,
-                },
-                {
-                    data: "EstadoPC",
+                    orderable: true,
                     searcheable: true,
                 },
                 {
                     data: "action",
+                    visible: true,
                     searcheable: false,
                     orderable: false,
                 },
             ],
+            columnDefs: [{
+                targets: -1,
+                render: function (data, type, row, meta) {
+                    return type === 'display' ? `<button type="button" class="btn btn-sm btn-danger btn-action" id="user_id" data-id="${row.user_id}">Retirar</button>` : ''
+                }
+            },
+            {
+                targets: 2,
+                render: function (data, type, row, meta) {
+                    return type === 'display' ? `<button type="button" class="btn btn-sm btn-alt-primary" id="btn-history" data-id="${row.user_id}" data-toggle="click-ripple">
+                                                    <i class="fa fa-code-fork"></i>
+                                                        </button>` : ''
+                    }
+                }
+            ],
             order: [[1, "desc"]],
+        });
+
+        $('#dt tbody').on('click', '.btn-action', function () {
+            var data = dt.row($(this).parents('tr')).data();
+            console.log(data);
+        alert(data.user_name + " fue retirado de la sede : " + data.campu);
+        });
+        
+        $('#dt tbody').on('click', '#btn-histor', function () {
+        $('#btn-save').val("add");
+        $('#myForm').trigger("reset");
+        $('#formModal').modal('show');
+    });
+    // CREATE
+/*      $("#btn-save").click(function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        e.preventDefault();
+        var formData = {
+            title: jQuery('#title').val(),
+            description: jQuery('#description').val(),
+        };
+        var state = jQuery('#btn-save').val();
+        var type = "POST";
+        var todo_id = jQuery('#todo_id').val();
+        var ajaxurl = 'todo';
+        $.ajax({
+            type: type,
+            url: ajaxurl,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                var todo = '<tr id="todo' + data.id + '"><td>' + data.id + '</td><td>' + data.title + '</td><td>' + data.description + '</td>';
+                if (state == "add") {
+                    jQuery('#todo-list').append(todo);
+                } else {
+                    jQuery("#todo" + todo_id).replaceWith(todo);
+                }
+                jQuery('#myForm').trigger("reset");
+                jQuery('#formModal').modal('hide')
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+     }); */
+        
+        //SHOW
+        $(document).on('click', '#btn-history', function (e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            console.log(id);
+            $.ajax({
+                url: `http://127.0.0.1:8000/admin/dashboard/inventario/historial-cambios/${id}`,
+                type: 'GET',
+                data: {
+                    "id" : id
+                },
+                success: function (data) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        $('#info-new-user').html(`${data[i].user_name} ha sido asignado a la sede.`);
+                        if (data[i].principal_campu === 'principal'){
+                            $('#info-heading').html("Timeline " + `<small>${data[i].campu}</small>`);
+                        };
+                            console.log(`Nombre técnico: ${data[i].user_name}
+                                        Sede: ${data[i].campu}
+                                        Sede Principal: ${data[i].principal_campu}
+                                        Departamento: ${data[i].department}
+                                        Municipio: ${data[i].town}`                                      
+                            );
+                        }
+                    $('#info-remove-user').html(`${data.user_name} ha sido retirado de la sede.`);
+                    $('#formModal').modal("show");
+                },
+/*                 complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000 */
+            })
         });
 
         $(document).on("click", "#btn-delete", function (e) {

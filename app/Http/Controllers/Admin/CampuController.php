@@ -30,9 +30,17 @@ class CampuController extends Controller
     {
         $name = $request->get('search');
 
-        $campus = Campu::orderBy('id', 'desc')
+        $campus = Campu::select(
+            'campus.id',
+            'campus.name',
+            'campus.slug',
+            DB::raw("DATEDIFF(NOW(), campus.created_at) as days"),
+            DB::raw("CONCAT(CASE WHEN campus.created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() THEN 'Nuevo' ELSE 'Antiguo' end) as new_campu")
+        )->orderByDesc('campus.created_at')
             ->name($name)
             ->paginate(6);
+
+        //return $campus;
 
         return view('admin.sedes.index', compact('campus'));
     }
