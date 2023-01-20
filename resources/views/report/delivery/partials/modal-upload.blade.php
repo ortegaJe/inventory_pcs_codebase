@@ -1,5 +1,6 @@
 <!-- Pop Out Modal -->
-<form action="{{ route('upload.file.delivery', $repo->repo_id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('upload.file.delivery', [$repo->repo_id, $repo->id_device]) }}" method="POST"
+    enctype="multipart/form-data">
     @csrf
     @method('POST')
     <div class="modal fade" id="modal-upload" tabindex="-1" role="dialog" aria-labelledby="modal-popout"

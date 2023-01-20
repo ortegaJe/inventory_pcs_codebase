@@ -754,9 +754,12 @@ class ReportController extends Controller
         return $pdf->stream($nombre_archivo . $extension);
     }
 
-    public function uploadFileReportDeliverySigned(Request $req, $report_id)
+    public function uploadFileReportDeliverySigned(Request $req, $report_id, $deviceId)
     {
         $repo_id = Report::findOrFail($report_id);
+
+        $IdDevice = Device::findOrFail($deviceId);
+
         $repo = Report::select(
             'reports.id as repo_id',
             'reports.report_code_number',
@@ -765,14 +768,14 @@ class ReportController extends Controller
             'reports.rowguid'
         )
             ->leftJoin('report_deliveries as rd', 'rd.report_id', 'reports.id')
-            ->leftJoin('file_upload_reports as fur', 'fur.report_id', 'rd.report_id')
             ->leftJoin('devices as d', 'd.id', 'reports.device_id')
             ->leftJoin('campus as c', 'c.id', 'd.campu_id')
             ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
             ->leftJoin('users as u', 'u.id', 'cu.user_id')
+            ->where('reports.device_id', $IdDevice->id)
             ->where('cu.user_id', Auth::id())
-            //->where('reports.id', $repo_id->id)
-            ->orderByDesc('reports.report_code_number')
+            //->where('reports.id', $repoId->id)
+            ->orderByDesc('reports.created_at')
             ->first();
 
         //return $repo;
