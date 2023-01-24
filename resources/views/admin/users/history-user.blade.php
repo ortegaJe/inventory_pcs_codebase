@@ -131,24 +131,15 @@
                             </div> --}}
                         </div>
                         <div class="block-content block-content-full">
-                            <ul class="list list-timeline list-timeline-modern pull-t">
-                                <li>
+                            <ul class="list list-timeline list-timeline-modern pull-t" id="lista">
+                                {{-- <li>
                                     <div class="list-timeline-time">50 min ago</div>
                                     <i class="list-timeline-icon si si-user-following bg-success"></i>
                                     <div class="list-timeline-content">
                                         <p class="font-w600" id="info-new-user"></p>
                                         <p></p>
                                     </div>
-                                </li>
-
-                                <li>
-                                    <div class="list-timeline-time">5 days ago</div>
-                                    <i class="list-timeline-icon si si-user-unfollow bg-danger"></i>
-                                    <div class="list-timeline-content">
-                                        <p class="font-w600" id="info-remove-user"></p>
-                                        <p></p>
-                                    </div>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </div>

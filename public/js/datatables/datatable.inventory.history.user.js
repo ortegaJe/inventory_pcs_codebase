@@ -252,31 +252,36 @@ $(document).ready(function () {
                     "id" : id
                 },
                 success: function (data) {
-                    console.log(data);
-                    for (var i = 0; i < data.length; i++) {
-                        $('#info-new-user').html(`${data[i].user_name} ha sido asignado a la sede.`);
-                        if (data[i].principal_campu === 'principal'){
-                            $('#info-heading').html("Timeline " + `<small>${data[i].campu}</small>`);
-                        };
-                            console.log(`Nombre técnico: ${data[i].user_name}
-                                        Sede: ${data[i].campu}
-                                        Sede Principal: ${data[i].principal_campu}
-                                        Departamento: ${data[i].department}
-                                        Municipio: ${data[i].town}`                                      
-                            );
-                        }
-                    $('#info-remove-user').html(`${data.user_name} ha sido retirado de la sede.`);
+                    const listaContenedor = document.getElementById('lista');
+
+                    function crearItem(data)
+                    {
+                        const item = document.createElement('li');
+
+                        listaContenedor.appendChild(item);
+                    }
+
+                    data.forEach(crearItem);
+
+/*                     console.log(`Nombre técnico: ${data[0].user_name}
+                                Sede: ${data[0].campu}
+                                Sede Principal: ${data[0].principal_campu}
+                                Departamento: ${data[0].department}
+                                Municipio: ${data[0].town}`                                      
+                    ); */
+                        
+                    //$('#info-remove-user').html(`${data.user_name} ha sido retirado de la sede.`);
                     $('#formModal').modal("show");
                 },
 /*                 complete: function() {
                     $('#loader').hide();
-                },
+                },*/
                 error: function(jqXHR, testStatus, error) {
                     console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
+                    //alert("Page " + href + " cannot open. Error:" + error);
+                    //$('#loader').hide();
                 },
-                timeout: 8000 */
+                timeout: 8000 
             })
         });
 
