@@ -518,12 +518,12 @@
   <script src="{{ asset('/js/pages/be_forms_wizard.min.js') }}"></script>
   <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
   <script src="{{ asset('/js/datatables/datatable.inventory.deleted.js') }}"></script>
+
   <script>
     let root_url_get_list_devices = <?php echo json_encode(route('get.devices.list')) ?>;
     let root_url_retore_device = <?php echo json_encode(route('restore.device')) ?>;
     let root_url_restore_selected_devices = <?php echo json_encode(route('restore.selected.devices')) ?>;
   </script>
-
   <!-- Page JS Helpers (Select2 plugin) -->
   <script>
     jQuery(function(){ Codebase.helpers('select2'); });
