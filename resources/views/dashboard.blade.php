@@ -140,117 +140,50 @@
 <script>
   jQuery(function(){ Codebase.helpers('slick'); });
 </script>
-/* <script>
-  Highcharts.chart('container', {
-  chart: {
-  plotBackgroundColor: null,
-  plotBorderWidth: null,
-  plotShadow: false,
-  type: 'pie',
-  height: 331,
-  style: {
-      fontFamily: 'Nunito Sans'
-    }
-  },
-  title: {
-  text: null
-  },
-  tooltip: {
-  pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-  },
-  accessibility: {
-  point: {
-  valueSuffix: '%'
-  }
-  },
-  plotOptions: {
-  pie: {
-  allowPointSelect: true,
-  cursor: 'pointer',
-  dataLabels: {
-  enabled: true,
-  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-  }
-  }
-  },
-  series: [{
-  name: 'Total',
-  colorByPoint: true,
-  data: <?= $chart_data ?>
-  }],
-  exporting: {
-    filename: 'sistemas-operativos-instalados-viva1a'
-  }
-  }); 
-
-  $('#update').bind('click', function() {
-    var chart = $('#container').highcharts();
-    
-    chart.series[0].update({
-    data: [{
-    name: 'windows 7',
-    y: 87.99
-    }]
-    }, false);
-    
-    chart.redraw();
-    });
-</script> */
-
 <script>
-  Highcharts.chart('container', {
-chart: {
-type: 'bar'
-},
-title: {
-text: 'Historic World Population by Region',
-align: 'left'
-},
-xAxis: {
-categories: <?= $chart_data ?>,
-title: {
-text: null
-}
-},
-yAxis: {
-min: 0,
-title: {
-text: 'Population (millions)',
-align: 'high'
-},
-labels: {
-overflow: 'justify'
-}
-},
-tooltip: {
-valueSuffix: ' millions'
-},
-plotOptions: {
-bar: {
-dataLabels: {
-enabled: true
-}
-}
-},
-legend: {
-layout: 'vertical',
-align: 'right',
-verticalAlign: 'top',
-x: -40,
-y: 80,
-floating: true,
-borderWidth: 1,
-backgroundColor:
-Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-shadow: true
-},
-credits: {
-enabled: false
-},
-series: [{
-name: 'Year 1990',
-data: <?= $chart_data ?>,
-}]
+let name =  <?php echo $name ?>;
+let data =  <?php echo $data ?>; 
+
+Highcharts.chart('container', {
+    chart: {
+        type: 'column',
+           height: 331,
+    style: {
+        fontFamily: 'Nunito Sans'
+      }
+    },
+    title: {
+        text: 'Número de Sistemas Operativos Instalados'
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+        categories: name,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Sistemas Operativos'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                      '<td style="padding:0"><b>{point.y:.0f} total</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    series: [{
+      name: '<i class="fa fa-windows"></i>',
+      showInLegend: false,
+      data
+    }],
+    exporting: {
+      filename: 'numero-sistemas-operativos-instalados-viva1a'
+    }
 });
 </script>
 

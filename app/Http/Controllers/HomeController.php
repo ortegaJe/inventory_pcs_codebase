@@ -35,21 +35,14 @@ class HomeController extends Controller
             ->whereIn('d.type_device_id', [1, 2, 3, 5])
             ->groupBy('os_name', 'c.os_id')
             ->orderByDesc('total')
-            ->get();
+            ->pluck('total', 'os_name');
 
         //return $opSystems;
 
-        $dataPoints = [];
+        $name = $opSystems->keys();
+        $data = $opSystems->values();
+        //return [$labels, $data];
 
-        foreach ($opSystems as $opSystem) {
-
-            $dataPoints[] = [
-                'name'    => $opSystem->os_name,
-                'y'       => (int)$opSystem->total
-            ];
-        }
-
-        $data['chart_data'] = json_encode(array($dataPoints));
-        return view('dashboard', $data);
+        return view('dashboard', compact('name','data'));
     }
 }
