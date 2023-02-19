@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,8 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Auth::routes();
 
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
+
+//Route::get('sistemas-operativos-chart', [HomeController::class, 'getOsData'])->name('os_chart');
 
 //Route::get('/equipos-en-prestamo', [HomeController::class, 'getBorrowedDeviceList'])->name('get_borrowed_list');
 
