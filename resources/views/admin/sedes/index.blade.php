@@ -3,13 +3,6 @@
 @section('title', 'Sedes')
 
 @section('content')
-
-@if(session('info'))
-<div class="alert alert-success">
-  <strong>{{ session('info') }}</strong>
-</div>
-@endif
-
 <form action="{{ route('admin.inventory.campus.index') }}" method="GET">
   <div class="input-group input-group-lg">
     <input type="text" class="form-control" id="search" name="search" placeholder="Buscar sede..">
@@ -20,7 +13,6 @@
     </div>
   </div>
 </form>
-
 <!-- Overview -->
 <div class="content-heading">
   <div class="d-flex justify-content-between align-items-center mt-50 mb-20">
@@ -96,7 +88,6 @@
   </div>
 </div>
 <!-- END Overview -->
-
 <div class="row">
   @if(count($campus) <= 0) <!-- Animation Classes -->
     <div class="col-sm-4 mx-auto">
@@ -114,9 +105,9 @@
     <!-- END Animation Classes -->
     @else
     @foreach ($campus as $campu )
-    <div class="col-md-6 col-xl-4">
+    <div class="col-md-6 col-xl-4" id="sedes">
       <a class="block block-link-pop text-center"
-        href="{{ route('admin.inventory.campus.show', [$campu, '=', trim($campu->slug)]) }}">
+        href="{{ route('admin.inventory.campus.show', $campu) }}">
         <div class="block-content text-center">
           <div class="item item-circle bg-primary-lighter text-primary mx-auto my-10">
             <i class="fa fa-building-o"></i>
@@ -141,7 +132,6 @@
     {!! $campus->links("pagination::bootstrap-4") !!}
   </ul>
 </nav>
-
 @endsection
 
 @push('js')
@@ -165,13 +155,13 @@
 });
 </script>
 
-@if(Session::has('info_error'))
+@if(Session::has('success'))
 <script>
   Swal.fire(
-'ERROR',
-'{!! Session::get('info_error') !!}',
-'error'
-)
+            'Creado con Exito!',
+            '{!! Session::get('success') !!}',
+            'success'
+            )
 </script>
 @endif
 
@@ -188,5 +178,4 @@
             }
         });
 </script>
-
 @endpush

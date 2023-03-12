@@ -36,7 +36,7 @@
   <div class="content py-5 text-center">
     <nav class="breadcrumb bg-body-light mb-0">
       <a class="breadcrumb-item" href="{{ route('admin.inventory.campus.index') }}">Sede</a>
-      <span class="breadcrumb-item active">{{ Str::ucfirst(Str::lower($campus->name)) }}</span>
+      <span class="breadcrumb-item active">{{ Str::lower($campus->name) }}</span>
     </nav>
   </div>
 </div>
@@ -136,27 +136,28 @@
                 placeholder="4 letras es el limite.." data-always-show="true" data-pre-text="Used "
                 data-separator=" of " data-post-text=" characters"
                 onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ trim($campus->abreviature) }}">
-              <label for="abreviature">Abreviado de la sede</label>
+              <label for="abreviature">Abreviado</label>
               @error('abreviature')<small class="text-danger"> {{ $message }}</small>@enderror
             </div>
           </div>
-          <div class="col-4">
+          <div class="col-8">
             <div class="form-material floating">
               <input type="text" class="form-control" id="name" name="name"
                 onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ trim($campus->name) }}">
-              <label for="name">Nombre de la sede</label>
+              <label for="name">Nombre</label>
               @error('name')<small class="text-danger">{{ $message }}</small>@enderror
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="form-material">
-              <input type="text" class="form-control" id="slug" name="slug" readonly value="{{ trim($campus->slug) }}">
-              <label for="slug">Slug de la sede</label>
-              @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
             </div>
           </div>
         </div>
         <div class="form-group row">
+          <div class="col-4">
+            <div class="form-material floating">
+              <input type="text" class="form-control" id="name" name="name"
+                onkeyup="javascript:this.value=this.value.toUpperCase();" value="{{ trim($campus->admin_name) }} {{ trim($campus->admin_last_name) }}">
+              <label for="name">Administrador</label>
+              @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+            </div>
+          </div>
           <div class="col-4">
             <div class="form-material floating">
               <input type="text" class="form-control" id="address" name="address"

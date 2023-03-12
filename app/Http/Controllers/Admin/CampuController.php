@@ -68,15 +68,15 @@ class CampuController extends Controller
 
     public function assingUserCampu(Request $request, $id)
     {
+        $userId = $request->get('list_users');
 
-        $userId = $request->get('val-select2-lista-tecnicos');
-
-        //busca sede donde el valor del request coincida con el resultado de la variable $userId
-        $foundCampuId = DB::table('campu_users')->select('campu_id', 'user_id', 'is_principal')
+        //busca id de la sede que exista en la tabla intermedia, si no existe inserta nuevo registro y 
+        //si existe actualiza el regitro si no esta asignada.
+        $ifExist = DB::table('campu_users')->select('campu_id', 'user_id', 'is_principal')
             ->where('campu_id', $id)
             ->first();
 
-        if (isset($foundCampuId) === false) {
+        if ($ifExist === null) {
             //inserta una nueva sede con usuario asignado
             DB::table('campu_users')->insert([
                 'user_id'    => $userId,
@@ -85,7 +85,8 @@ class CampuController extends Controller
             ]);
 
             return back()->with('assigned', '');
-        } else
+            //return "regitro nuevo";
+        } 
             //actualiza sede con nuevo usuario asignado
             $update = array(
                 'user_id'      => $userId,
@@ -95,6 +96,7 @@ class CampuController extends Controller
         DB::table('campu_users')->where('campu_id', $id)->update($update);
 
         return back()->with('assigned', '');
+        //return "registro actualizado";
     }
 
     public function removeUserCampu($id)
@@ -140,24 +142,23 @@ class CampuController extends Controller
 
     public function store(Request $request)
     {
-        $campu = new Campu();
-
         $request->validate([
             'abreviature' => 'required|unique:campus,abreviature',
             'name' => 'required|unique:campus,name',
         ]);
 
-        $campu->abreviature = e($request->input('abreviature'));
-        $campu->name = e($request->input('name'));
-        $campu->slug = e($request->input('slug'));
-        $campu->address = e($request->input('address'));
-        $campu->phone = e($request->input('phone'));
+        $campu = new Campu();
+        $campu->abreviature = $request->abreviature;
+        $campu->name = $request->name;
+        $campu->slug = Str::slug($request->name);
+        $campu->address = $request->address;
+        $campu->phone = $request->phone;
         $campu->created_at = now('America/Bogota');
 
         $campu->save();
 
         return redirect()->route('admin.inventory.campus.index', $campu)
-            ->with('info', 'Sede ' . $campu->name . ' creada exitosamente!');
+            ->with('success', 'Sede ' . $campu->name);
     }
 
     public function show($id)

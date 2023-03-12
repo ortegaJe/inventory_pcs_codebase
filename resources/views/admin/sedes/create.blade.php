@@ -13,7 +13,6 @@
 @endif
 
 <div class="col-xl-12">
-  <!-- Roles -->
   <form action="{{ route('admin.inventory.campus.store') }}" method="POST">
     @csrf
     @method('POST')
@@ -57,25 +56,10 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <div class="col-6 mb-2">
-            <div class="form-material">
-              <input type="text" class="form-control" id="slug" name="slug" data-always-show="true" readonly>
-              <label for="slug">Slug de la sede</label>
-              @error('slug')
-              <small class="text-danger">
-                {{ $message }}
-              </small>
-              @enderror
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </form>
 </div>
-<!-- END Roles -->
-
 @endsection
 
 @push('js')
