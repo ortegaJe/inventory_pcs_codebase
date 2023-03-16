@@ -212,7 +212,7 @@
                 @endif
               </div>
             </div>
-            @if (Auth::id() == 2)
+            @if (Auth::id() == 13)
             <div class="form-group row">
               <div class="col-md-3">
                 <label class="css-control css-control-primary css-switch css-switch-square">
