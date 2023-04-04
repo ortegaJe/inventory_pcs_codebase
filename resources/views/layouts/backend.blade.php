@@ -53,8 +53,8 @@
 <body>
   @auth
   <div id="page-loader" class="bg-gd-sea show"></div>
-  <div id="page-container"
-    class="sidebar-o enable-page-overlay side-scroll page-header-enabled side-trans-enabled sidebar-inverse enable-cookies">
+  <!-- Page Container -->
+  <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-enabled side-trans-enabled sidebar-inverse enable-cookies">
     <!-- START Sidebar -->
     <nav id="sidebar">
       <!-- Sidebar Content -->
@@ -414,22 +414,23 @@
           @endphp
 
           <!-- User Dropdown -->
+          <input type="hidden" id="user-id" value="{{ Auth::id() }}">
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-user d-sm-none"></i>
-              <span class="d-none d-sm-inline-block">{{Str::upper(Auth::user()->nick_name) }}</span>
+              <span class="d-none d-sm-inline-block">{{Str::title(Auth::user()->nick_name) }}</span>
               <i class="fa fa-angle-down ml-5"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
-              <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">{{ Auth::user()->name }}
+              <h5 class="h6 mb-5 text-center text-uppercase">{{ Auth::user()->name }}
                 {{ Auth::user()->last_name }}
-                <div class="mt-2">
+              </h5>
+              <h5 class="h6 py-10 mb-5 border-b">
                   @if (($campusTec) ? $campusTec->SedeTecnico : 0)
                   <i class="fa fa-building-o mr-5"></i>{{ $campusTec->SedeTecnico }}
                   @else
                   @endif
-                </div>
               </h5>
               <a class="dropdown-item" href="{{ route('admin.inventory.technicians.profiles', Auth::id()) }}">
                 <i class="si si-user mr-5"></i> Perfil
@@ -476,6 +477,7 @@
   </div>
   <!-- END Page Container -->
   @endauth
+</body>
 
   <!--
             Codebase JS Core
@@ -506,29 +508,25 @@
   <script src="https://kit.fontawesome.com/bb00059a3e.js" crossorigin="anonymous"></script>
 
   <!-- Page JS Plugins -->
+  <script src="{{ asset('/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/slick/slick.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/select2/js/select2.full.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
   <script src="{{ asset('/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('/js/plugins/jquery-validation/additional-methods.js') }}"></script>
-
-  <!-- Page JS Code -->
-  <script src="{{ asset('/js/pages/be_pages_dashboard.min.js') }}"></script>
   <script src="{{ asset('/js/pages/be_forms_wizard.min.js') }}"></script>
   <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
   <script src="{{ asset('/js/datatables/datatable.inventory.deleted.js') }}"></script>
-
+  <!-- Page JS Code -->
   <script>
     let root_url_get_list_devices = <?php echo json_encode(route('get.devices.list')) ?>;
     let root_url_retore_device = <?php echo json_encode(route('restore.device')) ?>;
     let root_url_restore_selected_devices = <?php echo json_encode(route('restore.selected.devices')) ?>;
   </script>
-  <!-- Page JS Helpers (Select2 plugin) -->
   <script>
     jQuery(function(){ Codebase.helpers('select2'); });
   </script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   @stack('js')
 </body>
 

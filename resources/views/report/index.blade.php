@@ -64,4 +64,22 @@
         </a>
     </div>
 </div>
+@php
+  $currenturl = url()->current();
+  $user_id = Auth::id();
+  $currentRoute = Route::currentRouteName()
+@endphp
 @endsection
+
+@push('js')
+<script>
+    let validate_sign = <?php echo json_encode(route('validate_sign')) ?>;
+    let route_sign_admin = <?php echo json_encode(route('sign.index')) ?>;
+    let route_sign_user = <?php echo json_encode(route('admin.inventory.technicians.profiles')) ?>;
+    let user_id = <?php echo json_encode($user_id) ?>;
+    let currentRoute = <?php echo json_encode($currentRoute) ?>;
+</script>
+
+<script src="{{ asset('/js/validate.sign.reports.js') }}"></script>
+
+@endpush

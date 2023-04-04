@@ -25,6 +25,8 @@ Auth::routes();
 
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
 
+Route::get('/validar-firmas', [HomeController::class, 'ValidateSign'])->name('validate_sign');
+
 //Route::get('sistemas-operativos-chart', [HomeController::class, 'getOsData'])->name('os_chart');
 
 //Route::get('/equipos-en-prestamo', [HomeController::class, 'getBorrowedDeviceList'])->name('get_borrowed_list');
