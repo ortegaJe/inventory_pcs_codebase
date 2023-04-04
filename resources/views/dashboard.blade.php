@@ -97,6 +97,9 @@
   </div>
 </div> --}}
 <!-- END Avatar Sliders -->
+@php
+  $user_id = Auth::id();
+@endphp
 @endsection
 
 @push('js')
@@ -107,9 +110,14 @@
 <script>
   let root_url = <?php echo json_encode(route('get.campus.fewer.devices')) ?>;
 	let root_url_show = <?php echo json_encode(route('admin.inventory.technicians.store')) ?>;
+  let validate_sign = <?php echo json_encode(route('validate_sign')) ?>;
+  let route_sign_admin = <?php echo json_encode(route('sign.index')) ?>;
+  let route_sign_user = <?php echo json_encode(route('admin.inventory.technicians.profiles')) ?>;
+  let user_id = <?php echo json_encode($user_id) ?>;
 </script>
 <script src="{{ asset('/js/datatables/datatable.inventory.campus.less.devices.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
+<script src="{{ asset('/js/validate.sign.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/slick/slick.min.js') }}"></script>

@@ -72,8 +72,8 @@ class User extends Authenticatable
     {
         return $query->leftJoin('campu_users', 'users.id', 'campu_users.user_id')
             ->leftJoin('campus', 'campu_users.campu_id', 'campus.id')
-            ->leftJoin('department_campu as dc', 'dc.campu_id', 'campus.id')
-            ->leftJoin('departments as d', 'd.id', 'dc.department_id')
+            //->leftJoin('department_campu as dc', 'dc.campu_id', 'campus.id')
+            //->leftJoin('departments as d', 'd.id', 'dc.department_id')
             ->where('campu_users.is_principal', 1)
             ->where('users.is_active', 1)
             ->whereNotIn('users.id', [1])

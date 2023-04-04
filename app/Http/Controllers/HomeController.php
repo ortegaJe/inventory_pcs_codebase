@@ -45,4 +45,23 @@ class HomeController extends Controller
 
         return view('dashboard', compact('name','data'));
     }
+
+     public function validateSign()
+    {
+        $users = DB::table('users as u')
+        ->leftJoin('campu_users as cu', 'cu.user_id', 'u.id')
+        ->leftJoin('campus as c', 'c.id', 'cu.campu_id')
+        ->where('cu.user_id', Auth::id())
+        ->select('u.id as user_id', 
+                 'u.sign as user_sign',
+                 'c.id as campu_id', 
+                 'c.name as campus',
+                 'c.abreviature',
+                 'c.admin_name', 
+                 'c.admin_last_name', 
+                 'c.admin_sign'
+        )->get();
+
+        return $users;
+    }
 }
