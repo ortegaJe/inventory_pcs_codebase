@@ -181,12 +181,12 @@
           <td class="d-none d-sm-table-cell text-center">
             <div class="btn-group">
               @if($device->first_semester_month == now()->isoformat('M'))
-              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
+              <a class="btn btn-sm btn-secondary btn-campu-id" id="{{ $device->campu_id }}" data-toggle="tooltip" title="Generar Reporte"
                 href="{{ route('inventory.report.maintenance.create', [$device->device_id, $device->device_rowguid]) }}">
                 <i class="fa fa-file-text-o"></i>
               </a>
               @elseif($device->second_semester_month == now()->isoformat('M'))
-              <a class="btn btn-sm btn-secondary" data-toggle="tooltip" title="Generar Reporte"
+              <a class="btn btn-sm btn-secondary btn-campu-id" id="{{ $device->campu_id }}" data-toggle="tooltip" title="Generar Reporte"
                 @if($device->maintenance_01_date == null)
                 id="btn-notify"
                 @endif
@@ -252,20 +252,23 @@
 </div>
 </div>
 <!-- END Device -->
+@php
+  $currenturl = url()->current();
+  $user_id = Auth::id();
+  $currentRoute = Route::currentRouteName()
+@endphp
 @endsection
 
 @push('js')
-<!-- Page JS Plugins -->
-<script src="{{ asset('/js/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
-<script src="{{ asset('/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
 
-<!-- Page JS Code -->
-<script src="{{ asset('/js/pages/be_widgets_stats.min.js') }}"></script>
+<script src="{{ asset('/js/validate.sign.reports.js') }}"></script>
 
-<!-- Page JS Helpers (Easy Pie Chart Plugin) -->
 <script>
-  jQuery(function(){ Codebase.helpers('easy-pie-chart'); });
+    let validate_sign = <?php echo json_encode(route('validate_sign')) ?>;
+    let route_sign_admin = <?php echo json_encode(route('sign.index')) ?>;
+    let route_sign_user = <?php echo json_encode(route('admin.inventory.technicians.profiles')) ?>;
+    let user_id = <?php echo json_encode($user_id) ?>;
+    let currentRoute = <?php echo json_encode($currentRoute) ?>;
 </script>
 
 @if(Session::has('report_created'))

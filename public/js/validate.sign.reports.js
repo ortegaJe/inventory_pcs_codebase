@@ -27,32 +27,26 @@ class AlertActivity {
                 _token: $('input[name="_token"]').val()
             },
             success: function(response) {
-                let modifiedArr = response.map(function(element) {
-                    //return `sede: ${element.campus}, firmas admin: ${element.admin_sign}`
+                $(document).on("click", ".btn-campu-id", function(e) {
+                    const campuId = this.id;
 
-                    if (element.user_sign == null) {
-                        return toast.fire({
-                                    html: 'Por favor cargue su firma de su sedes asignadas para los <strong>reportes</strong>, de lo contrario no se podra generar los reportes.',
-                                    footer: `<a href="${signUser}/${userId}"><strong>Ir a Perfil</strong><i class="fa fa-arrow-right ml-5"></i><strong> Mis Datos</strong></a>`,
-                                    buttonsStyling: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                });
-                    }
+                    let collect = response.map(function(element) {
 
-                    if (element.admin_sign == null) {
-                        return toast.fire({
-                                    html: 'Por favor cargue la firmas de los <strong>administradores</strong> de su sedes asignadas para los <strong>reportes</strong>, de lo contrario no se podra generar los reportes.',
-                                    footer: `<a href="${signAdmin}"><strong>Ir a Reportes</strong><i class="fa fa-arrow-right ml-5"></i><strong> Firmas</strong></a>`,
-                                    buttonsStyling: false,
-                                    showConfirmButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                });
-                    }
-                });
-                //console.log(modifiedArr);
+                        if (campuId == element.campu_id && element.admin_sign == null) {
+                            e.preventDefault();
+                            
+                            return toast.fire({
+                                        html: `Por favor cargue la firma del <strong>administrador de la sede ${element.campus}</strong> para los <strong>reportes</strong>, de lo contrario no se podra generar los reportes.`,
+                                        footer: `<a href="${signAdmin}"><strong>Ir a Reportes</strong><i class="fa fa-arrow-right ml-5"></i><strong> Firmas</strong></a>`,
+                                        buttonsStyling: false,
+                                        showConfirmButton: false,
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false,
+                                    });
+                        }
+                    });
+                    //alert(this.id);
+                });           
             }
         });
     }
