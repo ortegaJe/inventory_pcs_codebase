@@ -17,7 +17,7 @@
       <i class="fa fa-plus text-success mr-5"></i>Generar
       </button>
       @endif
-      @if($count_report->maintenance_02_date == null &&
+      @if($count_report->maintenance_02_date == null ||
       $count_report->semester_second_month_mto == now()->isoformat('M'))
       <button type="button" class="btn btn-sm btn-alt-success float-right" data-toggle="modal" data-target="#modal-mto">
         <i class="fa fa-plus text-success mr-5"></i>Generar
