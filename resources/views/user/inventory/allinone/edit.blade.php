@@ -229,7 +229,7 @@
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
-                    <option value="{{ $storage->id }}" {{ $storage->id == $deviceComponents->first_storage_id ?
+                    <option value="{{ $storage->id }}" {{ $storage->id == $deviceComponents->second_storage_id ?
                       'selected' : '' }}>
                       {{ $storage->size }}
                       {{ $storage->storage_unit }}
