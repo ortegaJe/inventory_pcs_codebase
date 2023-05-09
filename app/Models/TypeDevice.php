@@ -15,6 +15,7 @@ class TypeDevice extends Model
     const RASPBERRY_PI_ID = 4;
     const ALL_IN_ONE_PC_ID = 5;
     const IP_PHONE_ID = 6;
+    const MINIPC_SAT_ID = 9;
 
     const EQUIPOS_ESCRITORIOS = 'DE ESCRITORIO';
     const EQUIPOS_TURNEROS = 'TURNERO';
@@ -22,6 +23,7 @@ class TypeDevice extends Model
     const EQUIPOS_RASPBERRY = 'RASPBERRY';
     const EQUIPOS_ALL_IN_ONES = 'ALL IN ONE';
     const EQUIPOS_TELEFONOS_IP = 'TELEFONO IP';
+    const EQUIPOS_MINIPC_SAT = 'MINI PC SAT';
 
     public function scopeCountTypeDevice($query, $type_device_id)
     {

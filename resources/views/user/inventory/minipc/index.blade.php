@@ -1,6 +1,7 @@
 @extends('layouts.backend')
 
-@section('title', 'Equipos ' .Str::title($deviceType->type_name))
+@section('title', 'Equipos '.  (Str::title($deviceType->type_name)))
+
 @section('css')
 <link href="{{ asset('/css/datatables/datatable.inventory.pc.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.css') }}">
@@ -12,7 +13,7 @@
   <!-- Add Product -->
 {{--   <div class="row gutters-tiny mb-2">
     <div class="col-md-6 col-xl-2">
-      <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.allinone.create') }}">
+      <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
         <div class="block-content block-content-full block-sticky-options">
           <div class="block-options">
             <div class="block-options-item">
@@ -28,16 +29,16 @@
       </a>
     </div>
   </div> --}}
-  <!-- END Add Product -->
+  <!-- End Add Product -->
   <!-- Partial Table -->
   <div class="block block-rounded block-bordered">
     <div class="block-header block-header-default border-b">
       <h3 class="block-title">
-        Lista<small> | Equipos informaticos</small>
+        Equipos informáticos<small> | Lista</small>
       </h3>
       <div class="block-options">
-        <button type="button" class="btn btn-alt-success" data-toggle="tooltip" data-placement="top" title="Nuevo equipo {{ Str::lower($deviceType->type_name) }}"
-          onclick="window.location='{{ route('user.inventory.allinone.create') }}'">
+        <button type="button" class="btn btn-alt-success" data-toggle="tooltip" data-placement="top" title="Nuevo equipo {{ Str::title($deviceType->type_name) }}"
+          onclick="window.location='{{ route('minipc.create') }}'">
           <i class="fa fa-plus"></i>
         </button>
         <button type="button" class="btn btn-alt-primary" id="btn-refresh1" data-toggle="tooltip" data-placement="top" title="Actualizar lista">
@@ -69,7 +70,7 @@
               <th></th>
               <th>FECHA DE CREACIÓN</th>
               <th>NOMBRE DE EQUIPO</th>
-              <th>UBICACIÓN</th>
+              <th>UBICACION</th>
               <th>SERIAL</th>
               <th>ACTIVO FIJO</th>
               <th>IP</th>
@@ -91,33 +92,43 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('/js/datatables/datatable.inventory.aio.js') }}"></script>
+<script src="{{ asset('/js/datatables/datatable.inventory.minipc.js') }}"></script>
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-@if(Session::has('pc_created'))
+<script>
+  let root_url_minipc = <?php echo json_encode(route('minipc.index')) ?>;
+  let root_url_minipc_store = <?php echo json_encode(route('minipc.store')) ?>;    
+</script>
+
+@if(Session::has('device_created'))
 <script>
   Swal.fire(
-'Creado con Exito!',
-'{!! Session::get('pc_created') !!}',
-'success'
-)
+            'Creado con Exito!',
+            '{!! Session::get('device_created') !!}',
+            'success'
+            )
+</script>
+@endif
+
+@if(Session::has('info_error'))
+<script>
+  Swal.fire(
+            'Ha Ocurrido Un Error Al Crear El Equipo!',
+            '{!! Session::get('info_error') !!}',
+            'warning'
+            )
 </script>
 @endif
 
 @if(Session::has('pc_updated'))
 <script>
   Swal.fire(
-'Actualizado con Exito!',
-'{!! Session::get('pc_updated') !!}',
-'success'
-)
+            'Actualizado con Exito!',
+            '{!! Session::get('pc_updated') !!}',
+            'success'
+            )
 </script>
 @endif
-
-<script>
-  let root_url_allinone = <?php echo json_encode(route('user.inventory.allinone.index')) ?>;
-  let root_url_allinone_store = <?php echo json_encode(route('user.inventory.allinone.store')) ?>;
-</script>
 @endpush

@@ -96,17 +96,17 @@ class RaspberryController extends Controller
     {
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [7, 8, 10])
+            ->whereIn('id', [7, 8, 10, 12])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 6, 19, 20, 21])
+            ->whereIn('id', [1, 6, 19, 20, 21, 22])
             ->get();
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
-            ->whereIn('id', [32, 36])
+            ->whereIn('id', [32, 36, 78])
             ->get();
 
         $storages = DB::table('storages')
@@ -324,17 +324,17 @@ class RaspberryController extends Controller
 
         $operatingSystems = DB::table('operating_systems')
             ->select('id', 'name', 'version', 'architecture')
-            ->whereIn('id', [7, 8, 10])
+            ->whereIn('id', [7, 8, 10, 12])
             ->get();
 
         $memoryRams = DB::table('memory_rams')
             ->select('id', 'size', 'storage_unit', 'type', 'format')
-            ->whereIn('id', [1, 6, 19, 20, 21])
+            ->whereIn('id', [1, 6, 19, 20, 21, 22])
             ->get();
 
         $processors = DB::table('processors')
             ->select('id', 'brand', 'generation', 'velocity')
-            ->whereIn('id', [32, 36])
+            ->whereIn('id', [32, 36, 78])
             ->get();
 
         $storages = DB::table('storages')

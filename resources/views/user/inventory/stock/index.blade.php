@@ -35,10 +35,7 @@
                             <th>activo fijo</th>
                             <th>ip</th>
                             <th>mac</th>
-                            <th>
-                                <img class="img-fluid" width="80px"
-                                    src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk">
-                            </th>
+                            <th>anydesk</th>
                             <th>sede</th>
                             <th>estado</th>
                             <th>acciones</th>
@@ -48,16 +45,13 @@
                         <tr>
                             <th></th>
                             <th>FECHA DE CREACIÓN</th>
-                            <th>nombre de equipo</th>
-                            <th>ubicacion</th>
+                            <th>NOMBRE DE EQUIPO</th>
+                            <th>UBICACIÓN</th>
                             <th>SERIAL</th>
                             <th>ACTIVO FIJO</th>
                             <th>IP</th>
                             <th>MAC</th>
-                            <th>
-                                <img class="img-fluid" width="80px"
-                                    src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg" alt="anydesk">
-                            </th>
+                            <th>ANYDESK</th>
                             <th>SEDE</th>
                             <th>ESTADO</th>
                             <th>ACCIONES</th>

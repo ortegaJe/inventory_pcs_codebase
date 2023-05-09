@@ -11,7 +11,7 @@
         <div class="py-20 text-center">
           <div class="font-size-h2 font-w700 mb-0 text-info" data-toggle="countTo" data-to="{{ $globalDesktopCount }}">0
           </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">de escritorios</div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">escritorios</div>
         </div>
       </div>
     </a>
@@ -115,5 +115,26 @@
       </div>
     </a>
   </div>
+  <!-- END Telefonos IP -->
+
+  <!-- Mini PC -->
+  <div class="col-md-6 col-xl-2">
+    <a class="block block-rounded block-link-shadow" href="javascript:void(0)">
+      <div class="block-content block-content-full block-sticky-options">
+        <div class="block-options">
+          <div class="block-options-item">
+            <img style="opacity: 0.5;" width="30px" src="{{ asset('media/various/enrutador.png') }}" alt="enrutador.png">
+          </div>
+        </div>
+        <div class="py-20 text-center">
+          <div class="font-size-h2 font-w700 mb-0" style="color: #636262" data-toggle="countTo"
+            data-to="{{ $globalMiniPcSatCount }}">
+            0
+          </div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">MiniPC SAT</div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <!-- END Mini PC -->
 </div>
-<!-- END Telefonos IP -->

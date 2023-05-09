@@ -11,7 +11,7 @@
 <div class="col-md-12">
   @include('user.partials.cards')
   <!-- Add Product -->
-  <div class="row gutters-tiny mb-2">
+{{--   <div class="row gutters-tiny mb-2">
     <div class="col-md-6 col-xl-2">
       <a class="block block-rounded block-link-shadow" href="{{ route('user.inventory.desktop.create') }}">
         <div class="block-content block-content-full block-sticky-options">
@@ -28,7 +28,7 @@
         </div>
       </a>
     </div>
-  </div>
+  </div> --}}
   <!-- End Add Product -->
   <!-- Partial Table -->
   <div class="block block-rounded block-bordered">
@@ -37,8 +37,11 @@
         Equipos informáticos<small> | Lista</small>
       </h3>
       <div class="block-options">
-        <button type="button" id="btn-refresh1" class="btn-block-option" data-toggle="block-option"
-          data-action="state_toggle" data-action-mode="demo">
+        <button type="button" class="btn btn-alt-success" data-toggle="tooltip" data-placement="top" title="Nuevo equipo {{ Str::lower($deviceType->type_name) }}"
+          onclick="window.location='{{ route('user.inventory.desktop.create') }}'">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button type="button" class="btn btn-alt-primary" id="btn-refresh1" data-toggle="tooltip" data-placement="top" title="Actualizar lista">
           <i class="si si-refresh"></i>
         </button>
       </div>
@@ -56,10 +59,7 @@
               <th>activo fijo</th>
               <th>ip</th>
               <th>mac</th>
-              <th>
-                <img class="img-fluid" width="80px" src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg"
-                  alt="anydesk">
-              </th>
+              <th>anydesk</th>
               <th>sede</th>
               <th>estado</th>
               <th>acciones</th>
@@ -69,16 +69,13 @@
             <tr>
               <th></th>
               <th>FECHA DE CREACIÓN</th>
-              <th>nombre de equipo</th>
-              <th>ubicacion</th>
+              <th>NOMBRE DE EQUIPO</th>
+              <th>UBICACION</th>
               <th>SERIAL</th>
               <th>ACTIVO FIJO</th>
               <th>IP</th>
               <th>MAC</th>
-              <th>
-                <img class="img-fluid" width="80px" src="https://go.anydesk.com/_static/img/logos/anydesk-logo.svg"
-                  alt="anydesk">
-              </th>
+              <th>ANYDESK</th>
               <th>SEDE</th>
               <th>ESTADO</th>
               <th>ACCIONES</th>

@@ -205,20 +205,21 @@
                 </li>
                 @endcan
                 @can('user.inventory.desktop.index')
-                <li class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }} ||
-                  {{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }} ||  
-                  {{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/turneros') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'open' : '' }} ||
-                    {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
-                    {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'open' : '' }}
-                  {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}
-                  {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'open' : '' }}
-                  {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'open' : '' }}">
+                <li class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }}           
+                            {{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'open' : '' }}            
+                            {{ request()->is('tecnico/dashboard/inventario/portatiles') ? 'open' : '' }}              
+                            {{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'open' : '' }}              
+                            {{ request()->is('tecnico/dashboard/inventario/turneros') ? 'open' : '' }}                
+                            {{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'open' : '' }}               
+                            {{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'open' : '' }}            
+                            {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'open' : '' }}    
+                            {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat/registrar') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
@@ -230,10 +231,23 @@
                     </span>
                   </a>
                   <ul>
+                    @can('user.inventory.allinone.index')
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'active' : '' }}"
+                        href="{{ route('user.inventory.allinone.index') }}">All In One</a>
+                    </li>
+                    @endcan
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/de-escritorios') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'active' : '' }}"
-                        href="{{ route('user.inventory.desktop.index') }}">De escritorios
+                        href="{{ route('user.inventory.desktop.index') }}">Escritorios
+                      </a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/mini-pc-sat') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat/registrar') ? 'active' : '' }}"
+                        href="{{ route('minipc.index') }}">MiniPC SAT
                       </a>
                     </li>
                     @endcan
@@ -244,30 +258,23 @@
                         href="{{ route('user.inventory.laptop.index') }}">Portátiles</a>
                     </li>
                     @endcan
-                    @can('user.inventory.allinone.index')
-                    <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'active' : '' }}"
-                        href="{{ route('user.inventory.allinone.index') }}">All In One</a>
-                    </li>
-                    @endcan
-                    @can('user.inventory.turnero.index')
-                    <li>
-                      <a class="{{ request()->is('tecnico/dashboard/inventario/turneros') ? 'active' : '' }} ||
-                                  {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'active' : '' }}"
-                        href="{{ route('user.inventory.turnero.index') }}">Turneros</a>
-                    </li>
-                    @endcan
                     @can('user.inventory.raspberry.index')
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.raspberry.index') }}">Raspberry</a>
                     </li>
+                    @endcan
+                    @can('user.inventory.turnero.index')
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"
                         href="{{ route('user.inventory.phones.index') }}">Telefonos IP</a>
+                    </li>
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/turneros') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'active' : '' }}"
+                        href="{{ route('user.inventory.turnero.index') }}">Turneros</a>
                     </li>
                     @endcan
                   </ul>
