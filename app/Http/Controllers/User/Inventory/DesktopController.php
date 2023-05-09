@@ -38,6 +38,7 @@ class DesktopController extends Controller
         $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
         $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
         $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
+        $globalMiniPcSatCount = TypeDevice::countTypeDeviceUser(TypeDevice::MINIPC_SAT_ID, Auth::id());
         $deviceType = Device::select('tp.name as type_name')->join('type_devices as tp', 'tp.id', 'devices.type_device_id')->where('devices.type_device_id', TypeDevice::DESKTOP_PC_ID)->first();
 
         if ($request->ajax()) {
@@ -76,6 +77,7 @@ class DesktopController extends Controller
                 'globalRaspberryCount' => $globalRaspberryCount,
                 'globalAllInOneCount' => $globalAllInOneCount,
                 'globalIpPhoneCount' => $globalIpPhoneCount,
+                'globalMiniPcSatCount'  => $globalMiniPcSatCount,
             ];
 
         return view('user.inventory.desktop.index')->with($data);
