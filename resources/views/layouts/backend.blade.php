@@ -211,7 +211,8 @@
                             {{ request()->is('tecnico/dashboard/inventario/all-in-one') ? 'open' : '' }}              
                             {{ request()->is('tecnico/dashboard/inventario/turneros') ? 'open' : '' }}                
                             {{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'open' : '' }}               
-                            {{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'open' : '' }}            
+                            {{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat') ? 'open' : '' }}            
                             {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'open' : '' }}
                             {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'open' : '' }}    
                             {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}

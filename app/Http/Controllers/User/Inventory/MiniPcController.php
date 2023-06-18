@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Inventory;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreDevice;
 use App\Models\Component;
 use App\Models\Device;
 use App\Models\TypeDevice;
@@ -26,14 +27,14 @@ class MiniPcController extends Controller
 
     public function index(Request $request)
     {
-        $globalDesktopCount = TypeDevice::countTypeDeviceUser(TypeDevice::DESKTOP_PC_ID, Auth::id());
-        $globalTurneroCount = TypeDevice::countTypeDeviceUser(TypeDevice::TURNERO_PC_ID, Auth::id());
-        $globalLaptopCount  = TypeDevice::countTypeDeviceUser(TypeDevice::LAPTOP_PC_ID, Auth::id());
-        $globalRaspberryCount = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
-        $globalAllInOneCount = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
-        $globalIpPhoneCount = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
-        $globalMiniPcSatCount = TypeDevice::countTypeDeviceUser(TypeDevice::MINIPC_SAT_ID, Auth::id());
-        $deviceType = TypeDevice::select('name as type_name')->where('id', TypeDevice::MINIPC_SAT_ID)->first();
+        $globalDesktopCount     = TypeDevice::countTypeDeviceUser(TypeDevice::DESKTOP_PC_ID, Auth::id());
+        $globalTurneroCount     = TypeDevice::countTypeDeviceUser(TypeDevice::TURNERO_PC_ID, Auth::id());
+        $globalLaptopCount      = TypeDevice::countTypeDeviceUser(TypeDevice::LAPTOP_PC_ID, Auth::id());
+        $globalRaspberryCount   = TypeDevice::countTypeDeviceUser(TypeDevice::RASPBERRY_PI_ID, Auth::id());
+        $globalAllInOneCount    = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
+        $globalIpPhoneCount     = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
+        $globalMiniPcSatCount   = TypeDevice::countTypeDeviceUser(TypeDevice::MINIPC_SAT_ID, Auth::id());
+        $deviceType             = TypeDevice::select('name as type_name')->where('id', TypeDevice::MINIPC_SAT_ID)->first();
 
         if ($request->ajax()) {
 
@@ -50,11 +51,11 @@ class MiniPcController extends Controller
 
             $datatables->addColumn('action', function ($devices) {
                 //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($devices->DeviceID, true));
-                $btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
+                /*$btn = "<a type='button' class='btn btn-sm btn-secondary' id='btn-edit' 
                             href = '" . route('minipc.edit', $devices->DeviceID) . "'>
                                 <i class='fa fa-pencil'></i>
-                        </a>";
-                $btn = $btn . "<button type='button' class='btn btn-sm btn-secondary' data-id='$devices->DeviceID' id='btn-delete'>
+                        </a>";*/
+                $btn = "<button type='button' class='btn btn-sm btn-secondary' data-id='$devices->DeviceID' id='btn-delete'>
                                     <i class='fa fa-times'></i>";
                 return $btn;
             });
@@ -64,14 +65,14 @@ class MiniPcController extends Controller
 
         $data =
             [
-                'deviceType' => $deviceType,
-                'globalDesktopCount' => $globalDesktopCount,
-                'globalTurneroCount' => $globalTurneroCount,
-                'globalLaptopCount' => $globalLaptopCount,
-                'globalRaspberryCount' => $globalRaspberryCount,
-                'globalAllInOneCount' => $globalAllInOneCount,
-                'globalIpPhoneCount' => $globalIpPhoneCount,
-                'globalMiniPcSatCount' => $globalMiniPcSatCount,
+                'deviceType'            => $deviceType,
+                'globalDesktopCount'    => $globalDesktopCount,
+                'globalTurneroCount'    => $globalTurneroCount,
+                'globalLaptopCount'     => $globalLaptopCount,
+                'globalRaspberryCount'  => $globalRaspberryCount,
+                'globalAllInOneCount'   => $globalAllInOneCount,
+                'globalIpPhoneCount'    => $globalIpPhoneCount,
+                'globalMiniPcSatCount'  => $globalMiniPcSatCount,
             ];
 
         return view('user.inventory.minipc.index')->with($data);
@@ -79,7 +80,6 @@ class MiniPcController extends Controller
 
     public function create()
     {
-
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
@@ -134,133 +134,25 @@ class MiniPcController extends Controller
 
         $data =
             [
-                'operatingSystems' => $operatingSystems,
-                'memoryRams' => $memoryRams,
-                'storages' => $storages,
-                'brands' => $brands,
-                'processors' => $processors,
-                'campus' => $campus,
-                'status' => $status,
-                'domainNames' => $domainNames,
+                'operatingSystems'  => $operatingSystems,
+                'memoryRams'        => $memoryRams,
+                'storages'          => $storages,
+                'brands'            => $brands,
+                'processors'        => $processors,
+                'campus'            => $campus,
+                'status'            => $status,
+                'domainNames'       => $domainNames,
                 'statusAssignments' => $statusAssignments
             ];
 
         return view('user.inventory.minipc.create')->with($data);
     }
 
-    public function store(Request $request)
+    public function store(StoreDevice $request)
     {
         $userId = Auth::id();
 
-        $rules = [
-            'brand' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 6])
-            ],
-            'os' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 11])
-            ],
-            'model' => 'nullable|regex:/^[0-9a-zA-Z-()-, ]+$/i',
-            'serial' => 'required|unique:devices,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
-            'fixed_asset_number' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
-            'ram0' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
-            ],
-            'ram1' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
-            ],
-            'hdd0' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
-            ],
-            'hdd1' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
-            ],
-            'processor' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34])
-            ],
-            'statu' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 5, 6, 7, 8])
-            ],
-            'ip' => 'nullable|ipv4',
-            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
-            'domain_name' => 'required',
-            'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z-@]+$/i',
-            'device_name' => 'required|unique:devices,device_name|max:20|regex:/^[0-9a-zA-Z-]+$/i',
-            'campu' => 'required|numeric',
-            'location' => 'required|nullable|max:56|regex:/^[0-9a-zA-Z-ñÑóÓíÍ ]+$/i',
-            'custodian_date' => 'required_with:custodian_name,filled|date',
-            'custodian_name' => 'required_with:custodian_date,filled|regex:/^[0-9a-zA-Z-ñÑ-óÓ-íÍ ]+$/i',
-            'statu_assignment' => 'required_with:custodian_name,filled|numeric',
-            'observation' => 'nullable|max:255',
-        ];
-
-        $messages = [
-            'brand.required' => 'Seccíon 1. EQUIPO - Seleccione un item en la lista de fabricantes',
-            'brand.in' => 'Seccíon 1. EQUIPO - Seleccione una marca de computador valida en la lista',
-            'model.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo modelo',
-            'os.required' => 'Seccíon 1. EQUIPO - Seleccione un item en la lista de sistemas operativos',
-            'os.in' => 'Seccíon 1. EQUIPO - Seleccione un sistema operativo válido en la lista',
-            'serial.required' => 'Seccíon 1. EQUIPO - Es requerido un número de serial',
-            'serial.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo número de serial',
-            'serial.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número de serial',
-            'fixed_asset_number.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo de activo fijo',
-            'fixed_asset_number.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número activo fijo',
-            'monitor_serial_number.regex' => 'Símbolo(s) no permitido en el campo de número serial del monitor',
-            'monitor_serial_number.unique' => 'Ya existe un monitor registrado con este número serial del monitor',
-            'ram0.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 1',
-            'ram0.in' => 'Seccíon 2. HARDWARE - Seleccione una memoria ram valida en la lista',
-            'ram1.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 2',
-            'ram1.in' => 'Seccíon 2. HARDWARE - Seleccione una memoria ram valida en la lista',
-            'hdd0.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de primer almacenamiento',
-            'hdd0.in' => 'Seccíon 2. HARDWARE - Seleccione un disco duro válido en la lista',
-            'hdd1.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de segundo almacenamiento',
-            'hdd1.in' => 'Seccíon 2. HARDWARE - Seleccione un disco duro válido en la lista',
-            'processor.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de procesador',
-            'processor.in' => 'Seccíon 2. HARDWARE - Seleccione un procesador válido en la lista',
-            'statu.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista estado del equipo',
-            'statu.in' => 'Seccíon 2. HARDWARE - Seleccione un estado válido en la lista',
-            'ip.required' => 'Seccíon 3. RED - Es requirida un dirección IP',
-            'ip.ipv4' => 'Seccíon 3. RED - Direccion IP no valida',
-            'ip.unique' => 'Seccíon 3. RED - Ya existe un equipo con esta IP registrado',
-            'mac.required' => 'Seccíon 3. RED - Es requirida un dirección MAC',
-            'mac.regex' => 'Seccíon 3. RED - Símbolo(s) no permitido en el campo dirección MAC',
-            'mac.max' => 'Seccíon 3. RED - Direccion MAC no valida',
-            'mac.unique' => 'Seccíon 3. RED - Ya existe un equipo con esta MAC registrado',
-            'domain_name.required' => 'Seccíon 3. RED - Seleccionar un item en la lista de dominios',
-            'anydesk.max' => 'Seccíon 3. RED - Solo se permite 24 caracteres para el campo anydesk',
-            'anydesk.regex' => 'Seccíon 3. RED - Símbolo(s) no permitido en el campo anydesk',
-            'anydesk.unique' => 'Seccíon 3. RED - Ya existe un equipo registrado con este anydesk',
-            'device_name.required' => 'Seccíon 3. RED - Es requerido un nombre de equipo',
-            'device_name.max' => 'Seccíon 3. RED - Solo se permite 20 caracteres para el campo nombre de equipo',
-            'device_name.regex' => 'Seccíon 3. RED - Símbolo(s) no permitido en el campo nombre de equipo',
-            'device_name.unique' => 'Seccíon 3. RED - Ya existe un equipo registrado con este nombre',
-            'campu.required' => 'Seccíon 4. UBICACIÓN - Es requerido seleccionar la sede del equipo',
-            'custodian_date.required_with' => 'Seccíon 4. UBICACIÓN - El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
-            'custodian_date.date' => 'Seccíon 4. UBICACIÓN - Este no es un formato de fecha permitido para el campo de fecha de asignación de custodio',
-            'custodian_name.required_with'  => 'Seccíon 4. UBICACIÓN - El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
-            'custodian_name.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo nombre del custodio',
-            'statu_assignment.required_with' => 'Seccíon 4. UBICACIÓN - El campo concepto es obligatorio cuando el nombre del custodio está presente o llenado',
-            'location.required' => 'Seccíon 4. UBICACIÓN - Es requirida la ubicación del equipo en sede',
-            'location.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo ubicación',
-            'observation.max' => 'Seccíon 4. UBICACIÓN - Solo se permite 255 caracteres para el campo observación',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all());
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
@@ -368,7 +260,7 @@ class MiniPcController extends Controller
         $brands = DB::table('brands')
             ->select('id', 'name')
             ->where('id', '<>', [4])
-            ->where('id', '<>', [5])
+            ->where('id', '<>', [7])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')
@@ -438,7 +330,7 @@ class MiniPcController extends Controller
                 'statusAssignments' => $statusAssignments,
             ];
 
-        return view('user.inventory.desktop.edit')->with($data);
+        return view('user.inventory.minipc.edit')->with($data);
     }
 
     public function update(Request $request, $id)

@@ -89,7 +89,7 @@
           <div class="font-size-h2 font-w700 mb-0" style="color: #c51d4a" data-toggle="countTo"
             data-to="{{ $globalRaspberryCount }}">0
           </div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">raspberry's</div>
+          <div class="font-size-sm font-w600 text-uppercase text-muted">raspberry</div>
         </div>
       </div>
     </a>

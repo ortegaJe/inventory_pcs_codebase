@@ -81,7 +81,7 @@ $(document).ready(function () {
             "</tr>" +
             "<tr>" +
             "<td>" +
-            '<i class="si si-screen-desktop fa-4x text-gray-dark"></i>' +
+            '<img width="58px" style="opacity: 0.5;" src="/media/various/enrutador.png" alt="enrutador.png">' +
             //'<img class="img-fluid no-gutters" width="160px" src="/media/dashboard/datatable/image_pc/'+ d.ImagenPc +'">' +
             //'<img class="img-fluid no-gutters" width="160px" src="'+ d.ImagenPc +'">' +
             "</img>" +
