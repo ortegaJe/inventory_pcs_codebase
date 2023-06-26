@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Http\Requests\StoreDevice;
 use App\Http\Requests\UpdateFormRequest;
 use App\Models\Component;
 use App\Models\Device;
@@ -70,14 +71,14 @@ class DesktopController extends Controller
 
         $data =
             [
-                'deviceType' => $deviceType,
-                'globalDesktopCount' => $globalDesktopCount,
-                'globalTurneroCount' => $globalTurneroCount,
-                'globalLaptopCount' => $globalLaptopCount,
+                'deviceType'           => $deviceType,
+                'globalDesktopCount'   => $globalDesktopCount,
+                'globalTurneroCount'   => $globalTurneroCount,
+                'globalLaptopCount'    => $globalLaptopCount,
                 'globalRaspberryCount' => $globalRaspberryCount,
-                'globalAllInOneCount' => $globalAllInOneCount,
-                'globalIpPhoneCount' => $globalIpPhoneCount,
-                'globalMiniPcSatCount'  => $globalMiniPcSatCount,
+                'globalAllInOneCount'  => $globalAllInOneCount,
+                'globalIpPhoneCount'   => $globalIpPhoneCount,
+                'globalMiniPcSatCount' => $globalMiniPcSatCount,
             ];
 
         return view('user.inventory.desktop.index')->with($data);
@@ -140,134 +141,27 @@ class DesktopController extends Controller
 
         $data =
             [
-                'operatingSystems' => $operatingSystems,
-                'memoryRams' => $memoryRams,
-                'storages' => $storages,
-                'brands' => $brands,
-                'processors' => $processors,
-                'campus' => $campus,
-                'status' => $status,
-                'domainNames' => $domainNames,
+                'operatingSystems'  => $operatingSystems,
+                'memoryRams'        => $memoryRams,
+                'storages'          => $storages,
+                'brands'            => $brands,
+                'processors'        => $processors,
+                'campus'            => $campus,
+                'status'            => $status,
+                'domainNames'       => $domainNames,
                 'statusAssignments' => $statusAssignments
             ];
 
         return view('user.inventory.desktop.create')->with($data);
     }
 
-    public function store(Request $request)
+    public function store(StoreDevice $request)
     {
         //https://www.mindtwo.de/guidelines/coding/laravel
 
-        //$device = new Device;
-
-        //$q = $device->create($request->all());
-
-        //return $q;
-
         $userId = Auth::id();
 
-        /*         $q = array( //$this->generatorID;
-            'inventory_code_number' => $this->generatorID,
-            'type_device_id' => TypeDevice::DESKTOP_PC_ID, //ID equipo de escritorio
-            'brand_id' => $request->brand,
-            'model' =>  Str::lower($request->model),
-            'fixed_asset_number' => $request->activo_fijo,
-            'serial_number' => Str::lower($request->serial),
-            'ip' => $request->ip,
-            'mac' => Str::lower($request->mac),
-            'nat' => null,
-            'domain_name' => $request->domain_name,
-            'device_name' => Str::lower($request->device_name),
-            'anydesk' => Str::lower($request->anydesk),
-            'campu_id' => $request->campu_id,
-            'location' => Str::lower($request->location),
-            'statu_id' => $request->statu_id,
-            'custodian_assignment_date' => Str::lower($request->custodian_date),
-            'custodian_name' => Str::lower($request->custodian_name),
-            'assignment_statu_id' => $request->statu_assignment,
-            'observation' => Str::lower($request->observation),
-            'rowguid' => Uuid::uuid(),
-            'created_at' => now('America/Bogota'),
-            'is_stock' => $request->has('stock'),
-        );
-
-        //return $q;
-
-        $device = Device::insert([
-            'inventory_code_number' => $this->generatorID,
-            'type_device_id' => TypeDevice::DESKTOP_PC_ID, //ID equipo de escritorio
-            'brand_id' => $request->brand,
-            'model' =>  Str::lower($request->model),
-            'fixed_asset_number' => $request->activo_fijo,
-            'serial_number' => Str::lower($request->serial),
-            'ip' => $request->ip,
-            'mac' => Str::lower($request->mac),
-            'nat' => null,
-            'domain_name' => $request->domain_name,
-            'device_name' => Str::lower($request->device_name),
-            'anydesk' => Str::lower($request->anydesk),
-            'campu_id' => $request->campu_id,
-            'location' => Str::lower($request->location),
-            'statu_id' => $request->statu_id,
-            'custodian_assignment_date' => Str::lower($request->custodian_date),
-            'custodian_name' => Str::lower($request->custodian_name),
-            'assignment_statu_id' => $request->statu_assignment,
-            'observation' => Str::lower($request->observation),
-            'rowguid' => Uuid::uuid(),
-            'created_at' => now('America/Bogota'),
-            'is_stock' => $request->has('stock'),
-        ]);
-
-        $lastId = Device::latest()->pluck('id')->first();
-
-        $component = Component::insert([
-            'device_id' => $lastId,
-            'os_id' => $request->os,
-            'monitor_serial_number' => $request->monitor,
-            'slot_one_ram_id' => $request->ram0,
-            'slot_two_ram_id' => $request->ram1,
-            'first_storage_id' => $request->hdd0,
-            'second_storage_id' => $request->hdd1,
-            'processor_id' => $request->processor,
-            'handset' => null,
-            'power_adapter' => null,
-        ]);
-
-        return response()->json([
-            'message' => 'Equipo registrado al inventario exitosamente!',
-            'device_insert' => Device::join('components as c', 'c.device_id', 'devices.id')->latest()->first(),
-            'last_id' => Device::latest()->first('id'),
-            //'last_id' => Device::latest()->pluck('id')->first(),
-        ]); */
-
-        /*         return redirect()->route('user.inventory.desktop.index')
-            //->withErrors($validator)
-            ->with('pc_created', 'Nuevo equipo añadido al inventario!'); */
-
-
-        /*         DB::beginTransaction();
-        try {
-            DB::table('devices')->insert([
-                'type_device_id' => TypeDevice::DESKTOP_PC_ID, //ID equipo de escritorio
-                'brand_id' => $request->brand,
-                'model' =>  Str::lower($request->model),
-            ]);
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            //report($e);
-            $a = array($e);
-            //return $a[0];
-            return response()->json([
-                'message' => 'Error insert.',
-                'error' => $a,
-            ], 404);
-        }
-        return redirect()->route('user.inventory.desktop.index')
-            //->withErrors($validator)
-            ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $this->device->inventory_code_number . '');*/
-
-        $rules = [
+        /*$rules = [
 
             //'marca-pc-select2' => 'not_in:0',
             'brand_id' => [
@@ -379,9 +273,9 @@ class DesktopController extends Controller
             'location.required' => 'Seccíon 4. UBICACIÓN - Es requirida la ubicación del equipo en sede',
             'location.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo ubicación',
             'observation.max' => 'Seccíon 4. UBICACIÓN - Solo se permite 255 caracteres para el campo observación',
-        ];
+        ];*/
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all());
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
@@ -400,9 +294,9 @@ class DesktopController extends Controller
                     $this->device->inventory_code_number = $this->generatorID, //32
                     $this->device->fixed_asset_number = e($request->input('fixed_asset_number')),
                     $this->device->type_device_id = TypeDevice::DESKTOP_PC_ID, //ID equipo de escritorio
-                    $this->device->brand_id = e($request->input('brand_id')),
+                    $this->device->brand_id = e($request->input('brand')),
                     $this->device->model = e(Str::upper($request->input('model'))),
-                    $this->device->serial_number = e(Str::upper($request->input('serial_number'))),
+                    $this->device->serial_number = e(Str::upper($request->input('serial'))),
                     $this->device->ip = e($request->input('ip')),
                     $this->device->mac = e($request->input('mac')),
                     $this->device->nat = null,
@@ -410,24 +304,24 @@ class DesktopController extends Controller
                     $this->device->device_name = e($request->input('device_name')),
                     $this->device->anydesk = e(trim($request->input('anydesk'))),
                     $this->device->device_image = null,
-                    $this->device->campu_id = e($request->input('campu_id')),
+                    $this->device->campu_id = e($request->input('campu')),
                     $this->device->location = e($request->input('location')),
-                    $this->statu_id = e($request->input('statu_id')),
-                    $this->device->custodian_assignment_date = e($request->input('custodian_assignment_date')),
+                    $this->statu_id = e($request->input('statu')),
+                    $this->device->custodian_assignment_date = e($request->input('custodian_date')),
                     $this->device->custodian_name = e($request->input('custodian_name')),
-                    $this->device->assignment_statu_id = e($request->input('assignment_statu_id')),
+                    $this->device->assignment_statu_id = e($request->input('statu_assignment')),
                     $this->device->observation = e($request->input('observation')),
                     $this->device->rowguid = Uuid::uuid(),
                     $this->device->created_at = now('America/Bogota'),
                     $this->device->is_stock = $request->has('stock'),
 
-                    $this->component->monitor_serial_number = e($request->input('monitor_serial_number')),
-                    $this->component->slot_one_ram_id = e($request->input('slot_one_ram_id')),
-                    $this->component->slot_two_ram_id = e($request->input('slot_two_ram_id')),
-                    $this->component->first_storage_id = e($request->input('first_storage_id')),
-                    $this->component->second_storage_id = e($request->input('second_storage_id')),
-                    $this->component->processor_id = e($request->input('processor_id')),
-                    $this->component->os_id = e($request->input('os_id')),
+                    $this->component->monitor_serial_number = e($request->input('monitor_serial')),
+                    $this->component->slot_one_ram_id = e($request->input('ram0')),
+                    $this->component->slot_two_ram_id = e($request->input('ram1')),
+                    $this->component->first_storage_id = e($request->input('hdd0')),
+                    $this->component->second_storage_id = e($request->input('hdd1')),
+                    $this->component->processor_id = e($request->input('processor')),
+                    $this->component->os_id = e($request->input('os')),
                     $this->component->handset = null,
                     $this->component->power_adapter = null,
 

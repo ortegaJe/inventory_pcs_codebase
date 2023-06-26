@@ -32,40 +32,34 @@ class StoreDevice extends FormRequest
             'os' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 11])
             ],
             'model' => 'nullable|regex:/^[0-9a-zA-Z-()-, ]+$/i',
             'serial' => 'required|unique:devices,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
+            'monitor_serial' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
             'fixed_asset_number' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
             'ram0' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
             ],
             'ram1' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
             ],
             'hdd0' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
             ],
             'hdd1' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
             ],
             'processor' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34])
             ],
             'statu' => [
                 'required',
                 'numeric',
-                //Rule::in([1, 2, 3, 5, 6, 7, 8])
             ],
             'ip' => 'nullable|ipv4',
             'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
@@ -94,8 +88,8 @@ class StoreDevice extends FormRequest
             'serial.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número de serial',
             'fixed_asset_number.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo de activo fijo',
             'fixed_asset_number.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número activo fijo',
-            'monitor_serial_number.regex' => 'Símbolo(s) no permitido en el campo de número serial del monitor',
-            'monitor_serial_number.unique' => 'Ya existe un monitor registrado con este número serial del monitor',
+            'monitor_serial.regex' => 'Símbolo(s) no permitido en el campo de número serial del monitor',
+            'monitor_serial.unique' => 'Ya existe un monitor registrado con este número serial del monitor',
             'ram0.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 1',
             'ram0.in' => 'Seccíon 2. HARDWARE - Seleccione una memoria ram valida en la lista',
             'ram1.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 2',
