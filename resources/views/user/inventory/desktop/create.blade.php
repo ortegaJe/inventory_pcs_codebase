@@ -140,9 +140,9 @@
               </div>
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="fixed_asset_number" name="fixed_asset_number"
-                    value="{{ old('fixed_asset_number') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="fixed_asset_number">Codigo de activo fijo</label>
+                  <input type="text" class="form-control" id="activo_fijo" name="activo_fijo"
+                    value="{{ old('activo_fijo') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="activo_fijo">Codigo de activo fijo</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fwfa-barcode"></i>
@@ -491,7 +491,7 @@
           <div class="row">
             <div class="col-6">
               <button type="button" class="btn btn-alt-secondary disabled" data-wizard="prev">
-                <i class="fa fa-angle-left mr-5"></i> Atras
+                <i class="fa fa-angle-left mr-5"></i>Atras
               </button>
             </div>
             <div class="col-6 text-right">
@@ -499,7 +499,7 @@
                 Siguiente <i class="fa fa-angle-right ml-5"></i>
               </button>
               <button type="submit" class="btn btn-alt-primary d-none" data-wizard="finish">
-                <i class="fa fa-check mr-5"></i> Guardar
+                <i class="fa fa-save mr-5"></i>Guardar
               </button>
             </div>
           </div>

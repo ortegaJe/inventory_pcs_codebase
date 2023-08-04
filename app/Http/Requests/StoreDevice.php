@@ -36,7 +36,7 @@ class StoreDevice extends FormRequest
             'model' => 'nullable|regex:/^[0-9a-zA-Z-()-, ]+$/i',
             'serial' => 'required|unique:devices,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
             'monitor_serial' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
-            'fixed_asset_number' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
+            'activo_fijo' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
             'ram0' => [
                 'required',
                 'numeric',
@@ -86,8 +86,8 @@ class StoreDevice extends FormRequest
             'serial.required' => 'Seccíon 1. EQUIPO - Es requerido un número de serial',
             'serial.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo número de serial',
             'serial.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número de serial',
-            'fixed_asset_number.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo de activo fijo',
-            'fixed_asset_number.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número activo fijo',
+            'activo_fijo.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo de activo fijo',
+            'activo_fijo.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número activo fijo',
             'monitor_serial.regex' => 'Símbolo(s) no permitido en el campo de número serial del monitor',
             'monitor_serial.unique' => 'Ya existe un monitor registrado con este número serial del monitor',
             'ram0.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 1',
@@ -123,7 +123,7 @@ class StoreDevice extends FormRequest
             'custodian_name.required_with'  => 'Seccíon 4. UBICACIÓN - El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
             'custodian_name.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo nombre del custodio',
             'statu_assignment.required_with' => 'Seccíon 4. UBICACIÓN - El campo concepto es obligatorio cuando el nombre del custodio está presente o llenado',
-            'location.required' => 'Seccíon 4. UBICACIÓN - Es requirida la ubicación del equipo en sede',
+            'location.required' => 'Seccíon 4. UBICACIÓN - Es requerida la ubicación del equipo en sede',
             'location.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo ubicación',
             'observation.max' => 'Seccíon 4. UBICACIÓN - Solo se permite 255 caracteres para el campo observación',
         ];

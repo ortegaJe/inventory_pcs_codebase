@@ -27,8 +27,8 @@ class DesktopController extends Controller
     public function __construct()
     {
         $this->generatorID = Helper::IDGenerator(new Device, 'inventory_code_number', 8, 'PC');
-        $this->device = new Device();
-        $this->component = new Component();
+        $this->device      = new Device();
+        $this->component   = new Component();
     }
 
     public function index(Request $request)
@@ -41,7 +41,7 @@ class DesktopController extends Controller
         $globalIpPhoneCount     = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
         $globalMiniPcSatCount   = TypeDevice::countTypeDeviceUser(TypeDevice::MINIPC_SAT_ID, Auth::id());
         $deviceType             = TypeDevice::select('name as type_name')->where('id', TypeDevice::DESKTOP_PC_ID)->first();
-
+        
         if ($request->ajax()) {
 
             $devices = DB::table('view_all_devices')
@@ -161,121 +161,7 @@ class DesktopController extends Controller
 
         $userId = Auth::id();
 
-        /*$rules = [
-
-            //'marca-pc-select2' => 'not_in:0',
-            'brand_id' => [
-                'required',
-                'numeric',
-                Rule::in([1, 2, 3, 6])
-            ],
-            'os_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 11])
-            ],
-            'model' => 'nullable|regex:/^[0-9a-zA-Z-()-, ]+$/i',
-            'serial_number' => 'required|unique:devices,serial_number|regex:/^[0-9a-zA-Z-]+$/i',
-            'fixed_asset_number' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
-            'monitor_serial_number' => 'nullable|regex:/^[0-9a-zA-Z-]+$/i',
-            'slot_one_ram_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
-            ],
-            'slot_two_ram_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
-            ],
-            'first_storage_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
-            ],
-            'second_storage_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30])
-            ],
-            'processor_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34])
-            ],
-            'statu_id' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 5, 6, 7, 8])
-            ],
-            'ip' => 'nullable|ipv4',
-            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
-            'domain_name' => 'required',
-            'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z-@]+$/i',
-            //'anydesk' => 'sometimes|unique:devices,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
-            'device_name' => 'required|unique:devices,device_name|max:20|regex:/^[0-9a-zA-Z-]+$/i',
-            'campu_id' => 'required|numeric',
-            'location' => 'required|nullable|max:56|regex:/^[0-9a-zA-Z-ñÑóÓíÍ ]+$/i',
-            'custodian_assignment_date' => 'required_with:custodian_name,filled|date',
-            'custodian_name' => 'required_with:custodian_assignment_date,filled|regex:/^[0-9a-zA-Z-ñÑ-óÓ-íÍ ]+$/i',
-            'assignment_statu_id' => 'required_with:custodian_name,filled|numeric',
-            'observation' => 'nullable|max:255',
-        ];
-
-        $messages = [
-            //'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
-            'brand_id.required' => 'Seccíon 1. EQUIPO - Seleccione un item en la lista de fabricantes',
-            'brand_id.in' => 'Seccíon 1. EQUIPO - Seleccione una marca de computador valida en la lista',
-            'model.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo modelo',
-            'os_id.required' => 'Seccíon 1. EQUIPO - Seleccione un item en la lista de sistemas operativos',
-            'os_id.in' => 'Seccíon 1. EQUIPO - Seleccione un sistema operativo válido en la lista',
-            'serial_number.required' => 'Seccíon 1. EQUIPO - Es requerido un número de serial',
-            'serial_number.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo número de serial',
-            'serial_number.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número de serial',
-            'fixed_asset_number.regex' => 'Seccíon 1. EQUIPO - Símbolo(s) no permitido en el campo de activo fijo',
-            'fixed_asset_number.unique' => 'Seccíon 1. EQUIPO - Ya existe un equipo registrado con este número activo fijo',
-            //'fixed_asset_number.max' => 'Seccíon 1. EQUIPO - Solo se permite 24 caracteres para el activo fijo',
-            'monitor_serial_number.regex' => 'Símbolo(s) no permitido en el campo de número serial del monitor',
-            'monitor_serial_number.unique' => 'Ya existe un monitor registrado con este número serial del monitor',
-            'slot_one_ram_id.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 1',
-            'slot_one_ram_id.in' => 'Seccíon 2. HARDWARE - Seleccione una memoria ram valida en la lista',
-            'slot_two_ram_id.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de memoria ram ranura 2',
-            'slot_two_ram_id.in' => 'Seccíon 2. HARDWARE - Seleccione una memoria ram valida en la lista',
-            'first_storage_id.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de primer almacenamiento',
-            'first_storage_id.in' => 'Seccíon 2. HARDWARE - Seleccione un disco duro válido en la lista',
-            'second_storage_id.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de segundo almacenamiento',
-            'second_storage_id.in' => 'Seccíon 2. HARDWARE - Seleccione un disco duro válido en la lista',
-            'processor_id.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista de procesador',
-            'processor_id.in' => 'Seccíon 2. HARDWARE - Seleccione un procesador válido en la lista',
-            'statu_id.required' => 'Seccíon 2. HARDWARE - Seleccione un item en la lista estado del equipo',
-            'statu_id.in' => 'Seccíon 2. HARDWARE - Seleccione un estado válido en la lista',
-            'ip.required' => 'Seccíon 3. RED - Es requirida un dirección IP',
-            'ip.ipv4' => 'Seccíon 3. RED - Direccion IP no valida',
-            'ip.unique' => 'Seccíon 3. RED - Ya existe un equipo con esta IP registrado',
-            'mac.required' => 'Seccíon 3. RED - Es requirida un dirección MAC',
-            'mac.regex' => 'Seccíon 3. RED - Símbolo(s) no permitido en el campo dirección MAC',
-            'mac.max' => 'Seccíon 3. RED - Direccion MAC no valida',
-            'mac.unique' => 'Seccíon 3. RED - Ya existe un equipo con esta MAC registrado',
-            'domain_name.required' => 'Seccíon 3. RED - Seleccionar un item en la lista de dominios',
-            'anydesk.max' => 'Seccíon 3. RED - Solo se permite 24 caracteres para el campo anydesk',
-            'anydesk.regex' => 'Seccíon 3. RED - Símbolo(s) no permitido en el campo anydesk',
-            'anydesk.unique' => 'Seccíon 3. RED - Ya existe un equipo registrado con este anydesk',
-            'device_name.required' => 'Seccíon 3. RED - Es requerido un nombre de equipo',
-            'device_name.max' => 'Seccíon 3. RED - Solo se permite 20 caracteres para el campo nombre de equipo',
-            'device_name.regex' => 'Seccíon 3. RED - Símbolo(s) no permitido en el campo nombre de equipo',
-            'device_name.unique' => 'Seccíon 3. RED - Ya existe un equipo registrado con este nombre',
-            'campu_id.required' => 'Seccíon 4. UBICACIÓN - Es requerido seleccionar la sede del equipo',
-            'custodian_assignment_date.required_with' => 'Seccíon 4. UBICACIÓN - El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
-            'custodian_assignment_date.date' => 'Seccíon 4. UBICACIÓN - Este no es un formato de fecha permitido para el campo de fecha de asignación de custodio',
-            'custodian_name.required_with'  => 'Seccíon 4. UBICACIÓN - El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
-            'custodian_name.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo nombre del custodio',
-            'assignment_statu_id.required_with' => 'Seccíon 4. UBICACIÓN - El campo concepto es obligatorio cuando el nombre del custodio está presente o llenado',
-            'location.required' => 'Seccíon 4. UBICACIÓN - Es requirida la ubicación del equipo en sede',
-            'location.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo ubicación',
-            'observation.max' => 'Seccíon 4. UBICACIÓN - Solo se permite 255 caracteres para el campo observación',
-        ];*/
-
-        $validator = Validator::make($request->all());
+        $validator = Validator::make($request->all(), $rules = [], $messages = []);
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
@@ -292,7 +178,7 @@ class DesktopController extends Controller
                 "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
                 [
                     $this->device->inventory_code_number = $this->generatorID, //32
-                    $this->device->fixed_asset_number = e($request->input('fixed_asset_number')),
+                    $this->device->fixed_asset_number = e($request->input('activo_fijo')),
                     $this->device->type_device_id = TypeDevice::DESKTOP_PC_ID, //ID equipo de escritorio
                     $this->device->brand_id = e($request->input('brand')),
                     $this->device->model = e(Str::upper($request->input('model'))),
