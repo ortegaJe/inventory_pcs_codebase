@@ -10,8 +10,16 @@
 <div class="row">
   <div class="col-md-12 mx-auto">
     <h2 class="content-heading">Registrar Nuevo Equipo Pórtatil</h2>
-    {{-- <button type="button" class="js-notify btn btn-sm btn-alt-danger" data-type="danger" data-icon="fa fa-times"
-      data-message="Update failed! :-(">Error</button> --}}
+    @if ($errors->any())
+    <div class="alert alert-danger">
+      <strong>Whoops!</strong> There were some problems with your input.<br><br>
+      <ul>
+        @foreach ($errors->all() as $error)
+        <li style="list-style:none;"><i class="fa fa-times text-pulse mr-5"></i>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+    @endif
     <!-- Progress Wizard 2 -->
     <div class="js-wizard-simple block">
       <!-- Wizard Progress Bar -->
@@ -46,103 +54,89 @@
         <div class="block-content block-content-full tab-content" style="min-height: 274px;">
           <!-- Step 1 -->
           <div class="tab-pane active" id="wizard-progress2-step1" role="tabpanel">
-            @if (Session::has('message'))
-            <div data-notify="container"
-              class="col-xs-11 col-sm-4 alert-message alert alert-{{ Session::get('typealert') }} animated fadeIn"
-              role="alert" data-notify-position="top-right"
-              style="display: inline-block; margin: 0px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1033; top: 20px; right: 20px; animation-iteration-count: 1;">
-              <button type="button" aria-hidden="true" class="close" data-notify="dismiss"
-                style="position: absolute; right: 10px; top: 5px; z-index: 1035;">×</button><span data-notify="icon"
-                class="fa fa-times"></span> <span data-notify="title"></span> <span data-notify="message">{{
-                Session::get('message') }}
-              </span><a href="#" target="_blank" data-notify="url"></a>
-            </div>
-            @endif
             <div class="form-group row">
               <div class="col-md-4">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="marca-pc-select2" name="marca-pc-select2"
-                    style="width: 100%;" data-placeholder="Seleccionar fabricante..">
+                  <select class="js-select2 form-control" id="brand" name="brand" style="width: 100%;"
+                    data-placeholder="Seleccionar fabricante..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($brands as $brand)
-                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                    @if(old('brand') == $brand->id)
+                    <option value="{{ $brand->id }}" selected>
+                      {{ $brand->name }}
+                    </option>
+                    @else
+                    <option value="{{ $brand->id }}">
+                      {{ $brand->name }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN FABRICANTES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="marca-pc-select2">Fabricantes</label>
+                  <label for="brand_id">Fabricantes</label>
                 </div>
-                @if($errors->has('marca-pc-select2'))
-                <small class="text-danger is-invalid">{{ $errors->first('marca-pc-select2') }}</small>
-                @endif
               </div>
               <div class="col-md-4">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="os-pc-select2" name="os-pc-select2" style="width: 100%;"
+                  <select class="js-select2 form-control" id="os" name="os" style="width: 100%;"
                     data-placeholder="Seleccionar sistema operativo..">
-                    <option disabled selected></option>
-                    <!-- Empty value for demostrating material select box -->
+                    <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($operatingSystems as $os)
-                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }}
-                      {{ $os->architecture }}</option>
+                    @if(old('os') == $os->id)
+                    <option value="{{ $os->id }}" selected>{{ $os->name }} {{ $os->version }} {{ $os->architecture }}
+                    </option>
+                    @else
+                    <option value="{{ $os->id }}">{{ $os->name }} {{ $os->version }} {{ $os->architecture }}</option>
+                    @endif
                     @empty
                     <option>NO EXISTEN SISTEMAS OPERATIVOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="os-pc-select2">Sistema Operativo</label>
+                  <label for="os_id">Sistema Operativo</label>
                 </div>
-                @if($errors->has('os-pc-select2'))
-                <small class="text-danger is-invalid">{{ $errors->first('os-pc-select2') }}</small>
-                @endif
               </div>
               <div class="col-md-4">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="modelo-pc" name="modelo-pc" value="{{ old('modelo-pc') }}"
-                    maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="modelo-pc">Modelo</label>
+                  <input type="text" class="form-control" id="model" name="model" value="{{ old('model') }}"
+                    maxlength="100" onkeyup="javascript:this.value=this.value.toUpperCase();"
+                    onkeypress="return /[0-9a-zA-Z-() ]/i.test(event.key)">
+                  <label for="model">Modelo</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-paint-brush"></i>
                     </span>
                   </div>
                 </div>
-                @if($errors->has('modelo-pc'))
-                <small class="text-danger is-invalid">{{ $errors->first('modelo-pc') }}</small>
-                @endif
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="serial-pc" name="serial-pc" value="{{ old('serial-pc') }}"
-                    maxlength="24" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="serial-pc">Numero Serial</label>
+                  <input type="text" class="form-control" id="serial" name="serial" value="{{ old('serial') }}"
+                    maxlength="24" onkeyup="javascript:this.value=this.value.toUpperCase();"
+                    onkeypress="return /[0-9a-zA-Z]/i.test(event.key)">
+                  <label for="serial">Numero Serial</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-fw fa-barcode"></i>
                     </span>
                   </div>
                 </div>
-                @if($errors->has('serial-pc'))
-                <small class="text-danger is-invalid">{{ $errors->first('serial-pc') }}</small>
-                @endif
               </div>
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="activo-fijo-pc" name="activo-fijo-pc"
-                    value="{{ old('activo-fijo-pc') }}" maxlength="15"
+                  <input type="text" class="form-control" id="activo_fijo" name="activo_fijo"
+                    value="{{ old('activo_fijo') }}" maxlength="15"
                     onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="activo-fijo-pc">Codigo de activo fijo</label>
+                  <label for="activo_fijo">Codigo de activo fijo</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       {{-- <iclass="fafa-fwfa-barcode"></i> --}}
                     </span>
                   </div>
                 </div>
-                @if($errors->has('activo-fijo-pc'))
-                <small class="text-danger is-invalid">{{ $errors->first('activo-fijo-pc') }}</small>
-                @endif
               </div>
             </div>
           </div>
@@ -153,121 +147,141 @@
             <div class="form-group row">
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-ram0" name="val-select2-ram0"
+                  <select class="js-select2 form-control" id="ram0" name="ram0"
                     style="width: 100%;" data-placeholder="Seleccionar RAM ranura 1">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}">
-                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
+                    @if(old('ram0') == $ram->id)
+                    <option value="{{ $ram->id }}" selected> {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}
+                      {{ $ram->format }}
+                    </option>
+                    @else
+                    <option value="{{ $ram->id }}"> {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}
+                      {{ $ram->format }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-ram0">Memorias RAM</label>
+                  <label for="ram0">Memorias RAM</label>
                 </div>
-                @if($errors->has('val-select2-ram0'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram0') }}</small>
-                @endif
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-ram1" name="val-select2-ram1"
-                    value="{{ old('val-select2-ram1') }}" style="width: 100%;"
+                  <select class="js-select2 form-control" id="ram1" name="ram1"
+                    value="{{ old('ram1') }}" style="width: 100%;"
                     data-placeholder="Seleccionar RAM ranura 2">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($memoryRams as $ram)
-                    <option value="{{ $ram->id }}">
-                      {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}{{ $ram->format }}</option>
+                    @if(old('ram1') == $ram->id)
+                    <option value="{{ $ram->id }}" selected> {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}
+                      {{ $ram->format }}
+                    </option>
+                    @else
+                    <option value="{{ $ram->id }}"> {{ $ram->size }}{{ $ram->storage_unit }}{{ $ram->type }}
+                      {{ $ram->format }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN MEMORIAS RAM REGISTRADAS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-ram1">Memorias RAM</label>
+                  <label for="ram1">Memorias RAM</label>
                 </div>
-                @if($errors->has('val-select2-ram1'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-ram1') }}</small>
-                @endif
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-first-storage"
-                    name="val-select2-first-storage" style="width: 100%;"
+                  <select class="js-select2 form-control" id="hdd0"
+                    name="hdd0" style="width: 100%;"
                     data-placeholder="Seleccionar primer almacenamiento..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
+                    @if(old('hdd0') == $storage->id)
+                    <option value="{{ $storage->id }}" selected>{{ $storage->size }} {{ $storage->storage_unit }}
+                      {{ $storage->type }}
+                    </option>
+                    @else
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
-                      {{ $storage->type }}</option>
+                      {{ $storage->type }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-first-storage">Almacenamiento</label>
+                  <label for="hdd0">Almacenamiento</label>
                 </div>
-                @if($errors->has('val-select2-first-storage'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-first-storage') }}</small>
-                @endif
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-second-storage"
-                    name="val-select2-second-storage" style="width: 100%;"
+                  <select class="js-select2 form-control" id="hdd1"
+                    name="hdd1" style="width: 100%;"
                     data-placeholder="Seleccionar segundo almacenamiento..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($storages as $storage)
+                    @if(old('hdd1') == $storage->id)
+                    <option value="{{ $storage->id }}" selected>{{ $storage->size }} {{ $storage->storage_unit }}
+                      {{ $storage->type }}
+                    </option>
+                    @else
                     <option value="{{ $storage->id }}">{{ $storage->size }} {{ $storage->storage_unit }}
-                      {{ $storage->type }}</option>
+                      {{ $storage->type }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-second-storage">Almacenamiento</label>
+                  <label for="hdd1">Almacenamiento</label>
                 </div>
-                @if($errors->has('val-select2-second-storage'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-second-storage') }}</small>
-                @endif
               </div>
             </div>
             <div class="form-group row">
               <div class="col-md-6">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-cpu" name="val-select2-cpu"
+                  <select class="js-select2 form-control" id="processor" name="processor"
                     style="width: 100%;" data-placeholder="Seleccionar procesador..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($processors as $cpu)
+                    @if(old('processor') == $cpu->id)
+                    <option value="{{ $cpu->id }}" selected>{{ $cpu->brand }} {{ $cpu->generation }}
+                      {{ $cpu->velocity }}
+                    </option>
+                    @else
                     <option value="{{ $cpu->id }}">{{ $cpu->brand }} {{ $cpu->generation }}
-                      {{ $cpu->velocity }}</option>
+                      {{ $cpu->velocity }}
+                    </option>
+                    @endif
                     @empty
                     <option>NO EXISTEN PROCESADORES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-cpu">Procesador</label>
+                  <label for="processor">Procesador</label>
                 </div>
-                @if($errors->has('val-select2-cpu'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-cpu') }}</small>
-                @endif
               </div>
               <div class="col-md-6">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-status" name="val-select2-status"
+                  <select class="js-select2 form-control" id="statu" name="statu"
                     style="width: 100%;" data-placeholder="Seleccionar un estado..">
                     <option disabled selected></option>
                     <!-- Empty value for demostrating material select box -->
                     @forelse ($status as $statu)
-                    <option value="{{ $statu->id }}">{{ Str::title($statu->name) }}
-                    </option>
+                    @if(old('statu') == $statu->id)
+                    <option value="{{ $statu->id }}" selected>{{ Str::title($statu->name) }}</option>
+                    @else
+                    <option value="{{ $statu->id }}">{{ Str::title($statu->name) }}</option>
+                    @endif
                     @empty
-                    <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
+                    <option>NO EXISTEN ESTADOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-status">Estado del equipo</label>
+                  <label for="statu">Estado del equipo</label>
                 </div>
-                @if($errors->has('val-select2-status'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-status') }}</small>
-                @endif
               </div>
             </div>
             @if (Auth::id() == 13)
@@ -336,32 +350,30 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <div class="form-material">
-                    <select class="js-select2 form-control" id="pc-domain-name" name="pc-domain-name"
+                    <select class="js-select2 form-control" id="domain_name" name="domain_name"
                       style="width: 100%;" data-placeholder="Seleccionar dominio..">
                       <option></option>
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                       @forelse ($domainNames as $domainName)
+                      @if(old('domain_name') == $domainName)
+                      <option selected>{{ $domainName }}</option>
+                      @else
                       <option>{{ $domainName }}</option>
+                      @endif
                       @empty
                       <option>NO EXISTEN DOMINIOS REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="pc-domain-name"><i class="fa fa-sitemap"></i> Dominio</label>
+                    <label for="domain_name"><i class="fa fa-sitemap"></i> Dominio</label>
                   </div>
-                  @if($errors->has('pc-domain-name'))
-                  <small class="text-danger is-invalid">{{ $errors->first('pc-domain-name') }}</small>
-                  @endif
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-material floating">
-                  <input type="text" class="form-control" id="pc-name" name="pc-name" maxlength="20"
-                    value="{{ old('pc-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="pc-name">Nombre del equipo</label>
+                  <input type="text" class="form-control" id="device_name" name="device_name" maxlength="20"
+                    value="{{ old('device_name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="device_name">Nombre del equipo</label>
                 </div>
-                @if($errors->has('pc-name'))
-                <small class="text-danger is-invalid">{{ $errors->first('pc-name') }}</small>
-                @endif
                 <div class="block-content block-content-full">
                 </div>
               </div>
@@ -374,21 +386,22 @@
               <div class="col-md-6 mb-3">
                 <div class="form-group">
                   <div class="form-material">
-                    <select class="js-select2 form-control" id="val-select2-campus" name="val-select2-campus"
+                    <select class="js-select2 form-control" id="campu" name="campu"
                       style="width: 100%;" data-placeholder="Seleccionar Sede..">
                       <option></option>
                       <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                       @forelse ($campus as $campu)
+                      @if(old('campu') == $campu->id)
+                      <option value="{{ $campu->id }}" selected>{{ $campu->name }}</option>
+                      @else
                       <option value="{{ $campu->id }}">{{ $campu->name }}</option>
+                      @endif
                       @empty
                       <option>NO EXISTEN SEDES REGISTRADAS</option>
                       @endforelse
                     </select>
-                    <label for="val-select2-campus"><i class="fa fa-building"></i> Sede del equipo</label>
+                    <label for="campu"><i class="fa fa-building"></i> Sede del equipo</label>
                   </div>
-                  @if($errors->has('val-select2-campus'))
-                  <small class="text-danger is-invalid">{{ $errors->first('val-select2-campus') }}</small>
-                  @endif
                 </div>
               </div>
               <div class="col-md-6">
@@ -402,54 +415,47 @@
                     </span>
                   </div>
                 </div>
-                @if($errors->has('location'))
-                <small class="text-danger is-invalid">{{ $errors->first('location') }}</small>
-                @endif
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-3">
                 <div class="form-material">
-                  <input type="text" class="js-flatpickr form-control" id="custodian-assignment-date"
-                    name="custodian-assignment-date" placeholder="d-m-Y" data-allow-input="true" maxlength="10">
-                  <label for="custodian-assignment-date">Fecha de asignación al custodio</label>
+                  <input type="text" class="js-flatpickr form-control" id="custodian_date"
+                    name="custodian_date" placeholder="d-m-Y" data-allow-input="true" maxlength="10">
+                  <label for="custodian_date">Fecha de asignación al custodio</label>
                 </div>
-                @if($errors->has('custodian-assignment-date'))
-                <small class="text-danger is-invalid">{{ $errors->first('custodian-assignment-date') }}</small>
-                @endif
               </div>
               <div class="col-md-6">
                 <div class="form-material floating input-group">
-                  <input type="text" class="form-control" id="custodian-name" name="custodian-name" maxlength="56"
-                    value="{{ old('custodian-name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
-                  <label for="custodian-name">Nombres y apellidos del custodio</label>
+                  <input type="text" class="form-control" id="custodian_name" name="custodian_name" maxlength="56"
+                    value="{{ old('custodian_name') }}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <label for="custodian_name">Nombres y apellidos del custodio</label>
                   <div class="input-group-append">
                     <span class="input-group-text">
                       <i class="fa fa-user"></i>
                     </span>
                   </div>
                 </div>
-                @if($errors->has('custodian-name'))
-                <small class="text-danger is-invalid">{{ $errors->first('custodian-name') }}</small>
-                @endif
               </div>
               <div class="col-md-3">
                 <div class="form-material">
-                  <select class="js-select2 form-control" id="val-select2-status-assignment"
-                    name="val-select2-status-assignment" style="width: 100%;" data-placeholder="Seleccionar concepto..">
+                  <select class="js-select2 form-control" id="statu_assignment"
+                    name="statu_assignment" style="width: 100%;" data-placeholder="Seleccionar concepto..">
                     <option disabled selected></option><!-- Empty value for demostrating material select box -->
                     @forelse ($statusAssignments as $statuAssignment)
-                    <option value="{{ $statuAssignment->id }}">{{ Str::title($statuAssignment->name) }}
-                    </option>
+                    @if(old('statu_assignment') == $statuAssignment->id)
+                    <option value="{{ $statuAssignment->id }}" selected>
+                      {{ Str::title($statuAssignment->name) }}
+                    </option> @else
+                    <option value="{{ $statuAssignment->id }}">
+                      {{ Str::title($statuAssignment->name) }}
+                    </option> @endif
                     @empty
                     <option>NO EXISTEN ESTADOS REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-status-assignment">Concepto</label>
+                  <label for="statu_assignment">Concepto</label>
                 </div>
-                @if($errors->has('val-select2-status-assignment'))
-                <small class="text-danger is-invalid">{{ $errors->first('val-select2-status-assignment') }}</small>
-                @endif
               </div>
             </div>
             <div class="form-row">
@@ -463,9 +469,6 @@
                   <label for="observation">Observación</label>
                 </div>
               </div>
-              @if($errors->has('observation'))
-              <small class="text-danger is-invalid">{{ $errors->first('observation') }}</small>
-              @endif
             </div>
             <!-- END Step 4 -->
           </div>
@@ -477,7 +480,7 @@
           <div class="row">
             <div class="col-6">
               <button type="button" class="btn btn-alt-secondary disabled" data-wizard="prev">
-                <i class="fa fa-angle-left mr-5"></i> Atras
+                <i class="fa fa-angle-left mr-5"></i>Atras
               </button>
             </div>
             <div class="col-6 text-right">
@@ -485,7 +488,7 @@
                 Siguiente <i class="fa fa-angle-right ml-5"></i>
               </button>
               <button type="submit" class="btn btn-alt-primary d-none" data-wizard="finish">
-                <i class="fa fa-check mr-5"></i> Guardar
+                <i class="fa fa-save mr-5"></i>Guardar
               </button>
             </div>
           </div>

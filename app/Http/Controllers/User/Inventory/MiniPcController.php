@@ -152,7 +152,7 @@ class MiniPcController extends Controller
     {
         $userId = Auth::id();
 
-        $validator = Validator::make($request->all());
+        $validator = Validator::make($request->all(),$rules = [], $messages = []);
         if ($validator->fails()) :
             return back()->withErrors($validator)
                 ->withInput()
