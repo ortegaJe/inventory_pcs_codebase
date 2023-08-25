@@ -219,7 +219,7 @@ $(document).ready(function () {
                 confirmButtonText: "Si, borrar!",
                 cancelButtonText: "No, cancelar",
             }).then((result) => {
-                if (result.isConfirmed) {
+                if (result.value) {
                     event.preventDefault();
                     let id = $(this).attr("data-id");
                     //console.log(id);

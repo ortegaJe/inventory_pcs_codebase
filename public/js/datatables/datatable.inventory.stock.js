@@ -284,7 +284,7 @@ $(document).ready(function () {
                 confirmButtonText: "Si, eliminar!",
                 cancelButtonText: "No, cancelar",
             }).then((result) => {
-                if (result.isConfirmed) {
+                if (result.value) {
                     event.preventDefault();
                     let id = $(this).attr("data-id");
                     //console.log(id);
