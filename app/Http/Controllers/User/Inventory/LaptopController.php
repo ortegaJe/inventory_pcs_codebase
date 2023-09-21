@@ -39,6 +39,7 @@ class LaptopController extends Controller
         $globalAllInOneCount    = TypeDevice::countTypeDeviceUser(TypeDevice::ALL_IN_ONE_PC_ID, Auth::id());
         $globalIpPhoneCount     = TypeDevice::countTypeDeviceUser(TypeDevice::IP_PHONE_ID, Auth::id());
         $globalMiniPcSatCount   = TypeDevice::countTypeDeviceUser(TypeDevice::MINIPC_SAT_ID, Auth::id());
+        $globalTabletCount      = TypeDevice::countTypeDeviceUser(TypeDevice::TABLET_ID, Auth::id());
         $deviceType             = TypeDevice::select('name as type_name')->where('id', TypeDevice::LAPTOP_PC_ID)->first();
 
         if ($request->ajax()) {
@@ -84,6 +85,7 @@ class LaptopController extends Controller
                 'globalAllInOneCount' => $globalAllInOneCount,
                 'globalIpPhoneCount' => $globalIpPhoneCount,
                 'globalMiniPcSatCount'  => $globalMiniPcSatCount,
+                'globalTabletCount'     => $globalTabletCount,
             ];
 
         return view('user.inventory.laptop.index')->with($data);

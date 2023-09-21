@@ -212,7 +212,8 @@
                             {{ request()->is('tecnico/dashboard/inventario/turneros') ? 'open' : '' }}                
                             {{ request()->is('tecnico/dashboard/inventario/raspberry') ? 'open' : '' }}               
                             {{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'open' : '' }}
-                            {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat') ? 'open' : '' }}            
+                            {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/tablets') ? 'open' : '' }}            
                             {{ request()->is('tecnico/dashboard/inventario/de-escritorios/registrar') ? 'open' : '' }}
                             {{ request()->is('tecnico/dashboard/inventario/portatiles/registrar') ? 'open' : '' }}    
                             {{ request()->is('tecnico/dashboard/inventario/all-in-one/registrar') ? 'open' : '' }}
@@ -220,7 +221,8 @@
                             {{ request()->is('tecnico/dashboard/inventario/raspberry/registrar') ? 'open' : '' }}
                             {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'open' : '' }}
                             {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'open' : '' }}
-                            {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat/registrar') ? 'open' : '' }}">
+                            {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat/registrar') ? 'open' : '' }}
+                            {{ request()->is('tecnico/dashboard/inventario/tablets/registrar') ? 'open' : '' }}">
                   <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
                     <span class="sidebar-mini-hide">Equipos</span>
                     <span class="badge badge-pill bg-gray-darker"><i class="si si-screen-desktop"></i>
@@ -267,6 +269,11 @@
                     </li>
                     @endcan
                     @can('user.inventory.turnero.index')
+                    <li>
+                      <a class="{{ request()->is('tecnico/dashboard/inventario/tablets') ? 'active' : '' }} ||
+                                  {{ request()->is('tecnico/dashboard/inventario/tablets/registrar') ? 'active' : '' }}"
+                        href="{{ route('tablet.index') }}">Tablets</a>
+                    </li>
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/telefonos-ip') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/telefonos-ip/registrar') ? 'active' : '' }}"

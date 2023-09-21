@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Http\Controllers\User\Inventory\MiniPcController;
+use App\Http\Controllers\User\Inventory\TabletController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -98,6 +99,8 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
     Route::resource('telefonos-ip', 'App\Http\Controllers\User\Inventory\PhoneIpController')->names('user.inventory.phones');
 
     Route::resource('mini-pc-sat', MiniPcController::class)->names('minipc');
+
+    Route::resource('tablets', TabletController::class)->names('tablet');
     
     Route::put('cargar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@uploadUserSign')->name('upload.sign.user');
 
