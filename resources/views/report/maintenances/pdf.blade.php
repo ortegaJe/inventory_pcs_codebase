@@ -486,14 +486,14 @@
                     @if ($repo->FechaMto02Realizado == null)
                     @else
                         <div align="center" valign=middle style="margin-top:4px">
-                            <img src="{{ public_path('storage/' . $repo->FirmaAdmin) }}" alt="" width="100"
-                                height="50" style="margin-top:4px">
+                            <img src="{{ public_path('storage/' . $repo->FirmaAdmin) }}" alt=""
+                                width="100" height="50" style="margin-top:4px">
                         </div>
                     @endif
                 </td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                <td style="font-size: 7px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=23 rowspan=4 height="68" align="left" valign=top>
                     <font face="Arial" size=1 color="#000000">{{ $repo->DescripcionMto02 }}</font>
                 </td>
