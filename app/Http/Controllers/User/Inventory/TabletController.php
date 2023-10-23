@@ -110,7 +110,7 @@ class TabletController extends Controller
 
         $storages = DB::table('storages')
         ->select('id', 'size','storage_unit')
-        ->whereIn('id',[1,34])
+        ->whereIn('id',[34,35])
         ->get();
 
         $processors = DB::table('processors')

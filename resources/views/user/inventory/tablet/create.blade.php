@@ -199,7 +199,6 @@
                                             <option disabled selected></option>
                                             <!-- Empty value for demostrating material select box -->
                                             @forelse ($storages as $storage)
-                                                @if ($loop->last)
                                                     @if (old('hdd0') == $storage->id)
                                                         <option value="{{ $storage->id }}" selected>
                                                             {{ $storage->size }} {{ $storage->storage_unit }}
@@ -208,7 +207,6 @@
                                                         <option value="{{ $storage->id }}">
                                                             {{ $storage->size }} {{ $storage->storage_unit }}
                                                         </option>
-                                                    @endif
                                                 @endif
                                             @empty
                                                 <option>NO EXISTEN DISCO DUROS REGISTRADOS</option>
