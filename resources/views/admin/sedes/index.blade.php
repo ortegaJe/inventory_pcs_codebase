@@ -49,11 +49,18 @@
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('name')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          {{-- <div class="col-md-5">
-            <input type="text" class="form-control" id="slug" name="slug" placeholder="Slug sede" readonly
-              onkeyup="javascript:this.value=this.value.toUpperCase();">
-            @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
-          </div> --}}
+          <div class="col-md-3">
+            <select class="form-control" id="regional" name="regional">
+              <option value="0">--Seleccione regional--</option>
+              @forelse ($regionals as $region)
+              <option value="{{ $region->id }}">{{ $region->name }}
+              </option>
+              @empty
+              <option>REGIONALES NO DISPONIBLES</option>
+              @endforelse
+            </select>
+            @error('regional')<small class="text-danger">{{ $message }}</small>@enderror
+          </div>
           <div class="col-md-3">
             <input type="text" class="form-control" id="address" name="address" placeholder="Dirección"
               onkeyup="javascript:this.value=this.value.toUpperCase();">
@@ -64,19 +71,6 @@
               onkeyup="javascript:this.value=this.value.toUpperCase();">
             @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
           </div>
-          {{-- <div class="col-md-4">
-            <select class="js-select2 form-control" id="tecnicos" name="tecnicos" style="width: 100%;"
-              data-placeholder="Asignar técnico..">
-              <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-              @forelse ($users as $tecnico)
-              <option value="{{ $tecnico->id }}">{{ Str::title($tecnico->name) }} {{ Str::title($tecnico->last_name) }}
-              </option>
-              @empty
-              <option>TECNICOS NO DISPONIBLES</option>
-              @endforelse
-            </select>
-            @error('tecnicos')<small class="text-danger">{{ $message }}</small>@enderror
-          </div>--}}
           <div class="col-md-2">
             <button type="submit" class="btn btn-alt-success btn-block" data-toggle="click-ripple">
               <i class="fa fa-save mr-1"></i> Guardar

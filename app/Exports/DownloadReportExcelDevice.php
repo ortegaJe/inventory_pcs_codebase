@@ -2,40 +2,38 @@
 
 namespace App\Exports;
 
-use App\Models\Campu;
-use App\Models\CampuUser;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class CampusExport implements
-    FromCollection,
-    ShouldAutoSize,
-    //ShouldAutoSize,
-    WithColumnWidths,
-    WithHeadings,
-    WithEvents,
-    WithCustomStartCell
-
+class DownloadReportExcelDevice implements 
+        FromCollection,
+        ShouldAutoSize,
+        WithColumnWidths,
+        WithHeadings,
+        WithEvents,
+        WithCustomStartCell
 {
     use Exportable;
 
-    private $dataCollection;
+    private $dataCollection; // Propiedad para almacenar la colección de datos
 
     public function __construct(int $campuId, string $campuName)
     {
-        $this->campuId = $campuId;
+        $this->campuId   = $campuId;
         $this->campuName = $campuName;
     }
 
+    /**
+    * @return \Illuminate\Support\Collection
+    */
     public function collection()
     {
         $export = DB::table('view_all_devices')

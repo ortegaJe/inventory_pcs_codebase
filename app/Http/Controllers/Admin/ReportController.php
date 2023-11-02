@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\DownloadReportExcelAllDevice;
+use App\Exports\DownloadReportExcelDevice;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,18 +26,21 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Excel;
 
 class ReportController extends Controller
 {
     private $generatorID;
+    private $excel;
 
-    public function __construct()
+    public function __construct(Excel $excel)
     {
         $this->generatorID = Helper::IDGenerator(new Report, 'report_code_number', 12, 'REPO');
         $this->report = new Report();
         $this->report_remove = new ReportRemove();
         $this->report_delivery = new ReportDelivery();
         $this->report_maintenance = new ReportMaintenance();
+        $this->excel = $excel;
     }
 
     public function index()
@@ -909,5 +914,48 @@ class ReportController extends Controller
         }
 
         return redirect()->route('sign.index')->with('success_upload_sign', '');
+    }
+
+    public function indexExcelReportDevice()
+    {
+        $user = Auth::id();
+
+        $campus = DB::table('campus as a')
+                    ->leftJoin('campu_users as b', 'b.campu_id', 'a.id')
+                    ->leftJoin('users as c', 'c.id', 'b.user_id')
+                    ->leftJoin('regional as d', 'd.id', 'a.regional_id')
+                    ->where('b.user_id', $user)
+                    ->where('a.is_active', true)
+                    ->select('a.id as campu_id',
+                             'a.name as campu_name',
+                             'd.name as regional',
+                             'a.is_active',
+                             'c.id as user_id',
+                             DB::raw("CONCAT(c.name,' ',c.middle_name,' ',c.last_name,' ',c.second_last_name) AS userName"),
+                             DB::raw("(SELECT COUNT(*) FROM devices WHERE campu_id = a.id) AS countDevice")
+                             )
+                    ->get();
+
+        //return $campus;
+
+        return view('report.excel_report_devices.index', compact('campus'));
+    }
+
+    public function downloadExcelReportDevice($id)
+    {
+        //error_log(__LINE__ . __METHOD__ . ' campu_id --->' .$id);
+
+        $campuId = Campu::findOrFail($id);
+
+        return $this->excel->download(new DownloadReportExcelDevice($campuId->id,$campuId->name), 'invoices.xlsx');
+    }
+
+    public function downloadExcelReportAllDevice($user)
+    {
+        //error_log(__LINE__ . __METHOD__ . ' user_id --->' .$id);
+
+        $userId = User::findOrFail($user);
+
+        return $this->excel->download(new DownloadReportExcelAllDevice($userId->id), 'invoices.xlsx');
     }
 }

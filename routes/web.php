@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\Inventory\GarbageController;
@@ -61,7 +62,7 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
 
-    Route::get('exports-campu-inventory-computers-{id}-{slug}', 'App\Http\Controllers\Admin\CampuController@exportCampu')->name('admin.inventory.export-campu-computers');
+    Route::get('exports-campu-inventory-computers/{campuId}/{campu}', 'App\Http\Controllers\Admin\CampuController@exportCampu')->name('admin.inventory.export-campu-computers');
 
     Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autoCompleteSearch')->name('admin.inventory.campus.search');
 
@@ -145,6 +146,12 @@ Route::prefix('dashboard/inventario/reportes')->group(
 
         Route::post('cargar-acta-de-entrega-firmado/{report_id}/{device_id}', 'App\Http\Controllers\Admin\ReportController@uploadFileReportDeliverySigned')->name('upload.file.delivery');
 
+        Route::get('descargar-excel', [ReportController::class, 'indexExcelReportDevice'])->name('index.excel.report.device');
+
+        Route::get('download-report-excel-devices/{id?}', [ReportController::class, 'downloadExcelReportDevice'])->name('download.excel.report.device');
+        
+        Route::get('download-report-excel-all-devices/{user?}', [ReportController::class, 'downloadExcelReportAllDevice'])->name('download.excel.report.all.device');
+        
         Route::get('firmas-administradores', 'App\Http\Controllers\Admin\ReportController@indexSign')->name('sign.index');
 
         Route::get('editar-administrador-sede/{id}-{slug}', 'App\Http\Controllers\Admin\ReportController@editSign')->name('sign.edit');

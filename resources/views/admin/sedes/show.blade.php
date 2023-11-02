@@ -20,7 +20,7 @@
           </a>
           @if ($campusCount <= 0) @else <button type="button" class="btn btn-sm btn-alt-success mr-4"
             data-toggle="tooltip" data-placement="bottom" title="Descargar Inventario"
-            onclick="window.location='{{ route('admin.inventory.export-campu-computers', [$campus->id, $campus->slug]) }}'">
+            onclick="window.location='{{ route('admin.inventory.export-campu-computers', [$campus->id, $campus->name]) }}'">
             <i class="fa fa-file-excel-o"></i>
             </button>
             @endif
@@ -96,7 +96,7 @@
       <div class="block-content block-content-full">
         <p class="mb-4">
           <strong>Región:</strong>
-          <span class="text-muted"></span>
+          <span class="text-muted">{{ $campus->regional }}</span>
         </p>
         <p>
           <strong>Abreviado de la sede:</strong>

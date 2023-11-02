@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Str;
 
-use function PHPUnit\Framework\isNull;
-
 class CampuController extends Controller
 {
     private $excel;
@@ -40,9 +38,11 @@ class CampuController extends Controller
             ->name($name)
             ->paginate(6);
 
+        $regionals = DB::table('regional')->get();
+
         //return $campus;
 
-        return view('admin.sedes.index', compact('campus'));
+        return view('admin.sedes.index', compact('campus','regionals'));
     }
 
     public function autoCompleteSearch(Request $request)
@@ -54,15 +54,15 @@ class CampuController extends Controller
         return response()->json($filterResult);
     }
 
-    public function exportCampu($campuId, $campuSlug)
+    public function exportCampu($campuId, $campu)
     {
         $rand = Str::upper(Str::random(12));
 
         //$exceptColumn = $campuId->except('CampuID');
 
         return $this->excel->download(
-            new CampusExport($campuId),
-            "export_inventory_" . Str::lower($campuSlug) . "_devices_" . $rand . ".xlsx"
+            new CampusExport($campuId,$campu),
+            "export_inventory_" . Str::slug($campu) . "_devices_" . $rand . ".xlsx"
         );
     }
 
@@ -135,7 +135,7 @@ class CampuController extends Controller
     }
 
     public function create()
-    {
+    {        
         return view('admin.sedes.create');
     }
 
@@ -144,16 +144,18 @@ class CampuController extends Controller
     {
         $request->validate([
             'abreviature' => 'required|unique:campus,abreviature',
-            'name' => 'required|unique:campus,name',
+            'name'        => 'required|unique:campus,name',
+            'regional'    => 'required|not_in:0'
         ]);
 
         $campu = new Campu();
         $campu->abreviature = $request->abreviature;
-        $campu->name = $request->name;
-        $campu->slug = Str::slug($request->name);
-        $campu->address = $request->address;
-        $campu->phone = $request->phone;
-        $campu->created_at = now('America/Bogota');
+        $campu->name        = $request->name;
+        $campu->slug        = Str::slug($request->name);
+        $campu->address     = $request->address;
+        $campu->phone       = $request->phone;
+        $campu->regional_id = $request->regional;
+        $campu->created_at  = now('America/Bogota');
 
         $campu->save();
 
@@ -163,7 +165,15 @@ class CampuController extends Controller
 
     public function show($id)
     {
-        $campus = Campu::findOrFail($id);
+        $campus = Campu::leftJoin('regional', 'regional.id','campus.regional_id')
+                    ->select('campus.id',
+                             'campus.name',
+                             'campus.abreviature',
+                             'campus.slug',
+                             'campus.address',
+                             'regional.id as regional_id',
+                             'regional.name as regional'
+                             )->findOrFail($id);
 
         $userLists = User::all();
 

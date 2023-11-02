@@ -2,13 +2,10 @@
 
 namespace App\Exports;
 
-use App\Models\Campu;
-use App\Models\CampuUser;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -16,26 +13,26 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class CampusExport implements
-    FromCollection,
-    ShouldAutoSize,
-    //ShouldAutoSize,
-    WithColumnWidths,
-    WithHeadings,
-    WithEvents,
-    WithCustomStartCell
-
+class DownloadReportExcelAllDevice implements 
+        FromCollection,
+        ShouldAutoSize,
+        WithColumnWidths,
+        WithHeadings,
+        WithEvents,
+        WithCustomStartCell
 {
     use Exportable;
 
-    private $dataCollection;
+    private $dataCollection; // Propiedad para almacenar la colección de datos
 
-    public function __construct(int $campuId, string $campuName)
+    public function __construct(int $userId)
     {
-        $this->campuId = $campuId;
-        $this->campuName = $campuName;
+        $this->userId   = $userId;
     }
 
+    /**
+    * @return \Illuminate\Support\Collection
+    */
     public function collection()
     {
         $export = DB::table('view_all_devices')
@@ -67,7 +64,7 @@ class CampusExport implements
                             'FechaCreacion',
                         )
                     ->crossJoin(DB::raw('(SELECT @rownum := 0) AS rownum')) // Inicializa la variable de conteo
-                    ->where('CampuID', $this->campuId)
+                    ->where('TecnicoID', $this->userId)
                     ->orderByDesc('FechaCreacion')
                     ->get();
 
@@ -141,7 +138,7 @@ class CampusExport implements
                 $event->sheet->mergeCells('B2:AA2');
                 $event->sheet->getStyle('B2:AA2')
                     ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
-                $event->sheet->getCell('B2')->setValue("INVENTARIO DE EQUIPOS REGISTRADOS SEDE ".$this->campuName);
+                $event->sheet->getCell('B2')->setValue("INVENTARIO DE EQUIPOS REGISTRADOS SEDE");
                 $event->sheet->getStyle('B2:AA2')->applyFromArray([
                     'font' => [
                         'bold' => true,
