@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\AllCampuByRegionalExport;
+use App\Exports\CampuByRegionalExport;
 use App\Exports\CampusExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCampuRequest;
@@ -24,25 +26,46 @@ class CampuController extends Controller
         $this->excel = $excel;
     }
 
-    public function index(Request $request)
+    public function getAllCampu()
     {
-        $name = $request->get('search');
-
-        $campus = Campu::select(
-            'campus.id',
-            'campus.name',
-            'campus.slug',
-            DB::raw("DATEDIFF(NOW(), campus.created_at) as days"),
-            DB::raw("CONCAT(CASE WHEN campus.created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() THEN 'Nuevo' ELSE 'Antiguo' end) as new_campu")
+        $campus = Campu::leftJoin('regional', 'regional.id','campus.regional_id')
+        ->select(
+            'campus.id as campu_id',
+            'campus.name as campu_name',
+            'regional.name as regional',
+            DB::raw("CASE WHEN DATEDIFF(CURDATE(), campus.created_at) <= 3 THEN 'Nuevo' ELSE 'Antiguo' END AS new_campu")
         )->orderByDesc('campus.created_at')
-            ->name($name)
-            ->paginate(6);
+           //->name($name)
+            ->get();
 
-        $regionals = DB::table('regional')->get();
+            return response()->json($campus);
+    }
 
-        //return $campus;
+    public function campuByRegional($id)
+    {
+        $regionals = DB::table('regional')
+                            ->select(
+                                'campus.id as campu_id',
+                                DB::raw("CASE WHEN 
+                                                DATEDIFF(CURDATE(), campus.created_at) <= 3 
+                                                    THEN 'Nuevo' 
+                                                        ELSE 'Antiguo' 
+                                                            END AS new_campu"),
+                                'campus.name as campu_name'
+                            )
+                            ->leftJoin('campus', 'campus.regional_id', 'regional.id')
+                            ->where('campus.regional_id', $id)
+                            ->orderBy('campus.name', 'asc')
+                            ->get();
 
-        return view('admin.sedes.index', compact('campus','regionals'));
+        return response()->json($regionals);
+    }
+
+    public function index()
+    {
+        $regionals = DB::table('regional')->orderBy('name')->get();
+        //return $regionals;
+        return view('admin.sedes.index',compact('regionals'));
     }
 
     public function autoCompleteSearch(Request $request)
@@ -64,6 +87,23 @@ class CampuController extends Controller
             new CampusExport($campuId,$campu),
             "export_inventory_" . Str::slug($campu) . "_devices_" . $rand . ".xlsx"
         );
+    }
+
+    public function exportCampuByRegional($regional)
+    {
+        $rand = Str::upper(Str::random(12));
+        $regional_name = DB::table('regional')->where('id', $regional)->pluck('name')->first();
+        //error_log(__LINE__ . __METHOD__ . ' regional --->' .var_export($regional_name, true));
+
+        return $this->excel->download(
+            new CampuByRegionalExport($regional, $regional_name),
+            "export_inventory_" . Str::slug($regional) . "_devices_" . $rand . ".xlsx"
+        );
+    }
+
+    public function exportAllCampuByRegional()
+    {
+        return $this->excel->download(new AllCampuByRegionalExport,"export.xlsx");
     }
 
     public function assingUserCampu(Request $request, $id)

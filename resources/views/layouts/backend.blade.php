@@ -541,6 +541,7 @@
   </script>
   <script>
     jQuery(function(){ Codebase.helpers('select2'); });
+    jQuery(function(){ Codebase.helpers('slick'); });
   </script>
   @stack('js')
 </body>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\CampuController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
@@ -29,6 +30,10 @@ Auth::routes();
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
 
 Route::get('/validar-firmas', [HomeController::class, 'ValidateSign'])->name('validate_sign');
+
+Route::get('all-campus', [CampuController::class, 'getAllCampu'])->name('all_campus');
+
+Route::get('campus-by-regional/{id?}', [CampuController::class, 'campuByRegional'])->name('campus.regional');
 
 //Route::get('sistemas-operativos-chart', [HomeController::class, 'getOsData'])->name('os_chart');
 
@@ -64,6 +69,10 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::get('exports-campu-inventory-computers/{campuId}/{campu}', 'App\Http\Controllers\Admin\CampuController@exportCampu')->name('admin.inventory.export-campu-computers');
 
+    Route::get('export-campu-by-regional/{regional?}', [CampuController::class, 'exportCampuByRegional'])->name('export.campu_by_regional');
+
+    Route::get('export-all-campu-by-regional', [CampuController::class, 'exportAllCampuByRegional'])->name('export.all_campu_by_regional');
+    
     Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autoCompleteSearch')->name('admin.inventory.campus.search');
 
     Route::get('usuarios-buscar', 'App\Http\Controllers\Admin\UserController@autoCompleteSearchUser')->name('admin.inventory.users.search');

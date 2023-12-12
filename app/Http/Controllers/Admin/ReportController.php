@@ -465,6 +465,7 @@ class ReportController extends Controller
                     ->first();
 
                 if (empty($last_report_mto->id)) {
+                    //detallar este error en el view, si no encuentra el primer mto del año no registra el segundo por que deben haber dos registros mto
                     return redirect()->route('inventory.error', 404);
                 }
 
