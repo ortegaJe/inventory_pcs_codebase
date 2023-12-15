@@ -205,6 +205,18 @@ class BeUIIcons {
                 inputPlaceholder: "Seleccione regional",
                 inputOptions: getRegionalOptions(),
                 html: false,
+                inputValidator: () => {
+                    return new Promise((resolve) => {
+                        const index = document.querySelector('.swal2-select').selectedIndex;
+                        //console.log(index);
+
+                      if (index === 0) {
+                        resolve("Seleccione una opción válida :)");
+                      } else {
+                        resolve();
+                      }
+                    });
+                },
                 preConfirm: (selectedValue) => {
                     return new Promise(resolve => {
                         // Muestra el modal de carga
