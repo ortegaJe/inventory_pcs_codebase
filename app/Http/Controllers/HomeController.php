@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TypeDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -63,5 +64,11 @@ class HomeController extends Controller
         )->get();
 
         return $users;
+    }
+
+    public function getCategoryDevice()
+    {
+        $options = TypeDevice::pluck('name', 'id')->toArray();
+        return response()->json($options);
     }
 }

@@ -35,6 +35,8 @@ Route::get('all-campus', [CampuController::class, 'getAllCampu'])->name('all_cam
 
 Route::get('campus-by-regional/{id?}', [CampuController::class, 'campuByRegional'])->name('campus.regional');
 
+Route::get('select-category-devices', [HomeController::class, 'getCategoryDevice'])->name('select_category_device');
+
 //Route::get('sistemas-operativos-chart', [HomeController::class, 'getOsData'])->name('os_chart');
 
 //Route::get('/equipos-en-prestamo', [HomeController::class, 'getBorrowedDeviceList'])->name('get_borrowed_list');
