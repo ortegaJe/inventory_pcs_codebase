@@ -168,6 +168,8 @@ Route::prefix('dashboard/inventario/reportes')->group(
         Route::get('editar-administrador-sede/{id}-{slug}', 'App\Http\Controllers\Admin\ReportController@editSign')->name('sign.edit');
 
         Route::put('actualizar-administrador-sede/{id}', 'App\Http\Controllers\Admin\ReportController@updateSign')->name('sign.update');
+
+        Route::get('validate-calendar-mto', [ReportController::class, 'validateCalendarMto'])->name('calendar_mto');
     }
 );
 

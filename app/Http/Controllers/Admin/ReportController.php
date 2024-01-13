@@ -221,21 +221,43 @@ class ReportController extends Controller
         return $pdf->stream($nombre_archivo . $extension);
     }
 
+    public function validateCalendarMto()
+    {
+        $userId = Auth::id();
+
+        $mto = DB::table('campus as a')
+                    ->leftJoin('calendar_maintenances as b', 'b.campu_id','a.id')
+                    ->leftJoin('campu_users as c', 'c.campu_id', 'a.id')
+                    ->leftJoin('users as d', 'd.id', 'c.user_id')
+                    ->where('c.user_id', $userId)
+                    ->where('a.is_active',  true)
+                    ->get(['a.id as campu_id', 
+                           'a.name',
+                           'b.maintenance_01_month as mto01',
+                           'b.maintenance_02_month as mto02',
+                           DB::raw("MONTHNAME(CONCAT(YEAR(CURRENT_DATE()),'-',b.maintenance_01_month,'-',DAY(CURRENT_DATE()))) as mto01MoName"),
+                           DB::raw("MONTHNAME(CONCAT(YEAR(CURRENT_DATE()),'-',b.maintenance_02_month,'-',DAY(CURRENT_DATE()))) as mto02MoName"),
+                           DB::raw("CASE WHEN b.campu_id IS NULL THEN 0 ELSE 1 END AS statuMto")           
+                        ]);
+
+        return response()->json($mto);
+    }
+
     public function indexReportMaintenance(Request $request)
     {
         $user_id = Auth::id();
         $serial_number = $request->get('search');
 
-        $campu_users = Campu::leftJoin('campu_users as cu', 'cu.campu_id', 'campus.id')
-            ->leftJoin('users as u', 'u.id', 'cu.user_id')
-            ->leftJoin('devices as d', 'd.campu_id', 'campus.id')
-            ->leftJoin('reports as r', 'r.device_id', 'd.id')
+        $campu_users = Campu::leftJoin('campu_users as a', 'a.campu_id', 'campus.id')
+            ->leftJoin('users as b', 'b.id', 'a.user_id')
+            ->leftJoin('devices as c', 'c.campu_id', 'campus.id')
+            ->leftJoin('reports as d', 'd.device_id', 'c.id')
             ->select(
-                'cu.campu_id',
+                'a.campu_id',
                 'campus.name',
             )
-            ->where('cu.user_id', $user_id)
-            ->where('r.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID,)
+            ->where('a.user_id', $user_id)
+            ->where('d.report_name_id', Report::REPORT_MAINTENANCE_NAME_ID,)
             ->distinct('campus.name')
             ->get();
 

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <title>VIVA 1A | InventarioPC</title>
+    <title>InventoryPC | VIVA 1A</title>
 
     <meta name="description"
         content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
@@ -23,9 +23,9 @@
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-    <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="shortcut icon" href="">
+    <link rel="icon" type="image/png" sizes="192x192" href="">
+    <link rel="apple-touch-icon" sizes="180x180" href="">
     <!-- END Icons -->
 
     <!-- Stylesheets -->
@@ -84,7 +84,8 @@
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <div class="form-material floating">
-                                            <input type="text" class="form-control" id="login-username" name="email">
+                                            <input type="text" class="form-control" id="login-username"
+                                                name="email">
                                             <label for="login-username">Email</label>
                                         </div>
                                     </div>

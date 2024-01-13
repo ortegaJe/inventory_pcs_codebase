@@ -22,9 +22,6 @@ class AlertActivity {
         $.ajax({
             url: url,
             type: "GET",
-            data: {
-                _token: $('input[name="_token"]').val()
-            },
             success: function(response) {
                 let modifiedArr = response.map(function(element) {
                     //return `sede: ${element.campus}, firmas admin: ${element.admin_sign}`

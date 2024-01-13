@@ -7,92 +7,7 @@
   <a class="breadcrumb-item" href="{{ route('inventory.report.index') }}">Reportes</a>
   <span class="breadcrumb-item active">Mantenimientos</span>
 </nav>
-{{-- <div class="row gutters-tiny">
-  <!-- Row #1 -->
-  <div class="col-md-3 col-xl-2">
-    <a style="cursor:default" class="block" href="javascript:void(0)">
-      <div class="block-content block-content-full">
-        <div class="py-20 text-center">
-          <div class="js-pie-chart pie-chart mb-20" data-percent="45" data-line-width="6" data-size="100"
-            data-bar-color="#9ccc65" data-track-color="#e9e9e9">
-            <span>
-              <img class="img-avatar" src="assets/media/avatars/avatar15.jpg" alt="">
-            </span>
-          </div>
-          <div class="font-size-h3 font-w600">45 Realizados</div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">/100</div>
-        </div>
-      </div>
-    </a>
-  </div>
-  <div class="col-md-3 col-xl-2">
-    <a style="cursor:default" class="block" href="javascript:void(0)">
-      <div class="block-content block-content-full">
-        <div class="py-20 text-center">
-          <div class="js-pie-chart pie-chart mb-20" data-percent="75" data-line-width="6" data-size="100"
-            data-bar-color="#ffca28" data-track-color="#e9e9e9">
-            <span>
-              <img class="img-avatar" src="assets/media/avatars/avatar8.jpg" alt="">
-            </span>
-          </div>
-          <div class="font-size-h3 font-w600">64 Pendientes</div>
-          <div class="font-size-sm font-w600 text-uppercase text-muted">/36</div>
-        </div>
-      </div>
-    </a>
-  </div>
-  <!-- END Row #1 -->
-</div> --}}
-<!-- Orders -->
 <div class="content-heading">
-  {{--<div class="dropdown float-right">
-    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-drop" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">
-      Today
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-drop">
-      <a class="dropdown-item active" href="javascript:void(0)">
-        <i class="fa fa-fw fa-calendar mr-5"></i>Today
-      </a>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-calendar mr-5"></i>This Week
-      </a>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-calendar mr-5"></i>This Month
-      </a>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-calendar mr-5"></i>This Year
-      </a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-circle-o mr-5"></i>All Time
-      </a>
-    </div>
-  </div>
-  <div class="dropdown float-right mr-5">
-    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-filter-drop"
-      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      All
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-filter-drop">
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-spinner fa-spin text-warning mr-5"></i>Pending
-      </a>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-refresh fa-spin text-info mr-5"></i>Processing
-      </a>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-times text-danger mr-5"></i>Canceled
-      </a>
-      <a class="dropdown-item" href="javascript:void(0)">
-        <i class="fa fa-fw fa-check text-success mr-5"></i>Completed
-      </a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item active" href="javascript:void(0)">
-        <i class="fa fa-fw fa-circle-o mr-5"></i>All
-      </a>
-    </div>
-  </div>--}}
   Lista De Equipos
 </div>
 <div class="block block-rounded">
@@ -262,6 +177,7 @@
 @push('js')
 
 <script src="{{ asset('/js/validate.sign.reports.js') }}"></script>
+<script src="{{ asset('/js/validate.calendar.mto.js') }}"></script>
 
 <script>
     let validate_sign = <?php echo json_encode(route('validate_sign')) ?>;

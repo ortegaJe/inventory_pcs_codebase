@@ -23,9 +23,6 @@ class AlertActivity {
         $.ajax({
             url: url,
             type: "GET",
-            data: {
-                _token: $('input[name="_token"]').val()
-            },
             success: function(response) {
                 $(document).on("click", ".btn-campu-id", function(e) {
                     const campuId = this.id;
