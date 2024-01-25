@@ -4,6 +4,11 @@ class AlertValidateCalendarMto {
 
         const url = `/dashboard/inventario/reportes/validate-calendar-mto`;
 
+        function hasPagination() {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.has('page');
+      }
+
         // Set default properties
         let toast = Swal.mixin({
             icon: 'warning',
@@ -88,9 +93,11 @@ class AlertValidateCalendarMto {
 
               const finalMessage = `${mainMessage}<ul class="list-group push">${campusList}</ul>`;
 
+              if (!hasPagination() && window.location.pathname === '/dashboard/inventario/reportes/mantenimientos') {
                 toast.fire({
-                  html: finalMessage,
+                    html: finalMessage
                 });
+            }
 
           }).catch(error => {
             // Manejar errores de red o errores en el servidor
