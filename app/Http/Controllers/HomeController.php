@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\TypeDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,8 +32,13 @@ class HomeController extends Controller
             ->leftJoin('operating_systems as os', 'os.id', 'c.os_id')
             ->select(
                 DB::raw("COUNT(c.os_id) as total"),
-                DB::raw("CONCAT(os.name, ' ', os.version, ' ', os.architecture) AS os_name")
+                DB::raw("CONCAT(SUBSTRING(os.name, -7, 3),' ',
+                         REPLACE(LEFT(os.version, 3), 'P', ''),' ',
+                         LEFT(SUBSTRING_INDEX(os.version, ' ', -1), 3),' ',
+                         os.architecture) AS os_name"),
             )
+            ->where('d.is_active', true)
+            ->where('d.statu_id', [1,2,8])
             ->whereIn('d.type_device_id', [1, 2, 3, 5])
             ->groupBy('os_name', 'c.os_id')
             ->orderByDesc('total')
@@ -70,5 +76,35 @@ class HomeController extends Controller
     {
         $options = TypeDevice::pluck('name', 'id')->toArray();
         return response()->json($options);
+    }
+
+    public function autoCompleteSerialSearch(Request $request)
+    {
+        $query = $request->get('search');
+
+        $filterResult = Device::where('serial_number', 'LIKE', '%' . $query . '%')
+                            ->where('is_active', true)
+                            ->pluck('serial_number');
+
+        return response()->json($filterResult);
+    }
+
+    public function SearchDevice()
+    {
+        $devices = Device::join('campus as a', 'a.id', 'devices.campu_id')
+                    ->join('type_devices as b', 'b.id', 'devices.type_device_id')
+                    ->join('status as c', 'c.id', 'devices.statu_id')
+                    ->join('brands as d', 'd.id', 'devices.brand_id')
+                    //->where('devices.is_active', true)
+                    ->get([
+                        'b.name as type',
+                        'd.name as brand',
+                        'devices.serial_number',
+                        'a.name as campu',
+                        'c.name as status',
+                        DB::raw("DATE_FORMAT(devices.created_at, '%d-%m-%Y') as date_created"),
+                        ]);
+
+        return response()->json($devices);
     }
 }
