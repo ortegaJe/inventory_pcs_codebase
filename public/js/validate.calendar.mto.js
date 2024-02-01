@@ -88,21 +88,27 @@ class AlertValidateCalendarMto {
                         const badgeClass = campus.statuMto === 0
                                             ? "badge-danger"
                                             : "badge-success";
-                                    const haveMto = `<li class="list-group-item d-flex justify-content-between font-w600">${
-                                        campus.name
-                                    }
-                          <span class="badge badge-pill ${badgeClass}">${
-                            campus.statuMto === 0
-                            ? "No programado"
-                            : `${mto01MoName} - ${mto02MoName}`
-                          }</span>
-                                </li>`;
+                                    const haveMto = `<table class="table table-borderless d-flex justify-content-between font-w600">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td scope="row">${campus.name}</td>
+                                                                <td>
+                                                                    ${campus.statuMto === 0
+                                                                        ? `<span class="badge badge-pill ${badgeClass}">No programado</span>`
+                                                                        : `<span class="badge badge-pill ${badgeClass}">${mto01MoName}</span> 
+                                                                            <span class="badge badge-pill ${badgeClass}">${mto02MoName}</span>`
+                                                                        }
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>`;
 
                         return haveMto;
                     })
                     .join("");
 
-                const finalMessage = `${mainMessage}<ul class="list-group push">${campusList}</ul>`;
+                const finalMessage = `${mainMessage} ${campusList}`;
 
               if (!hasPagination() && window.location.pathname === '/dashboard/inventario/reportes/mantenimientos') {
                 toast.fire({
