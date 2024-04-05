@@ -10,7 +10,7 @@ class ListDevicesSelect {
                 5: "RASPBERRY",
                 6: "TABLETS",
                 7: "TELEFONOS IP",
-                8: "TURNEROS"
+                8: "ATRILES"
             };
         }
     

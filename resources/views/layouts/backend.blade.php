@@ -289,7 +289,7 @@
                     <li>
                       <a class="{{ request()->is('tecnico/dashboard/inventario/turneros') ? 'active' : '' }} ||
                                   {{ request()->is('tecnico/dashboard/inventario/turneros/registrar') ? 'active' : '' }}"
-                        href="{{ route('user.inventory.turnero.index') }}">Turneros</a>
+                        href="{{ route('user.inventory.turnero.index') }}">Atriles</a>
                     </li>
                     @endcan
                   </ul>
