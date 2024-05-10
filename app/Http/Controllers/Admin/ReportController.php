@@ -245,6 +245,24 @@ class ReportController extends Controller
 
     public function indexReportMaintenance(Request $request)
     {
+          $userID = Auth::user()->id;
+
+/*           $semesters = Campu::join('campu_users as b', 'b.campu_id', 'campus.id')
+          ->join('users as c', 'c.id', 'b.user_id')
+              ->join('reports as d', 'd.user_id', 'c.id')
+                  ->join('report_maintenances as e', 'e.report_id', 'd.id')
+                      ->where('c.id', $userID)
+                          ->where('campus.is_active', true)
+                              ->select(DB::raw("YEAR(e.maintenance_01_date) as year"))
+                                  ->groupBy('year')
+                                      ->get(['year']);
+
+        if ($semesters->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron sedes para este usuario'], 404);
+        }
+
+        return response()->json($semesters); */
+
         $user_id = Auth::id();
         $serial_number = $request->get('search');
 
@@ -276,7 +294,7 @@ class ReportController extends Controller
                 'd.inventory_code_number',
                 'd.serial_number',
                 'd.ip',
-                DB::raw("REPLACE(d.mac, '-', ':') as mac"),
+                DB::raw("REPLACE(d.mac, '-', ':') AS mac"),
                 'cu.campu_id',
                 'c.name as sede',
                 's.name as estado',
@@ -526,6 +544,8 @@ class ReportController extends Controller
             ->where('TecnicoID', $user_id)
             ->orderByDesc('FechaCreacionReporte')
             ->get();
+
+            return $generated_report_maintenance;
 
         $pdf = PDF::loadView(
             'report.maintenances.pdf',

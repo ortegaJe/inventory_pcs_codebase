@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CampuController;
+use App\Http\Controllers\Admin\MaintenanceController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
@@ -144,6 +145,10 @@ Route::prefix('dashboard/inventario/reportes')->group(
         Route::get('mantenimientos', 'App\Http\Controllers\Admin\ReportController@indexReportMaintenance')->name('inventory.report.maintenance.index');
 
         Route::get('descargar-mantenimiento-sede', 'App\Http\Controllers\Admin\ReportController@downloadMtoCampu')->name('inventory.report.download.mto.campu');
+
+        Route::get('/mto/getCampus', [MaintenanceController::class, 'getCampusMto'])->name('get.campus.mto');
+        
+        Route::post('/mto/mtoDownload', [MaintenanceController::class, 'downloadMto'])->name('download.mto');
 
         Route::get('mantenimientos/{device_id}-{device_rowguid}', 'App\Http\Controllers\Admin\ReportController@createReportMaintenance')->name('inventory.report.maintenance.create');
 

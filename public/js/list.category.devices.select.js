@@ -1,6 +1,7 @@
 class ListDevicesSelect {
 
     static RedirectToCategory() {
+        
         function getCategoryOptions() {
             return {
                 1: "ALL IN ONE",

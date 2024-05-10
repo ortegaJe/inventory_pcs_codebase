@@ -54,7 +54,7 @@
     </style>
 
 </head>
-@foreach ($generated_report_maintenance as $repo)
+@foreach ($mto as $repo)
 
     <body>
         <table cellspacing="0" border="0" style="margin-left: 30px">

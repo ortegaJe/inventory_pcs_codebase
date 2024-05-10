@@ -27,11 +27,9 @@
       title="Actualizar lista" onclick="window.location='{{ route('inventory.report.maintenance.index') }}'">
       <i class="si si-reload"></i>
     </button>
-    {{-- @include('report.maintenances.partials.modal_download_mto')
-    <button type="button" class="btn btn-sm btn-secondary ml-2" data-toggle="modal" data-target="#modal-download-all"
-      title="">
+    <button type="button" class="btn btn-sm btn-secondary ml-2" onclick="showMultiSelect()">
       <i class="fa fa-download"></i>
-    </button> --}}
+    </button>
   </div>
 </div>
 <!-- END Search -->
@@ -94,6 +92,7 @@
             @endif
           </td>
           <td class="d-none d-sm-table-cell text-center">
+            <input type="hidden" name="campu_id" id="campu_id" value="{{ $device->campu_id }}">
             <div class="btn-group">
               @if($device->first_semester_month == now()->isoformat('M'))
               <a class="btn btn-sm btn-secondary btn-campu-id" id="{{ $device->campu_id }}" data-toggle="tooltip" title="Generar Reporte"
@@ -170,6 +169,7 @@
 @php
   $currenturl = url()->current();
   $user_id = Auth::id();
+  $campu_id = $device->campu_id;
   $currentRoute = Route::currentRouteName()
 @endphp
 @endsection
@@ -178,12 +178,14 @@
 
 <script src="{{ asset('/js/validate.sign.reports.js') }}"></script>
 <script src="{{ asset('/js/validate.calendar.mto.js') }}"></script>
+<script src="{{ asset('/js/list.user.campus.js') }}"></script>
 
 <script>
     let validate_sign = <?php echo json_encode(route('validate_sign')) ?>;
     let route_sign_admin = <?php echo json_encode(route('sign.index')) ?>;
     let route_sign_user = <?php echo json_encode(route('admin.inventory.technicians.profiles')) ?>;
     let user_id = <?php echo json_encode($user_id) ?>;
+    let campu_id = <?php echo json_encode($campu_id) ?>;
     let currentRoute = <?php echo json_encode($currentRoute) ?>;
 </script>
 

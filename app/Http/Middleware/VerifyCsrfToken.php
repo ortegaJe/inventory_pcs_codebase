@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        '/dashboard/inventario/reportes/mto/mtoDownload',
     ];
 }
