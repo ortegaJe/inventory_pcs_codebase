@@ -54,7 +54,7 @@
     </style>
 
 </head>
-@foreach ($mto as $repo)
+@foreach ($document as $repo)
 
     <body>
         <table cellspacing="0" border="0" style="margin-left: 30px">
