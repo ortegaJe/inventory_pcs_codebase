@@ -77,7 +77,7 @@ class MaintenanceController extends Controller
     return response()->download(storage_path('app/public/' . $filename));
 }
 
-    public function downloadMto(Request $request)
+/*     public function downloadMto(Request $request)
     {
         $userID = Auth::user()->id;
         $campus = $request->post('campus');
@@ -113,6 +113,32 @@ class MaintenanceController extends Controller
 
         return $pdf->download('mto.pdf');
 
+    } */
+
+    public function downloadMto(Request $request)
+    {
+        $userID = Auth::user()->id;
+        $campus = $request->post('campus');
+        $year = $request->post('year');
+
+        try {
+            $mto = DB::table('view_report_maintenances')
+                ->where('RepoNameID', Report::REPORT_MAINTENANCE_NAME_ID)
+                ->where('TecnicoID', $userID)
+                ->where('SedeID', $campus)
+                ->whereYear('FechaMto01Realizado', $year)
+                ->orderBy('FechaMto01Realizado')
+                ->get();
+
+            if ($mto->isEmpty()) {
+                return response()->json(['message' => 'No se encontró información de mantenimientos para esta sede'], 404);
+            }
+
+            $pdf = PDF::loadView('report.maintenances.pdf', ['mto' => $mto]);
+            return $pdf->download('mto.pdf');
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al procesar la solicitud: ' . $e->getMessage()], 500);
+        }
     }
 
     /**

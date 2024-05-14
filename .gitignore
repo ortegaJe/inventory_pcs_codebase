@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
-/public/storage
+/public/storage/firma_tecnicos
+/public/storage/pdf
 /storage/*.key
 /vendor
 server.txt

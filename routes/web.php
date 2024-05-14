@@ -148,7 +148,7 @@ Route::prefix('dashboard/inventario/reportes')->group(
 
         Route::get('/mto/getCampus', [MaintenanceController::class, 'getCampusMto'])->name('get.campus.mto');
         
-        Route::post('/mto/mtoDownload', [MaintenanceController::class, 'downloadPdf'])->name('download.mto');
+        Route::post('/mto/mtoDownload', [MaintenanceController::class, 'downloadMto'])->name('download.mto');
 
         Route::get('mantenimientos/{device_id}-{device_rowguid}', 'App\Http\Controllers\Admin\ReportController@createReportMaintenance')->name('inventory.report.maintenance.create');
 
