@@ -4,7 +4,7 @@
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-    <title>InventarioPC | Reporte generado</title>
+    <title>Inventory PC | Reporte Generado</title>
     <meta name="generator" content="https://conversiontools.io" />
     <meta name="author" content="Jefferson J. Ortega" />
     <meta name="created" content="2010-12-29T01:40:27" />
@@ -54,7 +54,7 @@
     </style>
 
 </head>
-@foreach ($generated_report_maintenance as $repo)
+@foreach ($mto as $repo)
 
     <body>
         <table cellspacing="0" border="0" style="margin-left: 30px">

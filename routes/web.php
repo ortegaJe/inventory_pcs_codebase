@@ -98,6 +98,11 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::post('guardar-firmas-administradores', 'App\Http\Controllers\Admin\AdminDashboardController@storeAdminSignature')->name('admin.inventory.admin-signatures.store');
 
     Route::get('stock', [AdminDashboardController::class, 'getStock'])->name('get.stock');
+
+    Route::get('/mto/getCampus', [AdminDashboardController::class, 'getCampusMto'])->name('admin.get.campus.mto');
+        
+    Route::post('/mto/mtoDownload', [AdminDashboardController::class, 'downloadMto'])->name('admin.download.mto');
+
 });
 
 Route::prefix('tecnico/dashboard/inventario')->group(function () {

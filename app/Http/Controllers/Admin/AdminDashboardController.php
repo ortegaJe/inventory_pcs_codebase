@@ -14,6 +14,7 @@ use App\Helpers\Helper;
 use App\Models\AdminSignature;
 use App\Models\Campu;
 use App\Models\Device;
+use App\Models\Report;
 use App\Models\TypeDevice;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Excel;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class AdminDashboardController extends Controller
 {
@@ -209,6 +211,65 @@ class AdminDashboardController extends Controller
   public function errorView()
   {
     return view('admin.op_error_400');
+  }
+
+  public function getCampusMto()
+  {
+      //$userID = Auth::user()->id;
+
+      $data = [];
+
+      $campus = Campu::join('campu_users as b', 'b.campu_id', 'campus.id')
+      //->where('b.user_id', $userID)
+          ->where('campus.is_active', true)
+            ->orderBy('campus.name')
+              ->get(['campus.name', 'campus.id']);
+
+                  $data['campus'] = $campus;
+
+      $years = Campu::join('campu_users as b', 'b.campu_id', 'campus.id')
+      ->join('users as c', 'c.id', 'b.user_id')
+          ->join('reports as d', 'd.user_id', 'c.id')
+              ->join('report_maintenances as e', 'e.report_id', 'd.id')
+                  //->where('c.id', $userID)
+                      ->where('campus.is_active', true)
+                          ->select(DB::raw("YEAR(e.maintenance_01_date) as year"))
+                              ->groupBy('year')
+                                  ->get(['year']);
+
+                    $data['years'] = $years;
+
+        if ($campus->isEmpty() || $years->isEmpty()) {
+          return response()->json(['message' => 'No se encontraron sedes o años para seleccionar'], 404);
+      }
+
+      return response()->json($data);
+  }
+
+  public function downloadMto(Request $request)
+  {
+      //$userID = Auth::user()->id;
+      $campus = $request->post('campus');
+      $year = $request->post('year');
+
+      try {
+          $mto = DB::table('view_report_maintenances')
+              ->where('RepoNameID', Report::REPORT_MAINTENANCE_NAME_ID)
+              //->where('TecnicoID', $userID)
+              ->where('SedeID', $campus)
+              ->whereYear('FechaMto01Realizado', $year)
+              ->orderBy('FechaMto01Realizado')
+              ->get();
+
+          if ($mto->isEmpty()) {
+              return response()->json(['message' => 'No se encontró información de mantenimientos para esta sede'], 404);
+          }
+
+          $pdf = PDF::loadView('report.maintenances.pdf', ['mto' => $mto]);
+          return $pdf->download('mto.pdf');
+      } catch (\Exception $e) {
+          return response()->json(['message' => 'Error al procesar la solicitud: ' . $e->getMessage()], 500);
+      }
   }
 
   /**

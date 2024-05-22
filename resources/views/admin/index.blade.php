@@ -133,6 +133,10 @@
         Lista<small> | Equipos informaticos</small>
       </h3>
       <div class="block-options">
+        <button type="button" class="btn btn-alt-danger" data-toggle="tooltip" data-placement="left"
+          title="Descargar Mantenimientos" onclick="showMultiSelect()">
+          <i class="fa fa-file-pdf-o"></i>
+        </button>
         <button type="button" class="btn btn-alt-success" data-toggle="tooltip" data-placement="left"
           title="Descargar Inventario" onclick="window.location='{{ route('admin.inventory.export-all-computers') }}'">
           <i class="fa fa-file-excel-o"></i>
@@ -194,6 +198,7 @@
 <script src="{{ asset('/js/pages/be_tables_datatables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('/js/download.admin.mto.js') }}"></script>
 
 <script>
   let root_url_dashboard = <?php echo json_encode(route('admin.inventory.dash.index')) ?>;

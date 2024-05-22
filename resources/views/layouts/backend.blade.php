@@ -541,6 +541,7 @@
   <script src="{{ asset('/js/pages/be_forms_validation.min.js') }}"></script>
   <script src="{{ asset('/js/datatables/datatable.inventory.deleted.js') }}"></script>
   <script src="{{ asset('/js/list.category.devices.select.js') }}"></script>
+
   <!-- Page JS Code -->
   <script>
     let root_url_get_list_devices = <?php echo json_encode(route('get.devices.list')) ?>;
@@ -549,8 +550,7 @@
     let route_select_category_device = <?php echo json_encode(route('select_category_device')) ?>;
   </script>
   <script>
-    jQuery(function(){ Codebase.helpers('select2'); });
-    jQuery(function(){ Codebase.helpers('slick'); });
+    jQuery(function(){ Codebase.helpers(['select2', 'slick']); });
   </script>
   @stack('js')
 </body>
