@@ -266,18 +266,6 @@ class AdminDashboardController extends Controller
           }
 
           $pdf = PDF::loadView('report.maintenances.pdf', ['mto' => $mto]);
-
-                        // Generate a unique filename for the PDF file
-    $filename = uniqid() . '.pdf';
-
-    // Store the PDF file in the storage directory
-    Storage::disk('public')->put($filename, $pdf->output());
-
-    // Return the PDF file as a downloadable response
-    return response()->download(storage_path('app/public/' . $filename));
-
-          //return $pdf->download('mto.pdf');
-          
           return $pdf->download('mto.pdf');
       } catch (\Exception $e) {
           return response()->json(['message' => 'Error al procesar la solicitud: ' . $e->getMessage()], 500);
