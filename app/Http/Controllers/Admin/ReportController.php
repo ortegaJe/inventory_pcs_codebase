@@ -521,7 +521,7 @@ class ReportController extends Controller
                 'SedeEquipo',
             )->first();
 
-        $generated_report_maintenance = DB::table('view_report_maintenances')
+        $mto = DB::table('view_report_maintenances')
             ->where('RepoID', $report->id)
             ->where('TecnicoID', $user_id)
             ->orderByDesc('FechaCreacionReporte')
@@ -531,7 +531,7 @@ class ReportController extends Controller
             'report.maintenances.pdf',
             [
                 'report' => $report,
-                'generated_report_maintenance' => $generated_report_maintenance,
+                'mto' => $mto,
             ]
         );
 
