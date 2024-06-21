@@ -1,11 +1,11 @@
     td.details-control {
-        background: url('https://editor.datatables.net/examples/resources/details_open.png') no-repeat center center;
+        background: url('/media/dashboard/datatable/details_open.png') no-repeat center center;
         cursor: pointer;
         width: 1px;
     }
 
     tr.shown td.details-control {
-        background: url('https://editor.datatables.net/examples/resources/details_close.png') no-repeat center center;
+        background: url('/media/dashboard/datatable/details_close.png') no-repeat center center;
     }
 
     div.slider {

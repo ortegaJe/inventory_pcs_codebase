@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-12 mx-auto">
-    <h2 class="content-heading">Registrar Nuevo Equipo Pórtatil</h2>
+    <h2 class="content-heading">Registrar Nuevo Equipo Portátil</h2>
     @if ($errors->any())
     <div class="alert alert-danger">
       <strong>Whoops!</strong> There were some problems with your input.<br><br>

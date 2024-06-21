@@ -95,7 +95,7 @@ class TabletController extends Controller
     {
         $brands = DB::table('brands')
             ->select('id', 'name')
-            ->whereIn('id',[8])
+            ->whereIn('id',[3,8])
             ->get();
 
         $operatingSystems = DB::table('operating_systems')

@@ -113,7 +113,7 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
     Route::resource('all-in-one', 'App\Http\Controllers\User\Inventory\AllInOneController')->names('user.inventory.allinone');
 
-    Route::resource('turneros', 'App\Http\Controllers\User\Inventory\TurneroController')->names('user.inventory.turnero');
+    Route::resource('atriles', 'App\Http\Controllers\User\Inventory\TurneroController')->names('user.inventory.turnero');
 
     Route::resource('raspberry', 'App\Http\Controllers\User\Inventory\RaspberryController')->names('user.inventory.raspberry');
 
