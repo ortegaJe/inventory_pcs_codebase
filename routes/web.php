@@ -4,10 +4,13 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CampuController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DropzoneController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\Inventory\GarbageController;
 use App\Http\Controllers\User\Inventory\MiniPcController;
 use App\Http\Controllers\User\Inventory\TabletController;
+use App\Http\Controllers\User\Inventory\TurneroController;
+use App\Models\Campu;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +29,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Auth::routes();
+
+Route::get('sedes', function () {
+    
+});
 
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
 
@@ -113,8 +120,12 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
 
     Route::resource('all-in-one', 'App\Http\Controllers\User\Inventory\AllInOneController')->names('user.inventory.allinone');
 
-    Route::resource('turneros', 'App\Http\Controllers\User\Inventory\TurneroController')->names('user.inventory.turnero');
+    Route::resource('atriles', 'App\Http\Controllers\User\Inventory\TurneroController')->names('user.inventory.turnero');
 
+    Route::delete('/delete-atril-file/{id}', [TurneroController::class, 'fileDestroy'])->name('files.destroy');
+
+    Route::post('atril/atrilDropzoneStore', [TurneroController::class, 'AtrilDropzoneStore'])->name('atril.dropzone.store');
+    
     Route::resource('raspberry', 'App\Http\Controllers\User\Inventory\RaspberryController')->names('user.inventory.raspberry');
 
     Route::resource('telefonos-ip', 'App\Http\Controllers\User\Inventory\PhoneIpController')->names('user.inventory.phones');

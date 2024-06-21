@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Helpers\Helper;
+use App\Http\Requests\StoreAtrilRequest;
+use App\Http\Requests\StoreDevice;
+use App\Models\Campu;
 use App\Models\Component;
 use App\Models\Device;
 use App\Models\TypeDevice;
@@ -16,6 +19,7 @@ use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException; //Import exception.
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
@@ -162,191 +166,137 @@ class TurneroController extends Controller
         return view('user.inventory.turnero.create')->with($data);
     }
 
-    public function store(Request $request)
+    public function store(StoreAtrilRequest $request)
     {
         $userId = Auth::id();
 
-        $rules = [
-            //'marca-pc-select2' => 'not_in:0',
-            'marca-pc-select2' => [
-                'required',
-                'numeric',
-                Rule::in([1, 2, 3, 5, 6])
-            ],
-            'modelo-pc' => 'nullable|max:100|regex:/^[0-9a-zA-Z- ()]+$/i',
-            'serial-pc' => 'required|unique:devices,serial_number|max:24|regex:/^[0-9a-zA-Z-]+$/i',
-            'activo-fijo-pc' => 'nullable|max:15|regex:/^[0-9a-zA-Z-]+$/i',
-            'serial-monitor-pc' => 'nullable|max:24|regex:/^[0-9a-zA-Z-]+$/i',
-            'os-pc-select2' => [
-                'required',
-                'numeric',
-                Rule::in([1, 2, 3, 4, 5, 6, 11])
-            ],
-            'val-select2-ram0' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
-            ],
-            'val-select2-ram1' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
-            ],
-            'val-select2-first-storage' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
-            ],
-            'val-select2-second-storage' => [
-                'required',
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31])
-            ],
-            'val-select2-cpu' => [
-                'numeric',
-                //Rule::in([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31])
-            ],
-            'val-select2-status' => [
-                'required',
-                'numeric',
-                Rule::in([1, 2, 3, 5, 6, 7, 8])
-            ],
-            'ip' => 'nullable|ipv4',
-            'mac' => 'nullable|max:17|regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
-            'pc-domain-name' => 'required',
-            'anydesk' => 'nullable|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
-            //'anydesk' => 'sometimes|unique:devices,anydesk|max:24|regex:/^[0-9a-zA-Z- @]+$/i',
-            'pc-name' => 'required|unique:devices,device_name|max:20|regex:/^[0-9a-zA-Z-]+$/i',
-            'val-select2-campus' => 'required|numeric',
-            'location' => 'required|nullable|max:56|regex:/^[0-9a-zA-Z- ]+$/i',
-            'custodian-assignment-date' => 'required_with:custodian-name,filled|max:10|date',
-            'custodian-name' => 'required_with:custodian-assignment-date,filled|max:56|regex:/^[0-9a-zA-Z- .]+$/i',
-            'val-select2-status-assignment' => 'required_with:custodian-name,filled|numeric',
-            'observation' => 'nullable|max:255',
-        ];
+            Device::insert([            
+                'inventory_code_number'     => $this->generatorID,
+                'type_device_id'            => TypeDevice::TURNERO_PC_ID,
+                'brand_id'                  => $request->brand,
+                'model'                     => $request->model,
+                'fixed_asset_number'        => $request->activo_fijo,
+                'serial_number'             => $request->serial,
+                'ip'                        => $request->ip,
+                'mac'                       => $request->mac,
+                'nat'                       => null,
+                'domain_name'               => $request->domain_name,
+                'device_name'               => $request->device_name,
+                'anydesk'                   => $request->anydesk,
+                'campu_id'                  => $request->campu,
+                'location'                  => $request->location,
+                'statu_id'                  => $request->statu,
+                'custodian_assignment_date' => $request->custodian_date,
+                'custodian_name'            => $request->custodian_name,
+                'assignment_statu_id'       => $request->statu_assignment,
+                'observation'               => $request->observation,
+                'rowguid'                   => Uuid::uuid(),
+                'created_at'                => now('America/Bogota'),
+                'is_stock'                  => $request->has('stock'),
+            ]);
+        
+            $lastIdDevice = Device::latest()->pluck('id')->first();
+            Component::insert([            
+                'device_id'         => $lastIdDevice,
+                'os_id'             => $request->os,
+                'slot_one_ram_id'   => $request->ram0,
+                'slot_two_ram_id'   => $request->ram1,
+                'first_storage_id'  => $request->hdd0,
+                'second_storage_id' => $request->hdd1,
+                'processor_id'      => $request->processor,
+                'handset'           => null,
+                'power_adapter'     => null,
+            ]);
 
-        $messages = [
-            //'marca-pc-select2.not_in:0' => 'Esta no es una marca de computador valida',
-            'marca-pc-select2.required' => 'Seleccione una marca de computador',
-            'marca-pc-select2.in' => 'Seleccione una marca de computador valida en la lista',
-            'modelo-pc.regex' => 'Símbolo(s) no permitido en el campo modelo',
-            'serial-pc.required' => 'Campo serial es requerido',
-            'serial-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
-            'serial-pc.unique' => 'Ya existe un equipo registrado con este serial',
-            'activo-fijo-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
-            'activo-fijo-pc.unique' => 'Ya existe un monitor registrado con este número activo fijo',
-            'activo-fijo-pc.max' => 'Solo se permite 24 caracteres para el activo fijo',
-            'serial-monitor-pc.regex' => 'Símbolo(s) no permitido en el campo serial',
-            'serial-monitor-pc.unique' => 'Ya existe un monitor registrado con este serial',
-            'os-pc-select2.required' => 'Seleccione un sistema operativo',
-            'os-pc-select2.in' => 'Seleccione un sistema operativo válido en la lista',
-            'val-select2-ram0.required' => 'Seleccione una memoria ram',
-            'val-select2-ram0.in' => 'Seleccione una memoria ram valida en la lista',
-            'val-select2-ram1.in' => 'Seleccione una memoria ram valida en la lista',
-            'val-select2-first-storage.required' => 'Seleccione un disco duro',
-            'val-select2-first-storage.in' => 'Seleccione un disco duro válido en la lista',
-            'val-select2-second-storage.in' => 'Seleccione un disco duro válido en la lista',
-            'val-select2-cpu.required' => 'Seleccione un procesador',
-            'val-select2-cpu.in' => 'Seleccione un procesador válido en la lista',
-            'val-select2-status.required' => 'Seleccione un estado del equipo',
-            'val-select2-status.in' => 'Seleccione un estado válido en la lista',
-            'ip.required' => 'Es requirida un dirección IP del equipo',
-            'ip.ipv4' => 'Direccion IP no valida',
-            'ip.max' => 'Direccion IP no valida',
-            'ip.unique' => 'Ya existe un equipo con esta IP registrado',
-            'mac.required' => 'Es requirida un dirección MAC del equipo',
-            'mac.regex' => 'Símbolo(s) no permitido en el campo MAC',
-            'mac.max' => 'Direccion MAC no valida',
-            'mac.unique' => 'Ya existe un equipo con esta MAC registrado',
-            'pc-domain-name.required' => 'Seleccionar dominio del equipo',
-            'pc-domain-name.max' => 'Solo se permite 20 caracteres para el nombre de dominio',
-            'pc-domain-name.regex' => 'Símbolo(s) no permitido en el en el dombre de dominio',
-            'anydesk.max' => 'Solo se permite 24 caracteres para el campo anydesk',
-            'anydesk.regex' => 'Símbolo(s) no permitido en el campo anydesk',
-            'anydesk.unique' => 'Ya existe un equipo registrado con este anydesk',
-            'pc-name.required' => 'Es requerido un nombre de equipo',
-            'pc-name.max' => 'Solo se permite 20 caracteres para el campo nombre de equipo',
-            'pc-name.regex' => 'Símbolo(s) no permitido en el campo nombre de equipo',
-            'pc-name.unique' => 'Ya existe un equipo registrado con este nombre',
-            'val-select2-campus.required' => 'Seleccione la sede del equipo',
-            'custodian-assignment-date.required_with' => 'El campo fecha de asignación del custodio es obligatorio cuando el nombre del custodio está presente o llenado',
-            'custodian-assignment-date.date' => 'Este no es un formato de fecha permitido',
-            'custodian-assignment-date.max' => 'Solo esta permitido 10 caracteres para la fecha',
-            'custodian-name.required_with'  => 'El campo nombre del custodio es obligatorio cuando la fecha de asignación del custodio está presente o llenado',
-            'custodian-name.max' => 'Solo esta permitido 56 caracteres para la el nombre del custodio',
-            'custodian-name.regex' => 'Símbolo(s) no permitido en el campo nombre del custodio',
-            'val-select2-status-assignment' => 'El campo concepto es obligatorio cuando el nombre del custodio está presente o llenado',
-            'location.required' => 'Es requirida la ubicación del equipo',
-            'location.max' => 'Solo se permite 56 caracteres para el campo ubicación',
-            'location.regex' => 'Símbolo(s) no permitido en el campo ubicación',
-            'observation.max' => 'Solo se permite 255 caracteres para el campo observación',
-        ];
+            $data = Device::select(
+                'id',
+                'custodian_name',
+                'assignment_statu_id',
+                'custodian_assignment_date',
+                'statu_id',
+                'location',
+                'observation',
+                'created_at'
+                )
+            ->where('id', $lastIdDevice)
+            ->first();
 
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) :
-            return back()->withErrors($validator)
-                ->withInput()
-                ->with(
-                    'message',
-                    'Upsss! Se encontraron campos con errores, por favor revisar'
-                )->with(
-                    'typealert',
-                    'danger'
-                );
-        else :
-            DB::beginTransaction();
-
-            DB::insert(
-                "CALL SP_insertDevice (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", //32
-                [
-                    $this->device->inventory_code_number = $this->generatorID, //32
-                    $this->device->fixed_asset_number = e($request->input('activo-fijo-pc')),
-                    $this->device->type_device_id = TypeDevice::TURNERO_PC_ID, //ID equipo de escritorio
-                    $this->device->brand_id = e($request->input('marca-pc-select2')),
-                    $this->device->model = e(Str::upper($request->input('modelo-pc'))),
-                    $this->device->serial_number = e(Str::upper($request->input('serial-pc'))),
-                    $this->device->ip = e($request->input('ip')),
-                    $this->device->mac = e($request->input('mac')),
-                    $this->device->nat = null,
-                    $this->device->domain_name = e($request->input('pc-domain-name')),
-                    $this->device->device_name = e($request->input('pc-name')),
-                    $this->device->anydesk = e(trim($request->input('anydesk'))),
-                    $this->device->device_image = null,
-                    $this->device->campu_id = e($request->input('val-select2-campus')),
-                    $this->device->location = e($request->input('location')),
-                    $this->statu_id = e($request->input('val-select2-status')),
-                    $this->device->custodian_assignment_date = e($request->input('custodian-assignment-date')),
-                    $this->device->custodian_name = e($request->input('custodian-name')),
-                    $this->device->assignment_statu_id = e($request->input('val-select2-status-assignment')),
-                    $this->device->observation = e($request->input('observation')),
-                    $this->device->rowguid = Uuid::uuid(),
-                    $this->device->created_at = now('America/Bogota')->toDateTimeString(),
-                    $this->device->is_stock = $request->has('stock'),
-
-                    $this->component->monitor_serial_number = e($request->input('serial-monitor-pc')),
-                    $this->component->slot_one_ram_id = e($request->input('val-select2-ram0')),
-                    $this->component->slot_two_ram_id = e($request->input('val-select2-ram1')),
-                    $this->component->first_storage_id = e($request->input('val-select2-first-storage')),
-                    $this->component->second_storage_id = e($request->input('val-select2-second-storage')),
-                    $this->component->processor_id = e($request->input('val-select2-cpu')),
-                    $this->component->os_id = e($request->input('os-pc-select2')),
-                    $this->component->handset = null,
-                    $this->component->power_adapter = null,
-
-                    $userId,
-                ]
+            DB::table('statu_devices')->insert(
+                array(
+                    'device_id'   => $lastIdDevice,
+                    'statu_id'    => $data->statu_id,
+                    'date_log'    => $data->created_at, 
+                )
             );
-            DB::commit();
-            return redirect()->route('user.inventory.turnero.index')
-                ->withErrors($validator)
-                ->with('pc_created', 'Nuevo equipo añadido al inventario! ' . $this->device->inventory_code_number . '');
-        endif;
-        try {
-        } catch (\Throwable $e) {
-            DB::rollback();
-            return back()->with('info_error', '');
-            throw $e;
-        }
+
+            DB::table('device_log')->insert(
+                array(
+                    'user_id'    => $userId,
+                    'device_id'  => $lastIdDevice,
+                    'created_at' => $data->created_at,
+                )
+            );
+
+            DB::table('custodian_log')->insert(
+                array(
+                    'device_id'             => $lastIdDevice,
+                    'custodian_name'        => $data->custodian_name,
+                    'assignment_statu_id'   => $data->assignment_statu_id,
+                    'assignment_date'       => $data->custodian_assignment_date,
+                    'location'              => $data->location,
+                    'observation'           => $data->observation, 
+                )
+            );
+
+            $campus = Campu::join('campu_users as b', 'b.id', 'campus.id')
+            ->join('users as c', 'c.id', 'b.user_id')
+                ->where('b.campu_id', $request->campu)
+                    ->first('campus.name');
+
+            $campuName = Str::lower(Str::slug($campus->name));
+            $serial = Str::lower(Str::slug($request->serial));
+
+            if($request->hasfile('files'))
+            {
+                foreach($request->file('files') as $file)
+                {
+                    $name = 'atril-'.$campuName.'-'.Uuid::uuid(). '.' . $file->getClientOriginalExtension();
+                    // Guardar archivo en el disco público
+                    $path = $file->storeAs('atril_files/'.$campuName.'/'.$serial, $name, 'public');
+
+                    DB::table('files')->insert([
+                        'device_id' => $lastIdDevice,
+                        'file_name' => $name,
+                        'file_path' => $path,
+                        'created_at' => now(),
+                    ]);
+                }
+            }
+
+        return redirect()->route('user.inventory.turnero.index')
+                            ->with('device_created', 'Nuevo equipo añadido al inventario! ' /*. $this->device->inventory_code_number . ''*/);  
+    }
+
+        /**
+     * Image Upload Code
+     *
+     * @return void
+     */
+    public function AtrilDropzoneStore(Request $request)
+    {
+        //$log = $request->campu;
+
+        //error_log(__LINE__ . __METHOD__ . ' respuesta --->' . var_export($log, true));
+
+        //return $log;
+
+
+        $image = $request->file('file');
+   
+        $imageName = Uuid::uuid().'.'.$image->extension();
+        $image->move(storage_path('app/public/images'),$imageName);
+   
+        return response()->json(['success'=>$imageName]);
     }
 
     public function edit($id)
@@ -415,6 +365,8 @@ class TurneroController extends Controller
 
         $domainNames = Device::DOMAIN_NAME;
 
+        $files = DB::table('files')->where('device_id', $device->id)->get();
+
         $data =
             [
                 'statuStock' => $statuStock,
@@ -427,7 +379,8 @@ class TurneroController extends Controller
                 'campus' => $campus,
                 'status' => $status,
                 'domainNames' => $domainNames,
-                'statusAssignments' => $statusAssignments
+                'statusAssignments' => $statusAssignments,
+                'files' => $files,
             ];
 
         return view('user.inventory.turnero.edit')->with($data);
@@ -642,4 +595,25 @@ class TurneroController extends Controller
             'result' => $deviceTemp[0]
         ]);
     }
+
+    public function fileDestroy($id)
+{
+    // Encuentra el archivo por su ID
+    $file = DB::table('files')->where('id', $id)->first();
+
+    error_log(__LINE__ . __METHOD__ . ' file --->' . var_export($file, true));
+
+    // Verifica si el archivo existe
+    if ($file) {
+        // Elimina el archivo del almacenamiento público
+        Storage::disk('public')->delete($file->file_path);
+
+        // Elimina el registro de la base de datos
+        DB::table('files')->where('id', $id)->delete();
+
+        return response()->json(['success' => true, 'message' => 'Archivo eliminado correctamente']);
+    }
+
+    return response()->json(['success' => false, 'message' => 'Archivo no encontrado'], 404);
+}
 }

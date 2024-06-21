@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDevice extends FormRequest
+class StoreAtrilRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -72,8 +72,8 @@ class StoreDevice extends FormRequest
             'custodian_name' => 'required_with:custodian_date,filled|regex:/^[0-9a-zA-Z-ñÑ-óÓ-íÍ ]+$/i',
             'statu_assignment' => 'required_with:custodian_name,filled|numeric',
             'observation' => 'nullable|max:255',
-            //'files' => 'sometimes|required|array|size:2',
-            //'files.*' => 'sometimes|required|image|mimes:jpeg,png,jpg|max:4096',
+            'files' => 'required|array|size:2',
+            'files.*' => 'required|image|mimes:jpeg,png,jpg|max:4096',
         ];
     }
 
@@ -128,11 +128,11 @@ class StoreDevice extends FormRequest
             'location.required' => 'Seccíon 4. UBICACIÓN - Es requerida la ubicación del equipo en sede',
             'location.regex' => 'Seccíon 4. UBICACIÓN - Símbolo(s) no permitido en el campo ubicación',
             'observation.max' => 'Seccíon 4. UBICACIÓN - Solo se permite 255 caracteres para el campo observación',
-            //'files.required' => 'Seccíon 4. UBICACIÓN - Es requerido subir dos fotos del atril para evidencia.',
-            //'files.size' => 'Seccíon 4. UBICACIÓN - Es requerido subir dos fotos como evidencia',
-            //'files.image' => 'Seccíon 4. UBICACIÓN - Solo se aceptan archivos tipo imagenes',
-            //'files.mimes' => 'Seccíon 4. UBICACIÓN - Solo se aceptan archivos tipo imagenes con extensiones jpeg,png,jpg',
-            //'files.max' => 'Seccíon 4. UBICACIÓN - Los archivos cargados no deben ser mayor a 8MB'
+            'files.required' => 'Seccíon 4. UBICACIÓN - Es requerido subir dos fotos del atril para evidencia.',
+            'files.size' => 'Seccíon 4. UBICACIÓN - Es requerido subir solo dos fotos como evidencia',
+            'files.image' => 'Seccíon 4. UBICACIÓN - Solo se aceptan archivos tipo imagenes',
+            'files.mimes' => 'Seccíon 4. UBICACIÓN - Solo se aceptan archivos tipo imagenes con extensiones jpeg,png,jpg',
+            'files.max' => 'Seccíon 4. UBICACIÓN - Los archivos cargados no deben ser mayor a 8MB'
         ];
     }
 }
