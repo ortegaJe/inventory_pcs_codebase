@@ -20,7 +20,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'cc',
         'name',
+        'middle_name',
+        'last_name',
+        'second_last_name',
+        'nick_name',
+        'birthday',
+        'sex',
+        'phone_number',
         'email',
         'password',
     ];
@@ -70,18 +78,13 @@ class User extends Authenticatable
 
     public function scopeWithPrincipalCampu($query)
     {
-        return $query->leftJoin('campu_users', 'users.id', 'campu_users.user_id')
-            ->leftJoin('campus', 'campu_users.campu_id', 'campus.id')
-            //->leftJoin('department_campu as dc', 'dc.campu_id', 'campus.id')
-            //->leftJoin('departments as d', 'd.id', 'dc.department_id')
+        return $query->leftJoin('campu_users', 'campu_users.user_id', 'users.id')
+            ->leftJoin('campus', 'campus.id', 'campu_users.campu_id')
+            ->leftJoin('regional', 'regional.id','campus.regional_id')
             ->where('campu_users.is_principal', 1)
             ->where('users.is_active', 1)
-            ->whereNotIn('users.id', [1])
-            ->orderByDesc('users.created_at')
-            ->paginate(8);
-    }
-
-    public function scopeCampuWithDeparment($query)
-    {
+            //->whereNotIn('users.id', [1])
+            ->orderByDesc('users.created_at');
+            //->get();
     }
 }

@@ -55,6 +55,16 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::resource('tecnicos', 'App\Http\Controllers\Admin\UserController')->names('admin.inventory.technicians');
 
+    Route::get('getUsers', [UserController::class, 'getUsers'])->name('get.users');
+
+    Route::get('users-by-regional/{id?}', [UserController::class, 'userByRegional'])->name('users.regional');
+    
+    Route::get('search-users', [UserController::class, 'autoCompleteUserSearch'])->name('search.users');
+
+    Route::post('fetch-campus', [UserController::class, 'fetchCampusDinamycDD'])->name('fetch.campus');
+    
+    Route::get('users-by-regional/{id?}', [UserController::class, 'userByRegional'])->name('user.regional');
+    
     Route::get('historial-tecnicos', [UserController::class, 'getAllUsers'])->name('technicians.history');
 
     Route::get('historial-cambios/{user_id}', [UserController::class, 'historyUser'])->name('technicians.history_changes');
@@ -72,7 +82,7 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::resource('roles', 'App\Http\Controllers\Admin\RoleController')->names('admin.inventory.roles');
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
-
+    
     Route::get('exports-campu-inventory-computers/{campuId}/{campu}', 'App\Http\Controllers\Admin\CampuController@exportCampu')->name('admin.inventory.export-campu-computers');
 
     Route::get('export-campu-by-regional/{regional?}', [CampuController::class, 'exportCampuByRegional'])->name('export.campu_by_regional');

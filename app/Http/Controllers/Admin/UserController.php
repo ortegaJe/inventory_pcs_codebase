@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserFormRequest;
 use App\Models\Campu;
 use App\Models\CampuUser;
 use App\Models\Computer;
@@ -19,9 +20,14 @@ use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
+    protected $faker;
+    protected $user;
+
     public function __construct()
     {
         $this->middleware('can:admin.inventory.tecnicos.index')->only('index');
@@ -30,23 +36,56 @@ class UserController extends Controller
         $this->user = new User();
         $this->campu_user = new CampuUser();
         $this->profile_user = new ProfileUser();
+        $this->faker = Faker::create();
+    }
+
+    // Método privado para construir la consulta base de usuarios
+    private function baseUserQuery()
+    {
+        return User::select(
+            'users.id',
+            'users.name',
+            'users.last_name',
+            'campus.name as sede',
+            'regional.name as regional',
+            DB::raw("CASE WHEN DATEDIFF(CURDATE(), users.created_at) <= 3 THEN 'Nuevo' ELSE 'Antiguo' END AS new_user")
+        )
+        ->leftJoin('campu_users', 'users.id', 'campu_users.user_id')
+        ->leftJoin('campus', 'campu_users.campu_id', 'campus.id')
+        ->leftJoin('regional', 'campus.regional_id', 'regional.id')
+        ->where('campu_users.is_principal', 1)
+        ->where('users.is_active', 1)
+        ->orderByDesc('users.created_at');
     }
 
     public function index(Request $request)
     {
-        $searchUsers = $request->get('search');
+        $regionals = DB::table('regional')->orderBy('name')->get();
+        $users = $this->baseUserQuery()->count();
+        return view('admin.users.index', compact('regionals','users'));
+    }
 
-        $users = User::select(
-            'users.id',
-            'users.name',
-            'users.last_name',
-            DB::raw("DATEDIFF(NOW(), users.created_at) as days"),
-            DB::raw("CONCAT(CASE WHEN users.created_at BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() THEN 'Nuevo' ELSE 'Antiguo' end) as new_user")
-        )
-            ->searchUser($searchUsers)
-            ->withPrincipalCampu();
+    // Método público para obtener todos los usuarios
+    public function getUsers()
+    {
+        $users = $this->baseUserQuery()->get();
+        return response()->json($users);
+    }
 
-        return view('admin.users.index', compact('users'));
+    // Método público para obtener usuarios por regional
+    public function userByRegional($id)
+    {
+        $users = $this->baseUserQuery()->where('regional.id', $id)->get();
+        return response()->json($users);
+    }
+
+        public function autoCompleteUserSearch(Request $request)
+    {
+        $queryName = $request->get('search');
+
+        $filterResult = User::select(DB::raw("UPPER(CONCAT(name,' ',last_name)) AS name"))->where('name', 'LIKE', '%' . $queryName . '%')->get();
+
+        return response()->json($filterResult);
     }
 
     public function getAllUsers(Request $request)
@@ -114,95 +153,91 @@ class UserController extends Controller
         //return json_encode($users, JSON_PRETTY_PRINT);
     }
 
-    public function autoCompleteSearchUser(Request $request)
-    {
-        $queryName = $request->get('search');
-
-        $filterResult = User::where('name', 'LIKE', '%' . $queryName . '%')->get();
-
-        return response()->json($filterResult);
-    }
-
     public function create()
     {
-        $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'name')->where('is_active', true)->get();
-
-        return view('admin.users.create', compact('profiles', 'campus'));
+        $profiles = DB::table('profiles')->select('name', 'id')->get();
+        return view('admin.users.create', compact('profiles'));
     }
 
-    public function store(Request $request)
+    public function fetchCampusDinamycDD(Request $request)
     {
-        $request->validate([
-            'cc' => 'required|unique:users,cc',
-            'lastname' => 'required',
-            'nickname' => 'required|unique:users,nick_name',
-            'birthday' => 'nullable|date',
-            'campu' => 'required|numeric',
-            'profile' => 'required|numeric',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            //'sign' => 'image'
+        $data['campus'] = DB::table('campus')->where('profile_id', $request->profile_id)->where('is_active', true)->get(['name','id']);
+        return response()->json($data);
+    }
+
+    public function store(UserFormRequest $request)
+    {
+        $name = substr($request->name, 0, 1);
+        $lastName = $request->last_name;
+        $baseNickName = Str::lower($name . $lastName);
+
+        if (User::where('nick_name', $baseNickName)->exists()) {
+            $name = substr($request->name, 0, 2);
+            $lastName = $request->last_name;
+            $nickName = Str::lower($name . $lastName);
+            //return "The record ".$nickName. " does not exist";
+        } else {
+            $nickName = $baseNickName;
+            //return "The record ".$baseNickName." exist";
+        }
+
+        $realPassword = $this->generateRandomPassword();
+
+        $name = Str::lower($request->name);
+        $middleName = Str::lower($request->middle_name);
+        $lastName = Str::lower($request->last_name);
+        $secondLastName = Str::lower($request->second_last_name);
+        $email = Str::lower($request->email);
+
+        try {
+            $user = User::create([
+            'cc' => $request->cc,
+            'name' => $name,
+            'middle_name' => $middleName,
+            'last_name' => $lastName,
+            'second_last_name' => $secondLastName,
+            'nick_name' => $nickName,
+            'birthday' => $request->birthday,
+            'sex' => $request->sex,
+            'phone_number' => $request->phone_number,
+            'email' => $email,
+            'password' => Hash::make($realPassword),
         ]);
 
-        //$file_sign = $request->file('sign')->store('firma_tecnicos');
-        $profile_user = $request->profile;
-        $campu_user =  $request->campu;
-        $is_principal = true;
+        $profile = ProfileUser::create([
+            'user_id' => $user->id,
+            'profile_id' => $request->profile,
+        ]);
 
-        /*         try {
-            $this->user->cc = $request->cc;
-            $this->user->name = $request->firstname;
-            $this->user->middle_name = $request->middlename;
-            $this->user->last_name = $request->lastname;
-            $this->user->second_last_name = $request->second_lastname;
-            $this->user->nick_name = $request->nickname;
-            $this->user->birthday = $request->birthday;
-            $this->user->sex = $request->sex;
-            $this->user->phone_number = $request->phone;
-            $this->user->avatar = null;
-            $this->user->sign = $url;
-            $this->user->email = $request->email;
-            $this->user->password = Hash::make($request['password']);
-            $this->user->created_at = now('America/Bogota');
-            $this->profile->profile_id = $profile_user;
-            $this->campu->campu_id = $campu_user;
-            $this->campu->is_principal = $is_principal;
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error' . $e]);
+        if($request->profile == 2)
+        {
+            $campu = CampuUser::create([
+                'user_id' => $user->id,
+                'campu_id' => $request->campu,
+                'is_principal' => 1
+            ]);
         }
-        return response()->json([
-            'message' => 'Success',
-            'user' => $this->user,
-            'campu' => $this->campu,
-            'profile' => $this->profile
-        ]); */
 
-        DB::insert(
-            "CALL SP_createUsers (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [
-                $this->user->cc = $request->cc,
-                $this->user->name = $request->firstname,
-                $this->user->middle_name = $request->middlename,
-                $this->user->last_name = $request->lastname,
-                $this->user->second_last_name = $request->second_lastname,
-                $this->user->nick_name = $request->nickname,
-                $this->user->birthday = $request->birthday,
-                $this->user->sex = $request->sex,
-                $this->user->phone_number = $request->phone,
-                $this->user->avatar = null,
-                //$this->user->sign = $file_sign,
-                $this->user->email = $request->email,
-                $this->user->password = Hash::make($request['password']),
-                $this->user->created_at = now('America/Bogota'),
-                $this->profile_user->profile_id = $profile_user,
-                $this->campu_user->campu_id = $campu_user,
-                $this->campu_user->is_principal = $is_principal,
-            ]
-        );
-
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error ' . $e->getMessage()]);
+        }
         return redirect()->route('admin.inventory.technicians.index')
-            ->with('user_created', 'Usuario creado con éxito!');
+                            ->with('success',$user->name.' '.$user->last_name.'<br/> Usuario: '.$user->email.' <br/> Contraseña: '.$realPassword);
+/*          return response()->json([
+            'message' => 'Success',
+            'user' => $user,
+            'campu' => $campu,
+            'profile' => $profile,
+        ]); */
+    }
+
+    private function generateRandomPassword()
+    {
+        $upper = $this->faker->regexify('[A-Z]{2}');
+        $lower = $this->faker->regexify('[a-z]{3}');
+        $numbers = $this->faker->regexify('[0-9]{3}');
+        $password = str_shuffle($upper . $lower . $numbers);
+        return $password;
     }
 
     public function show($id)
@@ -235,7 +270,7 @@ class UserController extends Controller
             ->join('campus as c', 'c.id', 'cp.campu_id')
             ->where('u.id', $id)
             ->get();
-        //return ($dataUsers);
+        //return $dataUsers;
 
         $data = [
             'users' => User::findOrFail($id),
@@ -263,12 +298,14 @@ class UserController extends Controller
                 'c.address',
                 'c.phone'
             )
-            ->join('profile_users as up', 'up.id', 'u.id')
+            ->join('profile_users as up', 'up.user_id', 'u.id')
             ->join('profiles as p', 'p.id', 'up.profile_id')
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
             ->where('u.id', $id)
             ->get();
+
+            //return $dataUsers;
 
         $data = [
             'users' => User::findOrFail($id),

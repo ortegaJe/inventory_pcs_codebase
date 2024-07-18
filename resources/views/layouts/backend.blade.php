@@ -157,11 +157,10 @@
                                         <li>
                                             <a class="{{ request()->is('admin/dashboard/inventario') ? 'active' : '' }}"
                                                 href="{{ route('admin.inventory.dash.index') }}">Inventario
-                                                <span class="badge badge-pill bg-gray-darker"><i
-                                                        class="si si-screen-desktop"></i>
+                                                <span class="badge badge-pill bg-gray-darker">
+                                                    <i class="si si-screen-desktop"></i>
                                                     @php
                                                         $globalPcCount = DB::table('devices')
-                                                            ->select('id')
                                                             ->where('is_active', true)
                                                             ->where('deleted_at', null)
                                                             ->whereIn('statu_id', [1, 2, 3, 5, 6, 7, 8])
@@ -179,9 +178,8 @@
                                                 <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
                                                     @php
                                                         $globalUsersCount = DB::table('users as u')
-                                                            ->select('u.id')
                                                             ->join('profile_users as pu', 'pu.user_id', 'u.id')
-                                                            ->where('profile_id', '<>', true)
+                                                            ->where('profile_id', 2)
                                                             ->where('u.is_active', true)
                                                             ->where('u.deleted_at', null)
                                                             ->count();
@@ -214,7 +212,6 @@
                                                 <span class="badge badge-pill bg-gray-darker"><i class="fa fa-building-o"></i>
                                                     @php
                                                         $globalCampusCount = DB::table('campus')
-                                                            ->select('id')
                                                             ->where('is_active', true)
                                                             ->count();
                                                     @endphp
@@ -243,19 +240,16 @@
                             {{ request()->is('tecnico/dashboard/inventario/equipos-eliminados') ? 'open' : '' }}
                             {{ request()->is('tecnico/dashboard/inventario/mini-pc-sat/registrar') ? 'open' : '' }}
                             {{ request()->is('tecnico/dashboard/inventario/tablets/registrar') ? 'open' : '' }}">
-                                            <a class="nav-submenu" data-toggle="nav-submenu" href="#">
-                                                <span class="sidebar-mini-hide">Usuarios</span>
-                                                <span class="badge badge-pill bg-gray-darker"><i class="si si-users"></i>
+                                            <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0)">
+                                                <span class="sidebar-mini-hide">Equipos</span>
+                                                <span class="badge badge-pill bg-gray-darker"><i
+                                                        class="si si-screen-desktop"></i>
                                                     @php
-                                                        $globalUsersCount = DB::table('users as u')
-                                                            ->select('u.id')
-                                                            ->join('profile_users as pu', 'pu.user_id', 'u.id')
-                                                            ->where('profile_id', '<>', true)
-                                                            ->where('u.is_active', true)
-                                                            ->where('u.deleted_at', null)
+                                                        $globalDeviceCount = DB::table('view_all_devices')
+                                                            ->where('TecnicoID', Auth::id())
                                                             ->count();
                                                     @endphp
-                                                    {{ $globalUsersCount ?? '0' }}
+                                                    {{ $globalDeviceCount ?? '0' }}
                                                 </span>
                                             </a>
                                             <ul>
@@ -316,19 +310,16 @@
                                 @can('get.stock')
                                     <ul>
                                         <li>
-                                            <a class="{{ request()->is('admin/dashboard/inventario') ? 'active' : '' }}"
-                                                href="{{ route('admin.inventory.dash.index') }}">Inventario
-                                                <span class="badge badge-pill bg-gray-darker"><i
-                                                        class="si si-screen-desktop"></i>
+                                            <a class="{{ request()->is('dashboard/inventario/stock') ? 'active' : '' }}"
+                                                href="{{ route('get.stock') }}">Stock
+                                                <span class="badge badge-pill bg-gray-darker"><i class="fa fa-cubes"></i>
                                                     @php
-                                                        $globalPcCount = DB::table('devices')
-                                                            ->select('id')
-                                                            ->where('is_active', true)
-                                                            ->where('deleted_at', null)
-                                                            ->whereIn('statu_id', [1, 2, 3, 5, 6, 7, 8])
+                                                        $globalDeviceCount = DB::table('view_all_devices')
+                                                            ->where('TecnicoID', Auth::id())
+                                                            ->where('EstadoPc', 'stock')
                                                             ->count();
                                                     @endphp
-                                                    {{ $globalPcCount ?? '0' }}
+                                                    {{ $globalDeviceCount ?? '0' }}
                                                 </span>
                                             </a>
                                         </li>
@@ -484,7 +475,7 @@
                                     <i class="si si-user mr-5"></i> Perfil
                                 </a>
                                 <!--<div class="dropdown-divider"></div>
-                                                       END Side Overlay -->
+                                                                       END Side Overlay -->
 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" id="logout-link">
