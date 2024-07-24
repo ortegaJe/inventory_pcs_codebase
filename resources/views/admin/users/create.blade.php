@@ -157,11 +157,11 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between w-100">
-                        <button type="submit" class="btn btn btn-alt-success min-width-125 mt-4 mb-4"
+                        <button type="submit" class="btn btn-hero btn-alt-success min-width-125 mt-4 mb-4"
                             data-toggle="click-ripple">
                             <i class="fa fa-save"></i> Guardar
                         </button>
-                        <button type="button" class="btn btn btn-alt-secondary min-width-125 mt-4 mb-4"
+                        <button type="button" class="btn btn-hero btn-alt-secondary min-width-125 mt-4 mb-4"
                             data-toggle="click-ripple"
                             onclick="window.location='{{ route('admin.inventory.technicians.index') }}'">
                             Cancelar

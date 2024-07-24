@@ -20,7 +20,7 @@
               <div class="col-12">
                 <div class="form-material">
                   <select class="js-select2 form-control" id="val-select2-change-profile"
-                    name="val-select2-change-profile" style="width: 100%;" data-placeholder="Seleccionar cargo.."
+                    name="val-select2-change-profile" style="width: 100%;" data-placeholder="Seleccionar perfil.."
                     required>
                     <option></option>
                     <!--  for data-placeholder attribute to work with Select2 plugin -->
@@ -29,10 +29,10 @@
                       {{ Str::upper($profile->name) }}
                     </option>
                     @empty
-                    <option>NO EXISTEN CARGOS REGISTRADOS</option>
+                    <option>NO EXISTEN PERFILES REGISTRADOS</option>
                     @endforelse
                   </select>
-                  <label for="val-select2-change-profile">Cargos de trabajo</label>
+                  <label for="val-select2-change-profile">Perfil</label>
                 </div>
                 @if($errors->has('val-select2-change-profile'))
                 <small class="text-danger is-invalid">{{ $errors->first('val-select2-change-profile') }}</small>

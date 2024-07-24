@@ -13,15 +13,18 @@ $(document).ready(function() {
                 text: "No se podra revertir esto!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-alt-danger m-1",
+                    cancelButton: "btn btn-alt-secondary m-1"
+                },
                 confirmButtonText: "Si, borrar!",
                 cancelButtonText: "No, cancelar"
             }).then(result => {
-                if (result.isConfirmed) {
+                if (result.value) {
                     event.preventDefault();
                     let id = $(this).attr("data-id");
-                    //console.log(id);
+                    console.log(id);
                     $.ajax({
                         url: root_url_user_store + "/" + id,
                         type: "DELETE",

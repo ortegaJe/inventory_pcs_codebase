@@ -135,7 +135,7 @@ Route::prefix('tecnico/dashboard/inventario')->group(function () {
     
     Route::put('cargar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@uploadUserSign')->name('upload.sign.user');
 
-    //Route::put('actualizar-firma-tecnico/{id}', 'App\Http\Controllers\Admin\UserController@updateUserSign')->name('update.sign.user');
+    Route::post('dropzoneUploadSignature', [UserController::class, 'dropzoneUploadSignature'])->name('dropzone.upload.signature');
 
     Route::get('equipos-eliminados', [GarbageController::class, 'getDevicesList'])->name('get.devices.list');
 

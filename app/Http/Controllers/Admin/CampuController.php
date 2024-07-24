@@ -264,6 +264,7 @@ class CampuController extends Controller
             ->join('profiles AS P', 'P.id', 'PU.profile_id')
             ->where('CU.campu_id', $id)
             ->where('U.is_active', 1)
+            ->where('CU.is_active', 1)
             ->get();
 
         //return $campuAssigned;

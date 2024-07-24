@@ -21,6 +21,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Faker\Factory as Faker;
+use Faker\Provider\Uuid;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -55,7 +56,7 @@ class UserController extends Controller
         ->leftJoin('regional', 'campus.regional_id', 'regional.id')
         ->where('campu_users.is_principal', 1)
         ->where('users.is_active', 1)
-        ->orderByDesc('users.created_at');
+        ->orderBy('users.last_name');
     }
 
     public function index(Request $request)
@@ -242,15 +243,23 @@ class UserController extends Controller
 
     public function show($id)
     {
+        $user = User::find($id);
+
         $roles = Role::all();
         $profiles = DB::table('profiles')->select('id', 'name')->get();
-        $campus = DB::table('campus')->select('id', 'name')->where('is_active', true)->get();
+        $campus = DB::table('campus as a')
+                        ->leftJoin('campu_users as b', 'b.campu_id', 'a.id')
+                        ->select('a.id', 'a.name')
+                        ->where('b.user_id', $user->id)
+                        ->where('a.is_active', true)
+                        ->where('b.is_active', true)
+                        ->get();
 
         $principalCampuUser = DB::table('campus as c')
             ->join('campu_users as cp', 'cp.campu_id', 'c.id')
             ->join('users as u', 'u.id', 'cp.user_id')
             ->where('cp.is_principal', 1)
-            ->where('u.id', $id)
+            ->where('u.id', $user->id)
             ->select('c.id as SedeID',)
             ->first();
         //return $principalCampuUser;
@@ -262,21 +271,27 @@ class UserController extends Controller
                 'p.name as CargoTecnico',
                 'c.name as SedeTecnico',
                 'cp.is_principal as SedePrincipal',
-                'u.sign'
+                'u.sign',
+                'cp.is_active'
             )
             ->join('profile_users as pu', 'pu.user_id', 'u.id')
             ->join('profiles as p', 'p.id', 'pu.profile_id')
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
-            ->where('u.id', $id)
+            ->where('u.id', $user->id)
+            ->where('cp.is_active', true)
             ->get();
         //return $dataUsers;
 
+        $rolesCollection = $user->roles->pluck('name');
+        //return $rolesCollection;
+
         $data = [
-            'users' => User::findOrFail($id),
+            'users' => User::findOrFail($user->id),
             'dataUsers' => $dataUsers,
             'profiles' => $profiles,
             'roles' => $roles,
+            'rolesCollection' => $rolesCollection,
             'campus' => $campus,
             'principalCampuUser' => $principalCampuUser,
         ];
@@ -286,6 +301,7 @@ class UserController extends Controller
 
     public function showProfileUser($id)
     {
+        $users = User::findOrFail($id);
 
         $dataUsers = DB::table('users as u')
             ->select(
@@ -302,19 +318,32 @@ class UserController extends Controller
             ->join('profiles as p', 'p.id', 'up.profile_id')
             ->join('campu_users as cp', 'cp.user_id', 'u.id')
             ->join('campus as c', 'c.id', 'cp.campu_id')
-            ->where('u.id', $id)
+            ->where('u.id', $users->id)
             ->get();
 
             //return $dataUsers;
 
         $data = [
-            'users' => User::findOrFail($id),
+            'users' => $users,
             'dataUsers' => $dataUsers,
         ];
 
         //dd($data);
 
         return view('user.profiles.show')->with($data);
+    }
+
+    public function dropzoneUploadSignature(Request $request)
+    {
+        $user = Auth::user();
+        //$image = $request->file('file');
+        //$imageName = Uuid::uuid().'.'.$image->extension();
+        $image = $request->file('file')->store('firma_tecnicos/' .$user->nick_name);
+
+        $update = array('sign' => $image);
+        User::where('id', $user->id)->update($update);
+   
+        return response()->json(['success'=> $image]);
     }
 
     public function update(Request $request, $id)
@@ -360,7 +389,7 @@ class UserController extends Controller
         }
     }
 
-    public function uploadUserSign(Request $request, $id)
+/*     public function uploadUserSign(Request $request, $id)
     {
         $user_id = User::findOrFail($id);
 
@@ -382,7 +411,7 @@ class UserController extends Controller
         }
 
         return back()->with('success_upload_sign', '');
-    }
+    } */
 
     public function updatePassword(Request $request, $id)
     {
@@ -431,7 +460,7 @@ class UserController extends Controller
 
         $foundCampuId = DB::table('campu_users')
             ->select('campu_id', 'is_principal')
-            ->where('campu_id', '=', $campuId)
+            ->where('campu_id', $campuId)
             ->first();
 
         if ($foundCampuId === null) {
@@ -458,11 +487,11 @@ class UserController extends Controller
         $profileId = $request->get('val-select2-change-profile');
 
         $update = array('profile_id' => $profileId);
-        $updatedProfile = DB::table('profile_users')->where('user_id', $id)->update($update);
+        DB::table('profile_users')->where('user_id', $id)->update($update);
 
-        //$profileUsersTemp[] = DB::table('user_profiles')->where('user_id', $id)->get();
-
-        //return response()->json($profileUsersTemp);
+        $ts = now('America/Bogota')->toDateTimeString();
+        $inactiveCampus = array('updated_at' => $ts,'is_active' => false);
+        DB::table('campu_users')->where('user_id', $id)->update($inactiveCampus);
 
         return back()->with('updated_profile_success', '');
     }
@@ -490,21 +519,32 @@ class UserController extends Controller
 
             $userTemp[] = DB::table('users')->where('id', $id)->get();
 
-            $softDeletePc = array(
+            $softDelete = array(
                 'password' => $passwordDisabled,
                 'updated_at' => $ts,
                 'deleted_at' => $ts,
                 'is_active' => false
             );
-            $users = DB::table('users')->where('id', $id)->update($softDeletePc);
+            
+            DB::table('users')->where('id', $id)->update($softDelete);
 
-            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($users, true));
+            $inactiveCampus = array(
+                'updated_at' => $ts,
+                'is_active' => false
+            );
+            
+            DB::table('campu_users')->where('user_id', $id)->update($inactiveCampus);
+
+            //error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($users, true));
         } catch (ModelNotFoundException $e) {
             // Handle the error.
+            return response()->json([
+                'message' => $e,
+            ]);
         }
 
         return response()->json([
-            'message' => 'Usuario removido exitosamente!',
+            'message' => 'Usuario retirado exitosamente!',
             'result' => $userTemp[0]
         ]);
     }
