@@ -300,21 +300,22 @@ class CampuController extends Controller
 
     public function UserCardManager()
     {
+        $userCardData = [];
 
         $getIdUserByCampus = DB::table('campu_users')
             ->select('user_id')
             ->where('campu_id', 1)
             ->first();
 
-        $campuAssignedCount = DB::table('campu_users')
+        $campuCount = DB::table('campu_users')
             ->select(DB::raw("campu_id,user_id,COUNT(user_id) AS NumberCampus"))
             ->where('campu_id', 1)
             ->orWhere('user_id', ($getIdUserByCampus) ? $getIdUserByCampus->user_id : 0)
             ->count();
 
-        //dd($campuAssignedCount);
+            $userCardData['campuCount'] = $campuCount;
 
-        $campuAssigned = DB::table('campus AS C')
+        $campuUser = DB::table('campus AS C')
             ->select(
                 'C.id AS SedeID',
                 'U.id AS UserID',
@@ -333,7 +334,9 @@ class CampuController extends Controller
             ->where('CU.is_active', 1)
             ->get();
 
-            return response()->json($campuAssigned);
+                $userCardData['campuUser'] = $campuUser;
+
+            return response()->json($userCardData);
 
     }
 

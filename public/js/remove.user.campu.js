@@ -1,17 +1,9 @@
 class UserCardManager 
 {
-    static createUserCard(campu) {
+    static createUserCard(campu, campuCount) {
         // Crear los elementos HTML para el usuario
-        const blockDiv = document.createElement('div');
-        blockDiv.classList.add('block');
-
-        const blockContentDiv = document.createElement('div');
-        blockContentDiv.classList.add('block-content', 'block-content-full');
-        blockDiv.appendChild(blockContentDiv);
-
         const py20Div = document.createElement('div');
         py20Div.classList.add('py-20', 'text-center');
-        blockContentDiv.appendChild(py20Div);
 
         const mb20Div = document.createElement('div');
         mb20Div.classList.add('mb-20');
@@ -28,7 +20,7 @@ class UserCardManager
 
         const detailsDiv = document.createElement('div');
         detailsDiv.classList.add('text-muted');
-        detailsDiv.innerHTML = `${campu.CargoTecnico.toUpperCase()} | <span class="badge badge-pill badge-primary"><i class="fa fa-building-o"></i> ${campu.campuAssignedCount} Sedes</span>`;
+        detailsDiv.innerHTML = `${campu.CargoTecnico.toUpperCase()} | <span class="badge badge-pill badge-primary"><i class="fa fa-building-o"></i> ${campuCount} Sedes</span>`;
         py20Div.appendChild(detailsDiv);
 
         const btnContainer = document.createElement('div');
@@ -49,7 +41,7 @@ class UserCardManager
         viewProfileBtn.innerHTML = '<i class="fa fa-eye mr-5"></i> Ver Perfil';
         btnContainer.appendChild(viewProfileBtn);
 
-        return blockDiv;
+        return py20Div;
     }
 
     static createNoAssignedCard() {
@@ -111,9 +103,9 @@ class UserCardManager
 
         container.innerHTML = ''; // Limpiar el contenedor
 
-        userData.forEach(campu => {
+        userData.campuUser.forEach(campu => {
             if (campu.hasOwnProperty('NombreCompletoTecnico')) {
-                const userCard = this.createUserCard(campu);
+                const userCard = this.createUserCard(campu, userData.campuCount);
                 container.appendChild(userCard);
             } else {
                 const noAssignedCard = this.createNoAssignedCard();

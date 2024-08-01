@@ -49,7 +49,11 @@
     </div>
     <div class="row invisible" data-toggle="appear">
         <!-- Row #1 -->
-        <div class="col-md-4" id="user-card">
+        <div class="col-md-4">
+            <div class="block">
+                <div class="block-content block-content-full" id="user-card" name="{{ $campuAssigned->UserID }}">
+                </div>
+            </div>
         </div>
         <!-- END Row #1 -->
         <div class="col-md-4">
