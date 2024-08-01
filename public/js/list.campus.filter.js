@@ -1,35 +1,22 @@
-/*
- *  Document   : be_ui_icons.js
- *  Author     : pixelcave
- *  Description: Custom JS code used in Icons Page
- */
+class BeUICampus {
 
-class BeUIIcons {
-    /*
-     * Icon Search functionality
-     *
-     */
-    static iconSearch() {
+    static titleSearch() {
         let searchItems = jQuery(".js-icon-list");
-        let searchItems_ = jQuery(".js-icon-list > div");
-        let searchValue = "",
-            el;
+        let searchValue = "";
 
         // Disable form submission
         jQuery(".js-form-icon-search").on("submit", () => false);
 
         // When user types
         jQuery(".js-icon-search").on("keyup", e => {
-            searchValue = jQuery(e.currentTarget)
-                .val()
-                .toLowerCase();
+            searchValue = jQuery(e.currentTarget).val().toLowerCase();
 
             if (searchValue.length > 2) {
                 // If more than 2 characters, search the icons
                 searchItems.hide();
 
                 jQuery("code", searchItems).each((index, element) => {
-                    el = jQuery(element);
+                    let el = jQuery(element);
 
                     if (el.text().match(searchValue)) {
                         el.parent("div").fadeIn(250);
@@ -42,158 +29,204 @@ class BeUIIcons {
         });
     }
 
-    static filterByRegional() {
-        let getAllCampu = url_all_campus;
-        let urlGetAllCampu = getAllCampu.replace(/\\/g, "/");
-        let getRegionalUrl = campu_by_regional;
-        let urlRegional = getRegionalUrl.replace(/\\/g, "/");
-        let getShowCampus = index_campus;
+    static async getCampus(url) {
+        try {
+            let response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            return await response.json();
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: `Error al cargar los datos de las sedes: ${error.message}`,
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return []; // Retorna un array vacío en caso de error
+        }
+    }
+
+    static async fetchUCampusByRegional(url) {
+        try {
+            let response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            return await response.json();
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: `Error al obtener los datos de las regionales de sedes: ${error.message}`,
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return []; // Retorna un array vacío en caso de error
+        }
+    }
+
+    static async displayCampus(data) {
+        const userList = document.getElementById("campuList");
+        userList.innerHTML = "";
+
+        data.forEach(campu => {
+            //console.log(campu);
+
+            const element = document.createElement("div");
+            element.classList.add("col-md-6", "col-xl-4", "campus");
+
+            const a = document.createElement("a");
+            a.classList.add("block", "block-bordered", "block-rounded", "block-link-pop", "text-center");
+            a.href = `/admin/dashboard/inventario/sedes/${campu.campu_id}`;
+            element.appendChild(a);
+
+            const div01 = document.createElement("div");
+            div01.classList.add("block-content", "text-center");
+            a.appendChild(div01);
+
+            const div02 = document.createElement("div");
+            div02.classList.add(
+                "item",
+                "item-circle",
+                "bg-primary-lighter",
+                "text-primary",
+                "mx-auto",
+                "my-10"
+            );
+            div01.appendChild(div02);
+
+            const i = document.createElement("i");
+            i.classList.add("fa", "fa-building-o");
+            div02.appendChild(i);
+
+            const div03 = document.createElement("div");
+            div03.classList.add("block-content", "bg-body-light");
+            a.appendChild(div03);
+
+            const p = document.createElement("p");
+            p.classList.add("font-w600", "font-size-xs");
+            p.textContent = campu.campu_name;
+            div03.appendChild(p);
+
+            if (campu.new_campu === "Nuevo") {
+                const span = document.createElement("span");
+                span.classList.add(
+                    "badge",
+                    "badge-pill",
+                    "badge-primary",
+                    "ml-2"
+                );
+                span.textContent = campu.new_campu;
+                p.appendChild(span);
+            }
+
+            userList.appendChild(element);
+        });
+
+        // Actualizar la lista de búsqueda después de mostrar las sedes
+        BeUICampus.searchItems = document.querySelectorAll(".campus");
+        // Actualizar el contador de usuarios
+        BeUICampus.updateUserCount(data.length);
+    }
+
+    static updateUserCount(count) {
+        const campuCountBadge = document.getElementById("campuCount");
+            campuCountBadge.textContent = count;
+    }
+
+    static async updateUsers() {
+        const regionalSelect = document.getElementById("regionalSelect");
+        const selectedRegional = regionalSelect.value;
+        let url = selectedRegional === "0" 
+            ? '/admin/dashboard/inventario/getCampus'
+            : `/admin/dashboard/inventario/campus-by-regional/${selectedRegional}`;
+
+        let data = await BeUICampus.fetchUCampusByRegional(url);
+        await BeUICampus.displayCampus(data);
+        document.querySelector(".js-icon-search").value = "";
+
+        if (selectedRegional === "0") {
+            document.getElementById("campuCount").style.display = "none";
+        } else {
+            const id = document.getElementById("campuCount");
+            
+            const i = document.createElement("i");
+            i.classList.add("fa", "fa-building-o", "ml-2");
+
+            id.appendChild(i);
+            id.style.display = "inline-block";
+        }
+    }
+
+    static async filterByRegional() {
+        let urlAllCampu = '/admin/dashboard/inventario/getCampus';
+        let urlRegional = '/users-by-regional/'; // Suponiendo esta ruta para regionales
 
         // Cargar sedes al cargar la página
-        fetch(urlGetAllCampu)
-        .then(response => response.json())
-        .then(data => {
+        let data = await BeUICampus.getCampus(urlAllCampu);
+        await BeUICampus.displayCampus(data);
 
-            // Función para cargar y mostrar las sedes
-            function displaySedes(data) {
-                sedeList.innerHTML = "";
+        // Evento al cambiar la regional
+        const regionalSelect = document.getElementById("regionalSelect");
+        regionalSelect.addEventListener("change", BeUICampus.updateUsers);
 
-                data.forEach(sede => {
-                    const sedeElement = document.createElement("div");
-                    sedeElement.classList.add("col-md-6", "col-xl-4", "sedes");
+        // Disable form submission
+        jQuery(".js-form-icon-search").on("submit", () => false);
 
-                    const a = document.createElement("a");
-                    a.classList.add("block", "block-bordered", "block-rounded", "block-link-pop", "text-center");
-                    a.href = `${getShowCampus}/${sede.campu_id}`;
-                    sedeElement.appendChild(a);
+        // Cuando el usuario escribe en el campo de búsqueda
+        // Evento al buscar sedes
+        jQuery(".js-icon-search").on("keyup", function (e) {
+            const searchValue = jQuery(e.currentTarget).val().toLowerCase();
+            const searchItems = document.querySelectorAll(".campus");
 
-                    const div01 = document.createElement("div");
-                    div01.classList.add("block-content", "text-center");
-                    a.appendChild(div01);
-
-                    const div02 = document.createElement("div");
-                    div02.classList.add(
-                        "item",
-                        "item-circle",
-                        "bg-primary-lighter",
-                        "text-primary",
-                        "mx-auto",
-                        "my-10"
-                    );
-                    div01.appendChild(div02);
-
-                    const i = document.createElement("i");
-                    i.classList.add("fa", "fa-building-o");
-                    div02.appendChild(i);
-
-                    const div03 = document.createElement("div");
-                    div03.classList.add("block-content", "bg-body-light");
-                    a.appendChild(div03);
-
-                    const p = document.createElement("p");
-                    p.classList.add("font-w600", "font-size-xs");
-                    p.textContent = sede.campu_name;
-                    div03.appendChild(p);
-
-                    if (sede.new_campu === "Nuevo") {
-                        const span = document.createElement("span");
-                        span.classList.add(
-                            "badge",
-                            "badge-pill",
-                            "badge-primary",
-                            "ml-2"
-                        );
-                        span.textContent = sede.new_campu;
-                        p.appendChild(span);
-                    }
-
-                    sedeList.appendChild(sedeElement);
+            if (searchValue.length > 2) {
+                // Si hay más de 2 caracteres, buscar las sedes por nombre
+                searchItems.forEach(item => {
+                    const sedeName = item.querySelector(".font-w600").textContent.toLowerCase();
+                    item.style.display = sedeName.includes(searchValue) ? "block" : "none";
                 });
-
-                // Actualizar la lista de búsqueda después de mostrar las sedes
-                searchItems = document.querySelectorAll(".sedes");
-            }
-
-            // Actualizar sedes cuando se selecciona una regional o se realiza una búsqueda
-            function updateSedes() {
-                const selectedRegional = regionalSelect.value;
-                let url = selectedRegional === "0" ? urlGetAllCampu : `${urlRegional}/${selectedRegional}`;
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        displaySedes(data);
-                        document.querySelector(".js-icon-search").value = "";
-                    })
-                    .catch(error => {
-                        console.error("Error al obtener los datos de las sedes: " + error);
-                    });
-            }
-
-            // Evento al cambiar la regional
-            regionalSelect.addEventListener("change", updateSedes);
-    
-            // Disable form submission
-            jQuery(".js-form-icon-search").on("submit", () => false);
-    
-            // Cuando el usuario escribe en el campo de búsqueda
-            // Evento al buscar sedes
-            jQuery(".js-icon-search").on("keyup", function (e) {
-                const searchValue = jQuery(e.currentTarget).val().toLowerCase();
-
-                if (searchValue.length > 2) {
-                    // Si hay más de 2 caracteres, buscar las sedes por nombre
-                    searchItems.forEach(item => {
-                        const sedeName = item.querySelector(".font-w600").textContent.toLowerCase();
-                        item.style.display = sedeName.includes(searchValue) ? "block" : "none";
-                    });
-                } else {
-                    // Si no hay suficientes caracteres, mostrar todas las sedes
-                    searchItems.forEach(item => {
-                        item.style.display = "block";
-                    });
-                }
-            });
-    
-            // Cargar sedes al cargar la página
-            const sedeList = document.getElementById("sedeList");
-            let searchItems = document.querySelectorAll(".sedes");
-
-            fetch(urlGetAllCampu)
-                .then(response => response.json())
-                .then(data => {
-                    displaySedes(data);
-                })
-                .catch(error => {
-                    console.error("Error al cargar las sedes: " + error);
+            } else {
+                // Si no hay suficientes caracteres, mostrar todas las sedes
+                searchItems.forEach(item => {
+                    item.style.display = "block";
                 });
-        })
-        .catch(error => {
-            console.error("Error al cargar las sedes: " + error);
+            }
         });
     }
 
-    static downloadCampuByRegional() {
-
-        // Función para obtener las opciones del select
-        function getRegionalOptions() {
-            return {
-                //id hardcoreados desde la base de datos cambiar que consulte en la db
-                0: "Todas",
-                4: "Antioquia",
-                5: "Costa",
-                1: "Bogotá",
-                6: "Manizales",
-                2: "Tolima",
-                3: "Valle del Cauca"
-            };
+    // Función para obtener las opciones de las regionales
+    static async getRegionalOptions() {
+        try {
+            const response = await fetch("/admin/dashboard/inventario/getRegionals");
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: `Error al cargar los datos de las regionales: ${error.message}`,
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+            return ""; // Retorna un string vacío en caso de error
         }
+    }
 
-        // Función para mostrar el modal de descarga
-        function showDownloadModal() {
-            return Swal.fire({
-                title: "Descargar sede por regionales Excel",
-                input: "select",
+    // Función para mostrar el SweetAlert para regionales
+    static async showRegionalSweetAlert() {
+        try {
+            const { regionals }  = await BeUICampus.getRegionalOptions();
+            //console.log(regionals);
+
+            const regionalOptions = regionals.map(region => `<option value="${region.id}">${region.name}</option>`).join("");
+
+            const html = `<select class="swal2-select" id="regionalList">${regionalOptions}</select>`;
+
+            const { value: selection } = await Swal.fire({
+                title: "Selecciona Regional",
+                html: html,
                 showCancelButton: true,
                 buttonsStyling: false,
                 customClass: {
@@ -202,104 +235,163 @@ class BeUIIcons {
                 },
                 confirmButtonText: "Descargar",
                 cancelButtonText: "Cancelar",
-                inputPlaceholder: "Seleccione regional",
-                inputOptions: getRegionalOptions(),
-                html: false,
-                inputValidator: () => {
-                    return new Promise((resolve) => {
-                        const index = document.querySelector('.swal2-select').selectedIndex;
-                        //console.log(index);
-
-                      if (index === 0) {
-                        resolve("Seleccione una opción válida :)");
-                      } else {
-                        resolve();
-                      }
-                    });
-                },
-                preConfirm: (selectedValue) => {
-                    return new Promise(resolve => {
-                        // Muestra el modal de carga
-                        Swal.fire({
-                            title: "Descargando...",
-                            text: "Por favor, espera mientras se descarga el archivo.",
-                            icon: "warning",
-                            allowOutsideClick: false,
-                            onBeforeOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-                        setTimeout(() => {
-                            resolve(selectedValue);
-                        }, 2000);
-                    });
+                preConfirm: () => {
+                    const regionalElement = document.getElementById("regionalList");
+                    const regional = regionalElement.value;
+                    const regionalName = regionalElement.options[regionalElement.selectedIndex].text;
+                    //console.log('data:', regionalElement, regional, regionalName);
+                    return { regionalName, regional };
                 }
-            })
-        }
-
-        // Función para descargar el archivo usando fetch
-        function downloadFile(selectedValue) {
-            let exportCampuByRegional    = export_campus_by_regional;
-            let exportAllCampuByRegional = export_all_campus_by_regional;
-            let url = selectedValue.value !== "0" ? `${exportCampuByRegional}/${selectedValue.value}` : exportAllCampuByRegional;
-
-            return fetch(url, {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Puedes agregar otras cabeceras si es necesario
-                },
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.blob();
-            })
-            .then(blob => {
-                let link = document.createElement('a');
-                const getRegionName = `${getRegionalOptions()[selectedValue.value]}`;
-                const regionName = getRegionName.toLowerCase();
-                link.href = window.URL.createObjectURL(blob);
-                link.download = `export_regional_${regionName}.xlsx`;
-                link.click();
-                // Cierra el modal de carga
-                Swal.close();
-            })
-            .catch(error => {
-                console.error('Error al descargar el archivo:', error);
-                // Cierra el modal de carga en caso de error
-                Swal.close();
-                // Muestra el modal de error
-                Swal.fire(
-                    "Error!",
-                    `Ocurrió un error en la descarga.</br>${error}`,
-                    "warning"
-                );
             });
-        }
 
-        // Init an example confirm alert on button click
-        jQuery(".downloadCampuByRegion").on("click", () => {
-            showDownloadModal()
-                .then(selectedValue => {
-                    if (selectedValue.value !== undefined) {
-                        //console.log(selectedValue);
-                        // Muestra el modal de éxito
-                        Swal.fire(
-                            "Descargado con éxito!",
-                            "El archivo Excel se descargó correctamente.",
-                            "success"
-                        );
-                        return downloadFile(selectedValue);
-                    } else {
-                        // Cierra el modal de carga si se cancela
-                        Swal.close();
-                        // También puedes manejar la cancelación aquí si es necesario
+            if (selection) {
+                // Muestra el SweetAlert de carga
+                Swal.fire({
+                    title: "Descargando...",
+                    text: "Por favor, espera mientras se descarga el archivo.",
+                    icon: "warning",
+                    allowOutsideClick: false,
+                    showCancelButton: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
                     }
                 });
-        });
 
+                if (selection.regional === "0") {
+                    BeUICampus.downloadAllCampu();
+                } else {
+                    BeUICampus.downloadByRegional(selection.regionalName, selection.regional);
+                }
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            // Manejar el error si es necesario
+        }
+    }
+
+    static async downloadByRegional(regionalName, regional) {
+        
+        try {
+            const response = await fetch("/admin/dashboard/inventario/exportCampuByRegional", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                body: JSON.stringify({ regional })
+            });
+
+            if (response.status === 404) {
+                throw new Error("No se encontró información para esta regional");
+            }
+
+            if (response.status === 500) {
+                throw new Error("Error al procesar la solicitud");
+            }
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Error en la solicitud AJAX");
+            }
+
+            // Cierra el SweetAlert de carga
+            Swal.close();
+
+            // Muestra el SweetAlert de éxito
+            Swal.fire({
+                title: "Descargado con éxito!",
+                text: "El archivo Excel se descargó correctamente.",
+                icon: "success",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-alt-success m-1"
+                }
+            });
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+
+            const d = new Date();
+            const date = d.getDate() + '' + (d.getMonth() + 1) + '' + d.getFullYear();
+
+            const underscore = regionalName.replaceAll(' ', '_');
+            const regionalNameFormatted = underscore.toLowerCase();
+
+            const fileName = `export_sedes_regionales_${regionalNameFormatted}_${date}`;
+            link.download = `${fileName}.xlsx`;
+            link.click();
+
+        } catch (error) {
+            console.error("Error:", error);
+            // Cierra el SweetAlert de carga
+            Swal.close();
+            Swal.fire("Aviso", error.message, "error");
+        }
+    }
+
+    static async downloadAllCampu() {
+        try {
+            const response = await fetch(`/admin/dashboard/inventario/exportAllCampuByRegional`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                }
+            });
+
+            if (response.status === 404) {
+                throw new Error("No se encontró información de todas las regionales");
+            }
+
+            if (response.status === 500) {
+                throw new Error("Error al procesar la solicitud");
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Error en la solicitud AJAX");
+            }
+
+            // Cierra el SweetAlert de carga
+            Swal.close();
+
+            // Muestra el SweetAlert de éxito
+            Swal.fire({
+                title: "Descargado con éxito!",
+                text: "El archivo Excel se descargó correctamente.",
+                icon: "success",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-alt-success m-1"
+                }
+            });
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+
+            const d = new Date();
+            const date = d.getDate() + '' + (d.getMonth() + 1) + '' + d.getFullYear();
+
+            const fileName = `export_all_campus_regional_${date}`;
+            link.download = `${fileName}.xlsx`;
+            link.click();
+
+        } catch (error) {
+            console.error("Error:", error);
+            // Cierra el SweetAlert de carga
+            Swal.close();
+            Swal.fire("Aviso", error.message, "error");
+        }
+    }
+
+    // Función para inicializar la descarga por regional
+    static  downloadCampuByRegional() {
+        jQuery(".downloadCampuByRegion").on("click", BeUICampus.showRegionalSweetAlert);
     }
 
     /*
@@ -307,7 +399,6 @@ class BeUIIcons {
      *
      */
     static init() {
-        //this.iconSearch();
         this.downloadCampuByRegional();
         this.filterByRegional();
     }
@@ -315,5 +406,5 @@ class BeUIIcons {
 
 // Initialize when page loads
 jQuery(() => {
-    BeUIIcons.init();
+    BeUICampus.init();
 });

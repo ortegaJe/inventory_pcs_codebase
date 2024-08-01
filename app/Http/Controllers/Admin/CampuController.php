@@ -26,46 +26,66 @@ class CampuController extends Controller
         $this->excel = $excel;
     }
 
-    public function getAllCampu()
+    // Método privado para construir la consulta base de campus
+    private function baseCampuQuery()
     {
-        $campus = Campu::leftJoin('regional', 'regional.id','campus.regional_id')
-        ->select(
-            'campus.id as campu_id',
-            'campus.name as campu_name',
-            'regional.name as regional',
-            DB::raw("CASE WHEN DATEDIFF(CURDATE(), campus.created_at) <= 3 THEN 'Nuevo' ELSE 'Antiguo' END AS new_campu")
-        )->orderByDesc('campus.created_at')
-           //->name($name)
-            ->get();
-
-            return response()->json($campus);
-    }
-
-    public function campuByRegional($id)
-    {
-        $regionals = DB::table('regional')
-                            ->select(
-                                'campus.id as campu_id',
-                                DB::raw("CASE WHEN 
-                                                DATEDIFF(CURDATE(), campus.created_at) <= 3 
-                                                    THEN 'Nuevo' 
-                                                        ELSE 'Antiguo' 
-                                                            END AS new_campu"),
-                                'campus.name as campu_name'
-                            )
-                            ->leftJoin('campus', 'campus.regional_id', 'regional.id')
-                            ->where('campus.regional_id', $id)
-                            ->orderBy('campus.name', 'asc')
-                            ->get();
-
-        return response()->json($regionals);
+        return Campu::leftJoin('regional', 'regional.id', 'campus.regional_id')
+            ->select(
+                'campus.id as campu_id',
+                'campus.name as campu_name',
+                'regional.name as regional',
+                DB::raw("CASE WHEN DATEDIFF(CURDATE(), campus.created_at) <= 3 THEN 'Nuevo' ELSE 'Antiguo' END AS new_campu")
+            )
+            ->where('campus.is_active', true)
+            ->orderBy('campus.name', 'asc');
     }
 
     public function index()
     {
         $regionals = DB::table('regional')->orderBy('name')->get();
-        //return $regionals;
-        return view('admin.sedes.index',compact('regionals'));
+        $campus = $this->baseCampuQuery()->count();
+        return view('admin.sedes.index',compact('regionals', 'campus'));
+    }
+
+    // Método público para obtener todos los campus
+    public function getCampus()
+    {
+        $campus = $this->baseCampuQuery()->get();
+        return response()->json($campus);
+    }
+
+    // Método público para obtener campus por regional
+    public function campuByRegional($id)
+    {
+        $regionals = $this->baseCampuQuery()
+            ->addSelect(
+                'users.name',
+                'users.last_name'
+            )
+            ->leftJoin('campu_users', 'campu_users.campu_id', 'campus.id')
+            ->leftJoin('users', 'users.id', 'campu_users.user_id')
+            ->where('campus.regional_id', $id)
+            ->orderBy('campus.name', 'asc')
+            ->get();
+
+        return response()->json($regionals);
+    }
+
+    public function getRegionals()
+    {
+        $data = [];
+
+        $regionals = DB::table('regional')->orderBy('name', 'asc')->get(['name','id']);
+        $allOption = (object) ['id' => 0, 'name' => 'TODO'];
+        $regionals->prepend($allOption);
+
+        $data['regionals'] = $regionals;
+
+        if ($regionals->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron regionales para seleccionar'], 404);
+        }
+
+        return response()->json($data);
     }
 
     public function autoCompleteSearch(Request $request)
@@ -89,16 +109,12 @@ class CampuController extends Controller
         );
     }
 
-    public function exportCampuByRegional($regional)
+    public function exportCampuByRegional(Request $request)
     {
-        $rand = Str::upper(Str::random(12));
+        $regional = $request->post('regional');
+        //error_log(__LINE__ . __METHOD__ . ' regional --->' .$regional);
         $regional_name = DB::table('regional')->where('id', $regional)->pluck('name')->first();
-        //error_log(__LINE__ . __METHOD__ . ' regional --->' .var_export($regional_name, true));
-
-        return $this->excel->download(
-            new CampuByRegionalExport($regional, $regional_name),
-            "export_inventory_" . Str::slug($regional) . "_devices_" . $rand . ".xlsx"
-        );
+        return $this->excel->download(new CampuByRegionalExport($regional, $regional_name),"export.xlsx");
     }
 
     public function exportAllCampuByRegional()
@@ -145,7 +161,7 @@ class CampuController extends Controller
         $userCampuRemoved = [];
         $campu = Campu::findOrFail($id);
         $ts = now('America/Bogota')->toDateTimeString();
-        error_log(__LINE__ . __METHOD__ . ' pc --->' . $id);
+        error_log(__LINE__ . __METHOD__ . ' user_id --->' . $id);
         try {
 
             $userCampuRemoved[] = DB::table('campus as c')
@@ -160,10 +176,9 @@ class CampuController extends Controller
                 ->where('cu.campu_id', $id)
                 ->get();
 
-            $update = array('user_id' => null, 'is_principal' => false, 'updated_at' => $ts);
-            $campuToRemoved = DB::table('campu_users')->where('campu_id', $id)->update($update);
+            $update = array('is_active' => false, 'updated_at' => $ts);
+            $campuToRemoved = DB::table('campu_users')->where('user_id', $id)->update($update);
 
-            error_log(__LINE__ . __METHOD__ . ' pc --->' . var_export($campuToRemoved, true));
         } catch (ModelNotFoundException $e) {
             // Handle the error.
         }
@@ -195,6 +210,7 @@ class CampuController extends Controller
         $campu->address     = $request->address;
         $campu->phone       = $request->phone;
         $campu->regional_id = $request->regional;
+        $campu->profile_id  = 2;
         $campu->created_at  = now('America/Bogota');
 
         $campu->save();
@@ -280,6 +296,45 @@ class CampuController extends Controller
             ];
 
         return view('admin.sedes.show')->with($data);
+    }
+
+    public function UserCardManager()
+    {
+
+        $getIdUserByCampus = DB::table('campu_users')
+            ->select('user_id')
+            ->where('campu_id', 1)
+            ->first();
+
+        $campuAssignedCount = DB::table('campu_users')
+            ->select(DB::raw("campu_id,user_id,COUNT(user_id) AS NumberCampus"))
+            ->where('campu_id', 1)
+            ->orWhere('user_id', ($getIdUserByCampus) ? $getIdUserByCampus->user_id : 0)
+            ->count();
+
+        //dd($campuAssignedCount);
+
+        $campuAssigned = DB::table('campus AS C')
+            ->select(
+                'C.id AS SedeID',
+                'U.id AS UserID',
+                'C.name AS NombreSede',
+                DB::raw("CONCAT(U.name,' ',
+                U.last_name) AS NombreCompletoTecnico"),
+                'P.name AS CargoTecnico',
+                'U.email AS EmailTecnico'
+            )
+            ->leftJoin('campu_users AS CU', 'CU.campu_id', 'C.id')
+            ->leftJoin('users AS U', 'U.id', 'CU.user_id')
+            ->join('profile_users AS PU', 'PU.user_id', 'U.id')
+            ->join('profiles AS P', 'P.id', 'PU.profile_id')
+            ->where('CU.campu_id', 1)
+            ->where('U.is_active', 1)
+            ->where('CU.is_active', 1)
+            ->get();
+
+            return response()->json($campuAssigned);
+
     }
 
     public function edit($id)

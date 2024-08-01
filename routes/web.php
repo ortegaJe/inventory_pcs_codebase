@@ -31,17 +31,11 @@ Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
 
 Route::get('/validar-firmas', [HomeController::class, 'ValidateSign'])->name('validate_sign');
 
-Route::get('all-campus', [CampuController::class, 'getAllCampu'])->name('all_campus');
-
-Route::get('campus-by-regional/{id?}', [CampuController::class, 'campuByRegional'])->name('campus.regional');
-
 Route::get('select-category-devices', [HomeController::class, 'getCategoryDevice'])->name('select_category_device');
 
 Route::get('search-devices', [HomeController::class, 'SearchDevice'])->name('search.device');
 
 Route::get('auto-complete-serial-search', [HomeController::class, 'autoCompleteSerialSearch'])->name('auto_complete_serial');
-
-//Route::get('sistemas-operativos-chart', [HomeController::class, 'getOsData'])->name('os_chart');
 
 //Route::get('/equipos-en-prestamo', [HomeController::class, 'getBorrowedDeviceList'])->name('get_borrowed_list');
 
@@ -82,12 +76,18 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
     Route::resource('roles', 'App\Http\Controllers\Admin\RoleController')->names('admin.inventory.roles');
 
     Route::resource('sedes', 'App\Http\Controllers\Admin\CampuController')->names('admin.inventory.campus');
+
+    Route::get('getCampus', [CampuController::class, 'getCampus'])->name('get.campus');
+
+    Route::get('campus-by-regional/{id?}', [CampuController::class, 'campuByRegional'])->name('campus.regional');
+
+    Route::get('getRegionals', [CampuController::class, 'getRegionals'])->name('regional');
+
+    Route::post('exportCampuByRegional', [CampuController::class, 'exportCampuByRegional'])->name('export.campu.by.regional');
+    
+    Route::get('exportAllCampuByRegional', [CampuController::class, 'exportAllCampuByRegional'])->name('export.all.campu.by.regional');
     
     Route::get('exports-campu-inventory-computers/{campuId}/{campu}', 'App\Http\Controllers\Admin\CampuController@exportCampu')->name('admin.inventory.export-campu-computers');
-
-    Route::get('export-campu-by-regional/{regional?}', [CampuController::class, 'exportCampuByRegional'])->name('export.campu_by_regional');
-
-    Route::get('export-all-campu-by-regional', [CampuController::class, 'exportAllCampuByRegional'])->name('export.all_campu_by_regional');
     
     Route::get('sedes-buscar', 'App\Http\Controllers\Admin\CampuController@autoCompleteSearch')->name('admin.inventory.campus.search');
 
@@ -95,7 +95,9 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::post('asignar-tecnico-sede/{id}', 'App\Http\Controllers\Admin\CampuController@assingUserCampu')->name('admin.inventory.assing-user-campu');
 
-    Route::delete('remover-tecnico-sede/{id}', 'App\Http\Controllers\Admin\CampuController@removeUserCampu')->name('admin.inventory.remove-user-campu');
+    Route::get('UserCardManager', [CampuController::class, 'UserCardManager']);
+    
+    Route::delete('removeUserCampu/{id}', 'App\Http\Controllers\Admin\CampuController@removeUserCampu')->name('admin.inventory.remove-user-campu');
 
     Route::get('maintenance/sede={id?}', 'App\Http\Controllers\Admin\AdminDashboardController@maintenanceView')->name('admin.inventory.maintenance');
 
