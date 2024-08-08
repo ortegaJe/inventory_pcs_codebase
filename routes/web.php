@@ -95,9 +95,9 @@ Route::prefix('admin/dashboard/inventario')->group(function () {
 
     Route::post('asignar-tecnico-sede/{id}', 'App\Http\Controllers\Admin\CampuController@assingUserCampu')->name('admin.inventory.assing-user-campu');
 
-    Route::get('UserCardManager', [CampuController::class, 'UserCardManager']);
+    Route::get('userCardCampu', [CampuController::class, 'userCardCampu']);
     
-    Route::delete('removeUserCampu/{id}', 'App\Http\Controllers\Admin\CampuController@removeUserCampu')->name('admin.inventory.remove-user-campu');
+    Route::delete('removeUserCampu', [CampuController::class, 'removeUserCampu']);
 
     Route::get('maintenance/sede={id?}', 'App\Http\Controllers\Admin\AdminDashboardController@maintenanceView')->name('admin.inventory.maintenance');
 

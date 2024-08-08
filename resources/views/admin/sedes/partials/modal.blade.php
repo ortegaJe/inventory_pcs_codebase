@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="modal-footer mt-4">
-              <button type="submit" class="btn btn-alt-success">Asignar</button>
+              <button type="submit" class="btn btn-alt-success">Aceptar</button>
             </div>
           </form>
         </div>

@@ -47,42 +47,7 @@
     <div class="content-heading">
         <h2 class="h4 font-w300 mb-0">Asignada a:</h2>
     </div>
-    <div class="row invisible" data-toggle="appear">
-        <!-- Row #1 -->
-        <div class="col-md-4">
-            <div class="block">
-                <div class="block-content block-content-full" id="user-card" name="{{ $campuAssigned->UserID }}">
-                </div>
-            </div>
-        </div>
-        <!-- END Row #1 -->
-        <div class="col-md-4">
-            <div class="block">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">
-                        <i class="fa fa-building-o fa-fw mr-5 text-muted"></i> Información de la sede
-                    </h3>
-                </div>
-                <div class="block-content block-content-full">
-                    <p class="mb-4">
-                        <strong>Región:</strong>
-                        <span class="text-muted">{{ $campus->regional }}</span>
-                    </p>
-                    <p>
-                        <strong>Abreviado de la sede:</strong>
-                        <span class="badge badge-pill badge-primary">{{ $campus->abreviature }}</span>
-                    </p>
-                    <p>
-                        <strong>Dirección:</strong>
-                        <span class="text-muted">{{ $campus->address }}</span>
-                    </p>
-                    <p>
-                        <strong>Telefonos:</strong>
-                        <span class="text-muted">{{ $campus->phone }}</span>
-                    </p>
-                </div>
-            </div>
-        </div>
+    <div class="row items-push" id="colUserCard">
     </div>
     <!-- END Overview -->
 
@@ -93,7 +58,7 @@
     <div class="block">
         <div class="block-header block-header-default">
             <h3 class="block-title">
-                <i class="fa fa-building fa-fw mr-5 text-muted"></i> Actualizar datos
+                <i class="fa fa-building fa-fw mr-5 text-muted"></i> Información de la Sede
             </h3>
         </div>
         <div class="block-content">
@@ -115,13 +80,24 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-8">
+                        <div class="col-4">
                             <div class="form-material floating">
                                 <input type="text" class="form-control" id="name" name="name"
                                     onkeyup="javascript:this.value=this.value.toUpperCase();"
                                     value="{{ trim($campus->name) }}">
                                 <label for="name">Nombre</label>
                                 @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-material floating">
+                                <input type="text" class="form-control" id="region" name="region"
+                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                    value="{{ trim($campus->regional) }}" readonly>
+                                <label for="region">Regional</label>
+                                @error('region')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -161,14 +137,9 @@
                                 @enderror
                             </div>
                         </div>
-                        {{-- <div class="col-4 mt-3">
-            <button type="button" class="btn btn-hero btn-alt-primary btn-block" data-toggle="click-ripple">
-              <i class="si si-user-follow mr-1"></i> Asignar nuevo técnico
-            </button>
-          </div> --}}
                     </div>
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-sm btn-alt-success min-width-125"
+                        <button type="submit" class="btn btn-hero btn-alt-success min-width-125"
                             data-toggle="click-ripple">Actualizar</button>
                     </div>
                 </div>
@@ -406,10 +377,9 @@
     @if (Session::has('assigned'))
         <script>
             Swal.fire(
-                'Usuario Asignado Con Exito!',
+                'Usuario Asignado con Exito!',
                 '{!! Session::get('assigned') !!}',
                 'success',
-                'showCancelButton'
             )
         </script>
     @endif
