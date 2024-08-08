@@ -76,7 +76,7 @@ class CampuController extends Controller
         $data = [];
 
         $regionals = DB::table('regional')->orderBy('name', 'asc')->get(['name','id']);
-        $allOption = (object) ['id' => 0, 'name' => 'TODO'];
+        $allOption = (object) ['id' => 0, 'name' => 'TODAS'];
         $regionals->prepend($allOption);
 
         $data['regionals'] = $regionals;
@@ -125,43 +125,26 @@ class CampuController extends Controller
     public function assingUserCampu(Request $request, $id)
     {
         $userId = $request->get('list_users');
+        $campuId = Campu::findOrFail($id);
 
-        //busca id de la sede que exista en la tabla intermedia, si no existe inserta nuevo registro y 
-        //si existe actualiza el regitro si no esta asignada.
-        $ifExist = DB::table('campu_users')->select('campu_id', 'user_id', 'is_principal')
-            ->where('campu_id', $id)
-            ->first();
-
-        if ($ifExist === null) {
-            //inserta una nueva sede con usuario asignado
-            DB::table('campu_users')->insert([
-                'user_id'    => $userId,
-                'campu_id'   => $id,
-                'created_at' => now('America/Bogota')
-            ]);
-
-            return back()->with('assigned', '');
-            //return "regitro nuevo";
-        } 
-            //actualiza sede con nuevo usuario asignado
-            $update = array(
-                'user_id'      => $userId,
-                'is_principal' => false,
-                'updated_at'   => now('America/Bogota')
-            );
-        DB::table('campu_users')->where('campu_id', $id)->update($update);
-
+        $update = array('user_id' => $userId, 'is_principal' => false, 'is_active' => true, 'updated_at' => now('America/Bogota'));
+        DB::table('campu_users')->where('campu_id', $campuId->id)->update($update);
         return back()->with('assigned', '');
-        //return "registro actualizado";
     }
 
-    public function removeUserCampu($id)
+    public function removeUserCampu(Request $request)
     {
         $campu = null;
         $userCampuRemoved = [];
-        $campu = Campu::findOrFail($id);
+        $userId = $request->post('userId');
+        $campuId = session('campu_id'); // Recupera el ID de la sesión
+
+            if (!$campuId) {
+                return response()->json(['error' => 'No se encontró el ID de la sede.'], 404);
+            }
+
         $ts = now('America/Bogota')->toDateTimeString();
-        error_log(__LINE__ . __METHOD__ . ' user_id --->' . $id);
+        //error_log(__LINE__ . __METHOD__ . ' user_id --->' . $userId);
         try {
 
             $userCampuRemoved[] = DB::table('campus as c')
@@ -173,19 +156,20 @@ class CampuController extends Controller
                 )
                 ->leftJoin('campu_users as cu', 'cu.campu_id', 'c.id')
                 ->leftJoin('users as u', 'u.id', 'cu.user_id')
-                ->where('cu.campu_id', $id)
+                ->where('cu.campu_id', $campuId)
                 ->get();
 
             $update = array('is_active' => false, 'updated_at' => $ts);
-            $campuToRemoved = DB::table('campu_users')->where('user_id', $id)->update($update);
+            DB::table('campu_users')->where('user_id', $userId)->update($update);
 
         } catch (ModelNotFoundException $e) {
             // Handle the error.
+            return $e;
         }
 
         return response()->json([
-            'message' => 'Ya no se encuentra asignado a la sede ' . $campu->name . '',
-            'result' => $userCampuRemoved[0]
+            'message' => 'Ya no se encuentra asignado a la sede',
+            'result' => $userCampuRemoved[0],
         ]);
     }
 
@@ -231,6 +215,8 @@ class CampuController extends Controller
                              'regional.name as regional'
                              )->findOrFail($id);
 
+        session(['campu_id' => $id]);
+
         $userLists = User::all();
 
         $typeDevices = DB::table('devices as d')
@@ -251,69 +237,40 @@ class CampuController extends Controller
             ->where('campu_id', $id)
             ->count();
 
-        $getIdUserByCampus = DB::table('campu_users')
-            ->select('user_id')
-            ->where('campu_id', $id)
-            ->first();
-
-        $campuAssignedCount = DB::table('campu_users')
-            ->select(DB::raw("campu_id,user_id,COUNT(user_id) AS NumberCampus"))
-            ->where('campu_id', $id)
-            ->orWhere('user_id', ($getIdUserByCampus) ? $getIdUserByCampus->user_id : 0)
-            ->count();
-
-        //dd($campuAssignedCount);
-
-        $campuAssigned = DB::table('campus AS C')
-            ->select(
-                'C.id AS SedeID',
-                'U.id AS UserID',
-                'C.name AS NombreSede',
-                DB::raw("CONCAT(U.name,' ',
-                U.last_name) AS NombreCompletoTecnico"),
-                'P.name AS CargoTecnico',
-                'U.email AS EmailTecnico'
-            )
-            ->leftJoin('campu_users AS CU', 'CU.campu_id', 'C.id')
-            ->leftJoin('users AS U', 'U.id', 'CU.user_id')
-            ->join('profile_users AS PU', 'PU.user_id', 'U.id')
-            ->join('profiles AS P', 'P.id', 'PU.profile_id')
-            ->where('CU.campu_id', $id)
-            ->where('U.is_active', 1)
-            ->where('CU.is_active', 1)
-            ->get();
-
-        //return $campuAssigned;
-
         $data =
             [
                 'campus' => $campus,
                 'typeDevices' => $typeDevices,
                 'campusCount' => $campusCount,
-                'campuAssigned' => $campuAssigned,
-                'campuAssignedCount' => $campuAssignedCount,
                 'userLists' => $userLists,
             ];
 
         return view('admin.sedes.show')->with($data);
     }
 
-    public function UserCardManager()
+    public function userCardCampu()
     {
+        $campuId = session('campu_id'); // Recupera el ID de la sesión
+
+        if (!$campuId) {
+            return response()->json(['error' => 'No se encontró el ID de la sede.'], 404);
+        }
+
         $userCardData = [];
 
         $getIdUserByCampus = DB::table('campu_users')
             ->select('user_id')
-            ->where('campu_id', 1)
+            ->where('campu_id', $campuId)
             ->first();
 
         $campuCount = DB::table('campu_users')
-            ->select(DB::raw("campu_id,user_id,COUNT(user_id) AS NumberCampus"))
-            ->where('campu_id', 1)
-            ->orWhere('user_id', ($getIdUserByCampus) ? $getIdUserByCampus->user_id : 0)
+            ->select(DB::raw("COUNT(user_id) AS NumberCampus"))
+            //->where('campu_id', $campuId)
+            ->where('is_active', true)
+            ->where('user_id', ($getIdUserByCampus) ? $getIdUserByCampus->user_id : 0)
             ->count();
 
-            $userCardData['campuCount'] = $campuCount;
+                $userCardData['campuCount'] = $campuCount;
 
         $campuUser = DB::table('campus AS C')
             ->select(
@@ -327,9 +284,9 @@ class CampuController extends Controller
             )
             ->leftJoin('campu_users AS CU', 'CU.campu_id', 'C.id')
             ->leftJoin('users AS U', 'U.id', 'CU.user_id')
-            ->join('profile_users AS PU', 'PU.user_id', 'U.id')
-            ->join('profiles AS P', 'P.id', 'PU.profile_id')
-            ->where('CU.campu_id', 1)
+            ->leftJoin('profile_users AS PU', 'PU.user_id', 'U.id')
+            ->leftJoin('profiles AS P', 'P.id', 'PU.profile_id')
+            ->where('CU.campu_id', $campuId)
             ->where('U.is_active', 1)
             ->where('CU.is_active', 1)
             ->get();
@@ -337,7 +294,6 @@ class CampuController extends Controller
                 $userCardData['campuUser'] = $campuUser;
 
             return response()->json($userCardData);
-
     }
 
     public function edit($id)
